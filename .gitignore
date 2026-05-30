@@ -1,0 +1,61 @@
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.build/
+.buildlog/
+.history
+.svn/
+.swiftpm/
+migrate_working_dir/
+
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# VS Code workspace settings (IDE-specific, not part of the project)
+.vscode/
+
+# Debug/scratch test files at root
+/debug_test.dart
+/test_*.dart
+/test.txt
+
+# Flutter/Dart/Pub related
+**/doc/api/
+**/ios/Flutter/.last_build_id
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+/build/
+
+# Symbolication related
+app.*.symbols
+
+# Obfuscation related
+app.*.map.json
+
+# Android Studio will place build artifacts here
+/android/app/debug
+/android/app/profile
+/android/app/release
+
+# ── Release signing secrets (NEVER commit these) ──────────────────────────────
+/android/key.properties
+/android/*.jks
+/android/*.keystore
+/android/*.p12
+
+# Claude Code session data
+/.claude/
+
+# Node.js (used for doc generation tooling)
+node_modules/
+docs/node_modules/

@@ -1,0 +1,2958 @@
+{
+  "@@locale": "es",
+  "appTitle": "Super Calculadora",
+  "@appTitle": {
+    "description": "App title shown in the title bar and about screen"
+  },
+  "appVersion": "Versión 1.0.0",
+  "@appVersion": {
+    "description": "App version string"
+  },
+  "appDeveloped": "Desarrollado en Flutter",
+  "@appDeveloped": {
+    "description": "Framework credit shown in about section"
+  },
+  "appDynamicThemes": "Con soporte a temas dinámicos",
+  "@appDynamicThemes": {
+    "description": "Dynamic theme support note in about section"
+  },
+  "navStandard": "Estándar",
+  "@navStandard": {
+    "description": "Navigation drawer item for standard calculator"
+  },
+  "navStandardSub": "Operaciones básicas",
+  "@navStandardSub": {
+    "description": "Subtitle for standard calculator nav item"
+  },
+  "navScientific": "Científica",
+  "@navScientific": {
+    "description": "Navigation drawer item for scientific calculator"
+  },
+  "navScientificSub": "Funciones avanzadas",
+  "@navScientificSub": {
+    "description": "Subtitle for scientific calculator nav item"
+  },
+  "navSpecial": "Funciones Especiales",
+  "@navSpecial": {
+    "description": "Navigation drawer item for special functions"
+  },
+  "navSpecialSub": "Teoría de números",
+  "@navSpecialSub": {
+    "description": "Subtitle for special functions nav item"
+  },
+  "navHistory": "Historial",
+  "@navHistory": {
+    "description": "Navigation drawer item for history"
+  },
+  "navHistorySub": "Ver operaciones anteriores",
+  "@navHistorySub": {
+    "description": "Subtitle for history nav item"
+  },
+  "navSettings": "Configuraciones",
+  "@navSettings": {
+    "description": "Navigation drawer item for settings"
+  },
+  "navSettingsSub": "Ajustes de la aplicación",
+  "@navSettingsSub": {
+    "description": "Subtitle for settings nav item"
+  },
+  "navHelp": "Ayuda",
+  "@navHelp": {
+    "description": "Navigation drawer item for help"
+  },
+  "navHelpSub": "Guía de funciones especiales",
+  "@navHelpSub": {
+    "description": "Subtitle for help nav item"
+  },
+  "navAbout": "Acerca de",
+  "@navAbout": {
+    "description": "Navigation drawer item for about dialog"
+  },
+  "navAboutSub": "Super Calculadora v1.0",
+  "@navAboutSub": {
+    "description": "Subtitle for about nav item"
+  },
+  "navCalculator": "Calculadora",
+  "@navCalculator": {
+    "description": "Calculator label in navigation"
+  },
+  "navSelectType": "Selecciona el tipo",
+  "@navSelectType": {
+    "description": "Prompt to select calculator type"
+  },
+  "navAngleMode": "Modo: {mode}",
+  "@navAngleMode": {
+    "description": "Angle mode label in drawer",
+    "placeholders": {
+      "mode": {
+        "type": "String"
+      }
+    }
+  },
+  "navRadians": "Radianes",
+  "@navRadians": {
+    "description": "Radians angle mode label"
+  },
+  "navDegrees": "Grados",
+  "@navDegrees": {
+    "description": "Degrees angle mode label"
+  },
+  "calcAnalysis": "Análisis",
+  "@calcAnalysis": {
+    "description": "Tab label for analysis view"
+  },
+  "calcExpressions": "Expresiones",
+  "@calcExpressions": {
+    "description": "Tab label for expressions view"
+  },
+  "calcScientific": "Calculadora Científica",
+  "@calcScientific": {
+    "description": "Title for scientific calculator screen"
+  },
+  "calcSpecialFunctions": "Funciones Especiales",
+  "@calcSpecialFunctions": {
+    "description": "Title for special functions screen"
+  },
+  "calcSuperCalculator": "Super Calculadora",
+  "@calcSuperCalculator": {
+    "description": "Main calculator title"
+  },
+  "calcNumericAnalysis": "Análisis Numérico",
+  "@calcNumericAnalysis": {
+    "description": "Title for numeric analysis section"
+  },
+  "calcMathExpressions": "Expresiones Matemáticas",
+  "@calcMathExpressions": {
+    "description": "Title for math expressions section"
+  },
+  "calcResult": "Resultado:",
+  "@calcResult": {
+    "description": "Label shown before a calculation result"
+  },
+  "calcProcessing": "Procesando números grandes...",
+  "@calcProcessing": {
+    "description": "Message shown while processing large numbers"
+  },
+  "calcCancel": "Cancelar",
+  "@calcCancel": {
+    "description": "Cancel button label during processing"
+  },
+  "displayPaste": "Pegar",
+  "@displayPaste": {
+    "description": "Paste action label on display"
+  },
+  "displayCopy": "Copiar",
+  "@displayCopy": {
+    "description": "Copy action label on display"
+  },
+  "displayCopied": "Copiado: {text}",
+  "@displayCopied": {
+    "description": "Confirmation message after copying text",
+    "placeholders": {
+      "text": {
+        "type": "String"
+      }
+    }
+  },
+  "displayCopyResult": "Copiar resultado",
+  "@displayCopyResult": {
+    "description": "Context menu option to copy result"
+  },
+  "displayPasteNumber": "Pegar número",
+  "@displayPasteNumber": {
+    "description": "Context menu option to paste a number"
+  },
+  "displayClearDisplay": "Limpiar display",
+  "@displayClearDisplay": {
+    "description": "Context menu option to clear the display"
+  },
+  "displayInvalidNumber": "Error: El texto pegado no es un número válido",
+  "@displayInvalidNumber": {
+    "description": "Error when pasted text is not a valid number"
+  },
+  "displayNothingToPaste": "No hay contenido para pegar",
+  "@displayNothingToPaste": {
+    "description": "Message when clipboard is empty"
+  },
+  "displayPasteError": "Error al pegar: {error}",
+  "@displayPasteError": {
+    "description": "Error message when paste operation fails",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "displayPasted": "Pegado: {text}",
+  "@displayPasted": {
+    "description": "Confirmation message after pasting text",
+    "placeholders": {
+      "text": {
+        "type": "String"
+      }
+    }
+  },
+  "histTitle": "Historial",
+  "@histTitle": {
+    "description": "Title of the history screen"
+  },
+  "histClearAll": "Limpiar historial",
+  "@histClearAll": {
+    "description": "Button label to clear all history"
+  },
+  "histClearAllTooltip": "Limpiar todo el historial",
+  "@histClearAllTooltip": {
+    "description": "Tooltip for clear all history button"
+  },
+  "histConfirmClear": "¿Estás seguro de que quieres eliminar todo el historial?",
+  "@histConfirmClear": {
+    "description": "Confirmation dialog text for clearing history"
+  },
+  "histConfirmClearN": "¿Estás seguro de que quieres eliminar todas las {count} operaciones del historial? Esta acción no se puede deshacer.",
+  "@histConfirmClearN": {
+    "description": "Confirmation dialog text for clearing N history items",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "histCleared": "Historial limpiado",
+  "@histCleared": {
+    "description": "Snackbar message after clearing history"
+  },
+  "histDeleted": "Historial eliminado",
+  "@histDeleted": {
+    "description": "Snackbar message after deleting history"
+  },
+  "histOperationDeleted": "Operación eliminada",
+  "@histOperationDeleted": {
+    "description": "Snackbar message after deleting single operation"
+  },
+  "histCopiedToClipboard": "Copiado al portapapeles",
+  "@histCopiedToClipboard": {
+    "description": "Snackbar message after copying to clipboard"
+  },
+  "histCopiedClipboardText": "Copiado al portapapeles: {text}",
+  "@histCopiedClipboardText": {
+    "description": "Snackbar message after copying specific text to clipboard",
+    "placeholders": {
+      "text": {
+        "type": "String"
+      }
+    }
+  },
+  "histFullResult": "Resultado completo",
+  "@histFullResult": {
+    "description": "Dialog title for full result view"
+  },
+  "histClose": "Cerrar",
+  "@histClose": {
+    "description": "Close button label in history dialogs"
+  },
+  "histExpression": "Expresión:",
+  "@histExpression": {
+    "description": "Label for expression in history detail"
+  },
+  "histResult": "Resultado:",
+  "@histResult": {
+    "description": "Label for result in history detail"
+  },
+  "histCopyResult": "Copiar resultado",
+  "@histCopyResult": {
+    "description": "Button to copy result from history"
+  },
+  "histCopyAll": "Copiar todo",
+  "@histCopyAll": {
+    "description": "Button to copy all from history item"
+  },
+  "histCopyExpression": "Copiar expresión",
+  "@histCopyExpression": {
+    "description": "Button to copy expression from history"
+  },
+  "histUseResult": "Usar resultado",
+  "@histUseResult": {
+    "description": "Button to use result from history in calculator"
+  },
+  "histViewResult": "Ver resultado",
+  "@histViewResult": {
+    "description": "Button to view full result from history"
+  },
+  "histDelete": "Eliminar",
+  "@histDelete": {
+    "description": "Button to delete a history item"
+  },
+  "histEmpty": "No hay operaciones en el historial",
+  "@histEmpty": {
+    "description": "Empty state title in history screen"
+  },
+  "histEmptyHint": "Realiza algunos cálculos para ver tu historial aquí",
+  "@histEmptyHint": {
+    "description": "Empty state hint in history screen"
+  },
+  "histEmptyHintAlt": "Las operaciones que realices aparecerán aquí",
+  "@histEmptyHintAlt": {
+    "description": "Alternative empty state hint in history screen"
+  },
+  "histOperations": "operaciones",
+  "@histOperations": {
+    "description": "Label for number of operations in history"
+  },
+  "histNow": "Ahora",
+  "@histNow": {
+    "description": "Time label for very recent history items"
+  },
+  "histErrorLoading": "Error cargando historial: {error}",
+  "@histErrorLoading": {
+    "description": "Error message when history fails to load",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "histErrorClearing": "Error limpiando historial: {error}",
+  "@histErrorClearing": {
+    "description": "Error message when history fails to clear",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "histErrorDeleting": "Error eliminando operación: {error}",
+  "@histErrorDeleting": {
+    "description": "Error message when a history item fails to delete",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsTitle": "Configuraciones",
+  "@settingsTitle": {
+    "description": "Title of the settings screen"
+  },
+  "settingsTheme": "Tema",
+  "@settingsTheme": {
+    "description": "Theme section title in settings"
+  },
+  "settingsNumberFormat": "Formato de números",
+  "@settingsNumberFormat": {
+    "description": "Number format section title in settings"
+  },
+  "settingsScientificNotation": "Usar notación científica",
+  "@settingsScientificNotation": {
+    "description": "Toggle label for scientific notation"
+  },
+  "settingsScientificHint": "Los números se mostrarán completos (ej: 123000) cuando esté deshabilitado",
+  "@settingsScientificHint": {
+    "description": "Hint text for scientific notation toggle"
+  },
+  "settingsFormatExamples": "Ejemplos de formato",
+  "@settingsFormatExamples": {
+    "description": "Section title for format examples"
+  },
+  "settingsLargeNumber": "Número grande:",
+  "@settingsLargeNumber": {
+    "description": "Label for large number format example"
+  },
+  "settingsSmallNumber": "Número pequeño:",
+  "@settingsSmallNumber": {
+    "description": "Label for small number format example"
+  },
+  "settingsNormal": "Normal:",
+  "@settingsNormal": {
+    "description": "Label for normal format example"
+  },
+  "settingsScientific": "Científica:",
+  "@settingsScientific": {
+    "description": "Label for scientific format example"
+  },
+  "settingsAboutApp": "Sobre el App",
+  "@settingsAboutApp": {
+    "description": "About app section title in settings"
+  },
+  "themeLight": "Claro",
+  "@themeLight": {
+    "description": "Light theme option label"
+  },
+  "themeDark": "Oscuro",
+  "@themeDark": {
+    "description": "Dark theme option label"
+  },
+  "themeAuto": "Automático",
+  "@themeAuto": {
+    "description": "Auto theme option label"
+  },
+  "themeLightDesc": "Usa siempre el tema claro",
+  "@themeLightDesc": {
+    "description": "Description for light theme option"
+  },
+  "themeDarkDesc": "Usa siempre el tema oscuro",
+  "@themeDarkDesc": {
+    "description": "Description for dark theme option"
+  },
+  "themeAutoDesc": "Sigue la configuración del sistema",
+  "@themeAutoDesc": {
+    "description": "Description for auto theme option"
+  },
+  "aboutTitle": "Super Calculadora",
+  "@aboutTitle": {
+    "description": "Title of the about dialog"
+  },
+  "aboutDescription": "Una calculadora avanzada con capacidades científicas y análisis numérico completo.",
+  "@aboutDescription": {
+    "description": "Description text in about dialog"
+  },
+  "aboutFeatures": "Características:",
+  "@aboutFeatures": {
+    "description": "Features section header in about dialog"
+  },
+  "aboutClose": "Cerrar",
+  "@aboutClose": {
+    "description": "Close button in about dialog"
+  },
+  "aboutFeature1": "Números de hasta 1024 bits",
+  "@aboutFeature1": {
+    "description": "About feature: large number support"
+  },
+  "aboutFeature2": "Precisión decimal de 64 bits",
+  "@aboutFeature2": {
+    "description": "About feature: decimal precision"
+  },
+  "aboutFeature3": "Modo calculadora estándar y científica",
+  "@aboutFeature3": {
+    "description": "About feature: calculator modes"
+  },
+  "aboutFeature4": "Funciones trigonométricas (sin, cos, tan)",
+  "@aboutFeature4": {
+    "description": "About feature: trig functions"
+  },
+  "aboutFeature5": "Funciones trigonométricas inversas (asin, acos, atan)",
+  "@aboutFeature5": {
+    "description": "About feature: inverse trig functions"
+  },
+  "aboutFeature6": "Logaritmos naturales (ln) y base 10 (log)",
+  "@aboutFeature6": {
+    "description": "About feature: logarithms"
+  },
+  "aboutFeature7": "Funciones exponenciales (eˣ, 10ˣ)",
+  "@aboutFeature7": {
+    "description": "About feature: exponential functions"
+  },
+  "aboutFeature8": "Cálculo de factorial (n!)",
+  "@aboutFeature8": {
+    "description": "About feature: factorial"
+  },
+  "aboutFeature9": "Constantes matemáticas (π, e)",
+  "@aboutFeature9": {
+    "description": "About feature: math constants"
+  },
+  "aboutFeature10": "Potencias y raíces (x², x³, √, ∛)",
+  "@aboutFeature10": {
+    "description": "About feature: powers and roots"
+  },
+  "aboutFeature11": "Conversión entre grados y radianes",
+  "@aboutFeature11": {
+    "description": "About feature: angle conversion"
+  },
+  "aboutFeature12": "Análisis de números primos",
+  "@aboutFeature12": {
+    "description": "About feature: prime analysis"
+  },
+  "aboutFeature13": "Descomposición en factores primos",
+  "@aboutFeature13": {
+    "description": "About feature: prime factorization"
+  },
+  "aboutFeature14": "Conversión binaria y decimal",
+  "@aboutFeature14": {
+    "description": "About feature: binary/decimal conversion"
+  },
+  "aboutFeature15": "Análisis de propiedades matemáticas",
+  "@aboutFeature15": {
+    "description": "About feature: math property analysis"
+  },
+  "aboutFeature16": "Operaciones con números extremadamente grandes",
+  "@aboutFeature16": {
+    "description": "About feature: extremely large numbers"
+  },
+  "aboutFeature17": "Cálculos pesados en hilos separados (isolates)",
+  "@aboutFeature17": {
+    "description": "About feature: isolate-based computation"
+  },
+  "aboutFeature18": "Manejo de errores de dominio y tamaño",
+  "@aboutFeature18": {
+    "description": "About feature: domain and size error handling"
+  },
+  "exprMathExpression": "Expresión matemática",
+  "@exprMathExpression": {
+    "description": "Label for math expression input field"
+  },
+  "exprHideHistory": "Ocultar historial",
+  "@exprHideHistory": {
+    "description": "Toggle to hide expression history"
+  },
+  "exprShowHistory": "Mostrar historial",
+  "@exprShowHistory": {
+    "description": "Toggle to show expression history"
+  },
+  "exprClearExpression": "Limpiar expresión",
+  "@exprClearExpression": {
+    "description": "Button to clear the expression input"
+  },
+  "exprHint": "Ej: (5 + 3) * sqrt(9) - 2^3",
+  "@exprHint": {
+    "description": "Hint text in expression input field"
+  },
+  "exprDelete": "Borrar",
+  "@exprDelete": {
+    "description": "Delete/backspace button label"
+  },
+  "exprEvaluate": "Evaluar (Enter)",
+  "@exprEvaluate": {
+    "description": "Evaluate button label"
+  },
+  "exprParenthesis": "Paréntesis",
+  "@exprParenthesis": {
+    "description": "Parenthesis button tooltip"
+  },
+  "exprSquareRoot": "Raíz cuadrada",
+  "@exprSquareRoot": {
+    "description": "Square root button tooltip"
+  },
+  "exprPower": "Potencia",
+  "@exprPower": {
+    "description": "Power button tooltip"
+  },
+  "exprSin": "Seno",
+  "@exprSin": {
+    "description": "Sine button tooltip"
+  },
+  "exprCos": "Coseno",
+  "@exprCos": {
+    "description": "Cosine button tooltip"
+  },
+  "exprTan": "Tangente",
+  "@exprTan": {
+    "description": "Tangent button tooltip"
+  },
+  "exprLog": "Logaritmo",
+  "@exprLog": {
+    "description": "Log base 10 button tooltip"
+  },
+  "exprLn": "Logaritmo natural",
+  "@exprLn": {
+    "description": "Natural logarithm button tooltip"
+  },
+  "exprPi": "Pi",
+  "@exprPi": {
+    "description": "Pi constant button tooltip"
+  },
+  "exprEuler": "Euler",
+  "@exprEuler": {
+    "description": "Euler constant button tooltip"
+  },
+  "analysisEnterNumber": "Ingresa un número para ver su análisis",
+  "@analysisEnterNumber": {
+    "description": "Placeholder text when no number is entered for analysis"
+  },
+  "analysisLoading": "Analizando número...",
+  "@analysisLoading": {
+    "description": "Loading message during number analysis"
+  },
+  "analysisLoadingHint": "Esto puede tomar unos momentos para números grandes",
+  "@analysisLoadingHint": {
+    "description": "Hint shown during long analysis computations"
+  },
+  "analysisLimited": "Análisis limitado",
+  "@analysisLimited": {
+    "description": "Label when analysis is limited due to number size"
+  },
+  "analysisExtremelyLarge": "Número Extremadamente Grande",
+  "@analysisExtremelyLarge": {
+    "description": "Label for extremely large numbers"
+  },
+  "analysisDigitsCount": "Dígitos: {count}",
+  "@analysisDigitsCount": {
+    "description": "Shows the number of digits in the analyzed number",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "analysisPrimalityNote": "Nota sobre análisis de primalidad",
+  "@analysisPrimalityNote": {
+    "description": "Note header about primality testing limitations"
+  },
+  "analysisOriginalInput": "Entrada original: {original} → Analizado: {analyzed}",
+  "@analysisOriginalInput": {
+    "description": "Shows original input vs analyzed value",
+    "placeholders": {
+      "original": {
+        "type": "String"
+      },
+      "analyzed": {
+        "type": "String"
+      }
+    }
+  },
+  "analysisCalculatingPrimes": "Calculando primos...",
+  "@analysisCalculatingPrimes": {
+    "description": "Loading message while calculating primes"
+  },
+  "analysisSearchingPrimes": "Buscando primo anterior y siguiente",
+  "@analysisSearchingPrimes": {
+    "description": "Loading message while searching for adjacent primes"
+  },
+  "analysisBasicProperties": "Propiedades Básicas",
+  "@analysisBasicProperties": {
+    "description": "Section title for basic number properties"
+  },
+  "analysisValue": "Valor",
+  "@analysisValue": {
+    "description": "Label for the number value"
+  },
+  "analysisIsPrime": "Es primo",
+  "@analysisIsPrime": {
+    "description": "Label for primality check"
+  },
+  "analysisDigits": "Dígitos",
+  "@analysisDigits": {
+    "description": "Label for digit count"
+  },
+  "analysisNextPrime": "Siguiente primo",
+  "@analysisNextPrime": {
+    "description": "Label for next prime number"
+  },
+  "analysisPrevPrime": "Primo anterior",
+  "@analysisPrevPrime": {
+    "description": "Label for previous prime number"
+  },
+  "analysisDigitSum": "Suma de dígitos",
+  "@analysisDigitSum": {
+    "description": "Label for digit sum"
+  },
+  "analysisBinary": "Binario",
+  "@analysisBinary": {
+    "description": "Label for binary representation"
+  },
+  "analysisYes": "Sí",
+  "@analysisYes": {
+    "description": "Yes value for boolean properties"
+  },
+  "analysisNo": "No",
+  "@analysisNo": {
+    "description": "No value for boolean properties"
+  },
+  "analysisRepresentations": "Representaciones",
+  "@analysisRepresentations": {
+    "description": "Section title for number representations"
+  },
+  "analysisOctal": "Octal",
+  "@analysisOctal": {
+    "description": "Label for octal representation"
+  },
+  "analysisHex": "Hexadecimal",
+  "@analysisHex": {
+    "description": "Label for hexadecimal representation"
+  },
+  "analysisMathAnalysis": "Análisis Matemático",
+  "@analysisMathAnalysis": {
+    "description": "Section title for mathematical analysis"
+  },
+  "analysisIsPerfect": "Es perfecto",
+  "@analysisIsPerfect": {
+    "description": "Label for perfect number check"
+  },
+  "analysisIsPalindrome": "Es palíndromo",
+  "@analysisIsPalindrome": {
+    "description": "Label for palindrome check"
+  },
+  "analysisIsFibonacci": "Es Fibonacci",
+  "@analysisIsFibonacci": {
+    "description": "Label for Fibonacci number check"
+  },
+  "analysisIsTriangular": "Es triangular",
+  "@analysisIsTriangular": {
+    "description": "Label for triangular number check"
+  },
+  "analysisPrimeFactors": "Factorización Prima",
+  "@analysisPrimeFactors": {
+    "description": "Section title for prime factorization"
+  },
+  "analysisPrimeFactorsLabel": "Factores primos",
+  "@analysisPrimeFactorsLabel": {
+    "description": "Label for prime factors list"
+  },
+  "analysisDivisors": "Divisores",
+  "@analysisDivisors": {
+    "description": "Section title for divisors"
+  },
+  "analysisAllDivisors": "Todos los divisores",
+  "@analysisAllDivisors": {
+    "description": "Label for complete list of divisors"
+  },
+  "analysisDivisorCount": "Cantidad de divisores",
+  "@analysisDivisorCount": {
+    "description": "Label for number of divisors"
+  },
+  "analysisArithmeticFunctions": "Funciones Aritméticas",
+  "@analysisArithmeticFunctions": {
+    "description": "Section title for arithmetic functions"
+  },
+  "analysisEulerPhi": "φ(n) Euler",
+  "@analysisEulerPhi": {
+    "description": "Label for Euler totient function"
+  },
+  "analysisCarmichael": "λ(n) Carmichael",
+  "@analysisCarmichael": {
+    "description": "Label for Carmichael function"
+  },
+  "analysisMobius": "μ(n) Möbius",
+  "@analysisMobius": {
+    "description": "Label for Möbius function"
+  },
+  "analysisSmallOmega": "ω(n) primos distintos",
+  "@analysisSmallOmega": {
+    "description": "Label for small omega function (distinct prime factors)"
+  },
+  "analysisBigOmega": "Ω(n) primos c/mult.",
+  "@analysisBigOmega": {
+    "description": "Label for big omega function (prime factors with multiplicity)"
+  },
+  "analysisSopfr": "sopfr(n) Σprimos rep.",
+  "@analysisSopfr": {
+    "description": "Label for sum of prime factors with repetition"
+  },
+  "analysisSopf": "sopf(n) Σprimos dist.",
+  "@analysisSopf": {
+    "description": "Label for sum of distinct prime factors"
+  },
+  "analysisRadical": "rad(n) radical",
+  "@analysisRadical": {
+    "description": "Label for radical of n"
+  },
+  "analysisDigitalRoot": "Raíz digital",
+  "@analysisDigitalRoot": {
+    "description": "Label for digital root"
+  },
+  "analysisClassification": "Clasificación",
+  "@analysisClassification": {
+    "description": "Section title for number classification"
+  },
+  "analysisSquareFree": "Libre de cuadrados",
+  "@analysisSquareFree": {
+    "description": "Label for square-free check"
+  },
+  "analysisPowerful": "Poderoso",
+  "@analysisPowerful": {
+    "description": "Label for powerful number check"
+  },
+  "analysisHarshad": "Harshad",
+  "@analysisHarshad": {
+    "description": "Label for Harshad number check"
+  },
+  "analysisSemiprime": "Semiprimo",
+  "@analysisSemiprime": {
+    "description": "Label for semiprime check"
+  },
+  "analysisAbundant": "Abundante",
+  "@analysisAbundant": {
+    "description": "Label for abundant number check"
+  },
+  "analysisDeficient": "Deficiente",
+  "@analysisDeficient": {
+    "description": "Label for deficient number check"
+  },
+  "analysisOperations": "Operaciones",
+  "@analysisOperations": {
+    "description": "Section title for number operations"
+  },
+  "analysisSquare": "Cuadrado",
+  "@analysisSquare": {
+    "description": "Label for square of the number"
+  },
+  "analysisCube": "Cubo",
+  "@analysisCube": {
+    "description": "Label for cube of the number"
+  },
+  "analysisSquareRootLabel": "Raíz cuadrada",
+  "@analysisSquareRootLabel": {
+    "description": "Label for square root in analysis"
+  },
+  "analysisIsPerfectSquare": "Es cuadrado perfecto",
+  "@analysisIsPerfectSquare": {
+    "description": "Label for perfect square check"
+  },
+  "analysisCubeRoot": "Raíz cúbica",
+  "@analysisCubeRoot": {
+    "description": "Label for cube root"
+  },
+  "analysisIsPerfectCube": "Es cubo perfecto",
+  "@analysisIsPerfectCube": {
+    "description": "Label for perfect cube check"
+  },
+  "analysisPerfectPower": "Potencia Perfecta",
+  "@analysisPerfectPower": {
+    "description": "Section title for perfect power analysis"
+  },
+  "analysisExpression": "Expresión",
+  "@analysisExpression": {
+    "description": "Label for perfect power expression"
+  },
+  "analysisBase": "Base",
+  "@analysisBase": {
+    "description": "Label for base in perfect power"
+  },
+  "analysisExponent": "Exponente",
+  "@analysisExponent": {
+    "description": "Label for exponent in perfect power"
+  },
+  "cardPrime": "Primo",
+  "@cardPrime": {
+    "description": "Prime badge label on number card"
+  },
+  "cardPerfect": "Perfecto",
+  "@cardPerfect": {
+    "description": "Perfect number badge label on number card"
+  },
+  "cardPalindrome": "Palíndromo",
+  "@cardPalindrome": {
+    "description": "Palindrome badge label on number card"
+  },
+  "cardFibonacci": "Fibonacci",
+  "@cardFibonacci": {
+    "description": "Fibonacci badge label on number card"
+  },
+  "cardTriangular": "Triangular",
+  "@cardTriangular": {
+    "description": "Triangular badge label on number card"
+  },
+  "cardEven": "Par",
+  "@cardEven": {
+    "description": "Even number badge label on number card"
+  },
+  "cardOdd": "Impar",
+  "@cardOdd": {
+    "description": "Odd number badge label on number card"
+  },
+  "cardQuickProperties": "Propiedades rápidas:",
+  "@cardQuickProperties": {
+    "description": "Quick properties section header on number card"
+  },
+  "cardConvert": "Convertir:",
+  "@cardConvert": {
+    "description": "Convert section header on number card"
+  },
+  "cardToDecimal": "A Decimal",
+  "@cardToDecimal": {
+    "description": "Convert to decimal button label"
+  },
+  "cardToBinary": "A Binario",
+  "@cardToBinary": {
+    "description": "Convert to binary button label"
+  },
+  "cardAdvancedOps": "Operaciones avanzadas:",
+  "@cardAdvancedOps": {
+    "description": "Advanced operations section header on number card"
+  },
+  "cardDigits": "dígitos",
+  "@cardDigits": {
+    "description": "Digits count suffix on number card"
+  },
+  "kbdNumberTheory": "Teoría de Números",
+  "@kbdNumberTheory": {
+    "description": "Number theory keyboard section title"
+  },
+  "kbdModularArith": "Aritmética Modular",
+  "@kbdModularArith": {
+    "description": "Modular arithmetic keyboard section title"
+  },
+  "kbdCombinatorics": "Combinatoria",
+  "@kbdCombinatorics": {
+    "description": "Combinatorics keyboard section title"
+  },
+  "kbdStatistics": "Estadística",
+  "@kbdStatistics": {
+    "description": "Statistics keyboard section title"
+  },
+  "errPower": "Error en potencia: {error}",
+  "@errPower": {
+    "description": "Error message for power operation",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errSquareRoot": "Error en raíz cuadrada: {error}",
+  "@errSquareRoot": {
+    "description": "Error message for square root operation",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errCubeRoot": "Error en raíz cúbica: {error}",
+  "@errCubeRoot": {
+    "description": "Error message for cube root operation",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errBinaryConversion": "Error en conversión binaria: {error}",
+  "@errBinaryConversion": {
+    "description": "Error message for binary conversion",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errEmptyBinary": "Número binario vacío",
+  "@errEmptyBinary": {
+    "description": "Error when binary input is empty"
+  },
+  "errInvalidBinary": "El número debe contener solo dígitos binarios (0 y 1)",
+  "@errInvalidBinary": {
+    "description": "Error when binary input contains invalid digits"
+  },
+  "errBinaryFromConversion": "Error en conversión de binario: {error}",
+  "@errBinaryFromConversion": {
+    "description": "Error message for conversion from binary",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errTrigTooLarge": "Número demasiado grande para funciones trigonométricas",
+  "@errTrigTooLarge": {
+    "description": "Error when number is too large for trig functions"
+  },
+  "errSin": "Error en seno: {error}",
+  "@errSin": {
+    "description": "Error message for sine operation",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errCos": "Error en coseno: {error}",
+  "@errCos": {
+    "description": "Error message for cosine operation",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errTanUndefined": "Tangente indefinida para este ángulo",
+  "@errTanUndefined": {
+    "description": "Error when tangent is undefined"
+  },
+  "errTan": "Error en tangente: {error}",
+  "@errTan": {
+    "description": "Error message for tangent operation",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errAsinDomain": "Arcoseno solo está definido para valores entre -1 y 1",
+  "@errAsinDomain": {
+    "description": "Domain error for arcsine"
+  },
+  "errAsin": "Error en arcoseno: {error}",
+  "@errAsin": {
+    "description": "Error message for arcsine operation",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errAcosDomain": "Arcocoseno solo está definido para valores entre -1 y 1",
+  "@errAcosDomain": {
+    "description": "Domain error for arccosine"
+  },
+  "errAcos": "Error en arcocoseno: {error}",
+  "@errAcos": {
+    "description": "Error message for arccosine operation",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errAtan": "Error en arcotangente: {error}",
+  "@errAtan": {
+    "description": "Error message for arctangent operation",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errLnDomain": "Logaritmo natural solo está definido para números positivos",
+  "@errLnDomain": {
+    "description": "Domain error for natural logarithm"
+  },
+  "errLnTooLarge": "Número demasiado grande para logaritmo natural",
+  "@errLnTooLarge": {
+    "description": "Error when number is too large for natural log"
+  },
+  "errLn": "Error en logaritmo natural: {error}",
+  "@errLn": {
+    "description": "Error message for natural logarithm operation",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errLogDomain": "Logaritmo solo está definido para números positivos",
+  "@errLogDomain": {
+    "description": "Domain error for log base 10"
+  },
+  "errLogTooLarge": "Número demasiado grande para logaritmo base 10",
+  "@errLogTooLarge": {
+    "description": "Error when number is too large for log base 10"
+  },
+  "errLog": "Error en logaritmo: {error}",
+  "@errLog": {
+    "description": "Error message for log base 10 operation",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errExpTooLarge": "Número demasiado grande para exponencial",
+  "@errExpTooLarge": {
+    "description": "Error when number is too large for exponential"
+  },
+  "errExp": "Error en exponencial: {error}",
+  "@errExp": {
+    "description": "Error message for exponential operation",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errTenPowTooLarge": "Número demasiado grande para 10^x",
+  "@errTenPowTooLarge": {
+    "description": "Error when number is too large for 10^x"
+  },
+  "errTenPow": "Error en 10^x: {error}",
+  "@errTenPow": {
+    "description": "Error message for 10^x operation",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errFactorialInvalid": "Número inválido para factorial",
+  "@errFactorialInvalid": {
+    "description": "Error when factorial input is invalid"
+  },
+  "errFactorialNonNeg": "Factorial solo está definido para números enteros no negativos",
+  "@errFactorialNonNeg": {
+    "description": "Error when factorial input is negative"
+  },
+  "errFactorialTooLarge": "Número demasiado grande para factorial (máximo 170)",
+  "@errFactorialTooLarge": {
+    "description": "Error when factorial input exceeds 170"
+  },
+  "errFactorial": "Error en factorial: {error}",
+  "@errFactorial": {
+    "description": "Error message for factorial operation",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errOperationCancelled": "Operación cancelada",
+  "@errOperationCancelled": {
+    "description": "Message when user cancels an operation"
+  },
+  "errGeneric": "Error: {error}",
+  "@errGeneric": {
+    "description": "Generic error message",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errPhiDomain": "φ(n) solo está definido para n > 0",
+  "@errPhiDomain": {
+    "description": "Domain error for Euler totient function"
+  },
+  "errPhi": "Error en φ(n): {error}",
+  "@errPhi": {
+    "description": "Error message for Euler totient function",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errPrimorialDomain": "Primorial solo está definido para n ≥ 0",
+  "@errPrimorialDomain": {
+    "description": "Domain error for primorial"
+  },
+  "errPrimorial": "Error en primorial: {error}",
+  "@errPrimorial": {
+    "description": "Error message for primorial operation",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errSigma0Domain": "σ₀(n) solo está definido para n > 0",
+  "@errSigma0Domain": {
+    "description": "Domain error for divisor count function"
+  },
+  "errSigma0": "Error en σ₀(n): {error}",
+  "@errSigma0": {
+    "description": "Error message for divisor count function",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errSigmaDomain": "σ(m,n) solo está definido para n > 0",
+  "@errSigmaDomain": {
+    "description": "Domain error for divisor sum function"
+  },
+  "errSigma": "Error en σ(m,n): {error}",
+  "@errSigma": {
+    "description": "Error message for divisor sum function",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errFloorCeil": "Error en piso/techo: {error}",
+  "@errFloorCeil": {
+    "description": "Error message for floor/ceiling operation",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errMobiusDomain": "μ(n) solo está definido para n > 0",
+  "@errMobiusDomain": {
+    "description": "Domain error for Möbius function"
+  },
+  "errMobius": "Error en μ(n): {error}",
+  "@errMobius": {
+    "description": "Error message for Möbius function",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errFactorialNeg": "El factorial no está definido para negativos",
+  "@errFactorialNeg": {
+    "description": "Error when factorial input is negative (special functions)"
+  },
+  "errFactorialMax": "n! demasiado grande (máx n=10000)",
+  "@errFactorialMax": {
+    "description": "Error when factorial exceeds max limit of 10000"
+  },
+  "errFactorialN": "Error en n!: {error}",
+  "@errFactorialN": {
+    "description": "Error message for n! in special functions",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errDoubleFactorialNeg": "El doble factorial no está definido para negativos",
+  "@errDoubleFactorialNeg": {
+    "description": "Error when double factorial input is negative"
+  },
+  "errDoubleFactorial": "Error en n!!: {error}",
+  "@errDoubleFactorial": {
+    "description": "Error message for double factorial operation",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errFibonacciNeg": "F(n) no está definido para n < 0",
+  "@errFibonacciNeg": {
+    "description": "Error when Fibonacci input is negative"
+  },
+  "errFibonacci": "Error en F(n): {error}",
+  "@errFibonacci": {
+    "description": "Error message for Fibonacci operation",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errCatalanNeg": "Catalan no está definido para n < 0",
+  "@errCatalanNeg": {
+    "description": "Error when Catalan input is negative"
+  },
+  "errCatalan": "Error en Catalan: {error}",
+  "@errCatalan": {
+    "description": "Error message for Catalan number operation",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errDerangementNeg": "D(n) no está definido para n < 0",
+  "@errDerangementNeg": {
+    "description": "Error when derangement input is negative"
+  },
+  "errDerangement": "Error en D(n): {error}",
+  "@errDerangement": {
+    "description": "Error message for derangement operation",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errPartitionNeg": "p(n) no está definido para n < 0",
+  "@errPartitionNeg": {
+    "description": "Error when partition input is negative"
+  },
+  "errPartition": "Error en p(n): {error}",
+  "@errPartition": {
+    "description": "Error message for partition function",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errBellNeg": "B(n) no está definido para n < 0",
+  "@errBellNeg": {
+    "description": "Error when Bell number input is negative"
+  },
+  "errBell": "Error en Bell(n): {error}",
+  "@errBell": {
+    "description": "Error message for Bell number operation",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errDigitalRoot": "Error en raíz digital: {error}",
+  "@errDigitalRoot": {
+    "description": "Error message for digital root operation",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errPrimitiveRootDomain": "Se necesita n > 1",
+  "@errPrimitiveRootDomain": {
+    "description": "Domain error for primitive root"
+  },
+  "errNoPrimitiveRoot": "No existe raíz primitiva mod {n}",
+  "@errNoPrimitiveRoot": {
+    "description": "Error when no primitive root exists",
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "errLiouvilleDomain": "λ_L(n) solo está definido para n > 0",
+  "@errLiouvilleDomain": {
+    "description": "Domain error for Liouville function"
+  },
+  "errLiouville": "Error en λ_L(n): {error}",
+  "@errLiouville": {
+    "description": "Error message for Liouville function",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errPrimeCounting": "Error en π(n): {error}",
+  "@errPrimeCounting": {
+    "description": "Error message for prime counting function",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errRadDomain": "rad(n) solo está definido para n > 0",
+  "@errRadDomain": {
+    "description": "Domain error for radical function"
+  },
+  "errRad": "Error en rad(n): {error}",
+  "@errRad": {
+    "description": "Error message for radical function",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errOmegaDomain": "ω(n) solo está definido para n > 0",
+  "@errOmegaDomain": {
+    "description": "Domain error for small omega function"
+  },
+  "errOmega": "Error en ω(n): {error}",
+  "@errOmega": {
+    "description": "Error message for small omega function",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errBigOmegaDomain": "Ω(n) solo está definido para n > 0",
+  "@errBigOmegaDomain": {
+    "description": "Domain error for big omega function"
+  },
+  "errBigOmega": "Error en Ω(n): {error}",
+  "@errBigOmega": {
+    "description": "Error message for big omega function",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errCarmichaelDomain": "λ(n) solo está definido para n > 0",
+  "@errCarmichaelDomain": {
+    "description": "Domain error for Carmichael function"
+  },
+  "errCarmichael": "Error en λ(n): {error}",
+  "@errCarmichael": {
+    "description": "Error message for Carmichael function",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errSopfrDomain": "sopfr(n) solo está definido para n > 0",
+  "@errSopfrDomain": {
+    "description": "Domain error for sopfr function"
+  },
+  "errSopfr": "Error en sopfr(n): {error}",
+  "@errSopfr": {
+    "description": "Error message for sopfr function",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errSopfDomain": "sopf(n) solo está definido para n > 0",
+  "@errSopfDomain": {
+    "description": "Domain error for sopf function"
+  },
+  "errSopf": "Error en sopf(n): {error}",
+  "@errSopf": {
+    "description": "Error message for sopf function",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errPercentage": "Error en porcentaje: {error}",
+  "@errPercentage": {
+    "description": "Error message for percentage operation",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errDivisionByZero": "División por cero",
+  "@errDivisionByZero": {
+    "description": "Error for division by zero"
+  },
+  "errReciprocal": "Error en recíproco: {error}",
+  "@errReciprocal": {
+    "description": "Error message for reciprocal operation",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errNoInverse": "No existe inverso modular de {a} mod {n}",
+  "@errNoInverse": {
+    "description": "Error when modular inverse does not exist",
+    "placeholders": {
+      "a": {
+        "type": "String"
+      },
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "errModPow": "Error en exponenciación modular: {error}",
+  "@errModPow": {
+    "description": "Error message for modular exponentiation",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errDiophantine": "Error en ecuación diofántica: {error}",
+  "@errDiophantine": {
+    "description": "Error message for Diophantine equation solver",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errCRT": "Error en TCR: {error}",
+  "@errCRT": {
+    "description": "Error message for Chinese Remainder Theorem",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsLanguage": "Idioma",
+  "@settingsLanguage": {
+    "description": "Language section title in settings"
+  },
+  "settingsLangAuto": "Automático (del sistema)",
+  "@settingsLangAuto": {
+    "description": "Automatic language option label"
+  },
+  "settingsLangAutoDesc": "Usar el idioma del dispositivo",
+  "@settingsLangAutoDesc": {
+    "description": "Automatic language option description"
+  },
+  "settingsLangEs": "Español",
+  "@settingsLangEs": {
+    "description": "Spanish language option"
+  },
+  "settingsLangEn": "English",
+  "@settingsLangEn": {
+    "description": "English language option"
+  },
+  "hlpTitle": "Guía de Funciones Especiales",
+  "@hlpTitle": {
+    "description": "Help screen title"
+  },
+  "hlpQuickStartHeader": "Inicio Rápido",
+  "@hlpQuickStartHeader": {
+    "description": "Quick start section header"
+  },
+  "hlpQuickStartWelcome": "Bienvenido a la calculadora para olimpiadas",
+  "@hlpQuickStartWelcome": {
+    "description": "Quick start welcome title"
+  },
+  "hlpQuickStartStep1": "Abre el menú lateral (☰) y selecciona \"Funciones Especiales\"",
+  "@hlpQuickStartStep1": {
+    "description": "Quick start step 1"
+  },
+  "hlpQuickStartStep2": "El teclado superior (scrollable) tiene ~40 funciones en 4 secciones",
+  "@hlpQuickStartStep2": {
+    "description": "Quick start step 2"
+  },
+  "hlpQuickStartStep3": "Ingresa un número y presiona cualquier botón de función",
+  "@hlpQuickStartStep3": {
+    "description": "Quick start step 3"
+  },
+  "hlpQuickStartStep4": "Si la función necesita más valores, aparece un indicador de operación pendiente",
+  "@hlpQuickStartStep4": {
+    "description": "Quick start step 4"
+  },
+  "hlpQuickStartStep5": "El panel lateral muestra análisis automático del número ingresado",
+  "@hlpQuickStartStep5": {
+    "description": "Quick start step 5"
+  },
+  "hlpQuickStartNote": "Las funciones de 1 parámetro se ejecutan inmediatamente.\nLas de 2+ parámetros muestran un indicador y esperan más valores.",
+  "@hlpQuickStartNote": {
+    "description": "Quick start info note"
+  },
+  "hlpParamHeader": "Sistema de Parámetros",
+  "@hlpParamHeader": {
+    "description": "Parameter system section header"
+  },
+  "hlpParamTypesTitle": "Tipos de funciones según parámetros",
+  "@hlpParamTypesTitle": {
+    "description": "Parameter types card title"
+  },
+  "hlpParam1Title": "1 parámetro (inmediatas)",
+  "@hlpParam1Title": {
+    "description": "1-param type title"
+  },
+  "hlpParam1Desc": "Ingresa número → Presiona función → Resultado",
+  "@hlpParam1Desc": {
+    "description": "1-param type description"
+  },
+  "hlpParam1Example": "Ej: φ(12) → ingresa 12, presiona φ → muestra 4",
+  "@hlpParam1Example": {
+    "description": "1-param type example"
+  },
+  "hlpParam2Title": "2-3-4 parámetros (fijos)",
+  "@hlpParam2Title": {
+    "description": "2-3-4 param type title"
+  },
+  "hlpParam2Desc": "Ingresa valor → Función → Valor → = → (repite si necesita más)\nSe auto-ejecuta al completar todos los parámetros.",
+  "@hlpParam2Desc": {
+    "description": "2-3-4 param type description"
+  },
+  "hlpParam2Example": "Ej: C(10,3) → ingresa 10 → C(n,k) → 3 → =",
+  "@hlpParam2Example": {
+    "description": "2-3-4 param type example"
+  },
+  "hlpParamNTitle": "N parámetros (variables)",
+  "@hlpParamNTitle": {
+    "description": "N-param type title"
+  },
+  "hlpParamNDesc": "Ingresa valor → Función → Valor → = (agrega más)\nPresiona la MISMA FUNCIÓN otra vez para ejecutar.",
+  "@hlpParamNDesc": {
+    "description": "N-param type description"
+  },
+  "hlpParamNExample": "Ej: MCD(12,18,24) → 12 → MCD → 18 → = → 24 → MCD",
+  "@hlpParamNExample": {
+    "description": "N-param type example"
+  },
+  "hlpPendingOpTitle": "Indicador de operación pendiente",
+  "@hlpPendingOpTitle": {
+    "description": "Pending operation indicator title"
+  },
+  "hlpPendingOpDesc": "Cuando una función espera más valores, aparece un indicador coloreado en la pantalla mostrando qué operación está en curso y qué falta.\n\nEjemplo: \"C(10, _)\" indica que falta k para completar C(n,k).\n\"MCD(12, 18, _) [= agregar, MCD resolver]\" indica una operación variable.",
+  "@hlpPendingOpDesc": {
+    "description": "Pending operation indicator description"
+  },
+  "hlpNumberTheoryHeader": "Teoría de Números",
+  "@hlpNumberTheoryHeader": {
+    "description": "Number theory section header"
+  },
+  "hlpEulerPhiTitle": "φ(n) — Función de Euler (Totient)",
+  "@hlpEulerPhiTitle": {
+    "description": "Euler phi function title"
+  },
+  "hlpEulerPhiParams": "1 param",
+  "@hlpEulerPhiParams": {
+    "description": "Euler phi params"
+  },
+  "hlpEulerPhiDesc": "Cuenta cuántos enteros de 1 a n son coprimos con n (es decir, MCD(k,n)=1).",
+  "@hlpEulerPhiDesc": {
+    "description": "Euler phi description"
+  },
+  "hlpEulerPhiFormula": "φ(n) = n × ∏(1 − 1/p) para cada primo p | n",
+  "@hlpEulerPhiFormula": {
+    "description": "Euler phi formula"
+  },
+  "hlpEulerPhiEx1": "φ(1) = 1",
+  "@hlpEulerPhiEx1": {
+    "description": "Euler phi example 1"
+  },
+  "hlpEulerPhiEx2": "φ(9) = 6 → [1,2,4,5,7,8]",
+  "@hlpEulerPhiEx2": {
+    "description": "Euler phi example 2"
+  },
+  "hlpEulerPhiEx3": "φ(12) = 4 → [1,5,7,11]",
+  "@hlpEulerPhiEx3": {
+    "description": "Euler phi example 3"
+  },
+  "hlpEulerPhiEx4": "φ(p) = p−1 para p primo",
+  "@hlpEulerPhiEx4": {
+    "description": "Euler phi example 4"
+  },
+  "hlpEulerPhiTip1": "Multiplicativa: φ(mn) = φ(m)φ(n) si MCD(m,n)=1",
+  "@hlpEulerPhiTip1": {
+    "description": "Euler phi tip 1"
+  },
+  "hlpEulerPhiTip2": "Teorema de Euler: a^φ(n) ≡ 1 (mod n) si MCD(a,n)=1",
+  "@hlpEulerPhiTip2": {
+    "description": "Euler phi tip 2"
+  },
+  "hlpEulerPhiTip3": "Σ φ(d) para d|n = n",
+  "@hlpEulerPhiTip3": {
+    "description": "Euler phi tip 3"
+  },
+  "hlpCarmichaelTitle": "λ(n) — Función λ de Carmichael",
+  "@hlpCarmichaelTitle": {
+    "description": "Carmichael function title"
+  },
+  "hlpCarmichaelParams": "1 param",
+  "@hlpCarmichaelParams": {
+    "description": "Carmichael params"
+  },
+  "hlpCarmichaelDesc": "Menor m > 0 tal que a^m ≡ 1 (mod n) para TODO a coprimo con n. Siempre divide a φ(n).",
+  "@hlpCarmichaelDesc": {
+    "description": "Carmichael description"
+  },
+  "hlpCarmichaelFormula": "λ(p^k) = φ(p^k) si p impar\nλ(2)=1, λ(4)=2, λ(2^k)=2^(k−2) si k≥3\nλ(n) = mcm de las partes",
+  "@hlpCarmichaelFormula": {
+    "description": "Carmichael formula"
+  },
+  "hlpCarmichaelEx1": "λ(8) = 2",
+  "@hlpCarmichaelEx1": {
+    "description": "Carmichael example 1"
+  },
+  "hlpCarmichaelEx2": "λ(15) = mcm(λ(3),λ(5)) = mcm(2,4) = 4",
+  "@hlpCarmichaelEx2": {
+    "description": "Carmichael example 2"
+  },
+  "hlpCarmichaelEx3": "λ(p) = p−1 para p primo",
+  "@hlpCarmichaelEx3": {
+    "description": "Carmichael example 3"
+  },
+  "hlpCarmichaelTip1": "λ(n) | φ(n) siempre",
+  "@hlpCarmichaelTip1": {
+    "description": "Carmichael tip 1"
+  },
+  "hlpCarmichaelTip2": "λ(n) = φ(n) si y solo si n tiene raíz primitiva",
+  "@hlpCarmichaelTip2": {
+    "description": "Carmichael tip 2"
+  },
+  "hlpMobiusTitle": "μ(n) — Función de Möbius",
+  "@hlpMobiusTitle": {
+    "description": "Mobius function title"
+  },
+  "hlpMobiusParams": "1 param",
+  "@hlpMobiusParams": {
+    "description": "Mobius params"
+  },
+  "hlpMobiusDesc": "Detecta si n es libre de cuadrados y cuenta factores primos.",
+  "@hlpMobiusDesc": {
+    "description": "Mobius description"
+  },
+  "hlpMobiusFormula": "μ(1) = 1\nμ(n) = (−1)^k si n = p₁·p₂·...·pₖ (distintos)\nμ(n) = 0 si p² | n",
+  "@hlpMobiusFormula": {
+    "description": "Mobius formula"
+  },
+  "hlpMobiusEx1": "μ(1) = 1",
+  "@hlpMobiusEx1": {
+    "description": "Mobius example 1"
+  },
+  "hlpMobiusEx2": "μ(6) = μ(2×3) = (−1)² = 1",
+  "@hlpMobiusEx2": {
+    "description": "Mobius example 2"
+  },
+  "hlpMobiusEx3": "μ(30) = μ(2×3×5) = (−1)³ = −1",
+  "@hlpMobiusEx3": {
+    "description": "Mobius example 3"
+  },
+  "hlpMobiusEx4": "μ(12) = 0 (tiene 2²)",
+  "@hlpMobiusEx4": {
+    "description": "Mobius example 4"
+  },
+  "hlpMobiusTip1": "Inversión de Möbius: si g(n) = Σ f(d) para d|n, entonces f(n) = Σ μ(d)g(n/d)",
+  "@hlpMobiusTip1": {
+    "description": "Mobius tip 1"
+  },
+  "hlpMobiusTip2": "Σ μ(d) para d|n = [n=1]",
+  "@hlpMobiusTip2": {
+    "description": "Mobius tip 2"
+  },
+  "hlpLiouvilleTitle": "λL(n) — Función de Liouville",
+  "@hlpLiouvilleTitle": {
+    "description": "Liouville function title"
+  },
+  "hlpLiouvilleParams": "1 param",
+  "@hlpLiouvilleParams": {
+    "description": "Liouville params"
+  },
+  "hlpLiouvilleDesc": "Completamente multiplicativa: λL(n) = (−1)^Ω(n).",
+  "@hlpLiouvilleDesc": {
+    "description": "Liouville description"
+  },
+  "hlpLiouvilleFormula": "λL(n) = (−1)^Ω(n)",
+  "@hlpLiouvilleFormula": {
+    "description": "Liouville formula"
+  },
+  "hlpLiouvilleEx1": "λL(12) = (−1)³ = −1 (Ω(12)=3)",
+  "@hlpLiouvilleEx1": {
+    "description": "Liouville example 1"
+  },
+  "hlpLiouvilleEx2": "λL(36) = (−1)⁴ = 1 (Ω(36)=4)",
+  "@hlpLiouvilleEx2": {
+    "description": "Liouville example 2"
+  },
+  "hlpLiouvilleTip1": "Σ λL(d) para d|n = 1 si n es cuadrado perfecto, 0 si no",
+  "@hlpLiouvilleTip1": {
+    "description": "Liouville tip 1"
+  },
+  "hlpSmallOmegaTitle": "ω(n) — Factores Primos Distintos",
+  "@hlpSmallOmegaTitle": {
+    "description": "Small omega function title"
+  },
+  "hlpSmallOmegaParams": "1 param",
+  "@hlpSmallOmegaParams": {
+    "description": "Small omega params"
+  },
+  "hlpSmallOmegaDesc": "Cuenta la cantidad de primos distintos que dividen a n.",
+  "@hlpSmallOmegaDesc": {
+    "description": "Small omega description"
+  },
+  "hlpSmallOmegaFormula": "ω(n) = k si n = p₁^a₁ × ... × pₖ^aₖ",
+  "@hlpSmallOmegaFormula": {
+    "description": "Small omega formula"
+  },
+  "hlpSmallOmegaEx1": "ω(12) = 2 → [2, 3]",
+  "@hlpSmallOmegaEx1": {
+    "description": "Small omega example 1"
+  },
+  "hlpSmallOmegaEx2": "ω(30) = 3 → [2, 3, 5]",
+  "@hlpSmallOmegaEx2": {
+    "description": "Small omega example 2"
+  },
+  "hlpSmallOmegaEx3": "ω(p^k) = 1",
+  "@hlpSmallOmegaEx3": {
+    "description": "Small omega example 3"
+  },
+  "hlpBigOmegaTitle": "Ω(n) — Factores Primos con Multiplicidad",
+  "@hlpBigOmegaTitle": {
+    "description": "Big omega function title"
+  },
+  "hlpBigOmegaParams": "1 param",
+  "@hlpBigOmegaParams": {
+    "description": "Big omega params"
+  },
+  "hlpBigOmegaDesc": "Número total de factores primos contando repeticiones.",
+  "@hlpBigOmegaDesc": {
+    "description": "Big omega description"
+  },
+  "hlpBigOmegaFormula": "Ω(n) = a₁ + a₂ + ... + aₖ",
+  "@hlpBigOmegaFormula": {
+    "description": "Big omega formula"
+  },
+  "hlpBigOmegaEx1": "Ω(12) = 3 → 2×2×3",
+  "@hlpBigOmegaEx1": {
+    "description": "Big omega example 1"
+  },
+  "hlpBigOmegaEx2": "Ω(72) = 5 → 2³×3² → 3+2",
+  "@hlpBigOmegaEx2": {
+    "description": "Big omega example 2"
+  },
+  "hlpBigOmegaEx3": "Ω(p) = 1, Ω(p²) = 2",
+  "@hlpBigOmegaEx3": {
+    "description": "Big omega example 3"
+  },
+  "hlpSigma0Title": "σ₀(n) — Cantidad de Divisores",
+  "@hlpSigma0Title": {
+    "description": "Sigma0 function title"
+  },
+  "hlpSigma0Params": "1 param",
+  "@hlpSigma0Params": {
+    "description": "Sigma0 params"
+  },
+  "hlpSigma0Desc": "Número total de divisores positivos de n.",
+  "@hlpSigma0Desc": {
+    "description": "Sigma0 description"
+  },
+  "hlpSigma0Formula": "Si n = p₁^a₁ × ... × pₖ^aₖ\nσ₀(n) = (a₁+1)(a₂+1)...(aₖ+1)",
+  "@hlpSigma0Formula": {
+    "description": "Sigma0 formula"
+  },
+  "hlpSigma0Ex1": "σ₀(12) = 6 → [1,2,3,4,6,12]",
+  "@hlpSigma0Ex1": {
+    "description": "Sigma0 example 1"
+  },
+  "hlpSigma0Ex2": "σ₀(p) = 2",
+  "@hlpSigma0Ex2": {
+    "description": "Sigma0 example 2"
+  },
+  "hlpSigma0Ex3": "σ₀(p²) = 3",
+  "@hlpSigma0Ex3": {
+    "description": "Sigma0 example 3"
+  },
+  "hlpSigmaTitle": "σ(n) — Suma de Divisores",
+  "@hlpSigmaTitle": {
+    "description": "Sigma function title"
+  },
+  "hlpSigmaParams": "1 param",
+  "@hlpSigmaParams": {
+    "description": "Sigma params"
+  },
+  "hlpSigmaDesc": "Suma de todos los divisores positivos de n.",
+  "@hlpSigmaDesc": {
+    "description": "Sigma description"
+  },
+  "hlpSigmaFormula": "σ(n) = Σ d para d | n",
+  "@hlpSigmaFormula": {
+    "description": "Sigma formula"
+  },
+  "hlpSigmaEx1": "σ(6) = 1+2+3+6 = 12 (6 es perfecto)",
+  "@hlpSigmaEx1": {
+    "description": "Sigma example 1"
+  },
+  "hlpSigmaEx2": "σ(12) = 1+2+3+4+6+12 = 28",
+  "@hlpSigmaEx2": {
+    "description": "Sigma example 2"
+  },
+  "hlpSigmaEx3": "σ(p) = p+1",
+  "@hlpSigmaEx3": {
+    "description": "Sigma example 3"
+  },
+  "hlpSigmaTip1": "n es perfecto ⟺ σ(n) = 2n",
+  "@hlpSigmaTip1": {
+    "description": "Sigma tip 1"
+  },
+  "hlpSigmaTip2": "n es abundante ⟺ σ(n) > 2n",
+  "@hlpSigmaTip2": {
+    "description": "Sigma tip 2"
+  },
+  "hlpSopfrTitle": "sopfr(n) — Suma de Primos con Repetición",
+  "@hlpSopfrTitle": {
+    "description": "Sopfr function title"
+  },
+  "hlpSopfrParams": "1 param",
+  "@hlpSopfrParams": {
+    "description": "Sopfr params"
+  },
+  "hlpSopfrDesc": "Suma los factores primos contando multiplicidad.",
+  "@hlpSopfrDesc": {
+    "description": "Sopfr description"
+  },
+  "hlpSopfrFormula": "sopfr(n) = a₁p₁ + a₂p₂ + ... + aₖpₖ",
+  "@hlpSopfrFormula": {
+    "description": "Sopfr formula"
+  },
+  "hlpSopfrEx1": "sopfr(12) = 2+2+3 = 7",
+  "@hlpSopfrEx1": {
+    "description": "Sopfr example 1"
+  },
+  "hlpSopfrEx2": "sopfr(60) = 2+2+3+5 = 12",
+  "@hlpSopfrEx2": {
+    "description": "Sopfr example 2"
+  },
+  "hlpSopfTitle": "sopf(n) — Suma de Primos Distintos",
+  "@hlpSopfTitle": {
+    "description": "Sopf function title"
+  },
+  "hlpSopfParams": "1 param",
+  "@hlpSopfParams": {
+    "description": "Sopf params"
+  },
+  "hlpSopfDesc": "Suma de los primos distintos que dividen a n.",
+  "@hlpSopfDesc": {
+    "description": "Sopf description"
+  },
+  "hlpSopfFormula": "sopf(n) = p₁ + p₂ + ... + pₖ",
+  "@hlpSopfFormula": {
+    "description": "Sopf formula"
+  },
+  "hlpSopfEx1": "sopf(12) = 2+3 = 5",
+  "@hlpSopfEx1": {
+    "description": "Sopf example 1"
+  },
+  "hlpSopfEx2": "sopf(60) = 2+3+5 = 10",
+  "@hlpSopfEx2": {
+    "description": "Sopf example 2"
+  },
+  "hlpRadTitle": "rad(n) — Radical",
+  "@hlpRadTitle": {
+    "description": "Radical function title"
+  },
+  "hlpRadParams": "1 param",
+  "@hlpRadParams": {
+    "description": "Radical params"
+  },
+  "hlpRadDesc": "Producto de los primos distintos que dividen a n (función del Conjetura ABC).",
+  "@hlpRadDesc": {
+    "description": "Radical description"
+  },
+  "hlpRadFormula": "rad(n) = ∏ p para p primo, p | n",
+  "@hlpRadFormula": {
+    "description": "Radical formula"
+  },
+  "hlpRadEx1": "rad(72) = rad(2³×3²) = 2×3 = 6",
+  "@hlpRadEx1": {
+    "description": "Radical example 1"
+  },
+  "hlpRadEx2": "rad(480) = rad(2⁵×3×5) = 30",
+  "@hlpRadEx2": {
+    "description": "Radical example 2"
+  },
+  "hlpRadEx3": "rad(p) = p",
+  "@hlpRadEx3": {
+    "description": "Radical example 3"
+  },
+  "hlpPrimorialTitle": "n# — Primorial",
+  "@hlpPrimorialTitle": {
+    "description": "Primorial function title"
+  },
+  "hlpPrimorialParams": "1 param",
+  "@hlpPrimorialParams": {
+    "description": "Primorial params"
+  },
+  "hlpPrimorialDesc": "Producto de todos los primos ≤ n.",
+  "@hlpPrimorialDesc": {
+    "description": "Primorial description"
+  },
+  "hlpPrimorialFormula": "n# = ∏ p para p primo, p ≤ n",
+  "@hlpPrimorialFormula": {
+    "description": "Primorial formula"
+  },
+  "hlpPrimorialEx1": "5# = 2×3×5 = 30",
+  "@hlpPrimorialEx1": {
+    "description": "Primorial example 1"
+  },
+  "hlpPrimorialEx2": "7# = 210",
+  "@hlpPrimorialEx2": {
+    "description": "Primorial example 2"
+  },
+  "hlpPrimorialEx3": "11# = 2310",
+  "@hlpPrimorialEx3": {
+    "description": "Primorial example 3"
+  },
+  "hlpPrimeCountTitle": "π(n) — Función Contadora de Primos",
+  "@hlpPrimeCountTitle": {
+    "description": "Prime counting function title"
+  },
+  "hlpPrimeCountParams": "1 param",
+  "@hlpPrimeCountParams": {
+    "description": "Prime counting params"
+  },
+  "hlpPrimeCountDesc": "Cuenta primos ≤ n. Exacto para n ≤ 1,000,000; aproximación Li(x) para mayores.",
+  "@hlpPrimeCountDesc": {
+    "description": "Prime counting description"
+  },
+  "hlpPrimeCountFormula": "π(n) ~ n/ln(n) (Teorema de los Números Primos)",
+  "@hlpPrimeCountFormula": {
+    "description": "Prime counting formula"
+  },
+  "hlpPrimeCountEx1": "π(10) = 4",
+  "@hlpPrimeCountEx1": {
+    "description": "Prime counting example 1"
+  },
+  "hlpPrimeCountEx2": "π(100) = 25",
+  "@hlpPrimeCountEx2": {
+    "description": "Prime counting example 2"
+  },
+  "hlpPrimeCountEx3": "π(1,000,000) = 78,498",
+  "@hlpPrimeCountEx3": {
+    "description": "Prime counting example 3"
+  },
+  "hlpDigitalRootTitle": "dr(n) — Raíz Digital",
+  "@hlpDigitalRootTitle": {
+    "description": "Digital root function title"
+  },
+  "hlpDigitalRootParams": "1 param",
+  "@hlpDigitalRootParams": {
+    "description": "Digital root params"
+  },
+  "hlpDigitalRootDesc": "Suma iterativa de dígitos hasta obtener un solo dígito.",
+  "@hlpDigitalRootDesc": {
+    "description": "Digital root description"
+  },
+  "hlpDigitalRootFormula": "dr(n) = 1 + (n−1) mod 9  (para n > 0)",
+  "@hlpDigitalRootFormula": {
+    "description": "Digital root formula"
+  },
+  "hlpDigitalRootEx1": "dr(493) → 4+9+3=16 → 1+6 = 7",
+  "@hlpDigitalRootEx1": {
+    "description": "Digital root example 1"
+  },
+  "hlpDigitalRootEx2": "dr(999) = 9",
+  "@hlpDigitalRootEx2": {
+    "description": "Digital root example 2"
+  },
+  "hlpDigitalRootEx3": "dr(n) ≡ n (mod 9)",
+  "@hlpDigitalRootEx3": {
+    "description": "Digital root example 3"
+  },
+  "hlpFloorCeilTitle": "⌊x⌋ / ⌈x⌉ — Piso y Techo",
+  "@hlpFloorCeilTitle": {
+    "description": "Floor/ceiling function title"
+  },
+  "hlpFloorCeilParams": "1 param",
+  "@hlpFloorCeilParams": {
+    "description": "Floor/ceiling params"
+  },
+  "hlpFloorCeilDesc": "Piso: mayor entero ≤ x. Techo: menor entero ≥ x. Se alterna entre ambos.",
+  "@hlpFloorCeilDesc": {
+    "description": "Floor/ceiling description"
+  },
+  "hlpFloorCeilFormula": "⌊x⌋ ≤ x < ⌊x⌋+1\n⌈x⌉−1 < x ≤ ⌈x⌉",
+  "@hlpFloorCeilFormula": {
+    "description": "Floor/ceiling formula"
+  },
+  "hlpFloorCeilEx1": "⌊3.7⌋ = 3, ⌈3.7⌉ = 4",
+  "@hlpFloorCeilEx1": {
+    "description": "Floor/ceiling example 1"
+  },
+  "hlpFloorCeilEx2": "⌊−2.3⌋ = −3, ⌈−2.3⌉ = −2",
+  "@hlpFloorCeilEx2": {
+    "description": "Floor/ceiling example 2"
+  },
+  "hlpFloorCeilEx3": "⌊5⌋ = ⌈5⌉ = 5",
+  "@hlpFloorCeilEx3": {
+    "description": "Floor/ceiling example 3"
+  },
+  "hlpPadicTitle": "Vₚ(n) — Valuación p-ádica",
+  "@hlpPadicTitle": {
+    "description": "p-adic valuation title"
+  },
+  "hlpPadicParams": "2 params: n → Vₚ → p → =",
+  "@hlpPadicParams": {
+    "description": "p-adic valuation params"
+  },
+  "hlpPadicDesc": "Máxima potencia del primo p que divide a n.",
+  "@hlpPadicDesc": {
+    "description": "p-adic valuation description"
+  },
+  "hlpPadicFormula": "Vₚ(n) = max[k : p^k | n]",
+  "@hlpPadicFormula": {
+    "description": "p-adic valuation formula"
+  },
+  "hlpPadicEx1": "V₂(24) = 3 → 24 = 2³×3",
+  "@hlpPadicEx1": {
+    "description": "p-adic example 1"
+  },
+  "hlpPadicEx2": "V₃(81) = 4 → 81 = 3⁴",
+  "@hlpPadicEx2": {
+    "description": "p-adic example 2"
+  },
+  "hlpPadicEx3": "V₅(100) = 2 → 100 = 2²×5²",
+  "@hlpPadicEx3": {
+    "description": "p-adic example 3"
+  },
+  "hlpPadicTip1": "Fórmula de Legendre: Vₚ(n!) = Σ ⌊n/pⁱ⌋",
+  "@hlpPadicTip1": {
+    "description": "p-adic tip 1"
+  },
+  "hlpPadicTip2": "Vₚ(ab) = Vₚ(a) + Vₚ(b)",
+  "@hlpPadicTip2": {
+    "description": "p-adic tip 2"
+  },
+  "hlpModArithHeader": "Aritmética Modular",
+  "@hlpModArithHeader": {
+    "description": "Modular arithmetic section header"
+  },
+  "hlpModTitle": "a mod b — Resto de División",
+  "@hlpModTitle": {
+    "description": "Modulo function title"
+  },
+  "hlpModParams": "2 params: a → mod → b → =",
+  "@hlpModParams": {
+    "description": "Modulo params"
+  },
+  "hlpModDesc": "Resto de dividir a entre b.",
+  "@hlpModDesc": {
+    "description": "Modulo description"
+  },
+  "hlpModFormula": "a mod b = a − b × ⌊a/b⌋",
+  "@hlpModFormula": {
+    "description": "Modulo formula"
+  },
+  "hlpModEx1": "17 mod 5 = 2",
+  "@hlpModEx1": {
+    "description": "Modulo example 1"
+  },
+  "hlpModEx2": "23 mod 7 = 2",
+  "@hlpModEx2": {
+    "description": "Modulo example 2"
+  },
+  "hlpModEx3": "−8 mod 3 = 1",
+  "@hlpModEx3": {
+    "description": "Modulo example 3"
+  },
+  "hlpModPowTitle": "a^b mod n — Exponenciación Modular",
+  "@hlpModPowTitle": {
+    "description": "Modular exponentiation title"
+  },
+  "hlpModPowParams": "3 params: a → a%n → b → = → n → =",
+  "@hlpModPowParams": {
+    "description": "Modular exponentiation params"
+  },
+  "hlpModPowDesc": "Calcula a^b mod n eficientemente usando cuadratura repetida O(log b).",
+  "@hlpModPowDesc": {
+    "description": "Modular exponentiation description"
+  },
+  "hlpModPowFormula": "Se descompone b en binario y se cuadra sucesivamente",
+  "@hlpModPowFormula": {
+    "description": "Modular exponentiation formula"
+  },
+  "hlpModPowEx1": "2¹⁰⁰ mod 7 = 2",
+  "@hlpModPowEx1": {
+    "description": "Modular exponentiation example 1"
+  },
+  "hlpModPowEx2": "3¹³ mod 11 = 5",
+  "@hlpModPowEx2": {
+    "description": "Modular exponentiation example 2"
+  },
+  "hlpModPowEx3": "Fundamental en RSA y tests de primalidad",
+  "@hlpModPowEx3": {
+    "description": "Modular exponentiation example 3"
+  },
+  "hlpModPowTip1": "Flujo: ingresa a → presiona a%n → ingresa b → presiona = → ingresa n → presiona =",
+  "@hlpModPowTip1": {
+    "description": "Modular exponentiation tip 1"
+  },
+  "hlpModInvTitle": "a⁻¹ mod n — Inverso Modular",
+  "@hlpModInvTitle": {
+    "description": "Modular inverse title"
+  },
+  "hlpModInvParams": "2 params: a → a⁻¹ → n → =",
+  "@hlpModInvParams": {
+    "description": "Modular inverse params"
+  },
+  "hlpModInvDesc": "Encuentra b tal que a×b ≡ 1 (mod n). Solo existe si MCD(a,n) = 1.",
+  "@hlpModInvDesc": {
+    "description": "Modular inverse description"
+  },
+  "hlpModInvFormula": "Algoritmo extendido de Euclides",
+  "@hlpModInvFormula": {
+    "description": "Modular inverse formula"
+  },
+  "hlpModInvEx1": "3⁻¹ mod 7 = 5 → 3×5=15≡1",
+  "@hlpModInvEx1": {
+    "description": "Modular inverse example 1"
+  },
+  "hlpModInvEx2": "5⁻¹ mod 11 = 9 → 5×9=45≡1",
+  "@hlpModInvEx2": {
+    "description": "Modular inverse example 2"
+  },
+  "hlpModInvEx3": "No existe si MCD(a,n) ≠ 1",
+  "@hlpModInvEx3": {
+    "description": "Modular inverse example 3"
+  },
+  "hlpOrdTitle": "ord_n(a) — Orden Multiplicativo",
+  "@hlpOrdTitle": {
+    "description": "Multiplicative order title"
+  },
+  "hlpOrdParams": "2 params: a → ord → n → =",
+  "@hlpOrdParams": {
+    "description": "Multiplicative order params"
+  },
+  "hlpOrdDesc": "Menor k > 0 con a^k ≡ 1 (mod n). Requiere MCD(a,n)=1.",
+  "@hlpOrdDesc": {
+    "description": "Multiplicative order description"
+  },
+  "hlpOrdFormula": "ord_n(a) = min[k > 0 : a^k ≡ 1 (mod n)]",
+  "@hlpOrdFormula": {
+    "description": "Multiplicative order formula"
+  },
+  "hlpOrdEx1": "ord₇(2) = 3 → 2³=8≡1",
+  "@hlpOrdEx1": {
+    "description": "Multiplicative order example 1"
+  },
+  "hlpOrdEx2": "ord₁₀(3) = 4 → 3⁴=81≡1",
+  "@hlpOrdEx2": {
+    "description": "Multiplicative order example 2"
+  },
+  "hlpOrdTip1": "ord_n(a) siempre divide a φ(n)",
+  "@hlpOrdTip1": {
+    "description": "Multiplicative order tip 1"
+  },
+  "hlpOrdTip2": "a es raíz primitiva ⟺ ord_n(a) = φ(n)",
+  "@hlpOrdTip2": {
+    "description": "Multiplicative order tip 2"
+  },
+  "hlpLegendreTitle": "(a/p) — Símbolo de Legendre",
+  "@hlpLegendreTitle": {
+    "description": "Legendre symbol title"
+  },
+  "hlpLegendreParams": "2 params: a → (a/p) → p → =",
+  "@hlpLegendreParams": {
+    "description": "Legendre symbol params"
+  },
+  "hlpLegendreDesc": "1 si a es residuo cuadrático mod p, −1 si no, 0 si p|a. Requiere p primo impar.",
+  "@hlpLegendreDesc": {
+    "description": "Legendre symbol description"
+  },
+  "hlpLegendreFormula": "(a/p) ≡ a^((p−1)/2) (mod p) — Criterio de Euler",
+  "@hlpLegendreFormula": {
+    "description": "Legendre symbol formula"
+  },
+  "hlpLegendreEx1": "(2/7) = 1 → 3²≡2 (mod 7)",
+  "@hlpLegendreEx1": {
+    "description": "Legendre symbol example 1"
+  },
+  "hlpLegendreEx2": "(3/7) = −1 → no existe x²≡3",
+  "@hlpLegendreEx2": {
+    "description": "Legendre symbol example 2"
+  },
+  "hlpLegendreEx3": "(5/5) = 0",
+  "@hlpLegendreEx3": {
+    "description": "Legendre symbol example 3"
+  },
+  "hlpJacobiTitle": "(a/n)ⱼ — Símbolo de Jacobi",
+  "@hlpJacobiTitle": {
+    "description": "Jacobi symbol title"
+  },
+  "hlpJacobiParams": "2 params: a → (a/n)ⱼ → n → =",
+  "@hlpJacobiParams": {
+    "description": "Jacobi symbol params"
+  },
+  "hlpJacobiDesc": "Generalización de Legendre para n compuesto impar. Usa reciprocidad cuadrática.",
+  "@hlpJacobiDesc": {
+    "description": "Jacobi symbol description"
+  },
+  "hlpJacobiFormula": "(a/n) = ∏(a/pᵢ)^eᵢ donde n = ∏pᵢ^eᵢ",
+  "@hlpJacobiFormula": {
+    "description": "Jacobi symbol formula"
+  },
+  "hlpJacobiEx1": "(2/15) = (2/3)(2/5) = (−1)(−1) = 1",
+  "@hlpJacobiEx1": {
+    "description": "Jacobi symbol example 1"
+  },
+  "hlpJacobiEx2": "(a/n) = −1 ⟹ a NO es residuo cuadrático",
+  "@hlpJacobiEx2": {
+    "description": "Jacobi symbol example 2"
+  },
+  "hlpJacobiEx3": "(a/n) = 1 NO garantiza que lo sea",
+  "@hlpJacobiEx3": {
+    "description": "Jacobi symbol example 3"
+  },
+  "hlpPrimRootTitle": "g — Raíz Primitiva",
+  "@hlpPrimRootTitle": {
+    "description": "Primitive root title"
+  },
+  "hlpPrimRootParams": "1 param",
+  "@hlpPrimRootParams": {
+    "description": "Primitive root params"
+  },
+  "hlpPrimRootDesc": "Menor raíz primitiva mod n (si existe). g es raíz primitiva si ord_n(g) = φ(n).",
+  "@hlpPrimRootDesc": {
+    "description": "Primitive root description"
+  },
+  "hlpPrimRootFormula": "[g, g², ..., g^φ(n)] = (Z/nZ)*",
+  "@hlpPrimRootFormula": {
+    "description": "Primitive root formula"
+  },
+  "hlpPrimRootEx1": "g(7) = 3 → [3,2,6,4,5,1]",
+  "@hlpPrimRootEx1": {
+    "description": "Primitive root example 1"
+  },
+  "hlpPrimRootEx2": "g(11) = 2",
+  "@hlpPrimRootEx2": {
+    "description": "Primitive root example 2"
+  },
+  "hlpPrimRootEx3": "Existe solo para n = 1,2,4,p^k,2p^k",
+  "@hlpPrimRootEx3": {
+    "description": "Primitive root example 3"
+  },
+  "hlpGcdTitle": "MCD — Máximo Común Divisor",
+  "@hlpGcdTitle": {
+    "description": "GCD function title"
+  },
+  "hlpGcdParams": "N params (variable, mín. 2)",
+  "@hlpGcdParams": {
+    "description": "GCD params"
+  },
+  "hlpGcdDesc": "Mayor entero que divide a todos los valores. Acepta 2 o más números.",
+  "@hlpGcdDesc": {
+    "description": "GCD description"
+  },
+  "hlpGcdFormula": "MCD(a,b) vía algoritmo de Euclides",
+  "@hlpGcdFormula": {
+    "description": "GCD formula"
+  },
+  "hlpGcdEx1": "MCD(12,18) = 6",
+  "@hlpGcdEx1": {
+    "description": "GCD example 1"
+  },
+  "hlpGcdEx2": "MCD(12,18,24) = 6",
+  "@hlpGcdEx2": {
+    "description": "GCD example 2"
+  },
+  "hlpGcdEx3": "MCD(a,b) × MCM(a,b) = a×b",
+  "@hlpGcdEx3": {
+    "description": "GCD example 3"
+  },
+  "hlpGcdTip1": "Flujo: 12 → MCD → 18 → MCD (ejecuta)",
+  "@hlpGcdTip1": {
+    "description": "GCD tip 1"
+  },
+  "hlpGcdTip2": "Para 3+ números: 12 → MCD → 18 → = → 24 → MCD",
+  "@hlpGcdTip2": {
+    "description": "GCD tip 2"
+  },
+  "hlpGcdTip3": "Presiona = para agregar más, presiona MCD para ejecutar",
+  "@hlpGcdTip3": {
+    "description": "GCD tip 3"
+  },
+  "hlpLcmTitle": "MCM — Mínimo Común Múltiplo",
+  "@hlpLcmTitle": {
+    "description": "LCM function title"
+  },
+  "hlpLcmParams": "N params (variable, mín. 2)",
+  "@hlpLcmParams": {
+    "description": "LCM params"
+  },
+  "hlpLcmDesc": "Menor entero positivo divisible por todos los valores.",
+  "@hlpLcmDesc": {
+    "description": "LCM description"
+  },
+  "hlpLcmFormula": "MCM(a,b) = a×b / MCD(a,b)",
+  "@hlpLcmFormula": {
+    "description": "LCM formula"
+  },
+  "hlpLcmEx1": "MCM(4,6) = 12",
+  "@hlpLcmEx1": {
+    "description": "LCM example 1"
+  },
+  "hlpLcmEx2": "MCM(3,5,7) = 105",
+  "@hlpLcmEx2": {
+    "description": "LCM example 2"
+  },
+  "hlpLcmTip1": "Mismo flujo que MCD: presiona MCM otra vez para ejecutar",
+  "@hlpLcmTip1": {
+    "description": "LCM tip 1"
+  },
+  "hlpDiophTitle": "Diof — Ecuación Diofántica Lineal",
+  "@hlpDiophTitle": {
+    "description": "Diophantine equation title"
+  },
+  "hlpDiophParams": "3 params: a → Diof → b → = → c → =",
+  "@hlpDiophParams": {
+    "description": "Diophantine equation params"
+  },
+  "hlpDiophDesc": "Resuelve ax + by = c. Da solución particular y general.",
+  "@hlpDiophDesc": {
+    "description": "Diophantine equation description"
+  },
+  "hlpDiophFormula": "ax + by = c tiene solución ⟺ MCD(a,b) | c\nx = x₀ + (b/g)t,  y = y₀ − (a/g)t",
+  "@hlpDiophFormula": {
+    "description": "Diophantine equation formula"
+  },
+  "hlpDiophEx1": "3x + 5y = 1 → x=2+5t, y=−1−3t",
+  "@hlpDiophEx1": {
+    "description": "Diophantine example 1"
+  },
+  "hlpDiophEx2": "6x + 9y = 12 → x=2+3t, y=0−2t",
+  "@hlpDiophEx2": {
+    "description": "Diophantine example 2"
+  },
+  "hlpDiophEx3": "4x + 6y = 3 → Sin solución",
+  "@hlpDiophEx3": {
+    "description": "Diophantine example 3"
+  },
+  "hlpDiophTip1": "Paso 1: ingresa a (coeficiente de x)",
+  "@hlpDiophTip1": {
+    "description": "Diophantine tip 1"
+  },
+  "hlpDiophTip2": "Paso 2: presiona Diof",
+  "@hlpDiophTip2": {
+    "description": "Diophantine tip 2"
+  },
+  "hlpDiophTip3": "Paso 3: ingresa b (coeficiente de y), presiona =",
+  "@hlpDiophTip3": {
+    "description": "Diophantine tip 3"
+  },
+  "hlpDiophTip4": "Paso 4: ingresa c (término independiente), presiona =",
+  "@hlpDiophTip4": {
+    "description": "Diophantine tip 4"
+  },
+  "hlpCrtTitle": "TCR — Teorema Chino del Residuo",
+  "@hlpCrtTitle": {
+    "description": "CRT title"
+  },
+  "hlpCrtParams": "Variable (4+ params en pares a,m)",
+  "@hlpCrtParams": {
+    "description": "CRT params"
+  },
+  "hlpCrtDesc": "Resuelve sistema de congruencias x ≡ aᵢ (mod mᵢ).",
+  "@hlpCrtDesc": {
+    "description": "CRT description"
+  },
+  "hlpCrtFormula": "x ≡ a₁ (mod m₁)\nx ≡ a₂ (mod m₂)\n→ x ≡ r (mod mcm(m₁,m₂))",
+  "@hlpCrtFormula": {
+    "description": "CRT formula"
+  },
+  "hlpCrtEx1": "x≡2(mod 3), x≡3(mod 5) → x≡8(mod 15)",
+  "@hlpCrtEx1": {
+    "description": "CRT example 1"
+  },
+  "hlpCrtEx2": "x≡1(mod 4), x≡2(mod 3) → x≡5(mod 12)",
+  "@hlpCrtEx2": {
+    "description": "CRT example 2"
+  },
+  "hlpCrtTip1": "Flujo: a₁ → TCR → m₁ → = → a₂ → = → m₂ → TCR",
+  "@hlpCrtTip1": {
+    "description": "CRT tip 1"
+  },
+  "hlpCrtTip2": "Los módulos deben ser compatibles",
+  "@hlpCrtTip2": {
+    "description": "CRT tip 2"
+  },
+  "hlpCombinatoricsHeader": "Combinatoria",
+  "@hlpCombinatoricsHeader": {
+    "description": "Combinatorics section header"
+  },
+  "hlpFactorialTitle": "n! — Factorial",
+  "@hlpFactorialTitle": {
+    "description": "Factorial function title"
+  },
+  "hlpFactorialParams": "1 param",
+  "@hlpFactorialParams": {
+    "description": "Factorial params"
+  },
+  "hlpFactorialDesc": "Producto de 1 a n. Precisión arbitraria.",
+  "@hlpFactorialDesc": {
+    "description": "Factorial description"
+  },
+  "hlpFactorialFormula": "n! = 1 × 2 × ... × n,  0! = 1",
+  "@hlpFactorialFormula": {
+    "description": "Factorial formula"
+  },
+  "hlpFactorialEx1": "5! = 120",
+  "@hlpFactorialEx1": {
+    "description": "Factorial example 1"
+  },
+  "hlpFactorialEx2": "10! = 3,628,800",
+  "@hlpFactorialEx2": {
+    "description": "Factorial example 2"
+  },
+  "hlpFactorialEx3": "20! = 2,432,902,008,176,640,000",
+  "@hlpFactorialEx3": {
+    "description": "Factorial example 3"
+  },
+  "hlpDblFactorialTitle": "n!! — Doble Factorial",
+  "@hlpDblFactorialTitle": {
+    "description": "Double factorial title"
+  },
+  "hlpDblFactorialParams": "1 param",
+  "@hlpDblFactorialParams": {
+    "description": "Double factorial params"
+  },
+  "hlpDblFactorialDesc": "Producto de enteros de misma paridad.",
+  "@hlpDblFactorialDesc": {
+    "description": "Double factorial description"
+  },
+  "hlpDblFactorialFormula": "n!! = n × (n−2) × (n−4) × ...",
+  "@hlpDblFactorialFormula": {
+    "description": "Double factorial formula"
+  },
+  "hlpDblFactorialEx1": "7!! = 7×5×3×1 = 105",
+  "@hlpDblFactorialEx1": {
+    "description": "Double factorial example 1"
+  },
+  "hlpDblFactorialEx2": "8!! = 8×6×4×2 = 384",
+  "@hlpDblFactorialEx2": {
+    "description": "Double factorial example 2"
+  },
+  "hlpDblFactorialEx3": "0!! = 1!! = 1",
+  "@hlpDblFactorialEx3": {
+    "description": "Double factorial example 3"
+  },
+  "hlpCombTitle": "C(n,k) — Combinaciones",
+  "@hlpCombTitle": {
+    "description": "Combinations title"
+  },
+  "hlpCombParams": "2 params: n → C(n,k) → k → =",
+  "@hlpCombParams": {
+    "description": "Combinations params"
+  },
+  "hlpCombDesc": "Formas de elegir k de n sin importar orden.",
+  "@hlpCombDesc": {
+    "description": "Combinations description"
+  },
+  "hlpCombFormula": "C(n,k) = n! / (k!(n−k)!)",
+  "@hlpCombFormula": {
+    "description": "Combinations formula"
+  },
+  "hlpCombEx1": "C(5,2) = 10",
+  "@hlpCombEx1": {
+    "description": "Combinations example 1"
+  },
+  "hlpCombEx2": "C(10,3) = 120",
+  "@hlpCombEx2": {
+    "description": "Combinations example 2"
+  },
+  "hlpCombEx3": "C(n,0) = C(n,n) = 1",
+  "@hlpCombEx3": {
+    "description": "Combinations example 3"
+  },
+  "hlpCombTip1": "Identidad de Pascal: C(n,k) = C(n−1,k−1) + C(n−1,k)",
+  "@hlpCombTip1": {
+    "description": "Combinations tip 1"
+  },
+  "hlpCombTip2": "C(n,k) = C(n, n−k)",
+  "@hlpCombTip2": {
+    "description": "Combinations tip 2"
+  },
+  "hlpVarTitle": "V(n,k) — Variaciones (Permutaciones parciales)",
+  "@hlpVarTitle": {
+    "description": "Variations/partial permutations title"
+  },
+  "hlpVarParams": "2 params: n → V(n,k) → k → =",
+  "@hlpVarParams": {
+    "description": "Variations params"
+  },
+  "hlpVarDesc": "Formas de elegir k de n CON orden.",
+  "@hlpVarDesc": {
+    "description": "Variations description"
+  },
+  "hlpVarFormula": "V(n,k) = n! / (n−k)!",
+  "@hlpVarFormula": {
+    "description": "Variations formula"
+  },
+  "hlpVarEx1": "V(5,2) = 20",
+  "@hlpVarEx1": {
+    "description": "Variations example 1"
+  },
+  "hlpVarEx2": "V(10,3) = 720",
+  "@hlpVarEx2": {
+    "description": "Variations example 2"
+  },
+  "hlpCatalanTitle": "Cat(n) — Números de Catalan",
+  "@hlpCatalanTitle": {
+    "description": "Catalan numbers title"
+  },
+  "hlpCatalanParams": "1 param",
+  "@hlpCatalanParams": {
+    "description": "Catalan params"
+  },
+  "hlpCatalanDesc": "Cuenta árboles binarios, triangulaciones, caminos de Dyck, paréntesis balanceados.",
+  "@hlpCatalanDesc": {
+    "description": "Catalan description"
+  },
+  "hlpCatalanFormula": "Cₙ = C(2n,n)/(n+1)",
+  "@hlpCatalanFormula": {
+    "description": "Catalan formula"
+  },
+  "hlpCatalanEx1": "C₀ = 1, C₁ = 1, C₂ = 2",
+  "@hlpCatalanEx1": {
+    "description": "Catalan example 1"
+  },
+  "hlpCatalanEx2": "C₃ = 5, C₄ = 14, C₅ = 42",
+  "@hlpCatalanEx2": {
+    "description": "Catalan example 2"
+  },
+  "hlpDerangementTitle": "D(n) — Derangements (Desarreglos)",
+  "@hlpDerangementTitle": {
+    "description": "Derangements title"
+  },
+  "hlpDerangementParams": "1 param",
+  "@hlpDerangementParams": {
+    "description": "Derangements params"
+  },
+  "hlpDerangementDesc": "Permutaciones donde ningún elemento queda en su posición original.",
+  "@hlpDerangementDesc": {
+    "description": "Derangements description"
+  },
+  "hlpDerangementFormula": "D(n) = n! × Σ(−1)^k/k! = (n−1)(D(n−1)+D(n−2))",
+  "@hlpDerangementFormula": {
+    "description": "Derangements formula"
+  },
+  "hlpDerangementEx1": "D(3) = 2 → [231, 312]",
+  "@hlpDerangementEx1": {
+    "description": "Derangements example 1"
+  },
+  "hlpDerangementEx2": "D(4) = 9",
+  "@hlpDerangementEx2": {
+    "description": "Derangements example 2"
+  },
+  "hlpDerangementEx3": "D(n)/n! → 1/e ≈ 0.3679",
+  "@hlpDerangementEx3": {
+    "description": "Derangements example 3"
+  },
+  "hlpBellTitle": "B(n) — Números de Bell",
+  "@hlpBellTitle": {
+    "description": "Bell numbers title"
+  },
+  "hlpBellParams": "1 param",
+  "@hlpBellParams": {
+    "description": "Bell params"
+  },
+  "hlpBellDesc": "Número total de particiones de un conjunto de n elementos.",
+  "@hlpBellDesc": {
+    "description": "Bell description"
+  },
+  "hlpBellFormula": "B(n) = Σ S₂(n,k) para k=0..n",
+  "@hlpBellFormula": {
+    "description": "Bell formula"
+  },
+  "hlpBellEx1": "B(3) = 5",
+  "@hlpBellEx1": {
+    "description": "Bell example 1"
+  },
+  "hlpBellEx2": "B(4) = 15",
+  "@hlpBellEx2": {
+    "description": "Bell example 2"
+  },
+  "hlpBellEx3": "B(5) = 52",
+  "@hlpBellEx3": {
+    "description": "Bell example 3"
+  },
+  "hlpPartitionTitle": "p(n) — Particiones de Enteros",
+  "@hlpPartitionTitle": {
+    "description": "Integer partitions title"
+  },
+  "hlpPartitionParams": "1 param",
+  "@hlpPartitionParams": {
+    "description": "Integer partitions params"
+  },
+  "hlpPartitionDesc": "Formas de escribir n como suma de enteros positivos (orden no importa).",
+  "@hlpPartitionDesc": {
+    "description": "Integer partitions description"
+  },
+  "hlpPartitionFormula": "Calculado con programación dinámica",
+  "@hlpPartitionFormula": {
+    "description": "Integer partitions formula"
+  },
+  "hlpPartitionEx1": "p(4) = 5 → [4, 3+1, 2+2, 2+1+1, 1+1+1+1]",
+  "@hlpPartitionEx1": {
+    "description": "Integer partitions example 1"
+  },
+  "hlpPartitionEx2": "p(10) = 42",
+  "@hlpPartitionEx2": {
+    "description": "Integer partitions example 2"
+  },
+  "hlpPartitionEx3": "p(100) = 190,569,292,356",
+  "@hlpPartitionEx3": {
+    "description": "Integer partitions example 3"
+  },
+  "hlpStirling2Title": "S₂(n,k) — Stirling 2da Especie",
+  "@hlpStirling2Title": {
+    "description": "Stirling 2nd kind title"
+  },
+  "hlpStirling2Params": "2 params: n → S₂ → k → =",
+  "@hlpStirling2Params": {
+    "description": "Stirling 2nd kind params"
+  },
+  "hlpStirling2Desc": "Formas de particionar n elementos en exactamente k subconjuntos no vacíos.",
+  "@hlpStirling2Desc": {
+    "description": "Stirling 2nd kind description"
+  },
+  "hlpStirling2Formula": "S₂(n,k) = k·S₂(n−1,k) + S₂(n−1,k−1)",
+  "@hlpStirling2Formula": {
+    "description": "Stirling 2nd kind formula"
+  },
+  "hlpStirling2Ex1": "S₂(4,2) = 7",
+  "@hlpStirling2Ex1": {
+    "description": "Stirling 2nd kind example 1"
+  },
+  "hlpStirling2Ex2": "S₂(5,3) = 25",
+  "@hlpStirling2Ex2": {
+    "description": "Stirling 2nd kind example 2"
+  },
+  "hlpStirling2Ex3": "B(n) = Σ S₂(n,k)",
+  "@hlpStirling2Ex3": {
+    "description": "Stirling 2nd kind example 3"
+  },
+  "hlpStirling1Title": "s₁(n,k) — Stirling 1ra Especie (sin signo)",
+  "@hlpStirling1Title": {
+    "description": "Stirling 1st kind title"
+  },
+  "hlpStirling1Params": "2 params: n → s₁ → k → =",
+  "@hlpStirling1Params": {
+    "description": "Stirling 1st kind params"
+  },
+  "hlpStirling1Desc": "Permutaciones de n elementos con exactamente k ciclos.",
+  "@hlpStirling1Desc": {
+    "description": "Stirling 1st kind description"
+  },
+  "hlpStirling1Formula": "|s₁(n,k)| = (n−1)·|s₁(n−1,k)| + |s₁(n−1,k−1)|",
+  "@hlpStirling1Formula": {
+    "description": "Stirling 1st kind formula"
+  },
+  "hlpStirling1Ex1": "s₁(4,2) = 11",
+  "@hlpStirling1Ex1": {
+    "description": "Stirling 1st kind example 1"
+  },
+  "hlpStirling1Ex2": "s₁(4,1) = 6",
+  "@hlpStirling1Ex2": {
+    "description": "Stirling 1st kind example 2"
+  },
+  "hlpFibTitle": "F(n) — n-ésimo Fibonacci",
+  "@hlpFibTitle": {
+    "description": "Fibonacci title"
+  },
+  "hlpFibParams": "1 param",
+  "@hlpFibParams": {
+    "description": "Fibonacci params"
+  },
+  "hlpFibDesc": "Calcula F(n) con duplicación rápida O(log n). Soporta n muy grandes.",
+  "@hlpFibDesc": {
+    "description": "Fibonacci description"
+  },
+  "hlpFibFormula": "F(0)=0, F(1)=1, F(n)=F(n−1)+F(n−2)",
+  "@hlpFibFormula": {
+    "description": "Fibonacci formula"
+  },
+  "hlpFibEx1": "F(10) = 55",
+  "@hlpFibEx1": {
+    "description": "Fibonacci example 1"
+  },
+  "hlpFibEx2": "F(50) = 12,586,269,025",
+  "@hlpFibEx2": {
+    "description": "Fibonacci example 2"
+  },
+  "hlpFibEx3": "F(100) = 354,224,848,179,261,915,075",
+  "@hlpFibEx3": {
+    "description": "Fibonacci example 3"
+  },
+  "hlpFibTip1": "F(n) mod m es periódico (período de Pisano)",
+  "@hlpFibTip1": {
+    "description": "Fibonacci tip 1"
+  },
+  "hlpFibTip2": "MCD(F(m), F(n)) = F(MCD(m,n))",
+  "@hlpFibTip2": {
+    "description": "Fibonacci tip 2"
+  },
+  "hlpDigitSumBaseTitle": "ΣdígB — Suma de Dígitos en Base b",
+  "@hlpDigitSumBaseTitle": {
+    "description": "Digit sum in base b title"
+  },
+  "hlpDigitSumBaseParams": "2 params: n → ΣdígB → b → =",
+  "@hlpDigitSumBaseParams": {
+    "description": "Digit sum in base b params"
+  },
+  "hlpDigitSumBaseDesc": "Suma los dígitos de n escritos en base b.",
+  "@hlpDigitSumBaseDesc": {
+    "description": "Digit sum in base b description"
+  },
+  "hlpDigitSumBaseFormula": "Si n = Σ dᵢ × bⁱ, entonces ΣdígB = Σ dᵢ",
+  "@hlpDigitSumBaseFormula": {
+    "description": "Digit sum in base b formula"
+  },
+  "hlpDigitSumBaseEx1": "ΣdígB(255, 2) = 8 → 11111111₂",
+  "@hlpDigitSumBaseEx1": {
+    "description": "Digit sum base b example 1"
+  },
+  "hlpDigitSumBaseEx2": "ΣdígB(100, 10) = 1",
+  "@hlpDigitSumBaseEx2": {
+    "description": "Digit sum base b example 2"
+  },
+  "hlpDigitSumBaseEx3": "ΣdígB(100, 16) = 10 → 64₁₆",
+  "@hlpDigitSumBaseEx3": {
+    "description": "Digit sum base b example 3"
+  },
+  "hlpStatisticsHeader": "Estadística",
+  "@hlpStatisticsHeader": {
+    "description": "Statistics section header"
+  },
+  "hlpArithMeanTitle": "Media Aritmética — Med A",
+  "@hlpArithMeanTitle": {
+    "description": "Arithmetic mean title"
+  },
+  "hlpArithMeanParams": "N params (variable, mín. 2)",
+  "@hlpArithMeanParams": {
+    "description": "Arithmetic mean params"
+  },
+  "hlpArithMeanDesc": "Promedio clásico de N números.",
+  "@hlpArithMeanDesc": {
+    "description": "Arithmetic mean description"
+  },
+  "hlpArithMeanFormula": "MA = (x₁ + x₂ + ... + xₙ) / n",
+  "@hlpArithMeanFormula": {
+    "description": "Arithmetic mean formula"
+  },
+  "hlpArithMeanEx1": "MA(3, 7) = 5",
+  "@hlpArithMeanEx1": {
+    "description": "Arithmetic mean example 1"
+  },
+  "hlpArithMeanEx2": "MA(2, 4, 6) = 4",
+  "@hlpArithMeanEx2": {
+    "description": "Arithmetic mean example 2"
+  },
+  "hlpArithMeanTip1": "Flujo: 3 → Med A → 7 → Med A (ejecuta)",
+  "@hlpArithMeanTip1": {
+    "description": "Arithmetic mean tip 1"
+  },
+  "hlpArithMeanTip2": "Para 3+ nums: 2 → Med A → 4 → = → 6 → Med A",
+  "@hlpArithMeanTip2": {
+    "description": "Arithmetic mean tip 2"
+  },
+  "hlpGeoMeanTitle": "Media Geométrica — Med G",
+  "@hlpGeoMeanTitle": {
+    "description": "Geometric mean title"
+  },
+  "hlpGeoMeanParams": "N params (variable, mín. 2)",
+  "@hlpGeoMeanParams": {
+    "description": "Geometric mean params"
+  },
+  "hlpGeoMeanDesc": "Raíz n-ésima del producto. Solo valores positivos.",
+  "@hlpGeoMeanDesc": {
+    "description": "Geometric mean description"
+  },
+  "hlpGeoMeanFormula": "MG = (x₁ × x₂ × ... × xₙ)^(1/n)",
+  "@hlpGeoMeanFormula": {
+    "description": "Geometric mean formula"
+  },
+  "hlpGeoMeanEx1": "MG(2, 8) = 4",
+  "@hlpGeoMeanEx1": {
+    "description": "Geometric mean example 1"
+  },
+  "hlpGeoMeanEx2": "MG(1, 4, 9) ≈ 3.30",
+  "@hlpGeoMeanEx2": {
+    "description": "Geometric mean example 2"
+  },
+  "hlpHarmMeanTitle": "Media Armónica — Med H",
+  "@hlpHarmMeanTitle": {
+    "description": "Harmonic mean title"
+  },
+  "hlpHarmMeanParams": "N params (variable, mín. 2)",
+  "@hlpHarmMeanParams": {
+    "description": "Harmonic mean params"
+  },
+  "hlpHarmMeanDesc": "Inverso de la media aritmética de los inversos. Solo valores positivos.",
+  "@hlpHarmMeanDesc": {
+    "description": "Harmonic mean description"
+  },
+  "hlpHarmMeanFormula": "MH = n / (1/x₁ + 1/x₂ + ... + 1/xₙ)",
+  "@hlpHarmMeanFormula": {
+    "description": "Harmonic mean formula"
+  },
+  "hlpHarmMeanEx1": "MH(2, 8) = 3.2",
+  "@hlpHarmMeanEx1": {
+    "description": "Harmonic mean example 1"
+  },
+  "hlpHarmMeanEx2": "MH(1, 4, 9) ≈ 2.08",
+  "@hlpHarmMeanEx2": {
+    "description": "Harmonic mean example 2"
+  },
+  "hlpQuadMeanTitle": "Media Cuadrática — Med C",
+  "@hlpQuadMeanTitle": {
+    "description": "Quadratic mean title"
+  },
+  "hlpQuadMeanParams": "N params (variable, mín. 2)",
+  "@hlpQuadMeanParams": {
+    "description": "Quadratic mean params"
+  },
+  "hlpQuadMeanDesc": "Raíz de la media de los cuadrados (RMS).",
+  "@hlpQuadMeanDesc": {
+    "description": "Quadratic mean description"
+  },
+  "hlpQuadMeanFormula": "MC = √((x₁² + x₂² + ... + xₙ²) / n)",
+  "@hlpQuadMeanFormula": {
+    "description": "Quadratic mean formula"
+  },
+  "hlpQuadMeanEx1": "MC(3, 4) ≈ 3.54",
+  "@hlpQuadMeanEx1": {
+    "description": "Quadratic mean example 1"
+  },
+  "hlpQuadMeanEx2": "MC(1, 2, 3) ≈ 2.16",
+  "@hlpQuadMeanEx2": {
+    "description": "Quadratic mean example 2"
+  },
+  "hlpMinMaxTitle": "min / max — Mínimo y Máximo",
+  "@hlpMinMaxTitle": {
+    "description": "Min/max title"
+  },
+  "hlpMinMaxParams": "N params (variable, mín. 2)",
+  "@hlpMinMaxParams": {
+    "description": "Min/max params"
+  },
+  "hlpMinMaxDesc": "Encuentra el menor/mayor valor de un conjunto de N números.",
+  "@hlpMinMaxDesc": {
+    "description": "Min/max description"
+  },
+  "hlpMinMaxFormula": "min(a₁,...,aₙ) y max(a₁,...,aₙ)",
+  "@hlpMinMaxFormula": {
+    "description": "Min/max formula"
+  },
+  "hlpMinMaxEx1": "min(3, 7, 1) = 1",
+  "@hlpMinMaxEx1": {
+    "description": "Min/max example 1"
+  },
+  "hlpMinMaxEx2": "max(3, 7, 1) = 7",
+  "@hlpMinMaxEx2": {
+    "description": "Min/max example 2"
+  },
+  "hlpMinMaxTip1": "Mismo flujo variable: presiona min/max otra vez para ejecutar",
+  "@hlpMinMaxTip1": {
+    "description": "Min/max tip 1"
+  },
+  "hlpMeanInequalityTitle": "Desigualdad de Medias (AM-GM-HM)",
+  "@hlpMeanInequalityTitle": {
+    "description": "Mean inequality info card title"
+  },
+  "hlpMeanInequalityContent": "Para números positivos siempre se cumple:\n\nMH ≤ MG ≤ MA ≤ MC\n\nLa igualdad se da solo cuando todos los valores son iguales.\nEsta desigualdad es fundamental en olimpiadas.",
+  "@hlpMeanInequalityContent": {
+    "description": "Mean inequality info card content"
+  },
+  "hlpAnalysisPanelHeader": "Panel de Análisis Numérico",
+  "@hlpAnalysisPanelHeader": {
+    "description": "Analysis panel section header"
+  },
+  "hlpAutoAnalysisTitle": "Análisis Automático",
+  "@hlpAutoAnalysisTitle": {
+    "description": "Auto analysis info card title"
+  },
+  "hlpAutoAnalysisContent": "Al ingresar cualquier número, el panel derecho (tablet) o inferior (móvil) muestra automáticamente:\n\n• Propiedades: dígitos, paridad, signo\n• Representaciones: binario, octal, hexadecimal\n• Primalidad: test Miller-Rabin, factorización completa\n• Primos vecinos: anterior y siguiente\n• Divisores: lista completa, suma, cantidad\n• Clasificaciones: cuadrado/cubo perfecto, potencia perfecta, Fibonacci, triangular, palíndromo\n\nPara números ≤ 15 dígitos, también muestra:\n\n• Funciones aritméticas: φ, λ, μ, ω, Ω, sopfr, sopf, rad, dr\n• Clasificaciones: libre de cuadrados, poderoso, Harshad, semiprimo, abundante/deficiente/perfecto",
+  "@hlpAutoAnalysisContent": {
+    "description": "Auto analysis info card content"
+  },
+  "hlpOlympiadHeader": "Fórmulas Clave para Olimpiadas",
+  "@hlpOlympiadHeader": {
+    "description": "Olympiad formulas section header"
+  },
+  "hlpIdentitiesTitle": "Identidades Fundamentales",
+  "@hlpIdentitiesTitle": {
+    "description": "Fundamental identities info card title"
+  },
+  "hlpIdentitiesContent": "• Teorema de Euler: a^φ(n) ≡ 1 (mod n) si MCD(a,n)=1\n• Pequeño Fermat: a^(p−1) ≡ 1 (mod p) si p primo\n• Wilson: (p−1)! ≡ −1 (mod p) ⟺ p es primo\n• Fórmula de Legendre: Vₚ(n!) = Σᵢ ⌊n/pⁱ⌋\n• Lucas: C(n,k) mod p = ∏ C(nᵢ,kᵢ) mod p\n• Σ φ(d) para d|n = n\n• Σ μ(d) para d|n = [n=1]\n• φ(mn) = φ(m)φ(n)·MCD(m,n)/φ(MCD(m,n))\n• MCD(F(m),F(n)) = F(MCD(m,n))\n• AM ≥ GM ≥ HM (desigualdad de medias)",
+  "@hlpIdentitiesContent": {
+    "description": "Fundamental identities info card content"
+  },
+  "hlpRefTableTitle": "Tabla de Referencia Rápida",
+  "@hlpRefTableTitle": {
+    "description": "Reference table info card title"
+  },
+  "hlpRefTableContent": "n    φ(n)  λ(n)  μ(n)  σ(n)  ω  Ω\n1    1     1     1     1     0  0\n6    2     2     1     12    2  2\n12   4     2     0     28    2  3\n30   8     4     −1    72    3  3\n60   16    4     0     168   3  4\n100  40    20    0     217   2  4",
+  "@hlpRefTableContent": {
+    "description": "Reference table info card content"
+  },
+  "hlpExamplesLabel": "Ejemplos:",
+  "@hlpExamplesLabel": {
+    "description": "Examples label in collapsible sections"
+  },
+  "hlpTipsLabel": "Tips:",
+  "@hlpTipsLabel": {
+    "description": "Tips label in collapsible sections"
+  },
+
+  "errExprEmpty": "Error: Expresión vacía",
+  "@errExprEmpty": { "description": "Error when expression is empty" },
+  "errExprMalformed": "Error: Expresión malformada",
+  "@errExprMalformed": { "description": "Error when expression is malformed" },
+  "errExprDivZero": "Error: División por cero",
+  "@errExprDivZero": { "description": "Error division by zero in expression" },
+  "errResultInvalid": "Error: Resultado no válido",
+  "@errResultInvalid": { "description": "Error when result is NaN or Infinite" },
+  "errAnalysisInvalid": "Error: número inválido para análisis",
+  "@errAnalysisInvalid": { "description": "Error when number is invalid for analysis" },
+  "errAnalysisFail": "No se puede analizar el número",
+  "@errAnalysisFail": { "description": "Error when analysis fails" },
+  "errNoSolution": "Sin solución",
+  "@errNoSolution": { "description": "No solution exists for the equation" },
+  "errIncompatibleSystem": "Sistema incompatible",
+  "@errIncompatibleSystem": { "description": "CRT system is incompatible" },
+  "errCRTNeedPairs": "TCR necesita pares (aᵢ, mᵢ)",
+  "@errCRTNeedPairs": { "description": "CRT requires pairs of values" },
+  "errUnknownOp": "Operación desconocida: {op}",
+  "@errUnknownOp": {
+    "description": "Unknown operation error",
+    "placeholders": { "op": { "type": "String" } }
+  }
+}

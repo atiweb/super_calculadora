@@ -1,0 +1,12 @@
+include: package:flutter_lints/flutter.yaml
+
+analyzer:
+  errors:
+    # Treat test-only lints as info or ignore to keep CI noise low
+    avoid_print: ignore
+    library_private_types_in_public_api: info
+    dead_code: info
+
+linter:
+  rules:
+    avoid_print: false

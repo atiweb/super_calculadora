@@ -1,0 +1,1079 @@
+{
+  "@@locale": "en",
+  "appTitle": "Super Calculator",
+  "appVersion": "Version 1.0.0",
+  "appDeveloped": "Developed in Flutter",
+  "appDynamicThemes": "With dynamic theme support",
+  "navStandard": "Standard",
+  "navStandardSub": "Basic operations",
+  "navScientific": "Scientific",
+  "navScientificSub": "Advanced functions",
+  "navSpecial": "Special Functions",
+  "navSpecialSub": "Number theory",
+  "navHistory": "History",
+  "navHistorySub": "View previous operations",
+  "navSettings": "Settings",
+  "navSettingsSub": "App settings",
+  "navHelp": "Help",
+  "navHelpSub": "Special functions guide",
+  "navAbout": "About",
+  "navAboutSub": "Super Calculator v1.0",
+  "navCalculator": "Calculator",
+  "navSelectType": "Select mode",
+  "navAngleMode": "Mode: {mode}",
+  "@navAngleMode": {
+    "placeholders": {
+      "mode": {
+        "type": "String"
+      }
+    }
+  },
+  "navRadians": "Radians",
+  "navDegrees": "Degrees",
+  "calcAnalysis": "Analysis",
+  "calcExpressions": "Expressions",
+  "calcScientific": "Scientific Calculator",
+  "calcSpecialFunctions": "Special Functions",
+  "calcSuperCalculator": "Super Calculator",
+  "calcNumericAnalysis": "Numeric Analysis",
+  "calcMathExpressions": "Math Expressions",
+  "calcResult": "Result:",
+  "calcProcessing": "Processing large numbers...",
+  "calcCancel": "Cancel",
+  "displayPaste": "Paste",
+  "displayCopy": "Copy",
+  "displayCopied": "Copied: {text}",
+  "@displayCopied": {
+    "placeholders": {
+      "text": {
+        "type": "String"
+      }
+    }
+  },
+  "displayCopyResult": "Copy result",
+  "displayPasteNumber": "Paste number",
+  "displayClearDisplay": "Clear display",
+  "displayInvalidNumber": "Error: Pasted text is not a valid number",
+  "displayNothingToPaste": "Nothing to paste",
+  "displayPasteError": "Paste error: {error}",
+  "@displayPasteError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "displayPasted": "Pasted: {text}",
+  "@displayPasted": {
+    "placeholders": {
+      "text": {
+        "type": "String"
+      }
+    }
+  },
+  "histTitle": "History",
+  "histClearAll": "Clear history",
+  "histClearAllTooltip": "Clear all history",
+  "histConfirmClear": "Are you sure you want to delete all history?",
+  "histConfirmClearN": "Are you sure you want to delete all {count} operations from history? This action cannot be undone.",
+  "@histConfirmClearN": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "histCleared": "History cleared",
+  "histDeleted": "History deleted",
+  "histOperationDeleted": "Operation deleted",
+  "histCopiedToClipboard": "Copied to clipboard",
+  "histCopiedClipboardText": "Copied to clipboard: {text}",
+  "@histCopiedClipboardText": {
+    "placeholders": {
+      "text": {
+        "type": "String"
+      }
+    }
+  },
+  "histFullResult": "Full result",
+  "histClose": "Close",
+  "histExpression": "Expression:",
+  "histResult": "Result:",
+  "histCopyResult": "Copy result",
+  "histCopyAll": "Copy all",
+  "histCopyExpression": "Copy expression",
+  "histUseResult": "Use result",
+  "histViewResult": "View result",
+  "histDelete": "Delete",
+  "histEmpty": "No operations in history",
+  "histEmptyHint": "Perform some calculations to see your history here",
+  "histEmptyHintAlt": "Operations you perform will appear here",
+  "histOperations": "operations",
+  "histNow": "Now",
+  "histErrorLoading": "Error loading history: {error}",
+  "@histErrorLoading": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "histErrorClearing": "Error clearing history: {error}",
+  "@histErrorClearing": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "histErrorDeleting": "Error deleting operation: {error}",
+  "@histErrorDeleting": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsTitle": "Settings",
+  "settingsTheme": "Theme",
+  "settingsNumberFormat": "Number format",
+  "settingsScientificNotation": "Use scientific notation",
+  "settingsScientificHint": "Numbers will be displayed in full (e.g. 123000) when disabled",
+  "settingsFormatExamples": "Format examples",
+  "settingsLargeNumber": "Large number:",
+  "settingsSmallNumber": "Small number:",
+  "settingsNormal": "Normal:",
+  "settingsScientific": "Scientific:",
+  "settingsAboutApp": "About the App",
+  "themeLight": "Light",
+  "themeDark": "Dark",
+  "themeAuto": "Automatic",
+  "themeLightDesc": "Always use light theme",
+  "themeDarkDesc": "Always use dark theme",
+  "themeAutoDesc": "Follow system settings",
+  "aboutTitle": "Super Calculator",
+  "aboutDescription": "An advanced calculator with scientific capabilities and complete numeric analysis.",
+  "aboutFeatures": "Features:",
+  "aboutClose": "Close",
+  "aboutFeature1": "Numbers up to 1024 bits",
+  "aboutFeature2": "64-bit decimal precision",
+  "aboutFeature3": "Standard and scientific calculator modes",
+  "aboutFeature4": "Trigonometric functions (sin, cos, tan)",
+  "aboutFeature5": "Inverse trigonometric functions (asin, acos, atan)",
+  "aboutFeature6": "Natural (ln) and base-10 (log) logarithms",
+  "aboutFeature7": "Exponential functions (eˣ, 10ˣ)",
+  "aboutFeature8": "Factorial calculation (n!)",
+  "aboutFeature9": "Mathematical constants (π, e)",
+  "aboutFeature10": "Powers and roots (x², x³, √, ∛)",
+  "aboutFeature11": "Degree and radian conversion",
+  "aboutFeature12": "Prime number analysis",
+  "aboutFeature13": "Prime factorization",
+  "aboutFeature14": "Binary and decimal conversion",
+  "aboutFeature15": "Mathematical property analysis",
+  "aboutFeature16": "Operations with extremely large numbers",
+  "aboutFeature17": "Heavy calculations on separate threads (isolates)",
+  "aboutFeature18": "Domain and size error handling",
+  "exprMathExpression": "Mathematical expression",
+  "exprHideHistory": "Hide history",
+  "exprShowHistory": "Show history",
+  "exprClearExpression": "Clear expression",
+  "exprHint": "E.g.: (5 + 3) * sqrt(9) - 2^3",
+  "exprDelete": "Delete",
+  "exprEvaluate": "Evaluate (Enter)",
+  "exprParenthesis": "Parentheses",
+  "exprSquareRoot": "Square root",
+  "exprPower": "Power",
+  "exprSin": "Sine",
+  "exprCos": "Cosine",
+  "exprTan": "Tangent",
+  "exprLog": "Logarithm",
+  "exprLn": "Natural logarithm",
+  "exprPi": "Pi",
+  "exprEuler": "Euler",
+  "analysisEnterNumber": "Enter a number to see its analysis",
+  "analysisLoading": "Analyzing number...",
+  "analysisLoadingHint": "This may take a moment for large numbers",
+  "analysisLimited": "Limited analysis",
+  "analysisExtremelyLarge": "Extremely Large Number",
+  "analysisDigitsCount": "Digits: {count}",
+  "@analysisDigitsCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "analysisPrimalityNote": "Note on primality analysis",
+  "analysisOriginalInput": "Original input: {original} → Analyzed: {analyzed}",
+  "@analysisOriginalInput": {
+    "placeholders": {
+      "original": {
+        "type": "String"
+      },
+      "analyzed": {
+        "type": "String"
+      }
+    }
+  },
+  "analysisCalculatingPrimes": "Calculating primes...",
+  "analysisSearchingPrimes": "Searching for previous and next prime",
+  "analysisBasicProperties": "Basic Properties",
+  "analysisValue": "Value",
+  "analysisIsPrime": "Is prime",
+  "analysisDigits": "Digits",
+  "analysisNextPrime": "Next prime",
+  "analysisPrevPrime": "Previous prime",
+  "analysisDigitSum": "Digit sum",
+  "analysisBinary": "Binary",
+  "analysisYes": "Yes",
+  "analysisNo": "No",
+  "analysisRepresentations": "Representations",
+  "analysisOctal": "Octal",
+  "analysisHex": "Hexadecimal",
+  "analysisMathAnalysis": "Mathematical Analysis",
+  "analysisIsPerfect": "Is perfect",
+  "analysisIsPalindrome": "Is palindrome",
+  "analysisIsFibonacci": "Is Fibonacci",
+  "analysisIsTriangular": "Is triangular",
+  "analysisPrimeFactors": "Prime Factorization",
+  "analysisPrimeFactorsLabel": "Prime factors",
+  "analysisDivisors": "Divisors",
+  "analysisAllDivisors": "All divisors",
+  "analysisDivisorCount": "Divisor count",
+  "analysisArithmeticFunctions": "Arithmetic Functions",
+  "analysisEulerPhi": "φ(n) Euler",
+  "analysisCarmichael": "λ(n) Carmichael",
+  "analysisMobius": "μ(n) Möbius",
+  "analysisSmallOmega": "ω(n) distinct primes",
+  "analysisBigOmega": "Ω(n) primes w/mult.",
+  "analysisSopfr": "sopfr(n) Σprimes rep.",
+  "analysisSopf": "sopf(n) Σprimes dist.",
+  "analysisRadical": "rad(n) radical",
+  "analysisDigitalRoot": "Digital root",
+  "analysisClassification": "Classification",
+  "analysisSquareFree": "Square-free",
+  "analysisPowerful": "Powerful",
+  "analysisHarshad": "Harshad",
+  "analysisSemiprime": "Semiprime",
+  "analysisAbundant": "Abundant",
+  "analysisDeficient": "Deficient",
+  "analysisOperations": "Operations",
+  "analysisSquare": "Square",
+  "analysisCube": "Cube",
+  "analysisSquareRootLabel": "Square root",
+  "analysisIsPerfectSquare": "Is perfect square",
+  "analysisCubeRoot": "Cube root",
+  "analysisIsPerfectCube": "Is perfect cube",
+  "analysisPerfectPower": "Perfect Power",
+  "analysisExpression": "Expression",
+  "analysisBase": "Base",
+  "analysisExponent": "Exponent",
+  "cardPrime": "Prime",
+  "cardPerfect": "Perfect",
+  "cardPalindrome": "Palindrome",
+  "cardFibonacci": "Fibonacci",
+  "cardTriangular": "Triangular",
+  "cardEven": "Even",
+  "cardOdd": "Odd",
+  "cardQuickProperties": "Quick properties:",
+  "cardConvert": "Convert:",
+  "cardToDecimal": "To Decimal",
+  "cardToBinary": "To Binary",
+  "cardAdvancedOps": "Advanced operations:",
+  "cardDigits": "digits",
+  "kbdNumberTheory": "Number Theory",
+  "kbdModularArith": "Modular Arithmetic",
+  "kbdCombinatorics": "Combinatorics",
+  "kbdStatistics": "Statistics",
+  "errPower": "Power error: {error}",
+  "@errPower": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errSquareRoot": "Square root error: {error}",
+  "@errSquareRoot": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errCubeRoot": "Cube root error: {error}",
+  "@errCubeRoot": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errBinaryConversion": "Binary conversion error: {error}",
+  "@errBinaryConversion": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errEmptyBinary": "Empty binary number",
+  "errInvalidBinary": "Number must contain only binary digits (0 and 1)",
+  "errBinaryFromConversion": "Binary conversion error: {error}",
+  "@errBinaryFromConversion": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errTrigTooLarge": "Number too large for trigonometric functions",
+  "errSin": "Sine error: {error}",
+  "@errSin": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errCos": "Cosine error: {error}",
+  "@errCos": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errTanUndefined": "Tangent undefined for this angle",
+  "errTan": "Tangent error: {error}",
+  "@errTan": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errAsinDomain": "Arcsine is only defined for values between -1 and 1",
+  "errAsin": "Arcsine error: {error}",
+  "@errAsin": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errAcosDomain": "Arccosine is only defined for values between -1 and 1",
+  "errAcos": "Arccosine error: {error}",
+  "@errAcos": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errAtan": "Arctangent error: {error}",
+  "@errAtan": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errLnDomain": "Natural logarithm is only defined for positive numbers",
+  "errLnTooLarge": "Number too large for natural logarithm",
+  "errLn": "Natural logarithm error: {error}",
+  "@errLn": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errLogDomain": "Logarithm is only defined for positive numbers",
+  "errLogTooLarge": "Number too large for base-10 logarithm",
+  "errLog": "Logarithm error: {error}",
+  "@errLog": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errExpTooLarge": "Number too large for exponential",
+  "errExp": "Exponential error: {error}",
+  "@errExp": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errTenPowTooLarge": "Number too large for 10^x",
+  "errTenPow": "10^x error: {error}",
+  "@errTenPow": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errFactorialInvalid": "Invalid number for factorial",
+  "errFactorialNonNeg": "Factorial is only defined for non-negative integers",
+  "errFactorialTooLarge": "Number too large for factorial (maximum 170)",
+  "errFactorial": "Factorial error: {error}",
+  "@errFactorial": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errOperationCancelled": "Operation cancelled",
+  "errGeneric": "Error: {error}",
+  "@errGeneric": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errPhiDomain": "φ(n) is only defined for n > 0",
+  "errPhi": "φ(n) error: {error}",
+  "@errPhi": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errPrimorialDomain": "Primorial is only defined for n ≥ 0",
+  "errPrimorial": "Primorial error: {error}",
+  "@errPrimorial": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errSigma0Domain": "σ₀(n) is only defined for n > 0",
+  "errSigma0": "σ₀(n) error: {error}",
+  "@errSigma0": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errSigmaDomain": "σ(m,n) is only defined for n > 0",
+  "errSigma": "σ(m,n) error: {error}",
+  "@errSigma": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errFloorCeil": "Floor/ceiling error: {error}",
+  "@errFloorCeil": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errMobiusDomain": "μ(n) is only defined for n > 0",
+  "errMobius": "μ(n) error: {error}",
+  "@errMobius": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errFactorialNeg": "Factorial is not defined for negative numbers",
+  "errFactorialMax": "n! too large (max n=10000)",
+  "errFactorialN": "n! error: {error}",
+  "@errFactorialN": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errDoubleFactorialNeg": "Double factorial is not defined for negative numbers",
+  "errDoubleFactorial": "n!! error: {error}",
+  "@errDoubleFactorial": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errFibonacciNeg": "F(n) is not defined for n < 0",
+  "errFibonacci": "F(n) error: {error}",
+  "@errFibonacci": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errCatalanNeg": "Catalan is not defined for n < 0",
+  "errCatalan": "Catalan error: {error}",
+  "@errCatalan": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errDerangementNeg": "D(n) is not defined for n < 0",
+  "errDerangement": "D(n) error: {error}",
+  "@errDerangement": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errPartitionNeg": "p(n) is not defined for n < 0",
+  "errPartition": "p(n) error: {error}",
+  "@errPartition": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errBellNeg": "B(n) is not defined for n < 0",
+  "errBell": "Bell(n) error: {error}",
+  "@errBell": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errDigitalRoot": "Digital root error: {error}",
+  "@errDigitalRoot": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errPrimitiveRootDomain": "n > 1 required",
+  "errNoPrimitiveRoot": "No primitive root exists mod {n}",
+  "@errNoPrimitiveRoot": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "errLiouvilleDomain": "λ_L(n) is only defined for n > 0",
+  "errLiouville": "λ_L(n) error: {error}",
+  "@errLiouville": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errPrimeCounting": "π(n) error: {error}",
+  "@errPrimeCounting": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errRadDomain": "rad(n) is only defined for n > 0",
+  "errRad": "rad(n) error: {error}",
+  "@errRad": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errOmegaDomain": "ω(n) is only defined for n > 0",
+  "errOmega": "ω(n) error: {error}",
+  "@errOmega": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errBigOmegaDomain": "Ω(n) is only defined for n > 0",
+  "errBigOmega": "Ω(n) error: {error}",
+  "@errBigOmega": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errCarmichaelDomain": "λ(n) is only defined for n > 0",
+  "errCarmichael": "λ(n) error: {error}",
+  "@errCarmichael": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errSopfrDomain": "sopfr(n) is only defined for n > 0",
+  "errSopfr": "sopfr(n) error: {error}",
+  "@errSopfr": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errSopfDomain": "sopf(n) is only defined for n > 0",
+  "errSopf": "sopf(n) error: {error}",
+  "@errSopf": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errPercentage": "Percentage error: {error}",
+  "@errPercentage": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errDivisionByZero": "Division by zero",
+  "errReciprocal": "Reciprocal error: {error}",
+  "@errReciprocal": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errNoInverse": "No modular inverse of {a} mod {n}",
+  "@errNoInverse": {
+    "placeholders": {
+      "a": {
+        "type": "String"
+      },
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "errModPow": "Modular exponentiation error: {error}",
+  "@errModPow": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errDiophantine": "Diophantine equation error: {error}",
+  "@errDiophantine": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errCRT": "CRT error: {error}",
+  "@errCRT": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsLanguage": "Language",
+  "settingsLangAuto": "Automatic (system)",
+  "settingsLangAutoDesc": "Use device language",
+  "settingsLangEs": "Español",
+  "settingsLangEn": "English",
+  "hlpTitle": "Special Functions Guide",
+  "hlpQuickStartHeader": "Quick Start",
+  "hlpQuickStartWelcome": "Welcome to the olympiad calculator",
+  "hlpQuickStartStep1": "Open the side menu (☰) and select \"Special Functions\"",
+  "hlpQuickStartStep2": "The top keyboard (scrollable) has ~40 functions in 4 sections",
+  "hlpQuickStartStep3": "Enter a number and press any function button",
+  "hlpQuickStartStep4": "If the function needs more values, a pending operation indicator appears",
+  "hlpQuickStartStep5": "The side panel shows automatic analysis of the entered number",
+  "hlpQuickStartNote": "1-parameter functions execute immediately.\n2+ parameter functions show an indicator and wait for more values.",
+  "hlpParamHeader": "Parameter System",
+  "hlpParamTypesTitle": "Function types by parameters",
+  "hlpParam1Title": "1 parameter (immediate)",
+  "hlpParam1Desc": "Enter number → Press function → Result",
+  "hlpParam1Example": "E.g.: φ(12) → enter 12, press φ → shows 4",
+  "hlpParam2Title": "2-3-4 parameters (fixed)",
+  "hlpParam2Desc": "Enter value → Function → Value → = → (repeat if more needed)\nAuto-executes when all parameters are filled.",
+  "hlpParam2Example": "E.g.: C(10,3) → enter 10 → C(n,k) → 3 → =",
+  "hlpParamNTitle": "N parameters (variable)",
+  "hlpParamNDesc": "Enter value → Function → Value → = (add more)\nPress the SAME FUNCTION again to execute.",
+  "hlpParamNExample": "E.g.: GCD(12,18,24) → 12 → GCD → 18 → = → 24 → GCD",
+  "hlpPendingOpTitle": "Pending operation indicator",
+  "hlpPendingOpDesc": "When a function awaits more values, a colored indicator appears on screen showing which operation is in progress and what is missing.\n\nExample: \"C(10, _)\" indicates that k is missing to complete C(n,k).\n\"GCD(12, 18, _) [= add, GCD solve]\" indicates a variable operation.",
+  "hlpNumberTheoryHeader": "Number Theory",
+  "hlpEulerPhiTitle": "φ(n) — Euler's Totient Function",
+  "hlpEulerPhiParams": "1 param",
+  "hlpEulerPhiDesc": "Counts how many integers from 1 to n are coprime with n (i.e., GCD(k,n)=1).",
+  "hlpEulerPhiFormula": "φ(n) = n × ∏(1 − 1/p) for each prime p | n",
+  "hlpEulerPhiEx1": "φ(1) = 1",
+  "hlpEulerPhiEx2": "φ(9) = 6 → [1,2,4,5,7,8]",
+  "hlpEulerPhiEx3": "φ(12) = 4 → [1,5,7,11]",
+  "hlpEulerPhiEx4": "φ(p) = p−1 for prime p",
+  "hlpEulerPhiTip1": "Multiplicative: φ(mn) = φ(m)φ(n) if GCD(m,n)=1",
+  "hlpEulerPhiTip2": "Euler's theorem: a^φ(n) ≡ 1 (mod n) if GCD(a,n)=1",
+  "hlpEulerPhiTip3": "Σ φ(d) for d|n = n",
+  "hlpCarmichaelTitle": "λ(n) — Carmichael's λ Function",
+  "hlpCarmichaelParams": "1 param",
+  "hlpCarmichaelDesc": "Smallest m > 0 such that a^m ≡ 1 (mod n) for ALL a coprime to n. Always divides φ(n).",
+  "hlpCarmichaelFormula": "λ(p^k) = φ(p^k) if p odd\nλ(2)=1, λ(4)=2, λ(2^k)=2^(k−2) if k≥3\nλ(n) = lcm of parts",
+  "hlpCarmichaelEx1": "λ(8) = 2",
+  "hlpCarmichaelEx2": "λ(15) = lcm(λ(3),λ(5)) = lcm(2,4) = 4",
+  "hlpCarmichaelEx3": "λ(p) = p−1 for prime p",
+  "hlpCarmichaelTip1": "λ(n) | φ(n) always",
+  "hlpCarmichaelTip2": "λ(n) = φ(n) if and only if n has a primitive root",
+  "hlpMobiusTitle": "μ(n) — Möbius Function",
+  "hlpMobiusParams": "1 param",
+  "hlpMobiusDesc": "Detects whether n is square-free and counts prime factors.",
+  "hlpMobiusFormula": "μ(1) = 1\nμ(n) = (−1)^k if n = p₁·p₂·...·pₖ (distinct)\nμ(n) = 0 if p² | n",
+  "hlpMobiusEx1": "μ(1) = 1",
+  "hlpMobiusEx2": "μ(6) = μ(2×3) = (−1)² = 1",
+  "hlpMobiusEx3": "μ(30) = μ(2×3×5) = (−1)³ = −1",
+  "hlpMobiusEx4": "μ(12) = 0 (has 2²)",
+  "hlpMobiusTip1": "Möbius inversion: if g(n) = Σ f(d) for d|n, then f(n) = Σ μ(d)g(n/d)",
+  "hlpMobiusTip2": "Σ μ(d) for d|n = [n=1]",
+  "hlpLiouvilleTitle": "λL(n) — Liouville Function",
+  "hlpLiouvilleParams": "1 param",
+  "hlpLiouvilleDesc": "Completely multiplicative: λL(n) = (−1)^Ω(n).",
+  "hlpLiouvilleFormula": "λL(n) = (−1)^Ω(n)",
+  "hlpLiouvilleEx1": "λL(12) = (−1)³ = −1 (Ω(12)=3)",
+  "hlpLiouvilleEx2": "λL(36) = (−1)⁴ = 1 (Ω(36)=4)",
+  "hlpLiouvilleTip1": "Σ λL(d) for d|n = 1 if n is a perfect square, 0 otherwise",
+  "hlpSmallOmegaTitle": "ω(n) — Distinct Prime Factors",
+  "hlpSmallOmegaParams": "1 param",
+  "hlpSmallOmegaDesc": "Counts the number of distinct primes dividing n.",
+  "hlpSmallOmegaFormula": "ω(n) = k if n = p₁^a₁ × ... × pₖ^aₖ",
+  "hlpSmallOmegaEx1": "ω(12) = 2 → [2, 3]",
+  "hlpSmallOmegaEx2": "ω(30) = 3 → [2, 3, 5]",
+  "hlpSmallOmegaEx3": "ω(p^k) = 1",
+  "hlpBigOmegaTitle": "Ω(n) — Prime Factors with Multiplicity",
+  "hlpBigOmegaParams": "1 param",
+  "hlpBigOmegaDesc": "Total number of prime factors counting repetitions.",
+  "hlpBigOmegaFormula": "Ω(n) = a₁ + a₂ + ... + aₖ",
+  "hlpBigOmegaEx1": "Ω(12) = 3 → 2×2×3",
+  "hlpBigOmegaEx2": "Ω(72) = 5 → 2³×3² → 3+2",
+  "hlpBigOmegaEx3": "Ω(p) = 1, Ω(p²) = 2",
+  "hlpSigma0Title": "σ₀(n) — Divisor Count",
+  "hlpSigma0Params": "1 param",
+  "hlpSigma0Desc": "Total number of positive divisors of n.",
+  "hlpSigma0Formula": "If n = p₁^a₁ × ... × pₖ^aₖ\nσ₀(n) = (a₁+1)(a₂+1)...(aₖ+1)",
+  "hlpSigma0Ex1": "σ₀(12) = 6 → [1,2,3,4,6,12]",
+  "hlpSigma0Ex2": "σ₀(p) = 2",
+  "hlpSigma0Ex3": "σ₀(p²) = 3",
+  "hlpSigmaTitle": "σ(n) — Sum of Divisors",
+  "hlpSigmaParams": "1 param",
+  "hlpSigmaDesc": "Sum of all positive divisors of n.",
+  "hlpSigmaFormula": "σ(n) = Σ d for d | n",
+  "hlpSigmaEx1": "σ(6) = 1+2+3+6 = 12 (6 is perfect)",
+  "hlpSigmaEx2": "σ(12) = 1+2+3+4+6+12 = 28",
+  "hlpSigmaEx3": "σ(p) = p+1",
+  "hlpSigmaTip1": "n is perfect ⟺ σ(n) = 2n",
+  "hlpSigmaTip2": "n is abundant ⟺ σ(n) > 2n",
+  "hlpSopfrTitle": "sopfr(n) — Sum of Primes with Repetition",
+  "hlpSopfrParams": "1 param",
+  "hlpSopfrDesc": "Sums the prime factors counting multiplicity.",
+  "hlpSopfrFormula": "sopfr(n) = a₁p₁ + a₂p₂ + ... + aₖpₖ",
+  "hlpSopfrEx1": "sopfr(12) = 2+2+3 = 7",
+  "hlpSopfrEx2": "sopfr(60) = 2+2+3+5 = 12",
+  "hlpSopfTitle": "sopf(n) — Sum of Distinct Primes",
+  "hlpSopfParams": "1 param",
+  "hlpSopfDesc": "Sum of distinct primes dividing n.",
+  "hlpSopfFormula": "sopf(n) = p₁ + p₂ + ... + pₖ",
+  "hlpSopfEx1": "sopf(12) = 2+3 = 5",
+  "hlpSopfEx2": "sopf(60) = 2+3+5 = 10",
+  "hlpRadTitle": "rad(n) — Radical",
+  "hlpRadParams": "1 param",
+  "hlpRadDesc": "Product of distinct primes dividing n (ABC Conjecture function).",
+  "hlpRadFormula": "rad(n) = ∏ p for p prime, p | n",
+  "hlpRadEx1": "rad(72) = rad(2³×3²) = 2×3 = 6",
+  "hlpRadEx2": "rad(480) = rad(2⁵×3×5) = 30",
+  "hlpRadEx3": "rad(p) = p",
+  "hlpPrimorialTitle": "n# — Primorial",
+  "hlpPrimorialParams": "1 param",
+  "hlpPrimorialDesc": "Product of all primes ≤ n.",
+  "hlpPrimorialFormula": "n# = ∏ p for p prime, p ≤ n",
+  "hlpPrimorialEx1": "5# = 2×3×5 = 30",
+  "hlpPrimorialEx2": "7# = 210",
+  "hlpPrimorialEx3": "11# = 2310",
+  "hlpPrimeCountTitle": "π(n) — Prime Counting Function",
+  "hlpPrimeCountParams": "1 param",
+  "hlpPrimeCountDesc": "Counts primes ≤ n. Exact for n ≤ 1,000,000; Li(x) approximation for larger.",
+  "hlpPrimeCountFormula": "π(n) ~ n/ln(n) (Prime Number Theorem)",
+  "hlpPrimeCountEx1": "π(10) = 4",
+  "hlpPrimeCountEx2": "π(100) = 25",
+  "hlpPrimeCountEx3": "π(1,000,000) = 78,498",
+  "hlpDigitalRootTitle": "dr(n) — Digital Root",
+  "hlpDigitalRootParams": "1 param",
+  "hlpDigitalRootDesc": "Iterative digit sum until a single digit is obtained.",
+  "hlpDigitalRootFormula": "dr(n) = 1 + (n−1) mod 9  (for n > 0)",
+  "hlpDigitalRootEx1": "dr(493) → 4+9+3=16 → 1+6 = 7",
+  "hlpDigitalRootEx2": "dr(999) = 9",
+  "hlpDigitalRootEx3": "dr(n) ≡ n (mod 9)",
+  "hlpFloorCeilTitle": "⌊x⌋ / ⌈x⌉ — Floor and Ceiling",
+  "hlpFloorCeilParams": "1 param",
+  "hlpFloorCeilDesc": "Floor: greatest integer ≤ x. Ceiling: smallest integer ≥ x. Toggles between both.",
+  "hlpFloorCeilFormula": "⌊x⌋ ≤ x < ⌊x⌋+1\n⌈x⌉−1 < x ≤ ⌈x⌉",
+  "hlpFloorCeilEx1": "⌊3.7⌋ = 3, ⌈3.7⌉ = 4",
+  "hlpFloorCeilEx2": "⌊−2.3⌋ = −3, ⌈−2.3⌉ = −2",
+  "hlpFloorCeilEx3": "⌊5⌋ = ⌈5⌉ = 5",
+  "hlpPadicTitle": "Vₚ(n) — p-adic Valuation",
+  "hlpPadicParams": "2 params: n → Vₚ → p → =",
+  "hlpPadicDesc": "Maximum power of prime p dividing n.",
+  "hlpPadicFormula": "Vₚ(n) = max[k : p^k | n]",
+  "hlpPadicEx1": "V₂(24) = 3 → 24 = 2³×3",
+  "hlpPadicEx2": "V₃(81) = 4 → 81 = 3⁴",
+  "hlpPadicEx3": "V₅(100) = 2 → 100 = 2²×5²",
+  "hlpPadicTip1": "Legendre's formula: Vₚ(n!) = Σ ⌊n/pⁱ⌋",
+  "hlpPadicTip2": "Vₚ(ab) = Vₚ(a) + Vₚ(b)",
+  "hlpModArithHeader": "Modular Arithmetic",
+  "hlpModTitle": "a mod b — Division Remainder",
+  "hlpModParams": "2 params: a → mod → b → =",
+  "hlpModDesc": "Remainder of dividing a by b.",
+  "hlpModFormula": "a mod b = a − b × ⌊a/b⌋",
+  "hlpModEx1": "17 mod 5 = 2",
+  "hlpModEx2": "23 mod 7 = 2",
+  "hlpModEx3": "−8 mod 3 = 1",
+  "hlpModPowTitle": "a^b mod n — Modular Exponentiation",
+  "hlpModPowParams": "3 params: a → a%n → b → = → n → =",
+  "hlpModPowDesc": "Computes a^b mod n efficiently using repeated squaring O(log b).",
+  "hlpModPowFormula": "Decompose b in binary and square successively",
+  "hlpModPowEx1": "2¹⁰⁰ mod 7 = 2",
+  "hlpModPowEx2": "3¹³ mod 11 = 5",
+  "hlpModPowEx3": "Fundamental in RSA and primality tests",
+  "hlpModPowTip1": "Flow: enter a → press a%n → enter b → press = → enter n → press =",
+  "hlpModInvTitle": "a⁻¹ mod n — Modular Inverse",
+  "hlpModInvParams": "2 params: a → a⁻¹ → n → =",
+  "hlpModInvDesc": "Finds b such that a×b ≡ 1 (mod n). Only exists if GCD(a,n) = 1.",
+  "hlpModInvFormula": "Extended Euclidean algorithm",
+  "hlpModInvEx1": "3⁻¹ mod 7 = 5 → 3×5=15≡1",
+  "hlpModInvEx2": "5⁻¹ mod 11 = 9 → 5×9=45≡1",
+  "hlpModInvEx3": "Does not exist if GCD(a,n) ≠ 1",
+  "hlpOrdTitle": "ord_n(a) — Multiplicative Order",
+  "hlpOrdParams": "2 params: a → ord → n → =",
+  "hlpOrdDesc": "Smallest k > 0 with a^k ≡ 1 (mod n). Requires GCD(a,n)=1.",
+  "hlpOrdFormula": "ord_n(a) = min[k > 0 : a^k ≡ 1 (mod n)]",
+  "hlpOrdEx1": "ord₇(2) = 3 → 2³=8≡1",
+  "hlpOrdEx2": "ord₁₀(3) = 4 → 3⁴=81≡1",
+  "hlpOrdTip1": "ord_n(a) always divides φ(n)",
+  "hlpOrdTip2": "a is a primitive root ⟺ ord_n(a) = φ(n)",
+  "hlpLegendreTitle": "(a/p) — Legendre Symbol",
+  "hlpLegendreParams": "2 params: a → (a/p) → p → =",
+  "hlpLegendreDesc": "1 if a is a quadratic residue mod p, −1 if not, 0 if p|a. Requires p odd prime.",
+  "hlpLegendreFormula": "(a/p) ≡ a^((p−1)/2) (mod p) — Euler's Criterion",
+  "hlpLegendreEx1": "(2/7) = 1 → 3²≡2 (mod 7)",
+  "hlpLegendreEx2": "(3/7) = −1 → no x²≡3 exists",
+  "hlpLegendreEx3": "(5/5) = 0",
+  "hlpJacobiTitle": "(a/n)ⱼ — Jacobi Symbol",
+  "hlpJacobiParams": "2 params: a → (a/n)ⱼ → n → =",
+  "hlpJacobiDesc": "Generalization of Legendre for odd composite n. Uses quadratic reciprocity.",
+  "hlpJacobiFormula": "(a/n) = ∏(a/pᵢ)^eᵢ where n = ∏pᵢ^eᵢ",
+  "hlpJacobiEx1": "(2/15) = (2/3)(2/5) = (−1)(−1) = 1",
+  "hlpJacobiEx2": "(a/n) = −1 ⟹ a is NOT a quadratic residue",
+  "hlpJacobiEx3": "(a/n) = 1 does NOT guarantee it is",
+  "hlpPrimRootTitle": "g — Primitive Root",
+  "hlpPrimRootParams": "1 param",
+  "hlpPrimRootDesc": "Smallest primitive root mod n (if exists). g is a primitive root if ord_n(g) = φ(n).",
+  "hlpPrimRootFormula": "[g, g², ..., g^φ(n)] = (Z/nZ)*",
+  "hlpPrimRootEx1": "g(7) = 3 → [3,2,6,4,5,1]",
+  "hlpPrimRootEx2": "g(11) = 2",
+  "hlpPrimRootEx3": "Exists only for n = 1,2,4,p^k,2p^k",
+  "hlpGcdTitle": "GCD — Greatest Common Divisor",
+  "hlpGcdParams": "N params (variable, min. 2)",
+  "hlpGcdDesc": "Largest integer dividing all values. Accepts 2 or more numbers.",
+  "hlpGcdFormula": "GCD(a,b) via Euclidean algorithm",
+  "hlpGcdEx1": "GCD(12,18) = 6",
+  "hlpGcdEx2": "GCD(12,18,24) = 6",
+  "hlpGcdEx3": "GCD(a,b) × LCM(a,b) = a×b",
+  "hlpGcdTip1": "Flow: 12 → GCD → 18 → GCD (executes)",
+  "hlpGcdTip2": "For 3+ numbers: 12 → GCD → 18 → = → 24 → GCD",
+  "hlpGcdTip3": "Press = to add more, press GCD to execute",
+  "hlpLcmTitle": "LCM — Least Common Multiple",
+  "hlpLcmParams": "N params (variable, min. 2)",
+  "hlpLcmDesc": "Smallest positive integer divisible by all values.",
+  "hlpLcmFormula": "LCM(a,b) = a×b / GCD(a,b)",
+  "hlpLcmEx1": "LCM(4,6) = 12",
+  "hlpLcmEx2": "LCM(3,5,7) = 105",
+  "hlpLcmTip1": "Same flow as GCD: press LCM again to execute",
+  "hlpDiophTitle": "Dioph — Linear Diophantine Equation",
+  "hlpDiophParams": "3 params: a → Dioph → b → = → c → =",
+  "hlpDiophDesc": "Solves ax + by = c. Gives particular and general solution.",
+  "hlpDiophFormula": "ax + by = c has a solution ⟺ GCD(a,b) | c\nx = x₀ + (b/g)t,  y = y₀ − (a/g)t",
+  "hlpDiophEx1": "3x + 5y = 1 → x=2+5t, y=−1−3t",
+  "hlpDiophEx2": "6x + 9y = 12 → x=2+3t, y=0−2t",
+  "hlpDiophEx3": "4x + 6y = 3 → No solution",
+  "hlpDiophTip1": "Step 1: enter a (coefficient of x)",
+  "hlpDiophTip2": "Step 2: press Dioph",
+  "hlpDiophTip3": "Step 3: enter b (coefficient of y), press =",
+  "hlpDiophTip4": "Step 4: enter c (constant term), press =",
+  "hlpCrtTitle": "CRT — Chinese Remainder Theorem",
+  "hlpCrtParams": "Variable (4+ params in pairs a,m)",
+  "hlpCrtDesc": "Solves system of congruences x ≡ aᵢ (mod mᵢ).",
+  "hlpCrtFormula": "x ≡ a₁ (mod m₁)\nx ≡ a₂ (mod m₂)\n→ x ≡ r (mod lcm(m₁,m₂))",
+  "hlpCrtEx1": "x≡2(mod 3), x≡3(mod 5) → x≡8(mod 15)",
+  "hlpCrtEx2": "x≡1(mod 4), x≡2(mod 3) → x≡5(mod 12)",
+  "hlpCrtTip1": "Flow: a₁ → CRT → m₁ → = → a₂ → = → m₂ → CRT",
+  "hlpCrtTip2": "The moduli must be compatible",
+  "hlpCombinatoricsHeader": "Combinatorics",
+  "hlpFactorialTitle": "n! — Factorial",
+  "hlpFactorialParams": "1 param",
+  "hlpFactorialDesc": "Product from 1 to n. Arbitrary precision.",
+  "hlpFactorialFormula": "n! = 1 × 2 × ... × n,  0! = 1",
+  "hlpFactorialEx1": "5! = 120",
+  "hlpFactorialEx2": "10! = 3,628,800",
+  "hlpFactorialEx3": "20! = 2,432,902,008,176,640,000",
+  "hlpDblFactorialTitle": "n!! — Double Factorial",
+  "hlpDblFactorialParams": "1 param",
+  "hlpDblFactorialDesc": "Product of integers with same parity.",
+  "hlpDblFactorialFormula": "n!! = n × (n−2) × (n−4) × ...",
+  "hlpDblFactorialEx1": "7!! = 7×5×3×1 = 105",
+  "hlpDblFactorialEx2": "8!! = 8×6×4×2 = 384",
+  "hlpDblFactorialEx3": "0!! = 1!! = 1",
+  "hlpCombTitle": "C(n,k) — Combinations",
+  "hlpCombParams": "2 params: n → C(n,k) → k → =",
+  "hlpCombDesc": "Ways to choose k from n regardless of order.",
+  "hlpCombFormula": "C(n,k) = n! / (k!(n−k)!)",
+  "hlpCombEx1": "C(5,2) = 10",
+  "hlpCombEx2": "C(10,3) = 120",
+  "hlpCombEx3": "C(n,0) = C(n,n) = 1",
+  "hlpCombTip1": "Pascal's identity: C(n,k) = C(n−1,k−1) + C(n−1,k)",
+  "hlpCombTip2": "C(n,k) = C(n, n−k)",
+  "hlpVarTitle": "V(n,k) — Variations (Partial Permutations)",
+  "hlpVarParams": "2 params: n → V(n,k) → k → =",
+  "hlpVarDesc": "Ways to choose k from n WITH order.",
+  "hlpVarFormula": "V(n,k) = n! / (n−k)!",
+  "hlpVarEx1": "V(5,2) = 20",
+  "hlpVarEx2": "V(10,3) = 720",
+  "hlpCatalanTitle": "Cat(n) — Catalan Numbers",
+  "hlpCatalanParams": "1 param",
+  "hlpCatalanDesc": "Counts binary trees, triangulations, Dyck paths, balanced parentheses.",
+  "hlpCatalanFormula": "Cₙ = C(2n,n)/(n+1)",
+  "hlpCatalanEx1": "C₀ = 1, C₁ = 1, C₂ = 2",
+  "hlpCatalanEx2": "C₃ = 5, C₄ = 14, C₅ = 42",
+  "hlpDerangementTitle": "D(n) — Derangements",
+  "hlpDerangementParams": "1 param",
+  "hlpDerangementDesc": "Permutations where no element remains in its original position.",
+  "hlpDerangementFormula": "D(n) = n! × Σ(−1)^k/k! = (n−1)(D(n−1)+D(n−2))",
+  "hlpDerangementEx1": "D(3) = 2 → [231, 312]",
+  "hlpDerangementEx2": "D(4) = 9",
+  "hlpDerangementEx3": "D(n)/n! → 1/e ≈ 0.3679",
+  "hlpBellTitle": "B(n) — Bell Numbers",
+  "hlpBellParams": "1 param",
+  "hlpBellDesc": "Total number of partitions of a set of n elements.",
+  "hlpBellFormula": "B(n) = Σ S₂(n,k) for k=0..n",
+  "hlpBellEx1": "B(3) = 5",
+  "hlpBellEx2": "B(4) = 15",
+  "hlpBellEx3": "B(5) = 52",
+  "hlpPartitionTitle": "p(n) — Integer Partitions",
+  "hlpPartitionParams": "1 param",
+  "hlpPartitionDesc": "Ways to write n as a sum of positive integers (order does not matter).",
+  "hlpPartitionFormula": "Computed with dynamic programming",
+  "hlpPartitionEx1": "p(4) = 5 → [4, 3+1, 2+2, 2+1+1, 1+1+1+1]",
+  "hlpPartitionEx2": "p(10) = 42",
+  "hlpPartitionEx3": "p(100) = 190,569,292,356",
+  "hlpStirling2Title": "S₂(n,k) — Stirling Numbers 2nd Kind",
+  "hlpStirling2Params": "2 params: n → S₂ → k → =",
+  "hlpStirling2Desc": "Ways to partition n elements into exactly k non-empty subsets.",
+  "hlpStirling2Formula": "S₂(n,k) = k·S₂(n−1,k) + S₂(n−1,k−1)",
+  "hlpStirling2Ex1": "S₂(4,2) = 7",
+  "hlpStirling2Ex2": "S₂(5,3) = 25",
+  "hlpStirling2Ex3": "B(n) = Σ S₂(n,k)",
+  "hlpStirling1Title": "s₁(n,k) — Stirling Numbers 1st Kind (unsigned)",
+  "hlpStirling1Params": "2 params: n → s₁ → k → =",
+  "hlpStirling1Desc": "Permutations of n elements with exactly k cycles.",
+  "hlpStirling1Formula": "|s₁(n,k)| = (n−1)·|s₁(n−1,k)| + |s₁(n−1,k−1)|",
+  "hlpStirling1Ex1": "s₁(4,2) = 11",
+  "hlpStirling1Ex2": "s₁(4,1) = 6",
+  "hlpFibTitle": "F(n) — nth Fibonacci",
+  "hlpFibParams": "1 param",
+  "hlpFibDesc": "Computes F(n) with fast doubling O(log n). Supports very large n.",
+  "hlpFibFormula": "F(0)=0, F(1)=1, F(n)=F(n−1)+F(n−2)",
+  "hlpFibEx1": "F(10) = 55",
+  "hlpFibEx2": "F(50) = 12,586,269,025",
+  "hlpFibEx3": "F(100) = 354,224,848,179,261,915,075",
+  "hlpFibTip1": "F(n) mod m is periodic (Pisano period)",
+  "hlpFibTip2": "GCD(F(m), F(n)) = F(GCD(m,n))",
+  "hlpDigitSumBaseTitle": "ΣdigB — Digit Sum in Base b",
+  "hlpDigitSumBaseParams": "2 params: n → ΣdigB → b → =",
+  "hlpDigitSumBaseDesc": "Sums the digits of n written in base b.",
+  "hlpDigitSumBaseFormula": "If n = Σ dᵢ × bⁱ, then ΣdigB = Σ dᵢ",
+  "hlpDigitSumBaseEx1": "ΣdigB(255, 2) = 8 → 11111111₂",
+  "hlpDigitSumBaseEx2": "ΣdigB(100, 10) = 1",
+  "hlpDigitSumBaseEx3": "ΣdigB(100, 16) = 10 → 64₁₆",
+  "hlpStatisticsHeader": "Statistics",
+  "hlpArithMeanTitle": "Arithmetic Mean — Med A",
+  "hlpArithMeanParams": "N params (variable, min. 2)",
+  "hlpArithMeanDesc": "Classic average of N numbers.",
+  "hlpArithMeanFormula": "AM = (x₁ + x₂ + ... + xₙ) / n",
+  "hlpArithMeanEx1": "AM(3, 7) = 5",
+  "hlpArithMeanEx2": "AM(2, 4, 6) = 4",
+  "hlpArithMeanTip1": "Flow: 3 → Med A → 7 → Med A (executes)",
+  "hlpArithMeanTip2": "For 3+ nums: 2 → Med A → 4 → = → 6 → Med A",
+  "hlpGeoMeanTitle": "Geometric Mean — Med G",
+  "hlpGeoMeanParams": "N params (variable, min. 2)",
+  "hlpGeoMeanDesc": "nth root of the product. Positive values only.",
+  "hlpGeoMeanFormula": "GM = (x₁ × x₂ × ... × xₙ)^(1/n)",
+  "hlpGeoMeanEx1": "GM(2, 8) = 4",
+  "hlpGeoMeanEx2": "GM(1, 4, 9) ≈ 3.30",
+  "hlpHarmMeanTitle": "Harmonic Mean — Med H",
+  "hlpHarmMeanParams": "N params (variable, min. 2)",
+  "hlpHarmMeanDesc": "Reciprocal of the arithmetic mean of the reciprocals. Positive values only.",
+  "hlpHarmMeanFormula": "HM = n / (1/x₁ + 1/x₂ + ... + 1/xₙ)",
+  "hlpHarmMeanEx1": "HM(2, 8) = 3.2",
+  "hlpHarmMeanEx2": "HM(1, 4, 9) ≈ 2.08",
+  "hlpQuadMeanTitle": "Quadratic Mean — Med C",
+  "hlpQuadMeanParams": "N params (variable, min. 2)",
+  "hlpQuadMeanDesc": "Root of the mean of squares (RMS).",
+  "hlpQuadMeanFormula": "QM = √((x₁² + x₂² + ... + xₙ²) / n)",
+  "hlpQuadMeanEx1": "QM(3, 4) ≈ 3.54",
+  "hlpQuadMeanEx2": "QM(1, 2, 3) ≈ 2.16",
+  "hlpMinMaxTitle": "min / max — Minimum and Maximum",
+  "hlpMinMaxParams": "N params (variable, min. 2)",
+  "hlpMinMaxDesc": "Finds the smallest/largest value in a set of N numbers.",
+  "hlpMinMaxFormula": "min(a₁,...,aₙ) and max(a₁,...,aₙ)",
+  "hlpMinMaxEx1": "min(3, 7, 1) = 1",
+  "hlpMinMaxEx2": "max(3, 7, 1) = 7",
+  "hlpMinMaxTip1": "Same variable flow: press min/max again to execute",
+  "hlpMeanInequalityTitle": "Mean Inequality (AM-GM-HM)",
+  "hlpMeanInequalityContent": "For positive numbers it always holds that:\n\nHM ≤ GM ≤ AM ≤ QM\n\nEquality holds only when all values are equal.\nThis inequality is fundamental in olympiads.",
+  "hlpAnalysisPanelHeader": "Numeric Analysis Panel",
+  "hlpAutoAnalysisTitle": "Automatic Analysis",
+  "hlpAutoAnalysisContent": "When any number is entered, the right panel (tablet) or bottom panel (mobile) automatically shows:\n\n• Properties: digits, parity, sign\n• Representations: binary, octal, hexadecimal\n• Primality: Miller-Rabin test, full factorization\n• Neighboring primes: previous and next\n• Divisors: complete list, sum, count\n• Classifications: perfect square/cube, perfect power, Fibonacci, triangular, palindrome\n\nFor numbers ≤ 15 digits, it also shows:\n\n• Arithmetic functions: φ, λ, μ, ω, Ω, sopfr, sopf, rad, dr\n• Classifications: square-free, powerful, Harshad, semiprime, abundant/deficient/perfect",
+  "hlpOlympiadHeader": "Key Olympiad Formulas",
+  "hlpIdentitiesTitle": "Fundamental Identities",
+  "hlpIdentitiesContent": "• Euler's theorem: a^φ(n) ≡ 1 (mod n) if GCD(a,n)=1\n• Fermat's little: a^(p−1) ≡ 1 (mod p) if p prime\n• Wilson: (p−1)! ≡ −1 (mod p) ⟺ p is prime\n• Legendre's formula: Vₚ(n!) = Σᵢ ⌊n/pⁱ⌋\n• Lucas: C(n,k) mod p = ∏ C(nᵢ,kᵢ) mod p\n• Σ φ(d) for d|n = n\n• Σ μ(d) for d|n = [n=1]\n• φ(mn) = φ(m)φ(n)·GCD(m,n)/φ(GCD(m,n))\n• GCD(F(m),F(n)) = F(GCD(m,n))\n• AM ≥ GM ≥ HM (mean inequality)",
+  "hlpRefTableTitle": "Quick Reference Table",
+  "hlpRefTableContent": "n    φ(n)  λ(n)  μ(n)  σ(n)  ω  Ω\n1    1     1     1     1     0  0\n6    2     2     1     12    2  2\n12   4     2     0     28    2  3\n30   8     4     −1    72    3  3\n60   16    4     0     168   3  4\n100  40    20    0     217   2  4",
+  "hlpExamplesLabel": "Examples:",
+  "hlpTipsLabel": "Tips:",
+
+  "errExprEmpty": "Error: Empty expression",
+  "errExprMalformed": "Error: Malformed expression",
+  "errExprDivZero": "Error: Division by zero",
+  "errResultInvalid": "Error: Invalid result",
+  "errAnalysisInvalid": "Error: Invalid number for analysis",
+  "errAnalysisFail": "Cannot analyze the number",
+  "errNoSolution": "No solution",
+  "errIncompatibleSystem": "Incompatible system",
+  "errCRTNeedPairs": "CRT needs pairs (aᵢ, mᵢ)",
+  "errUnknownOp": "Unknown operation: {op}"
+}
