@@ -26,6 +26,9 @@ migrate_working_dir/
 /test_*.dart
 /test.txt
 
+# Internal working/planning docs (not for publication)
+/IMPLEMENTATION_PLAN.md
+
 # Flutter/Dart/Pub related
 **/doc/api/
 **/ios/Flutter/.last_build_id
