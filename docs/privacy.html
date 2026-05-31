@@ -1,75 +1,182 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Privacy Policy – Super Calculadora</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Super Calculator — Privacy Policy</title>
   <style>
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-           max-width: 760px; margin: 40px auto; padding: 0 20px;
-           color: #333; line-height: 1.7; }
-    h1 { color: #4a148c; }
-    h2 { color: #6a1b9a; border-bottom: 1px solid #e0e0e0; padding-bottom: 4px; }
-    table { border-collapse: collapse; width: 100%; margin: 16px 0; }
-    th, td { border: 1px solid #ddd; padding: 8px 12px; text-align: left; }
-    th { background: #f3e5f5; }
-    .badge { display: inline-block; background: #4caf50; color: #fff;
-             border-radius: 4px; padding: 2px 8px; font-size: 0.85em; }
-    footer { margin-top: 48px; font-size: 0.85em; color: #888; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --accent: #6750a4;
+      --accent-light: #ede7f6;
+      --border: #cac4d0;
+      --text: #1c1b1f;
+      --text-muted: #49454f;
+      --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    body {
+      font-family: var(--font);
+      font-size: 15px;
+      line-height: 1.7;
+      color: var(--text);
+      background: #fff;
+    }
+
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 48px 24px 80px;
+    }
+
+    .page-header {
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 20px;
+      margin-bottom: 36px;
+    }
+    .page-header h1 { font-size: 1.8rem; font-weight: 700; color: var(--accent); }
+    .page-header .meta { margin-top: 6px; font-size: 13px; color: var(--text-muted); }
+
+    h2 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin: 32px 0 10px;
+    }
+
+    p { margin-bottom: 12px; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0;
+      font-size: 14px;
+    }
+    th {
+      text-align: left;
+      padding: 8px 12px;
+      background: var(--accent-light);
+      color: var(--accent);
+      font-weight: 600;
+      border-bottom: 2px solid var(--border);
+    }
+    td {
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+    tr:last-child td { border-bottom: none; }
+
+    ul {
+      margin: 8px 0 12px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    li { font-size: 14px; }
+
+    .highlight-box {
+      background: var(--accent-light);
+      border-left: 4px solid var(--accent);
+      border-radius: 0 8px 8px 0;
+      padding: 14px 18px;
+      margin: 16px 0;
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    footer {
+      margin-top: 48px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+      font-size: 13px;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
   </style>
 </head>
 <body>
+<div class="container">
 
-<h1>Privacy Policy</h1>
-<p><strong>App:</strong> Super Calculadora &nbsp;|&nbsp;
-   <strong>Last updated:</strong> May 2026 &nbsp;|&nbsp;
-   <span class="badge">No data collected</span></p>
+  <div class="page-header">
+    <h1>Privacy Policy</h1>
+    <div class="meta">Super Calculator &nbsp;&middot;&nbsp; Last updated: May 2026</div>
+  </div>
 
-<h2>Overview</h2>
-<p>Super Calculadora is a free, offline mathematical calculator.
-   This policy explains how the app handles your information.</p>
+  <h2>Overview</h2>
+  <p>Super Calculator is a free, offline mathematical calculator for Android. This privacy policy explains how the app handles your information.</p>
 
-<h2>Data Collection</h2>
-<p><strong>We do not collect, transmit, or share any personal data.</strong><br>
-   The app operates entirely on your device. No information is ever sent to any
-   server, third party, or cloud service.</p>
+  <div class="highlight-box">We do not collect, transmit, or share any personal data.</div>
 
-<h2>Data Stored Locally on Your Device</h2>
-<table>
-  <tr><th>Data</th><th>Purpose</th><th>Location</th></tr>
-  <tr><td>Calculation history</td><td>Display recent operations</td><td>Device local storage only</td></tr>
-  <tr><td>App settings (theme, notation, language)</td><td>Remember preferences</td><td>Device local storage only</td></tr>
-</table>
-<p>This data never leaves your device and is automatically deleted when you uninstall the app.</p>
+  <p>Super Calculator operates entirely on your device. No information is sent to any server, third party, or cloud service.</p>
 
-<h2>Internet Access</h2>
-<p>Super Calculadora <strong>does not require internet access</strong> and makes
-   no network requests of any kind.</p>
+  <h2>Data Stored Locally</h2>
+  <p>The app stores the following data <strong>only on your device</strong>, using Android's SharedPreferences:</p>
 
-<h2>Third-Party Services</h2>
-<p>The app does not integrate with analytics, advertising, crash-reporting,
-   or social media services of any kind.</p>
+  <table>
+    <thead>
+      <tr>
+        <th>Data</th>
+        <th>Purpose</th>
+        <th>Where stored</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Calculation history</td>
+        <td>Display recent operations</td>
+        <td>Device local storage</td>
+      </tr>
+      <tr>
+        <td>App settings (theme, notation, language)</td>
+        <td>Remember your preferences</td>
+        <td>Device local storage</td>
+      </tr>
+    </tbody>
+  </table>
 
-<h2>Permissions</h2>
-<p>The app requests <strong>no special Android permissions</strong>.
-   It does not access your camera, microphone, contacts, location,
-   or any device feature beyond local storage.</p>
+  <p>This data never leaves your device and is deleted when you uninstall the app.</p>
 
-<h2>Children's Privacy</h2>
-<p>The app does not collect data from anyone, including children under 13.</p>
+  <h2>Internet Access</h2>
+  <p>Super Calculator <strong>does not require internet access</strong> and does not make any network requests.</p>
 
-<h2>Changes to This Policy</h2>
-<p>If the app ever changes to collect data, this policy will be updated
-   and users will be notified via an app update.</p>
+  <h2>Third-Party Services</h2>
+  <p>The app does not integrate with:</p>
+  <ul>
+    <li>Analytics services (Google Analytics, Firebase, etc.)</li>
+    <li>Advertising networks</li>
+    <li>Crash reporting services</li>
+    <li>Social media SDKs</li>
+  </ul>
 
-<h2>Contact</h2>
-<p>For questions, open an issue on the
-   <a href="https://github.com/atiweb/super_calculadora">GitHub repository</a>.</p>
+  <h2>Children's Privacy</h2>
+  <p>The app does not collect data from anyone, including children under 13.</p>
 
-<footer>
-  Super Calculadora is open source — you can verify all data handling by reading
-  the <a href="https://github.com/atiweb/super_calculadora">source code</a>.
-</footer>
+  <h2>Permissions</h2>
+  <p>The app requests <strong>no special Android permissions</strong>. It does not access your camera, microphone, contacts, location, or any other device feature beyond local storage.</p>
 
+  <h2>Changes to This Policy</h2>
+  <p>If the app ever changes to collect data, this policy will be updated and users will be notified via an app update.</p>
+
+  <h2>Contact</h2>
+  <p>For questions about this privacy policy, open an issue on the <a href="https://github.com/Adalberto-Garcia-Garces/super_calculadora">GitHub repository</a>.</p>
+
+  <p style="margin-top: 20px; font-size: 13px; color: var(--text-muted);">
+    This app is open source. You can verify all data handling by reading the source code.
+  </p>
+
+  <footer>
+    <span>Super Calculator v1.0.0 &mdash; Adalberto Garcia Garces</span>
+    <span><a href="index.html">Back to Help</a></span>
+  </footer>
+
+</div>
 </body>
 </html>
