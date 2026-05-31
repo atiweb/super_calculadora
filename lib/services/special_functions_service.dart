@@ -181,6 +181,11 @@ class SpecialFunctionsService {
   
   /// Función piso
   static BigInt floor(BigDecimal x) {
+    // For negative numbers with a fractional part, the floor is one less
+    // than the integer part (e.g. floor(-2.3) = -3, not -2).
+    if (x.isNegative && x.fractionalPart != BigInt.zero) {
+      return x.integerPart - BigInt.one;
+    }
     return x.integerPart;
   }
   

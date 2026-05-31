@@ -425,15 +425,11 @@ class BigDecimal {
     return result;
   }
 
-  /// Convertir a double (puede perder precisión)
+  /// Convertir a double (puede perder precisión para valores muy grandes)
   double toDouble() {
-    double integerValue = _integerPart.toDouble();
-    if (_fractionalPart == BigInt.zero || _scale == 0) {
-      return integerValue;
-    }
-    
-    double fractionalValue = _fractionalPart.toDouble() / math.pow(10, _scale);
-    return integerValue + fractionalValue;
+    // Parsing from the string representation avoids precision loss that occurs
+    // when _fractionalPart exceeds 2^53 and cannot round-trip through double.
+    return double.parse(toString());
   }
 
   /// Crear copia con precisión ajustada
