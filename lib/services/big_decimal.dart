@@ -69,6 +69,31 @@ class BigDecimal {
     return BigDecimal.fromString(value.toString());
   }
 
+  /// Construye un BigDecimal a partir de un valor entero escalado (total)
+  /// y su escala, garantizando que la parte entera y la parte fraccionaria
+  /// compartan el mismo signo que el valor real.
+  ///
+  /// Usa truncamiento hacia cero (`~/`) y `remainder` (cuyo signo coincide con
+  /// el del dividendo) para que la invariante
+  ///   total = integerPart * 10^scale + fractionalPart
+  /// se cumpla con signos consistentes. Esto evita estados como
+  /// (integerPart > 0, fractionalPart < 0) que rompen `toString`.
+  factory BigDecimal._fromTotal(BigInt total, int scale) {
+    if (scale <= 0) {
+      // El valor es un entero (posiblemente reescalado por 10^(-scale)).
+      if (scale < 0) {
+        total = total * BigInt.from(10).pow(-scale);
+      }
+      return BigDecimal._(total, BigInt.zero, 0);
+    }
+
+    final BigInt scaleMultiplier = BigInt.from(10).pow(scale);
+    final BigInt integerPart = total ~/ scaleMultiplier; // trunca hacia cero
+    final BigInt fractionalPart =
+        total.remainder(scaleMultiplier); // signo = signo de total
+    return BigDecimal._(integerPart, fractionalPart, scale);
+  }
+
   /// Zero constant
   static final BigDecimal zero = BigDecimal._(BigInt.zero, BigInt.zero, 0);
 
@@ -95,25 +120,17 @@ class BigDecimal {
 
   /// Suma
   BigDecimal operator +(BigDecimal other) {
-    // Normalizar escalas
+    // Normalizar ambos operandos a la misma escala y sumar como enteros
+    // escalados. La re-canonicalización (vía _fromTotal) garantiza signos
+    // consistentes incluso cuando la suma cruza el cero (p. ej. 1.0 + (-0.5)).
     int maxScale = math.max(_scale, other._scale);
-    
-    BigInt thisNormalizedFrac = _normalizeScale(_fractionalPart, _scale, maxScale);
-    BigInt otherNormalizedFrac = _normalizeScale(other._fractionalPart, other._scale, maxScale);
-    
-    // Sumar partes
-    BigInt newIntegerPart = _integerPart + other._integerPart;
-    BigInt newFractionalPart = thisNormalizedFrac + otherNormalizedFrac;
-    
-    // Manejar carry
-    BigInt scaleMultiplier = BigInt.from(10).pow(maxScale);
-    if (newFractionalPart.abs() >= scaleMultiplier) {
-      BigInt carry = newFractionalPart ~/ scaleMultiplier;
-      newIntegerPart += carry;
-      newFractionalPart = newFractionalPart % scaleMultiplier;
-    }
-    
-    return BigDecimal._(newIntegerPart, newFractionalPart, maxScale);
+
+    BigInt totalThis =
+        _toTotalDecimal() * BigInt.from(10).pow(maxScale - _scale);
+    BigInt totalOther =
+        other._toTotalDecimal() * BigInt.from(10).pow(maxScale - other._scale);
+
+    return BigDecimal._fromTotal(totalThis + totalOther, maxScale);
   }
 
   /// Resta
@@ -128,22 +145,9 @@ class BigDecimal {
 
   /// Multiplicación
   BigDecimal operator *(BigDecimal other) {
-    // Convertir a forma decimal completa
-    BigInt thisTotal = _toTotalDecimal();
-    BigInt otherTotal = other._toTotalDecimal();
-    
-    // Multiplicar
-    BigInt result = thisTotal * otherTotal;
-    
-    // Ajustar escala
-    int newScale = _scale + other._scale;
-    
-    // Convertir de vuelta
-    BigInt scaleMultiplier = BigInt.from(10).pow(newScale);
-    BigInt newIntegerPart = result ~/ scaleMultiplier;
-    BigInt newFractionalPart = result % scaleMultiplier;
-    
-    return BigDecimal._(newIntegerPart, newFractionalPart, newScale);
+    // (a · 10^sa) · (b · 10^sb) = (a·b) · 10^(sa+sb)
+    BigInt result = _toTotalDecimal() * other._toTotalDecimal();
+    return BigDecimal._fromTotal(result, _scale + other._scale);
   }
 
   /// División
@@ -171,21 +175,10 @@ class BigDecimal {
 
   // La escala final se basa en la escala del numerador + precisión extra
   int newScale = p + sa;
-    
-    // Manejar escalas negativas
-    if (newScale < 0) {
-      // Si la escala es negativa, multiplicar el resultado por 10^(-newScale)
-      BigInt multiplier = BigInt.from(10).pow(-newScale);
-      result = result * multiplier;
-      newScale = 0;
-    }
-    
-    // Convertir de vuelta
-    BigInt scaleMultiplier = BigInt.from(10).pow(newScale);
-    BigInt newIntegerPart = result ~/ scaleMultiplier;
-    BigInt newFractionalPart = result % scaleMultiplier;
 
-    return BigDecimal._(newIntegerPart, newFractionalPart, newScale);
+    // _fromTotal maneja la re-canonicalización (signos consistentes) y el
+    // caso de escala negativa.
+    return BigDecimal._fromTotal(result, newScale);
   }
 
   /// Potencia
@@ -347,28 +340,31 @@ class BigDecimal {
   @override
   String toString() {
     if (isZero) return '0';
-    
-    String integerStr = _integerPart.toString();
-    
+
+    // El signo se determina con isNegative porque la parte entera puede ser 0
+    // para valores negativos pequeños (p. ej. -0.5 tiene integerPart == 0).
+    final String sign = isNegative ? '-' : '';
+    final String integerStr = _integerPart.abs().toString();
+
     if (_fractionalPart == BigInt.zero || _scale == 0) {
-      return integerStr;
+      return '$sign$integerStr';
     }
-    
+
     String fractionalStr = _fractionalPart.abs().toString();
-    
+
     // Rellenar con ceros a la izquierda si es necesario
     while (fractionalStr.length < _scale) {
       fractionalStr = '0$fractionalStr';
     }
-    
+
     // Remover ceros finales
     fractionalStr = fractionalStr.replaceAll(RegExp(r'0+$'), '');
-    
+
     if (fractionalStr.isEmpty) {
-      return integerStr;
+      return '$sign$integerStr';
     }
-    
-    return '$integerStr.$fractionalStr';
+
+    return '$sign$integerStr.$fractionalStr';
   }
 
   /// Convertir a representación binaria
