@@ -6,6 +6,7 @@ import 'screens/calculator_screen.dart';
 import 'screens/settings_screen.dart';
 import 'screens/history_screen.dart';
 import 'screens/special_functions_help_screen.dart';
+import 'screens/olympiad/olympiad_tools_screen.dart';
 import 'services/calculator_service.dart';
 import 'services/settings_service.dart';
 import 'providers/theme_provider.dart';
@@ -87,6 +88,7 @@ class SuperCalculadoraApp extends StatelessWidget {
               '/settings': (context) => const SettingsScreen(),
               '/history': (context) => const HistoryScreen(),
               '/special-help': (context) => const SpecialFunctionsHelpScreen(),
+              '/olympiad': (context) => const OlympiadToolsScreen(),
             },
             debugShowCheckedModeBanner: false,
           );

@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../l10n/app_localizations.dart';
 import '../services/calculator_service.dart';
 import '../models/calculator_config.dart';
+import '../screens/olympiad/olympiad_strings.dart';
 import 'about_dialog.dart';
 
 class CalculatorDrawer extends StatelessWidget {
@@ -110,6 +111,15 @@ class CalculatorDrawer extends StatelessWidget {
                 onTap: () {
                   Navigator.pop(context);
                   Navigator.pushNamed(context, '/settings');
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.emoji_events_outlined),
+                title: Text(OlympiadStrings.of(context).title),
+                subtitle: Text(OlympiadStrings.of(context).subtitle),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.pushNamed(context, '/olympiad');
                 },
               ),
               ListTile(
