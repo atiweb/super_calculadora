@@ -118,23 +118,23 @@ void main() {
     test('x^2-5x+6 → rational {2,3}', () {
       final s = PolynomialService.solveQuadratic(fi(1), fi(-5), fi(6));
       expect(s.discriminant, fi(1));
-      expect(s.nature, 'dos reales distintas');
+      expect(s.nature, QuadraticNature.twoRealDistinct);
       expect(s.rationalRoots, [fi(2), fi(3)]);
     });
     test('x^2-4x+4 → double root 2', () {
       final s = PolynomialService.solveQuadratic(fi(1), fi(-4), fi(4));
-      expect(s.nature, 'una raíz doble');
+      expect(s.nature, QuadraticNature.doubleRoot);
       expect(s.rationalRoots, [fi(2)]);
     });
     test('x^2-2 → irrational, no rational roots', () {
       final s = PolynomialService.solveQuadratic(fi(1), fi(0), fi(-2));
-      expect(s.nature, 'dos reales distintas');
+      expect(s.nature, QuadraticNature.twoRealDistinct);
       expect(s.rationalRoots, isEmpty);
       expect((s.realRoots[0] + 1.4142135).abs() < 1e-5, true);
     });
     test('x^2+x+1 → complex', () {
       final s = PolynomialService.solveQuadratic(fi(1), fi(1), fi(1));
-      expect(s.nature, 'complejas conjugadas');
+      expect(s.nature, QuadraticNature.complexConjugate);
       expect(s.realRoots, isEmpty);
     });
     test('a=0 throws', () =>

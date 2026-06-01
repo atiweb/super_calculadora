@@ -3,18 +3,23 @@ import '../models/fraction.dart';
 import '../models/surd.dart';
 import '../models/point.dart';
 
-/// Clasificación de un triángulo por lados y por ángulos.
-class TriangleType {
-  /// 'equilátero' | 'isósceles' | 'escaleno'
-  final String bySides;
+/// Clasificación de un triángulo por la igualdad de sus lados.
+enum TriangleSides { equilateral, isosceles, scalene }
 
-  /// 'rectángulo' | 'acutángulo' | 'obtusángulo'
-  final String byAngles;
+/// Clasificación de un triángulo por su mayor ángulo.
+enum TriangleAngles { right, acute, obtuse }
+
+/// Clasificación de un triángulo por lados y por ángulos.
+///
+/// Se usan enumeraciones (no texto) para que la capa de UI elija el idioma.
+class TriangleType {
+  final TriangleSides bySides;
+  final TriangleAngles byAngles;
 
   const TriangleType(this.bySides, this.byAngles);
 
   @override
-  String toString() => '$bySides, $byAngles';
+  String toString() => '${bySides.name}, ${byAngles.name}';
 
   @override
   bool operator ==(Object other) =>
@@ -61,26 +66,26 @@ class GeometryService {
     }
 
     // Por lados
-    final String bySides;
+    final TriangleSides bySides;
     if (a == b && b == c) {
-      bySides = 'equilátero';
+      bySides = TriangleSides.equilateral;
     } else if (a == b || b == c || a == c) {
-      bySides = 'isósceles';
+      bySides = TriangleSides.isosceles;
     } else {
-      bySides = 'escaleno';
+      bySides = TriangleSides.scalene;
     }
 
     // Por ángulos: comparar el cuadrado del lado mayor con la suma de los otros
     final sides = [a, b, c]..sort();
     final BigInt x = sides[0], y = sides[1], z = sides[2]; // z es el mayor
     final BigInt diff = x * x + y * y - z * z;
-    final String byAngles;
+    final TriangleAngles byAngles;
     if (diff == BigInt.zero) {
-      byAngles = 'rectángulo';
+      byAngles = TriangleAngles.right;
     } else if (diff > BigInt.zero) {
-      byAngles = 'acutángulo';
+      byAngles = TriangleAngles.acute;
     } else {
-      byAngles = 'obtusángulo';
+      byAngles = TriangleAngles.obtuse;
     }
 
     return TriangleType(bySides, byAngles);

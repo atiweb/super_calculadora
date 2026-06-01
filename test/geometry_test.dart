@@ -9,20 +9,20 @@ void main() {
   group('triangle validity & type', () {
     test('3,4,5 is valid', () => expect(GeometryService.isValidTriangle(bi(3), bi(4), bi(5)), true));
     test('1,2,3 is degenerate (invalid)', () => expect(GeometryService.isValidTriangle(bi(1), bi(2), bi(3)), false));
-    test('3,4,5 → escaleno, rectángulo', () {
+    test('3,4,5 → scalene, right', () {
       final t = GeometryService.triangleType(bi(3), bi(4), bi(5));
-      expect(t.bySides, 'escaleno');
-      expect(t.byAngles, 'rectángulo');
+      expect(t.bySides, TriangleSides.scalene);
+      expect(t.byAngles, TriangleAngles.right);
     });
-    test('5,5,5 → equilátero, acutángulo', () {
+    test('5,5,5 → equilateral, acute', () {
       final t = GeometryService.triangleType(bi(5), bi(5), bi(5));
-      expect(t.bySides, 'equilátero');
-      expect(t.byAngles, 'acutángulo');
+      expect(t.bySides, TriangleSides.equilateral);
+      expect(t.byAngles, TriangleAngles.acute);
     });
-    test('2,2,3 → isósceles, obtusángulo', () {
+    test('2,2,3 → isosceles, obtuse', () {
       final t = GeometryService.triangleType(bi(2), bi(2), bi(3));
-      expect(t.bySides, 'isósceles');
-      expect(t.byAngles, 'obtusángulo');
+      expect(t.bySides, TriangleSides.isosceles);
+      expect(t.byAngles, TriangleAngles.obtuse);
     });
   });
 

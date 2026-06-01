@@ -118,6 +118,9 @@ class CalculatorService extends ChangeNotifier {
     _isCalculatingOperation = false;
     _operationProgress = '';
     _canCancelOperation = false;
+    // El display volvió a '0': limpiar también el análisis para que el panel
+    // no quede mostrando el número anterior.
+    _updateAnalysis();
     notifyListeners();
   }
 

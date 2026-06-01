@@ -17,12 +17,14 @@ class VietaRelations {
       this.sumOfRoots, this.productOfRoots, this.elementarySymmetric);
 }
 
+/// Naturaleza de las raíces de una cuadrática (neutral al idioma).
+enum QuadraticNature { twoRealDistinct, doubleRoot, complexConjugate }
+
 /// Solución exacta de una ecuación cuadrática.
 class QuadraticSolution {
   final Fraction discriminant;
 
-  /// 'dos reales distintas' | 'una raíz doble' | 'complejas conjugadas'
-  final String nature;
+  final QuadraticNature nature;
 
   /// Raíces racionales exactas (vacío si las raíces son irracionales/complejas).
   final List<Fraction> rationalRoots;
@@ -181,13 +183,13 @@ class PolynomialService {
     }
     final Fraction d = b * b - Fraction.fromInt(4) * a * c;
 
-    final String nature;
+    final QuadraticNature nature;
     if (d.isZero) {
-      nature = 'una raíz doble';
+      nature = QuadraticNature.doubleRoot;
     } else if (d.isPositive) {
-      nature = 'dos reales distintas';
+      nature = QuadraticNature.twoRealDistinct;
     } else {
-      nature = 'complejas conjugadas';
+      nature = QuadraticNature.complexConjugate;
     }
 
     final List<Fraction> rationalRoots = [];

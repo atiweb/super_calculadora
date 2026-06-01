@@ -49,6 +49,41 @@ String _superscript(int n) {
   return n.toString().split('').map((d) => map[d] ?? d).join();
 }
 
+// Localización de los resultados que los servicios devuelven como enumeraciones.
+
+String _sidesLabel(OlympiadStrings s, TriangleSides v) {
+  switch (v) {
+    case TriangleSides.equilateral:
+      return s.pick('equilátero', 'equilateral');
+    case TriangleSides.isosceles:
+      return s.pick('isósceles', 'isosceles');
+    case TriangleSides.scalene:
+      return s.pick('escaleno', 'scalene');
+  }
+}
+
+String _anglesLabel(OlympiadStrings s, TriangleAngles v) {
+  switch (v) {
+    case TriangleAngles.right:
+      return s.pick('rectángulo', 'right');
+    case TriangleAngles.acute:
+      return s.pick('acutángulo', 'acute');
+    case TriangleAngles.obtuse:
+      return s.pick('obtusángulo', 'obtuse');
+  }
+}
+
+String _natureLabel(OlympiadStrings s, QuadraticNature v) {
+  switch (v) {
+    case QuadraticNature.twoRealDistinct:
+      return s.pick('dos reales distintas', 'two distinct real');
+    case QuadraticNature.doubleRoot:
+      return s.pick('una raíz doble', 'one double root');
+    case QuadraticNature.complexConjugate:
+      return s.pick('complejas conjugadas', 'complex conjugate');
+  }
+}
+
 /// Pantalla base: una lista desplazable de herramientas.
 class _ToolScaffold extends StatelessWidget {
   final String title;
@@ -214,7 +249,7 @@ class GeometryToolScreen extends StatelessWidget {
             final area = GeometryService.heronArea(a, b, c);
             final r = GeometryService.inradius(a, b, c);
             final big = GeometryService.circumradius(a, b, c);
-            return '${s.pick('Tipo', 'Type')}: ${t.bySides}, ${t.byAngles}\n'
+            return '${s.pick('Tipo', 'Type')}: ${_sidesLabel(s, t.bySides)}, ${_anglesLabel(s, t.byAngles)}\n'
                 '${s.pick('Perímetro', 'Perimeter')}: ${a + b + c}\n'
                 '${s.pick('Área', 'Area')}: $area  ≈ ${area.toDouble().toStringAsFixed(4)}\n'
                 'R = $big  ≈ ${big.toDouble().toStringAsFixed(4)}\n'
@@ -304,7 +339,7 @@ class PolynomialsToolScreen extends StatelessWidget {
                 Fraction.parse(i[0]), Fraction.parse(i[1]), Fraction.parse(i[2]));
             final sb = StringBuffer();
             sb.writeln('${s.pick('Discriminante', 'Discriminant')}: ${sol.discriminant}');
-            sb.writeln('${s.pick('Naturaleza', 'Nature')}: ${sol.nature}');
+            sb.writeln('${s.pick('Naturaleza', 'Nature')}: ${_natureLabel(s, sol.nature)}');
             if (sol.rationalRoots.isNotEmpty) {
               sb.writeln('${s.pick('Raíces exactas', 'Exact roots')}: ${sol.rationalRoots.join(', ')}');
             }
@@ -442,12 +477,14 @@ class StepsToolScreen extends StatelessWidget {
           title: s.pick('Euclides con pasos', 'Euclid with steps'),
           fields: [ToolField('a', initial: '240'), ToolField('b', initial: '46')],
           compute: (i) =>
-              StepsService.euclidSteps(_bi(i[0]), _bi(i[1])).toString(),
+              StepsService.euclidSteps(_bi(i[0]), _bi(i[1]), spanish: s.es)
+                  .toString(),
         ),
         CalcTool(
           title: s.pick('Factorización con pasos', 'Factorization with steps'),
           fields: [ToolField('n', initial: '360')],
-          compute: (i) => StepsService.factorizationSteps(_bi(i[0])).toString(),
+          compute: (i) =>
+              StepsService.factorizationSteps(_bi(i[0]), spanish: s.es).toString(),
         ),
         CalcTool(
           title: s.pick('TCR con pasos', 'CRT with steps'),
@@ -458,7 +495,8 @@ class StepsToolScreen extends StatelessWidget {
             ToolField(s.pick('Módulos', 'Moduli'), initial: '3, 5, 7'),
           ],
           compute: (i) =>
-              StepsService.crtSteps(_biList(i[0]), _biList(i[1])).toString(),
+              StepsService.crtSteps(_biList(i[0]), _biList(i[1]), spanish: s.es)
+                  .toString(),
         ),
       ],
     );

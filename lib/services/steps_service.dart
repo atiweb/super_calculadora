@@ -1,24 +1,32 @@
 import '../models/step_result.dart';
 
 /// Versiones "con procedimiento" de algoritmos clásicos, para uso didáctico.
+///
+/// El parámetro [spanish] elige el idioma de la prosa; las líneas matemáticas
+/// (ecuaciones) son neutrales al idioma.
 class StepsService {
   static final BigInt _zero = BigInt.zero;
   static final BigInt _one = BigInt.one;
 
+  static String _t(bool es, String spanish, String english) =>
+      es ? spanish : english;
+
   /// Algoritmo de Euclides con pasos, incluyendo la identidad de Bézout
   /// g = x·a + y·b. El resultado es el mcd.
-  static StepResult euclidSteps(BigInt a, BigInt b) {
+  static StepResult euclidSteps(BigInt a, BigInt b, {bool spanish = false}) {
     final BigInt origA = a, origB = b;
     final List<String> steps = [];
 
     BigInt x = a.abs();
     BigInt y = b.abs();
     if (y == _zero) {
-      steps.add('mcd($origA, $origB) = $x (el segundo término es 0)');
+      steps.add(_t(spanish, 'mcd($origA, $origB) = $x (el segundo término es 0)',
+          'gcd($origA, $origB) = $x (second term is 0)'));
       return StepResult(x.toString(), steps);
     }
 
-    steps.add('Algoritmo de Euclides para mcd($x, $y):');
+    steps.add(_t(spanish, 'Algoritmo de Euclides para mcd($x, $y):',
+        'Euclidean algorithm for gcd($x, $y):'));
     while (y != _zero) {
       final BigInt q = x ~/ y;
       final BigInt r = x - q * y;
@@ -27,27 +35,31 @@ class StepsService {
       y = r;
     }
     final BigInt g = x;
-    steps.add('Último resto no nulo ⇒ mcd = $g');
+    steps.add(_t(spanish, 'Último resto no nulo ⇒ mcd = $g',
+        'Last nonzero remainder ⇒ gcd = $g'));
 
     // Bézout por Euclides extendido.
     final ext = _extendedGcd(origA.abs(), origB.abs());
     BigInt bx = ext[1], by = ext[2];
     if (origA.isNegative) bx = -bx;
     if (origB.isNegative) by = -by;
-    steps.add('Identidad de Bézout: $g = ($bx)·$origA + ($by)·$origB');
+    steps.add(_t(spanish, 'Identidad de Bézout: $g = ($bx)·$origA + ($by)·$origB',
+        'Bézout identity: $g = ($bx)·$origA + ($by)·$origB'));
 
     return StepResult(g.toString(), steps);
   }
 
   /// Factorización en primos con los pasos de división sucesiva.
-  static StepResult factorizationSteps(BigInt n) {
+  static StepResult factorizationSteps(BigInt n, {bool spanish = false}) {
     final List<String> steps = [];
     if (n < BigInt.from(2)) {
-      steps.add('$n no tiene factorización en primos (n < 2)');
+      steps.add(_t(spanish, '$n no tiene factorización en primos (n < 2)',
+          '$n has no prime factorization (n < 2)'));
       return StepResult(n.toString(), steps);
     }
 
-    steps.add('Factorización de $n por divisiones sucesivas:');
+    steps.add(_t(spanish, 'Factorización de $n por divisiones sucesivas:',
+        'Factorization of $n by successive division:'));
     BigInt remaining = n;
     final Map<BigInt, int> factors = {};
 
@@ -62,7 +74,7 @@ class StepsService {
     }
     if (remaining > _one) {
       if (factors.isNotEmpty || remaining != n) {
-        steps.add('$remaining es primo');
+        steps.add(_t(spanish, '$remaining es primo', '$remaining is prime'));
       }
       factors[remaining] = (factors[remaining] ?? 0) + 1;
     }
@@ -76,12 +88,13 @@ class StepsService {
 
   /// Teorema Chino del Resto con pasos, combinando las congruencias de a pares.
   /// Devuelve la solución como "x ≡ r (mod m)" o indica incompatibilidad.
-  static StepResult crtSteps(List<BigInt> remainders, List<BigInt> moduli) {
+  static StepResult crtSteps(List<BigInt> remainders, List<BigInt> moduli,
+      {bool spanish = false}) {
     if (remainders.length != moduli.length || remainders.isEmpty) {
       throw ArgumentError('Listas de igual tamaño y no vacías');
     }
     final List<String> steps = [];
-    steps.add('Sistema de congruencias:');
+    steps.add(_t(spanish, 'Sistema de congruencias:', 'System of congruences:'));
     for (int i = 0; i < remainders.length; i++) {
       steps.add('  x ≡ ${remainders[i]} (mod ${moduli[i]})');
     }
@@ -96,10 +109,13 @@ class StepsService {
       final BigInt g = _gcd(curM, m2);
 
       if ((a2 - curR) % g != _zero) {
-        steps.add(
+        steps.add(_t(
+            spanish,
             'Combinar con x ≡ $a2 (mod $m2): mcd($curM, $m2) = $g no divide '
-            'a ${a2 - curR} ⇒ sistema incompatible');
-        return StepResult('sin solución', steps);
+                'a ${a2 - curR} ⇒ sistema incompatible',
+            'Combine with x ≡ $a2 (mod $m2): gcd($curM, $m2) = $g does not '
+                'divide ${a2 - curR} ⇒ incompatible system'));
+        return StepResult(_t(spanish, 'sin solución', 'no solution'), steps);
       }
 
       final BigInt lcm = curM ~/ g * m2;
@@ -110,14 +126,14 @@ class StepsService {
       newR %= lcm;
       if (newR.isNegative) newR += lcm;
 
-      steps.add('Combinar con x ≡ $a2 (mod $m2) ⇒ '
-          'x ≡ $newR (mod $lcm)');
+      steps.add(_t(spanish, 'Combinar con x ≡ $a2 (mod $m2) ⇒ x ≡ $newR (mod $lcm)',
+          'Combine with x ≡ $a2 (mod $m2) ⇒ x ≡ $newR (mod $lcm)'));
       curR = newR;
       curM = lcm;
     }
 
     final String result = 'x ≡ $curR (mod $curM)';
-    steps.add('Solución: $result');
+    steps.add(_t(spanish, 'Solución: $result', 'Solution: $result'));
     return StepResult(result, steps);
   }
 

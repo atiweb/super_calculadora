@@ -62,7 +62,7 @@ void main() {
     test('incompatible system', () {
       // x≡1(mod2), x≡2(mod4) → incompatible
       final r = StepsService.crtSteps([bi(1), bi(2)], [bi(2), bi(4)]);
-      expect(r.result, 'sin solución');
+      expect(r.result, 'no solution');
     });
   });
 }
