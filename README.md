@@ -65,6 +65,16 @@ Every number you enter is automatically analyzed:
 - All arithmetic functions (φ, λ, ω, Ω, sopf, sopfr, rad, μ, …)
 - Number classifications: prime, perfect, abundant, deficient, squarefree, powerful, Harshad, semiprime, Fibonacci, triangular, palindrome…
 
+### Olympiad Tools *(training toolkit for IMO-style problems)*
+A dedicated section (from the navigation drawer) with **exact** tools across the four olympiad pillars:
+- **Fractions** — exact rational arithmetic, simplify/convert
+- **Radicals** — √n and ⁿ√n simplification, denominator rationalization
+- **Geometry** — triangle classification, Heron area, circumradius/inradius, shoelace area, Pythagorean & Heronian triples
+- **Polynomials** — rational roots, Vieta's relations, discriminant, quadratic/cubic solving
+- **Number Theory** — modular square root (Tonelli-Shanks), linear congruences, Pell equation, continued fractions, sums of squares, Frobenius number
+- **Step by step** — Euclid, CRT and factorization shown with worked steps
+- **Complex & Sequences** — roots of unity, De Moivre, linear recurrences, Pascal triangle
+
 ### Other
 - **Persistent history** — last 100 operations saved on device
 - **Bilingual** — English and Spanish (auto-detected from device locale)
