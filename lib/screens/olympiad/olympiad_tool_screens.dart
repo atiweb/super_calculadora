@@ -40,6 +40,15 @@ List<int> _intList(String s) => s
     .map(_int)
     .toList();
 
+/// Convierte un entero a superíndices Unicode (3 → "³"), para el índice de raíz.
+String _superscript(int n) {
+  const map = {
+    '0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴',
+    '5': '⁵', '6': '⁶', '7': '⁷', '8': '⁸', '9': '⁹', '-': '⁻',
+  };
+  return n.toString().split('').map((d) => map[d] ?? d).join();
+}
+
 /// Pantalla base: una lista desplazable de herramientas.
 class _ToolScaffold extends StatelessWidget {
   final String title;
@@ -142,9 +151,10 @@ class SurdsToolScreen extends StatelessWidget {
           ],
           compute: (i) {
             final r = SurdService.simplifyNthRoot(_bi(i[0]), _int(i[1]));
-            final coef = r.coefficient == BigInt.one ? '' : '${r.coefficient}·';
             if (r.radicand == BigInt.one) return r.coefficient.toString();
-            return '$coef${i[1]}√${r.radicand}';
+            final coef = r.coefficient == BigInt.one ? '' : '${r.coefficient}·';
+            final idx = _superscript(_int(i[1]));
+            return '$coef$idx√${r.radicand}';
           },
         ),
         CalcTool(
