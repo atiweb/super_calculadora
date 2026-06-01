@@ -1,3 +1,4 @@
+import 'calc_exception.dart';
 import 'fraction.dart';
 
 /// Polinomio en una variable con coeficientes racionales exactos.
@@ -102,7 +103,7 @@ class Polynomial {
   /// this = cociente·divisor + resto, con grado(resto) < grado(divisor).
   ({Polynomial quotient, Polynomial remainder}) divMod(Polynomial divisor) {
     if (divisor.isZero) {
-      throw ArgumentError('División entre el polinomio nulo');
+      throw CalcException(CalcError.zeroPolynomialDivision);
     }
     List<Fraction> rem = List.of(coefficients);
     final List<Fraction> quot =

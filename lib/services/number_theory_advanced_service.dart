@@ -1,3 +1,4 @@
+import '../models/calc_exception.dart';
 import '../models/fraction.dart';
 import 'special_functions_service.dart';
 
@@ -71,7 +72,7 @@ class NumberTheoryAdvancedService {
   /// Resuelve a·x ≡ b (mod n). Devuelve todas las soluciones en [0, n),
   /// o lista vacía si no hay solución.
   static List<BigInt> solveLinearCongruence(BigInt a, BigInt b, BigInt n) {
-    if (n <= _zero) throw ArgumentError('El módulo debe ser positivo');
+    if (n <= _zero) throw CalcException(CalcError.modulusPositive);
     a = a % n;
     if (a.isNegative) a += n;
     b = b % n;
@@ -132,7 +133,7 @@ class NumberTheoryAdvancedService {
 
   /// Fracción continua de un racional p/q → [a0; a1, a2, ...].
   static List<BigInt> continuedFraction(BigInt p, BigInt q) {
-    if (q == _zero) throw ArgumentError('Denominador nulo');
+    if (q == _zero) throw CalcException(CalcError.zeroDenominator);
     final List<BigInt> result = [];
     while (q != _zero) {
       final BigInt a = _floorDiv(p, q);
@@ -147,7 +148,7 @@ class NumberTheoryAdvancedService {
   /// Fracción continua (periódica) de √n: devuelve (a0, periodo).
   /// Si n es cuadrado perfecto, el periodo es vacío.
   static ({BigInt a0, List<BigInt> period}) continuedFractionSqrt(BigInt n) {
-    if (n < _zero) throw ArgumentError('n debe ser ≥ 0');
+    if (n < _zero) throw CalcException(CalcError.nNonNegative);
     final BigInt a0 = _isqrt(n);
     if (a0 * a0 == n) return (a0: a0, period: <BigInt>[]);
 
@@ -184,10 +185,10 @@ class NumberTheoryAdvancedService {
 
   /// Solución fundamental (mínima, x>0) de x² − D·y² = 1, para D no cuadrado.
   static ({BigInt x, BigInt y}) solvePell(BigInt D) {
-    if (D <= _zero) throw ArgumentError('D debe ser positivo');
+    if (D <= _zero) throw CalcException(CalcError.positiveDRequired);
     final BigInt a0 = _isqrt(D);
     if (a0 * a0 == D) {
-      throw ArgumentError('D no debe ser un cuadrado perfecto');
+      throw CalcException(CalcError.perfectSquareD);
     }
 
     BigInt m = _zero, d = _one, a = a0;
@@ -228,7 +229,7 @@ class NumberTheoryAdvancedService {
 
   /// Representación n = a² + b² + c² + d² (teorema de Lagrange, siempre existe).
   static ({BigInt a, BigInt b, BigInt c, BigInt d}) sumOfFourSquares(BigInt n) {
-    if (n < _zero) throw ArgumentError('n debe ser ≥ 0');
+    if (n < _zero) throw CalcException(CalcError.nNonNegative);
     BigInt a = _zero;
     while (a * a <= n) {
       BigInt b = a;
@@ -253,7 +254,7 @@ class NumberTheoryAdvancedService {
   /// Devuelve `null` si mcd ≠ 1 (infinitos no representables).
   static BigInt? frobeniusNumber(List<int> coins) {
     final filtered = coins.where((c) => c > 0).toSet().toList()..sort();
-    if (filtered.isEmpty) throw ArgumentError('Se requiere al menos un valor positivo');
+    if (filtered.isEmpty) throw CalcException(CalcError.needPositiveValue);
     if (filtered.contains(1)) return BigInt.from(-1); // todo es representable
 
     // mcd de todos debe ser 1.
@@ -296,7 +297,7 @@ class NumberTheoryAdvancedService {
 
   /// n-ésimo número de Lucas: L(0)=2, L(1)=1, L(n)=L(n-1)+L(n-2).
   static BigInt lucasNumber(int n) {
-    if (n < 0) throw ArgumentError('n debe ser ≥ 0');
+    if (n < 0) throw CalcException(CalcError.nNonNegative);
     if (n == 0) return _two;
     if (n == 1) return _one;
     BigInt prev = _two, cur = _one;
@@ -312,7 +313,7 @@ class NumberTheoryAdvancedService {
 
   /// Menor x ≥ 0 con g^x ≡ h (mod n), por baby-step giant-step, o `null`.
   static BigInt? discreteLog(BigInt g, BigInt h, BigInt n) {
-    if (n <= _one) throw ArgumentError('n debe ser > 1');
+    if (n <= _one) throw CalcException(CalcError.nGreaterThanOne);
     g = g % n;
     if (g.isNegative) g += n;
     h = h % n;

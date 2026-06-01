@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+import 'calc_exception.dart';
 
 /// Número complejo en coordenadas cartesianas (parte real e imaginaria).
 ///
@@ -24,7 +25,7 @@ class Complex {
 
   Complex operator /(Complex o) {
     final double d = o.re * o.re + o.im * o.im;
-    if (d == 0) throw ArgumentError('División por cero complejo');
+    if (d == 0) throw CalcException(CalcError.divisionByZero);
     return Complex((re * o.re + im * o.im) / d, (im * o.re - re * o.im) / d);
   }
 
@@ -45,7 +46,7 @@ class Complex {
 
   /// Las n raíces n-ésimas de este número complejo.
   List<Complex> nthRoots(int n) {
-    if (n < 1) throw ArgumentError('n debe ser ≥ 1');
+    if (n < 1) throw CalcException(CalcError.nPositive);
     final double r = math.pow(modulus, 1 / n).toDouble();
     final double theta = argument;
     return List.generate(n, (k) {
@@ -56,7 +57,7 @@ class Complex {
 
   /// Las n raíces n-ésimas de la unidad: e^(2πik/n).
   static List<Complex> rootsOfUnity(int n) {
-    if (n < 1) throw ArgumentError('n debe ser ≥ 1');
+    if (n < 1) throw CalcException(CalcError.nPositive);
     return List.generate(n, (k) {
       final double angle = 2 * math.pi * k / n;
       return Complex(math.cos(angle), math.sin(angle));

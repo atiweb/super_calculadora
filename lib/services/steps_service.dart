@@ -1,3 +1,4 @@
+import '../models/calc_exception.dart';
 import '../models/step_result.dart';
 
 /// Versiones "con procedimiento" de algoritmos clásicos, para uso didáctico.
@@ -91,7 +92,7 @@ class StepsService {
   static StepResult crtSteps(List<BigInt> remainders, List<BigInt> moduli,
       {bool spanish = false}) {
     if (remainders.length != moduli.length || remainders.isEmpty) {
-      throw ArgumentError('Listas de igual tamaño y no vacías');
+      throw CalcException(CalcError.listsSameSize);
     }
     final List<String> steps = [];
     steps.add(_t(spanish, 'Sistema de congruencias:', 'System of congruences:'));

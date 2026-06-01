@@ -1,3 +1,5 @@
+import '../models/calc_exception.dart';
+
 /// Combinatoria adicional: filas del triángulo de Pascal y coeficientes
 /// multinomiales.
 class CombinatoricsExtraService {
@@ -5,7 +7,7 @@ class CombinatoricsExtraService {
 
   /// Fila n del triángulo de Pascal: [C(n,0), C(n,1), …, C(n,n)].
   static List<BigInt> pascalRow(int n) {
-    if (n < 0) throw ArgumentError('n debe ser ≥ 0');
+    if (n < 0) throw CalcException(CalcError.nNonNegative);
     final List<BigInt> row = [_one];
     BigInt value = _one;
     for (int k = 1; k <= n; k++) {
@@ -23,7 +25,7 @@ class CombinatoricsExtraService {
   /// Coeficiente multinomial (k₁+k₂+…)! / (k₁!·k₂!·…).
   static BigInt multinomial(List<int> parts) {
     if (parts.any((k) => k < 0)) {
-      throw ArgumentError('Las partes deben ser no negativas');
+      throw CalcException(CalcError.partsNonNegative);
     }
     int total = 0;
     BigInt result = _one;

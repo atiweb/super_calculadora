@@ -1,3 +1,5 @@
+import 'calc_exception.dart';
+
 /// Número racional exacto p/q usando aritmética de precisión arbitraria.
 ///
 /// La matemática de olimpiada es exacta: una respuesta es `22/7`, no
@@ -14,7 +16,7 @@ class Fraction implements Comparable<Fraction> {
   /// Constructor principal: reduce y canoniza el signo.
   factory Fraction(BigInt numerator, BigInt denominator) {
     if (denominator == BigInt.zero) {
-      throw ArgumentError('El denominador no puede ser cero');
+      throw CalcException(CalcError.zeroDenominator);
     }
 
     // Mover el signo al numerador.
@@ -40,17 +42,17 @@ class Fraction implements Comparable<Fraction> {
   factory Fraction.parse(String input) {
     final s = input.trim();
     if (s.isEmpty) {
-      throw const FormatException('Cadena vacía');
+      throw CalcException(CalcError.emptyInput);
     }
     if (s.contains('/')) {
       final parts = s.split('/');
       if (parts.length != 2) {
-        throw FormatException('Formato de fracción inválido: $input');
+        throw CalcException(CalcError.invalidFraction, {'value': input});
       }
       final n = BigInt.tryParse(parts[0].trim());
       final d = BigInt.tryParse(parts[1].trim());
       if (n == null || d == null) {
-        throw FormatException('Formato de fracción inválido: $input');
+        throw CalcException(CalcError.invalidFraction, {'value': input});
       }
       return Fraction(n, d);
     }
@@ -59,7 +61,7 @@ class Fraction implements Comparable<Fraction> {
     }
     final n = BigInt.tryParse(s);
     if (n == null) {
-      throw FormatException('Número inválido: $input');
+      throw CalcException(CalcError.invalidNumber, {'value': input});
     }
     return Fraction.fromBigInt(n);
   }
@@ -71,7 +73,7 @@ class Fraction implements Comparable<Fraction> {
     final String body = negative ? s.substring(1) : s;
     final parts = body.split('.');
     if (parts.length > 2) {
-      throw FormatException('Decimal inválido: $input');
+      throw CalcException(CalcError.invalidNumber, {'value': input});
     }
     final BigInt intPart =
         parts[0].isEmpty ? BigInt.zero : BigInt.parse(parts[0]);
@@ -115,7 +117,7 @@ class Fraction implements Comparable<Fraction> {
 
   Fraction operator /(Fraction other) {
     if (other.isZero) {
-      throw ArgumentError('División por cero');
+      throw CalcException(CalcError.divisionByZero);
     }
     return Fraction(numerator * other.denominator, denominator * other.numerator);
   }
@@ -126,7 +128,7 @@ class Fraction implements Comparable<Fraction> {
   Fraction pow(int exponent) {
     if (exponent == 0) return one;
     if (exponent < 0) {
-      if (isZero) throw ArgumentError('0 elevado a exponente negativo');
+      if (isZero) throw CalcException(CalcError.zeroToNegativePower);
       return Fraction(
         denominator.pow(-exponent),
         numerator.pow(-exponent),
@@ -138,7 +140,7 @@ class Fraction implements Comparable<Fraction> {
   Fraction abs() => isNegative ? -this : this;
 
   Fraction reciprocal() {
-    if (isZero) throw ArgumentError('El recíproco de 0 no está definido');
+    if (isZero) throw CalcException(CalcError.reciprocalOfZero);
     return Fraction(denominator, numerator);
   }
 

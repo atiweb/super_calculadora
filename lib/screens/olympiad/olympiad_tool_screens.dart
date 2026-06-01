@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../models/calc_exception.dart';
 import '../../models/complex.dart';
 import '../../models/fraction.dart';
 import '../../models/point.dart';
@@ -18,13 +19,13 @@ import 'olympiad_strings.dart';
 
 BigInt _bi(String s) {
   final v = BigInt.tryParse(s.trim());
-  if (v == null) throw FormatException('Número entero inválido: "$s"');
+  if (v == null) throw CalcException(CalcError.invalidInteger, {'value': s});
   return v;
 }
 
 int _int(String s) {
   final v = int.tryParse(s.trim());
-  if (v == null) throw FormatException('Entero inválido: "$s"');
+  if (v == null) throw CalcException(CalcError.invalidInteger, {'value': s});
   return v;
 }
 
@@ -131,8 +132,7 @@ class FractionsToolScreen extends StatelessWidget {
               case '-': r = a - b; break;
               case '*': case '×': r = a * b; break;
               case '/': case '÷': r = a / b; break;
-              default: throw ArgumentError(s.pick(
-                  'Operación no válida (use + - * /)', 'Invalid operation (use + - * /)'));
+              default: throw CalcException(CalcError.invalidOperation);
             }
             return '${r.toString()}\n'
                 '${s.pick('Mixto', 'Mixed')}: ${r.toMixedString()}\n'
@@ -242,8 +242,7 @@ class GeometryToolScreen extends StatelessWidget {
           compute: (i) {
             final a = _bi(i[0]), b = _bi(i[1]), c = _bi(i[2]);
             if (!GeometryService.isValidTriangle(a, b, c)) {
-              throw ArgumentError(s.pick(
-                  'Los lados no forman un triángulo', 'Sides do not form a triangle'));
+              throw CalcException(CalcError.invalidTriangle);
             }
             final t = GeometryService.triangleType(a, b, c);
             final area = GeometryService.heronArea(a, b, c);
@@ -276,7 +275,7 @@ class GeometryToolScreen extends StatelessWidget {
             final pts = i[0].split(';').where((p) => p.trim().isNotEmpty).map((p) {
               final xy = p.split(',');
               if (xy.length != 2) {
-                throw FormatException('${s.pick('Punto inválido', 'Invalid point')}: "$p"');
+                throw CalcException(CalcError.invalidPoint, {'value': p});
               }
               return Point(Fraction.parse(xy[0]), Fraction.parse(xy[1]));
             }).toList();

@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+import '../models/calc_exception.dart';
 import '../models/fraction.dart';
 import '../models/polynomial.dart';
 
@@ -41,7 +42,7 @@ class PolynomialService {
   /// Parsea expresiones como "x^2-5x+6", "2x^3 - x + 1", "3/2 x - 1".
   static Polynomial parse(String input) {
     String s = input.replaceAll(' ', '').replaceAll('*', '');
-    if (s.isEmpty) throw const FormatException('Expresión vacía');
+    if (s.isEmpty) throw CalcException(CalcError.emptyExpression);
 
     // Separar en términos preservando el signo.
     s = s.replaceAll('-', '+-');
@@ -54,7 +55,7 @@ class PolynomialService {
     for (final term in rawTerms) {
       final m = termRe.firstMatch(term);
       if (m == null) {
-        throw FormatException('Término inválido: "$term"');
+        throw CalcException(CalcError.invalidTerm, {'value': term});
       }
       final String coeffStr = m.group(1) ?? '';
       final bool hasX = m.group(2) != null;
@@ -71,7 +72,7 @@ class PolynomialService {
         coeff = Fraction.parse(coeffStr);
       }
       if (!hasX && coeffStr.isEmpty) {
-        throw FormatException('Término inválido: "$term"');
+        throw CalcException(CalcError.invalidTerm, {'value': term});
       }
 
       byPower[power] = (byPower[power] ?? Fraction.zero) + coeff;
@@ -100,7 +101,7 @@ class PolynomialService {
   /// Relaciones de Vieta: eₖ = (−1)ᵏ · a_{n−k} / aₙ.
   static VietaRelations vieta(Polynomial p) {
     if (p.degree < 1) {
-      throw ArgumentError('Se requiere grado ≥ 1 para las relaciones de Vieta');
+      throw CalcException(CalcError.degreeAtLeastOne);
     }
     final int n = p.degree;
     final Fraction an = p.leadingCoefficient;
@@ -131,13 +132,13 @@ class PolynomialService {
           Fraction.fromInt(4) * a * c.pow(3) -
           Fraction.fromInt(27) * a.pow(2) * d.pow(2);
     }
-    throw UnsupportedError('Discriminante implementado sólo para grados 2 y 3');
+    throw CalcException(CalcError.discriminantDegree);
   }
 
   /// Candidatos a raíz racional (teorema de la raíz racional).
   static List<Fraction> rationalRootCandidates(Polynomial p) {
     if (p.isZero) {
-      throw ArgumentError('El polinomio nulo tiene infinitas raíces');
+      throw CalcException(CalcError.zeroPolynomialRoots);
     }
     // Escalar a coeficientes enteros.
     final List<BigInt> intCoeffs = _toIntegerCoefficients(p);
@@ -179,7 +180,7 @@ class PolynomialService {
   /// Resuelve ax² + bx + c = 0 de forma exacta donde es posible.
   static QuadraticSolution solveQuadratic(Fraction a, Fraction b, Fraction c) {
     if (a.isZero) {
-      throw ArgumentError('a = 0: no es una ecuación cuadrática');
+      throw CalcException(CalcError.notQuadratic);
     }
     final Fraction d = b * b - Fraction.fromInt(4) * a * c;
 
@@ -231,7 +232,7 @@ class PolynomialService {
   /// Raíces reales (aproximadas) de ax³+bx²+cx+d = 0.
   static List<double> solveCubicReal(double a, double b, double c, double d) {
     if (a == 0) {
-      throw ArgumentError('a = 0: no es una ecuación cúbica');
+      throw CalcException(CalcError.notCubic);
     }
     // Normalizar y deprimir: x = t − b/(3a) ⇒ t³ + pt + q = 0
     final double bn = b / a, cn = c / a, dn = d / a;

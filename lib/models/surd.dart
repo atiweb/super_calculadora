@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+import 'calc_exception.dart';
 import 'fraction.dart';
 
 /// Radical cuadrático en forma simplificada: `coefficient · √radicand`.
@@ -19,7 +20,7 @@ class Surd {
   /// factores cuadrados del radicando hacia el coeficiente.
   factory Surd(Fraction coefficient, BigInt radicand) {
     if (radicand.isNegative) {
-      throw ArgumentError('Radicando negativo: no es un número real');
+      throw CalcException(CalcError.negativeRadicand);
     }
     if (radicand == BigInt.zero || coefficient.isZero) {
       return Surd._(Fraction.zero, BigInt.one);
@@ -51,14 +52,6 @@ class Surd {
 
   /// Verdadero si el valor es racional (no queda raíz).
   bool get isRational => radicand == BigInt.one || coefficient.isZero;
-
-  /// La parte racional si `isRational`, de lo contrario lanza.
-  Fraction get asRational {
-    if (!isRational) {
-      throw StateError('El surd $this no es racional');
-    }
-    return coefficient;
-  }
 
   double toDouble() =>
       coefficient.toDouble() * math.sqrt(radicand.toDouble());

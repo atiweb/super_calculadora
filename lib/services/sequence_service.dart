@@ -1,3 +1,4 @@
+import '../models/calc_exception.dart';
 import '../models/fraction.dart';
 
 /// Generación de sucesiones definidas por recurrencias lineales.
@@ -9,9 +10,9 @@ class SequenceService {
       List<Fraction> coeffs, List<Fraction> initial, int count) {
     final int k = coeffs.length;
     if (initial.length != k) {
-      throw ArgumentError('Se requieren $k términos iniciales');
+      throw CalcException(CalcError.needKInitialTerms, {'k': '$k'});
     }
-    if (count < 0) throw ArgumentError('count debe ser ≥ 0');
+    if (count < 0) throw CalcException(CalcError.countNonNegative);
 
     final List<Fraction> terms = List.of(initial);
     if (count <= k) return terms.sublist(0, count);

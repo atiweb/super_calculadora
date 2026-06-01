@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+import '../models/calc_exception.dart';
 import '../models/fraction.dart';
 import '../models/surd.dart';
 import '../models/point.dart';
@@ -62,7 +63,7 @@ class GeometryService {
   /// Clasifica el triángulo por lados y por ángulos.
   static TriangleType triangleType(BigInt a, BigInt b, BigInt c) {
     if (!isValidTriangle(a, b, c)) {
-      throw ArgumentError('Los lados no forman un triángulo válido');
+      throw CalcException(CalcError.invalidTriangle);
     }
 
     // Por lados
@@ -100,7 +101,7 @@ class GeometryService {
   /// Área exacta por la fórmula de Herón, como radical: Área = √P / 4.
   static Surd heronArea(BigInt a, BigInt b, BigInt c) {
     if (!isValidTriangle(a, b, c)) {
-      throw ArgumentError('Los lados no forman un triángulo válido');
+      throw CalcException(CalcError.invalidTriangle);
     }
     final BigInt p = _heronProduct(a, b, c);
     // √P / 4 = (1/4)·√P
@@ -128,7 +129,7 @@ class GeometryService {
   /// Radio circunscrito exacto: R = abc / (4·Área) = abc / √P  → (abc/P)·√P.
   static Surd circumradius(BigInt a, BigInt b, BigInt c) {
     if (!isValidTriangle(a, b, c)) {
-      throw ArgumentError('Los lados no forman un triángulo válido');
+      throw CalcException(CalcError.invalidTriangle);
     }
     final BigInt p = _heronProduct(a, b, c);
     return Surd(Fraction(a * b * c, p), p);
@@ -137,7 +138,7 @@ class GeometryService {
   /// Radio inscrito exacto: r = Área / s = √P / (2(a+b+c)).
   static Surd inradius(BigInt a, BigInt b, BigInt c) {
     if (!isValidTriangle(a, b, c)) {
-      throw ArgumentError('Los lados no forman un triángulo válido');
+      throw CalcException(CalcError.invalidTriangle);
     }
     final BigInt p = _heronProduct(a, b, c);
     return Surd(Fraction(BigInt.one, BigInt.two * (a + b + c)), p);
@@ -173,7 +174,7 @@ class GeometryService {
   /// Los vértices deben ir en orden (horario o antihorario).
   static Fraction shoelaceArea(List<Point> vertices) {
     if (vertices.length < 3) {
-      throw ArgumentError('Se requieren al menos 3 vértices');
+      throw CalcException(CalcError.needAtLeast3Vertices);
     }
     Fraction sum = Fraction.zero;
     for (int i = 0; i < vertices.length; i++) {

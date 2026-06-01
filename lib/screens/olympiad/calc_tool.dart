@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import '../../models/calc_exception.dart';
 import 'olympiad_strings.dart';
 
 /// Descripción de un campo de entrada de una herramienta.
@@ -64,12 +65,18 @@ class _CalcToolState extends State<CalcTool> {
         _result = widget.compute(inputs);
         _error = null;
       } catch (e) {
-        _error = e is ArgumentError
-            ? (e.message?.toString() ?? e.toString())
-            : (e is FormatException ? e.message : e.toString());
+        // CalcException primero (extiende ArgumentError): se traduce por código.
+        if (e is CalcException) {
+          _error = s.errorText(e);
+        } else if (e is FormatException) {
+          _error = e.message;
+        } else if (e is ArgumentError) {
+          _error = e.message?.toString() ?? e.toString();
+        } else {
+          _error = e.toString();
+        }
         _result = null;
       }
-      _error ??= null;
       if (_error != null) _error = '${s.errorPrefix}: $_error';
     });
   }

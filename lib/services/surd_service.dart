@@ -1,3 +1,4 @@
+import '../models/calc_exception.dart';
 import '../models/fraction.dart';
 import '../models/surd.dart';
 
@@ -37,10 +38,10 @@ class SurdService {
   static ({BigInt coefficient, BigInt radicand}) simplifyNthRoot(
       BigInt n, int k) {
     if (k < 2) {
-      throw ArgumentError('El índice de la raíz debe ser ≥ 2');
+      throw CalcException(CalcError.rootIndexTooSmall);
     }
     if (n.isNegative && k.isEven) {
-      throw ArgumentError('Raíz de índice par de un número negativo');
+      throw CalcException(CalcError.evenRootOfNegative);
     }
 
     final bool negative = n.isNegative;
@@ -65,10 +66,10 @@ class SurdService {
   /// Racionaliza a/√b → (a/b)·√b. Devuelve el Surd equivalente.
   static Surd rationalizeOverSqrt(Fraction a, BigInt b) {
     if (b == BigInt.zero) {
-      throw ArgumentError('División por √0');
+      throw CalcException(CalcError.divisionByRootZero);
     }
     if (b.isNegative) {
-      throw ArgumentError('Radicando negativo: no es un número real');
+      throw CalcException(CalcError.negativeRadicand);
     }
     // a/√b = a·√b / b = (a/b)·√b
     return Surd(a / Fraction.fromBigInt(b), b);
@@ -80,11 +81,11 @@ class SurdService {
   static RationalizedBinomial rationalizeOverBinomial(
       Fraction a, Fraction c, BigInt d) {
     if (d.isNegative) {
-      throw ArgumentError('Radicando negativo: no es un número real');
+      throw CalcException(CalcError.negativeRadicand);
     }
     final Fraction denom = c * c - Fraction.fromBigInt(d);
     if (denom.isZero) {
-      throw ArgumentError('Denominador nulo: c² = d (el binomio se anula)');
+      throw CalcException(CalcError.binomialVanishes);
     }
     final Fraction rational = (a * c) / denom;
     final Surd surd = Surd(-(a / denom), d);
