@@ -47,4 +47,17 @@ class OlympiadStrings {
   String get catComplexSeq => pick('Complejos y Sucesiones', 'Complex & Sequences');
   String get catComplexSeqSub =>
       pick('Raíces de la unidad, recurrencias', 'Roots of unity, recurrences');
+
+  // Quiz
+  String get catQuiz => pick('Práctica', 'Practice');
+  String get catQuizSub =>
+      pick('Problemas con verificación', 'Self-checking problems');
+  String get quizAnswer => pick('Tu respuesta', 'Your answer');
+  String get quizCheck => pick('Comprobar', 'Check');
+  String get quizNext => pick('Siguiente', 'Next');
+  String get quizCorrect => pick('¡Correcto!', 'Correct!');
+  String quizIncorrect(String answer) =>
+      pick('Incorrecto. Respuesta: $answer', 'Incorrect. Answer: $answer');
+  String quizScore(int correct, int total) =>
+      pick('Puntaje: $correct / $total', 'Score: $correct / $total');
 }

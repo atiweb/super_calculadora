@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'olympiad_strings.dart';
 import 'olympiad_tool_screens.dart';
+import 'quiz_screen.dart';
 
 /// Pantalla principal (hub) de las Herramientas de Olimpiada: una tarjeta por
 /// categoría que abre la pantalla de herramientas correspondiente.
@@ -27,6 +28,8 @@ class OlympiadToolsScreen extends StatelessWidget {
           () => const StepsToolScreen()),
       _Category(Icons.auto_awesome, s.catComplexSeq, s.catComplexSeqSub,
           () => const ComplexSequencesToolScreen()),
+      _Category(Icons.quiz_outlined, s.catQuiz, s.catQuizSub,
+          () => const QuizScreen()),
     ];
 
     return Scaffold(
