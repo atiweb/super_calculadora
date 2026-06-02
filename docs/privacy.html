@@ -11,7 +11,14 @@
       --text:#1c1b1f;--text-muted:#49454f;--border:#cac4d0;
       --font:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
     }
-    body{font-family:var(--font);font-size:15px;line-height:1.7;color:var(--text);background:#fff}
+    html[data-theme=dark]{
+      --accent:#d0bcff;--accent-light:#381e72;
+      --text:#e6e1e5;--text-muted:#cac4d0;--border:#49454f;
+    }
+    html[data-theme=dark] body{background:#1c1b1f}
+    html[data-theme=dark] th{background:var(--accent-light)}
+    html[data-theme=dark] td{color:var(--text)}
+    body{font-family:var(--font);font-size:15px;line-height:1.7;color:var(--text);background:#fff;transition:background .2s,color .2s}
     .container{max-width:720px;margin:0 auto;padding:48px 24px 80px}
     .page-header{border-bottom:2px solid var(--accent);padding-bottom:20px;margin-bottom:36px}
     .page-header h1{font-size:1.8rem;font-weight:700;color:var(--accent)}
@@ -34,17 +41,22 @@
     html[lang=en] .en{display:inline} html[lang=en] .en-blk{display:block}
     html[lang=es] .es{display:inline} html[lang=es] .es-blk{display:block}
 
-    /* Lang toggle */
-    .lang-pill{position:fixed;top:12px;right:16px;display:flex;background:var(--accent-light);border-radius:20px;padding:2px;gap:2px;z-index:200;box-shadow:0 1px 4px rgba(0,0,0,.15)}
+    /* Controls */
+    .controls{position:fixed;top:12px;right:16px;display:flex;align-items:center;gap:8px;z-index:200}
+    .lang-pill{display:flex;background:var(--accent-light);border-radius:20px;padding:2px;gap:2px;box-shadow:0 1px 4px rgba(0,0,0,.15)}
     .lbtn{border:none;background:none;padding:4px 14px;border-radius:16px;cursor:pointer;font-size:12px;font-weight:700;color:var(--text-muted);transition:background .15s,color .15s}
     .lbtn.active{background:var(--accent);color:#fff}
+    .theme-btn{background:var(--accent-light);border:none;border-radius:50%;width:32px;height:32px;cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 4px rgba(0,0,0,.15);transition:background .15s;line-height:1}
   </style>
 </head>
 <body>
 
-<div class="lang-pill">
-  <button class="lbtn" data-lang="en" onclick="setLang('en')">EN</button>
-  <button class="lbtn" data-lang="es" onclick="setLang('es')">ES</button>
+<div class="controls">
+  <button class="theme-btn" id="theme-btn" onclick="toggleTheme()" title="Toggle theme / Cambiar tema">🌙</button>
+  <div class="lang-pill">
+    <button class="lbtn" data-lang="en" onclick="setLang('en')">EN</button>
+    <button class="lbtn" data-lang="es" onclick="setLang('es')">ES</button>
+  </div>
 </div>
 
 <div class="container">
@@ -178,10 +190,22 @@ function setLang(lang){
   });
   try{localStorage.setItem('sc-lang',lang);}catch(e){console.warn('localStorage unavailable',e);}
 }
+function setTheme(theme){
+  document.documentElement.dataset.theme=theme;
+  var btn=document.getElementById('theme-btn');
+  if(btn) btn.textContent=theme==='dark'?'☀️':'🌙';
+  try{localStorage.setItem('sc-theme',theme);}catch(e){console.warn('localStorage unavailable',e);}
+}
+function toggleTheme(){
+  setTheme(document.documentElement.dataset.theme==='dark'?'light':'dark');
+}
 (function(){
-  var saved='en';
-  try{saved=localStorage.getItem('sc-lang')||'en';}catch(e){console.warn('localStorage unavailable',e);}
-  setLang(saved);
+  var lang='en';
+  try{lang=localStorage.getItem('sc-lang')||'en';}catch(e){console.warn('localStorage unavailable',e);}
+  setLang(lang);
+  var theme='light';
+  try{theme=localStorage.getItem('sc-theme')||'light';}catch(e){console.warn('localStorage unavailable',e);}
+  setTheme(theme);
 })();
 </script>
 </body>
