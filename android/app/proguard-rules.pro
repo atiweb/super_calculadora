@@ -15,7 +15,7 @@
 -dontwarn org.mathparser.**
 
 # Keep Dart entry points
--keep class com.diego.supercalculadora.** { *; }
+-keep class br.dev.ati.supercalculadora.** { *; }
 
 # General Android
 -keepattributes *Annotation*

@@ -13,6 +13,7 @@
   <img src="https://img.shields.io/badge/Flutter-3.x-blue?style=flat-square" alt="Flutter"/>
   <img src="https://img.shields.io/badge/license-MIT-lightgrey?style=flat-square" alt="License"/>
   <img src="https://img.shields.io/badge/offline-100%25-brightgreen?style=flat-square" alt="Offline"/>
+  <a href="https://play.google.com/store/apps/details?id=br.dev.ati.supercalculadora"><img src="https://img.shields.io/badge/Google%20Play-Available-success?style=flat-square" alt="Google Play"/></a>
 </p>
 
 ---
@@ -94,7 +95,10 @@ A dedicated section (from the navigation drawer) with **exact** tools across the
 
 ## Installation
 
-### From Google Play *(coming soon)*
+### From Google Play
+
+- [Super Calculadora on Google Play](https://play.google.com/store/apps/details?id=br.dev.ati.supercalculadora)
+- Package name: `br.dev.ati.supercalculadora`
 
 ### From APK (sideload)
 1. Download the latest APK from [Releases](../../releases).
@@ -104,7 +108,7 @@ A dedicated section (from the navigation drawer) with **exact** tools across the
 ### Build from Source
 ```bash
 # Prerequisites: Flutter 3.x, Android SDK
-git clone https://github.com/Adalberto-Garcia-Garces/super_calculadora.git
+git clone https://github.com/atiweb/super_calculadora.git
 cd super_calculadora
 flutter pub get
 flutter build apk --release
@@ -129,7 +133,7 @@ keytool -genkey -v -keystore android/super_calculadora.jks \
 
 2. Create `android/key.properties`:
 ```properties
-storeFile=super_calculadora.jks
+storeFile=../super_calculadora.jks
 storePassword=YOUR_STORE_PASSWORD
 keyAlias=super_calculadora
 keyPassword=YOUR_KEY_PASSWORD
@@ -196,4 +200,4 @@ flutter analyze   # must pass with zero issues
 
 ---
 
-**Adalberto Garcia Garces**
+**atiweb**
