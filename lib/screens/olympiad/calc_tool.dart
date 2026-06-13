@@ -18,11 +18,15 @@ class ToolField {
 /// [compute] recibe los valores de los campos y devuelve el resultado como
 /// texto (puede ser multilínea). Si lanza una excepción, se muestra el mensaje
 /// como error.
+///
+/// [visualize] es opcional: si se provee, se llama con las mismas entradas que
+/// produjeron el último resultado exitoso y su Widget se muestra bajo el texto.
 class CalcTool extends StatefulWidget {
   final String title;
   final String? description;
   final List<ToolField> fields;
   final String Function(List<String> inputs) compute;
+  final Widget? Function(BuildContext context, List<String> inputs)? visualize;
 
   const CalcTool({
     super.key,
@@ -30,6 +34,7 @@ class CalcTool extends StatefulWidget {
     this.description,
     required this.fields,
     required this.compute,
+    this.visualize,
   });
 
   @override
@@ -40,6 +45,7 @@ class _CalcToolState extends State<CalcTool> {
   late final List<TextEditingController> _controllers;
   String? _result;
   String? _error;
+  List<String>? _lastSuccessfulInputs;
 
   @override
   void initState() {
@@ -63,6 +69,7 @@ class _CalcToolState extends State<CalcTool> {
     setState(() {
       try {
         _result = widget.compute(inputs);
+        _lastSuccessfulInputs = inputs;
         _error = null;
       } catch (e) {
         // CalcException primero (extiende ArgumentError): se traduce por código.
@@ -153,6 +160,29 @@ class _CalcToolState extends State<CalcTool> {
                   ],
                 ),
               ),
+            ],
+            if (_result != null &&
+                widget.visualize != null &&
+                _lastSuccessfulInputs != null) ...[
+              const SizedBox(height: 12),
+              Builder(builder: (context) {
+                Widget? visual;
+                try {
+                  visual = widget.visualize!(context, _lastSuccessfulInputs!);
+                } catch (_) {
+                  visual = null;
+                }
+                if (visual == null) return const SizedBox.shrink();
+                return ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Container(
+                    width: double.infinity,
+                    height: 220,
+                    color: theme.colorScheme.surfaceContainerHighest,
+                    child: visual,
+                  ),
+                );
+              }),
             ],
             if (_error != null) ...[
               const SizedBox(height: 12),

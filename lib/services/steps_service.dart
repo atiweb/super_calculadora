@@ -1,4 +1,6 @@
 import '../models/calc_exception.dart';
+import '../models/fraction.dart';
+import '../models/polynomial.dart';
 import '../models/step_result.dart';
 
 /// Versiones "con procedimiento" de algoritmos clásicos, para uso didáctico.
@@ -137,6 +139,59 @@ class StepsService {
     steps.add(_t(spanish, 'Solución: $result', 'Solution: $result'));
     return StepResult(result, steps);
   }
+
+  /// División sintética (regla de Ruffini) de p(x) entre (x − c), con pasos.
+  /// El resultado es "cociente; resto"; si el resto es 0, c es raíz.
+  static StepResult ruffiniSteps(Polynomial p, Fraction c,
+      {bool spanish = false}) {
+    if (p.isZero || p.degree < 1) {
+      throw CalcException(CalcError.degreeAtLeastOne);
+    }
+    final List<String> steps = [];
+    steps.add(_t(spanish, 'Ruffini: dividir p(x) = $p entre (x − ${_paren(c)})',
+        'Ruffini: divide p(x) = $p by (x − ${_paren(c)})'));
+
+    // Coeficientes de mayor a menor grado.
+    final List<Fraction> desc =
+        p.coefficients.reversed.toList(growable: false);
+    steps.add(_t(spanish,
+        'Coeficientes (grado ${p.degree} → 0): ${desc.join(', ')}',
+        'Coefficients (degree ${p.degree} → 0): ${desc.join(', ')}'));
+
+    // r[k] acumula el resultado de cada columna.
+    final List<Fraction> r = List.filled(desc.length, Fraction.zero);
+    r[0] = desc[0];
+    steps.add(_t(spanish, 'Bajar el primer coeficiente: ${r[0]}',
+        'Bring down the first coefficient: ${r[0]}'));
+    for (int k = 1; k < desc.length; k++) {
+      final Fraction prod = c * r[k - 1];
+      r[k] = desc[k] + prod;
+      steps.add(
+          '${desc[k]} + ${_paren(c)}·${_paren(r[k - 1])} = ${desc[k]} + ${_paren(prod)} = ${r[k]}');
+    }
+
+    final Fraction remainder = r.last;
+    final Polynomial quotient =
+        Polynomial(r.sublist(0, r.length - 1).reversed.toList());
+    steps.add(_t(spanish, 'Cociente: $quotient', 'Quotient: $quotient'));
+    steps.add(_t(spanish, 'Resto: $remainder', 'Remainder: $remainder'));
+    if (remainder.isZero) {
+      steps.add(_t(spanish, '⇒ ${_paren(c)} es raíz de p(x)',
+          '⇒ ${_paren(c)} is a root of p(x)'));
+    } else {
+      steps.add(_t(spanish, '⇒ p(${_paren(c)}) = $remainder (teorema del resto)',
+          '⇒ p(${_paren(c)}) = $remainder (remainder theorem)'));
+    }
+
+    final String result = spanish
+        ? 'cociente $quotient, resto $remainder'
+        : 'quotient $quotient, remainder $remainder';
+    return StepResult(result, steps);
+  }
+
+  /// Envuelve en paréntesis los valores negativos o fraccionarios.
+  static String _paren(Fraction f) =>
+      (f.isNegative || !f.isInteger) ? '($f)' : '$f';
 
   // ── Helpers ──────────────────────────────────────────────────────────────
 

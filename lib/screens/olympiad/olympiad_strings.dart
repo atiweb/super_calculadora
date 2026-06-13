@@ -48,6 +48,10 @@ class OlympiadStrings {
   String get catComplexSeq => pick('Complejos y Sucesiones', 'Complex & Sequences');
   String get catComplexSeqSub =>
       pick('Raíces de la unidad, recurrencias', 'Roots of unity, recurrences');
+  String get catStatistics => pick('Estadística', 'Statistics');
+  String get catStatisticsSub =>
+      pick('Descriptiva exacta y desigualdad de medias',
+          'Exact descriptive stats and mean inequality');
 
   // Quiz
   String get catQuiz => pick('Práctica', 'Practice');
@@ -160,6 +164,19 @@ class OlympiadStrings {
       case CalcError.listsSameSize:
         return pick('Las listas deben tener el mismo tamaño y no estar vacías',
             'The lists must have the same size and be non-empty');
+      case CalcError.inputTooLarge:
+        return pick('Entrada demasiado grande para este algoritmo (máx ${e.arg('max')})',
+            'Input too large for this algorithm (max ${e.arg('max')})');
+      case CalcError.integerCoordinatesRequired:
+        return pick('Se requieren coordenadas enteras',
+            'Integer coordinates are required');
+      case CalcError.collinearPoints:
+        return pick('Los puntos son colineales: no forman un triángulo',
+            'The points are collinear: they do not form a triangle');
+      case CalcError.invalidSystem:
+        return pick(
+            'Sistema inválido: 2 o 3 filas "a,b,…,k" separadas por ";"',
+            'Invalid system: 2 or 3 rows "a,b,…,k" separated by ";"');
     }
   }
 }

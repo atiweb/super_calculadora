@@ -28,6 +28,8 @@ class OlympiadToolsScreen extends StatelessWidget {
           () => const StepsToolScreen()),
       _Category(Icons.auto_awesome, s.catComplexSeq, s.catComplexSeqSub,
           () => const ComplexSequencesToolScreen()),
+      _Category(Icons.bar_chart, s.catStatistics, s.catStatisticsSub,
+          () => const StatisticsToolScreen()),
       _Category(Icons.quiz_outlined, s.catQuiz, s.catQuizSub,
           () => const QuizScreen()),
     ];

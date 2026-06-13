@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 
 import '../../models/calc_exception.dart';
@@ -5,13 +7,19 @@ import '../../models/complex.dart';
 import '../../models/fraction.dart';
 import '../../models/point.dart';
 import '../../models/surd.dart';
+import '../../models/polynomial.dart';
 import '../../services/combinatorics_extra_service.dart';
 import '../../services/geometry_service.dart';
+import '../../services/linear_system_service.dart';
 import '../../services/number_theory_advanced_service.dart';
 import '../../services/polynomial_service.dart';
 import '../../services/sequence_service.dart';
+import '../../services/special_functions_service.dart';
+import '../../services/statistics_service.dart';
 import '../../services/steps_service.dart';
 import '../../services/surd_service.dart';
+import '../../widgets/geometry_painters.dart';
+import '../../widgets/number_painters.dart';
 import 'calc_tool.dart';
 import 'olympiad_strings.dart';
 
@@ -40,6 +48,129 @@ List<int> _intList(String s) => s
     .where((e) => e.isNotEmpty)
     .map(_int)
     .toList();
+
+List<Fraction> _fracList(String s) => s
+    .split(RegExp(r'[,;\s]+'))
+    .where((e) => e.isNotEmpty)
+    .map(Fraction.parse)
+    .toList();
+
+/// Parsea "x,y" como punto de coordenadas racionales.
+Point _point(String s) {
+  final xy = s.split(',');
+  if (xy.length != 2) {
+    throw CalcException(CalcError.invalidPoint, {'value': s});
+  }
+  return Point(Fraction.parse(xy[0]), Fraction.parse(xy[1]));
+}
+
+/// Parsea una lista de puntos "x,y" separados por ";".
+List<Point> _pointList(String s) => s
+    .split(';')
+    .where((p) => p.trim().isNotEmpty)
+    .map(_point)
+    .toList();
+
+/// Suma de divisores σ(n) para la tabla de funciones multiplicativas.
+BigInt _sigma1(BigInt n) {
+  BigInt result = BigInt.one;
+  BigInt temp = n;
+  for (BigInt p = BigInt.two; p * p <= temp; p += BigInt.one) {
+    if (temp % p == BigInt.zero) {
+      BigInt term = BigInt.one, power = BigInt.one;
+      while (temp % p == BigInt.zero) {
+        temp ~/= p;
+        power *= p;
+        term += power;
+      }
+      result *= term;
+    }
+  }
+  if (temp > BigInt.one) result *= temp + BigInt.one;
+  return result;
+}
+
+/// Raíces reales aproximadas de un polinomio de grado 1–3 (para extremos del
+/// graficador); para grados mayores devuelve solo las raíces racionales.
+List<double> _realRootsApprox(Polynomial p) {
+  final c = p.coefficients;
+  switch (p.degree) {
+    case 1:
+      return [(-c[0] / c[1]).toDouble()];
+    case 2:
+      final sol = PolynomialService.solveQuadratic(c[2], c[1], c[0]);
+      return sol.realRoots;
+    case 3:
+      return PolynomialService.solveCubicReal(c[3].toDouble(),
+          c[2].toDouble(), c[1].toDouble(), c[0].toDouble());
+    default:
+      return PolynomialService.rationalRoots(p)
+          .map((r) => r.toDouble())
+          .toList();
+  }
+}
+
+/// Enumera los puntos reticulares de un polígono de vértices enteros, para
+/// dibujarlos: (frontera, interior). Si el área de barrido es muy grande,
+/// devuelve listas vacías (el dibujo omite los puntos).
+({List<Offset> boundary, List<Offset> interior}) _latticePoints(
+    List<Point> poly) {
+  final xs = poly.map((p) => p.x.toDouble()).toList();
+  final ys = poly.map((p) => p.y.toDouble()).toList();
+  final int minX = xs.reduce(math.min).ceil();
+  final int maxX = xs.reduce(math.max).floor();
+  final int minY = ys.reduce(math.min).ceil();
+  final int maxY = ys.reduce(math.max).floor();
+
+  if ((maxX - minX + 1) * (maxY - minY + 1) > 2500) {
+    return (boundary: const [], interior: const []);
+  }
+
+  bool onSegment(double px, double py, double ax, double ay, double bx, double by) {
+    final cross = (bx - ax) * (py - ay) - (by - ay) * (px - ax);
+    if (cross != 0) return false;
+    return px >= math.min(ax, bx) &&
+        px <= math.max(ax, bx) &&
+        py >= math.min(ay, by) &&
+        py <= math.max(ay, by);
+  }
+
+  bool onBoundary(double px, double py) {
+    for (int i = 0; i < poly.length; i++) {
+      final j = (i + 1) % poly.length;
+      if (onSegment(px, py, xs[i], ys[i], xs[j], ys[j])) return true;
+    }
+    return false;
+  }
+
+  bool inside(double px, double py) {
+    // Ray casting hacia +x.
+    bool odd = false;
+    for (int i = 0; i < poly.length; i++) {
+      final j = (i + 1) % poly.length;
+      if ((ys[i] > py) != (ys[j] > py)) {
+        final double xCross =
+            xs[i] + (py - ys[i]) / (ys[j] - ys[i]) * (xs[j] - xs[i]);
+        if (px < xCross) odd = !odd;
+      }
+    }
+    return odd;
+  }
+
+  final List<Offset> boundary = [];
+  final List<Offset> interior = [];
+  for (int x = minX; x <= maxX; x++) {
+    for (int y = minY; y <= maxY; y++) {
+      final px = x.toDouble(), py = y.toDouble();
+      if (onBoundary(px, py)) {
+        boundary.add(Offset(px, py));
+      } else if (inside(px, py)) {
+        interior.add(Offset(px, py));
+      }
+    }
+  }
+  return (boundary: boundary, interior: interior);
+}
 
 /// Convierte un entero a superíndices Unicode (3 → "³"), para el índice de raíz.
 String _superscript(int n) {
@@ -254,6 +385,25 @@ class GeometryToolScreen extends StatelessWidget {
                 'R = $big  ≈ ${big.toDouble().toStringAsFixed(4)}\n'
                 'r = $r  ≈ ${r.toDouble().toStringAsFixed(4)}';
           },
+          visualize: (ctx, i) {
+            final a = double.tryParse(i[0]);
+            final b = double.tryParse(i[1]);
+            final c = double.tryParse(i[2]);
+            if (a == null || b == null || c == null) return null;
+            if (a <= 0 || b <= 0 || c <= 0) return null;
+            if (a + b <= c || a + c <= b || b + c <= a) return null;
+            final scheme = Theme.of(ctx).colorScheme;
+            return CustomPaint(
+              painter: TrianglePainter(
+                a: a,
+                b: b,
+                c: c,
+                strokeColor: scheme.primary,
+                textColor: scheme.onSurface,
+              ),
+              child: const SizedBox.expand(),
+            );
+          },
         ),
         CalcTool(
           title: s.pick('Ternas pitagóricas primitivas', 'Primitive Pythagorean triples'),
@@ -272,15 +422,106 @@ class GeometryToolScreen extends StatelessWidget {
             ToolField(s.pick('Vértices', 'Vertices'), initial: '0,0; 4,0; 0,3'),
           ],
           compute: (i) {
-            final pts = i[0].split(';').where((p) => p.trim().isNotEmpty).map((p) {
-              final xy = p.split(',');
-              if (xy.length != 2) {
-                throw CalcException(CalcError.invalidPoint, {'value': p});
-              }
-              return Point(Fraction.parse(xy[0]), Fraction.parse(xy[1]));
-            }).toList();
-            final area = GeometryService.shoelaceArea(pts);
+            final area = GeometryService.shoelaceArea(_pointList(i[0]));
             return '${s.pick('Área', 'Area')}: $area  ≈ ${area.toDouble()}';
+          },
+          visualize: (ctx, i) {
+            final pts = _pointList(i[0]);
+            if (pts.length < 3) return null;
+            final offsets = pts
+                .map((p) => Offset(p.x.toDouble(), p.y.toDouble()))
+                .toList();
+            final scheme = Theme.of(ctx).colorScheme;
+            return CustomPaint(
+              painter: PolygonPainter(
+                vertices: offsets,
+                strokeColor: scheme.secondary,
+                textColor: scheme.onSurface,
+              ),
+              child: const SizedBox.expand(),
+            );
+          },
+        ),
+        CalcTool(
+          title: s.pick('Teorema de Pick', "Pick's theorem"),
+          description: s.pick(
+              'Polígono de vértices enteros: A = I + B/2 − 1. Vértices "x,y" separados por ";".',
+              'Integer-vertex polygon: A = I + B/2 − 1. Vertices "x,y" separated by ";".'),
+          fields: [
+            ToolField(s.pick('Vértices', 'Vertices'), initial: '0,0; 5,0; 5,4; 0,4'),
+          ],
+          compute: (i) {
+            final r = GeometryService.pickAnalysis(_pointList(i[0]));
+            return '${s.pick('Área', 'Area')}: ${r.area}\n'
+                'B (${s.pick('frontera', 'boundary')}): ${r.boundary}\n'
+                'I (${s.pick('interior', 'interior')}): ${r.interior}\n'
+                '${s.pick('Verificación', 'Check')}: ${r.interior} + ${r.boundary}/2 − 1 = ${r.area}';
+          },
+          visualize: (ctx, i) {
+            final pts = _pointList(i[0]);
+            if (pts.length < 3) return null;
+            if (pts.any((p) => !p.x.isInteger || !p.y.isInteger)) return null;
+            final lattice = _latticePoints(pts);
+            final scheme = Theme.of(ctx).colorScheme;
+            return CustomPaint(
+              painter: PolygonPainter(
+                vertices: pts
+                    .map((p) => Offset(p.x.toDouble(), p.y.toDouble()))
+                    .toList(),
+                strokeColor: scheme.secondary,
+                textColor: scheme.onSurface,
+                boundaryLattice: lattice.boundary,
+                interiorLattice: lattice.interior,
+                accentColor: scheme.tertiary,
+              ),
+              child: const SizedBox.expand(),
+            );
+          },
+        ),
+        CalcTool(
+          title: s.pick('Centros del triángulo', 'Triangle centers'),
+          description: s.pick(
+              'G, O, H exactos y recta de Euler; incentro aproximado. Vértices "x,y".',
+              'Exact G, O, H and Euler line; approximate incenter. Vertices "x,y".'),
+          fields: [
+            ToolField('A', initial: '0,0'),
+            ToolField('B', initial: '6,0'),
+            ToolField('C', initial: '2,4'),
+          ],
+          compute: (i) {
+            final r = GeometryService.triangleCenters(
+                _point(i[0]), _point(i[1]), _point(i[2]));
+            return '${s.pick('Baricentro', 'Centroid')} G: ${r.centroid}\n'
+                '${s.pick('Circuncentro', 'Circumcenter')} O: ${r.circumcenter}\n'
+                '${s.pick('Ortocentro', 'Orthocenter')} H: ${r.orthocenter}\n'
+                '${s.pick('Incentro', 'Incenter')} I ≈ '
+                '(${r.incenterX.toStringAsFixed(4)}, ${r.incenterY.toStringAsFixed(4)})\n'
+                '${s.pick('Recta de Euler', 'Euler line')}: H = 3G − 2O ✓';
+          },
+          visualize: (ctx, i) {
+            final a = _point(i[0]), b = _point(i[1]), c = _point(i[2]);
+            final r = GeometryService.triangleCenters(a, b, c);
+            Offset toOffset(Point p) => Offset(p.x.toDouble(), p.y.toDouble());
+            final scheme = Theme.of(ctx).colorScheme;
+            final o = toOffset(r.circumcenter);
+            final h = toOffset(r.orthocenter);
+            return CustomPaint(
+              painter: TriangleCentersPainter(
+                vertices: [toOffset(a), toOffset(b), toOffset(c)],
+                centers: [
+                  CenterMark('G', toOffset(r.centroid), const Color(0xFF43A047)),
+                  CenterMark('O', o, const Color(0xFF1E88E5)),
+                  CenterMark('H', h, const Color(0xFFE53935)),
+                  CenterMark('I', Offset(r.incenterX, r.incenterY),
+                      const Color(0xFFFB8C00)),
+                ],
+                eulerA: o,
+                eulerB: h,
+                strokeColor: scheme.primary,
+                textColor: scheme.onSurface,
+              ),
+              child: const SizedBox.expand(),
+            );
           },
         ),
       ],
@@ -323,6 +564,90 @@ class PolynomialsToolScreen extends StatelessWidget {
                   '${PolynomialService.discriminant(p)}');
             }
             sb.write('${s.pick('Derivada', 'Derivative')}: ${p.derivative()}');
+            return sb.toString();
+          },
+          visualize: (ctx, i) {
+            final p = PolynomialService.parse(i[0]);
+            if (p.degree < 1) return null;
+            final roots = PolynomialService.rationalRoots(p)
+                .map((r) => r.toDouble())
+                .toList();
+            final extrema =
+                p.degree >= 2 ? _realRootsApprox(p.derivative()) : <double>[];
+            // Rango centrado en los puntos de interés.
+            final interesting = [...roots, ...extrema];
+            double xMin, xMax;
+            if (interesting.isEmpty) {
+              xMin = -5;
+              xMax = 5;
+            } else {
+              xMin = interesting.reduce(math.min) - 2;
+              xMax = interesting.reduce(math.max) + 2;
+              if (xMax - xMin < 4) {
+                final mid = (xMin + xMax) / 2;
+                xMin = mid - 2;
+                xMax = mid + 2;
+              }
+            }
+            final scheme = Theme.of(ctx).colorScheme;
+            return CustomPaint(
+              painter: PolynomialPlotPainter(
+                coefficients:
+                    p.coefficients.map((c) => c.toDouble()).toList(),
+                xMin: xMin,
+                xMax: xMax,
+                roots: roots,
+                extrema: extrema,
+                curveColor: scheme.primary,
+                textColor: scheme.onSurface,
+                rootColor: scheme.error,
+              ),
+              child: const SizedBox.expand(),
+            );
+          },
+        ),
+        CalcTool(
+          title: s.pick('Ruffini: dividir entre (x − c)', 'Ruffini: divide by (x − c)'),
+          description: s.pick('División sintética con pasos.',
+              'Synthetic division with steps.'),
+          fields: [
+            ToolField(s.pick('Polinomio', 'Polynomial'), initial: 'x^3-6x^2+11x-6'),
+            ToolField('c (p/q)', initial: '1'),
+          ],
+          compute: (i) => StepsService.ruffiniSteps(
+                  PolynomialService.parse(i[0]), Fraction.parse(i[1]),
+                  spanish: s.es)
+              .toString(),
+        ),
+        CalcTool(
+          title: s.pick('Sistema lineal 2×2 / 3×3', 'Linear system 2×2 / 3×3'),
+          description: s.pick(
+              'Filas "a,b,…,k" (coeficientes y término independiente) separadas por ";".',
+              'Rows "a,b,…,k" (coefficients and constant) separated by ";".'),
+          fields: [
+            ToolField(s.pick('Sistema', 'System'), initial: '2,1,5; 1,-1,1'),
+          ],
+          compute: (i) {
+            final rows = i[0]
+                .split(';')
+                .where((r) => r.trim().isNotEmpty)
+                .map(_fracList)
+                .toList();
+            final sol = LinearSystemService.solveCramer(rows); // valida dimensiones
+            final det = LinearSystemService.determinant(
+                rows.map((r) => r.sublist(0, r.length - 1)).toList());
+            final sb = StringBuffer();
+            sb.writeln('det = $det');
+            if (sol == null) {
+              sb.write(s.pick('Sin solución única (determinante 0)',
+                  'No unique solution (zero determinant)'));
+            } else {
+              const names = ['x', 'y', 'z'];
+              for (int k = 0; k < sol.length; k++) {
+                sb.write('${k > 0 ? '\n' : ''}${names[k]} = ${sol[k]}'
+                    '  ≈ ${sol[k].toDouble().toStringAsFixed(6)}');
+              }
+            }
             return sb.toString();
           },
         ),
@@ -408,6 +733,23 @@ class NumberTheoryToolScreen extends StatelessWidget {
                 ? s.pick('Sin solución', 'No solution')
                 : 'x ≡ ${sols.join(', ')} (mod ${i[2]})';
           },
+          visualize: (ctx, i) {
+            final n = _int(i[2]);
+            if (n < 2 || n > 120) return null;
+            final sols = NumberTheoryAdvancedService.solveLinearCongruence(
+                _bi(i[0]), _bi(i[1]), _bi(i[2]));
+            final scheme = Theme.of(ctx).colorScheme;
+            return CustomPaint(
+              painter: ModularClockPainter(
+                modulus: n,
+                highlighted: sols.map((x) => x.toInt()).toSet(),
+                strokeColor: scheme.primary,
+                highlightColor: scheme.error,
+                textColor: scheme.onSurface,
+              ),
+              child: const SizedBox.expand(),
+            );
+          },
         ),
         CalcTool(
           title: s.pick('Ecuación de Pell x²−Dy²=1', 'Pell equation x²−Dy²=1'),
@@ -452,6 +794,87 @@ class NumberTheoryToolScreen extends StatelessWidget {
                   'gcd ≠ 1: infinitely many non-representable');
             }
             return r.toString();
+          },
+        ),
+        CalcTool(
+          title: s.pick('Criba de Eratóstenes', 'Sieve of Eratosthenes'),
+          description: s.pick('Cuadrícula con los primos hasta n resaltados (n ≤ 400).',
+              'Grid with the primes up to n highlighted (n ≤ 400).'),
+          fields: [ToolField('n', initial: '100')],
+          compute: (i) {
+            final n = _int(i[0]);
+            if (n < 2) throw CalcException(CalcError.nGreaterThanOne);
+            if (n > 400) {
+              throw CalcException(CalcError.inputTooLarge, {'max': '400'});
+            }
+            final flags = NumberTheoryAdvancedService.sieveOfEratosthenes(n);
+            final primes = <int>[];
+            for (int v = 2; v <= n; v++) {
+              if (flags[v]) primes.add(v);
+            }
+            return 'π($n) = ${primes.length}\n${primes.join(', ')}';
+          },
+          visualize: (ctx, i) {
+            final n = _int(i[0]);
+            if (n < 2 || n > 400) return null;
+            final scheme = Theme.of(ctx).colorScheme;
+            return CustomPaint(
+              painter: SievePainter(
+                isPrime: NumberTheoryAdvancedService.sieveOfEratosthenes(n),
+                primeColor: scheme.primary,
+                textColor: scheme.onSurface,
+              ),
+              child: const SizedBox.expand(),
+            );
+          },
+        ),
+        CalcTool(
+          title: s.pick('Residuos cuadráticos mod n', 'Quadratic residues mod n'),
+          fields: [ToolField('n', initial: '11')],
+          compute: (i) {
+            final n = _int(i[0]);
+            if (n < 2) throw CalcException(CalcError.nGreaterThanOne);
+            if (n > 2000) {
+              throw CalcException(CalcError.inputTooLarge, {'max': '2000'});
+            }
+            final residues = <int>{};
+            for (int x = 0; x <= n ~/ 2; x++) {
+              residues.add(x * x % n);
+            }
+            final sorted = residues.toList()..sort();
+            return '${s.pick('Residuos', 'Residues')} (${sorted.length}): '
+                '${sorted.join(', ')}\n'
+                '${s.pick('No residuos', 'Non-residues')}: ${n - sorted.length}';
+          },
+        ),
+        CalcTool(
+          title: s.pick('Tabla φ, τ, σ, μ', 'Table φ, τ, σ, μ'),
+          description: s.pick('Funciones multiplicativas para n en [a, b] (máx 30 filas).',
+              'Multiplicative functions for n in [a, b] (max 30 rows).'),
+          fields: [
+            ToolField(s.pick('Desde', 'From'), initial: '1'),
+            ToolField(s.pick('Hasta', 'To'), initial: '12'),
+          ],
+          compute: (i) {
+            final a = _bi(i[0]), b = _bi(i[1]);
+            if (a < BigInt.one) throw CalcException(CalcError.nPositive);
+            if (b - a >= BigInt.from(30)) {
+              throw CalcException(CalcError.inputTooLarge, {'max': '30'});
+            }
+            final sb = StringBuffer();
+            sb.writeln('     n |     φ |     τ |      σ |  μ');
+            for (BigInt n = a; n <= b; n += BigInt.one) {
+              final phi = SpecialFunctionsService.eulerPhi(n);
+              final tau = SpecialFunctionsService.divisorCount(n);
+              final sigma = _sigma1(n);
+              final mu = SpecialFunctionsService.moebiusMu(n);
+              sb.writeln('${'$n'.padLeft(6)} |'
+                  '${'$phi'.padLeft(6)} |'
+                  '${'$tau'.padLeft(6)} |'
+                  '${'$sigma'.padLeft(7)} |'
+                  '${'$mu'.padLeft(3)}');
+            }
+            return sb.toString().trimRight();
           },
         ),
       ],
@@ -521,6 +944,21 @@ class ComplexSequencesToolScreen extends StatelessWidget {
           compute: (i) => Complex.rootsOfUnity(_int(i[0]))
               .map((c) => c.toString())
               .join('\n'),
+          visualize: (ctx, i) {
+            final n = _int(i[0]);
+            if (n < 1 || n > 60) return null;
+            final scheme = Theme.of(ctx).colorScheme;
+            return CustomPaint(
+              painter: UnitCirclePainter(
+                points: Complex.rootsOfUnity(n)
+                    .map((c) => Offset(c.re, c.im))
+                    .toList(),
+                strokeColor: scheme.primary,
+                textColor: scheme.onSurface,
+              ),
+              child: const SizedBox.expand(),
+            );
+          },
         ),
         CalcTool(
           title: s.pick('Potencia de complejo (De Moivre)', 'Complex power (De Moivre)'),
@@ -545,6 +983,21 @@ class ComplexSequencesToolScreen extends StatelessWidget {
               .nthRoots(_int(i[2]))
               .map((c) => c.toString())
               .join('\n'),
+          visualize: (ctx, i) {
+            final n = _int(i[2]);
+            if (n < 1 || n > 60) return null;
+            final z = Complex(double.parse(i[0]), double.parse(i[1]));
+            if (z.modulus == 0) return null;
+            final scheme = Theme.of(ctx).colorScheme;
+            return CustomPaint(
+              painter: UnitCirclePainter(
+                points: z.nthRoots(n).map((c) => Offset(c.re, c.im)).toList(),
+                strokeColor: scheme.primary,
+                textColor: scheme.onSurface,
+              ),
+              child: const SizedBox.expand(),
+            );
+          },
         ),
         CalcTool(
           title: s.pick('Recurrencia lineal', 'Linear recurrence'),
@@ -567,6 +1020,139 @@ class ComplexSequencesToolScreen extends StatelessWidget {
           fields: [ToolField('n', initial: '6')],
           compute: (i) =>
               CombinatoricsExtraService.pascalRow(_int(i[0])).join(', '),
+        ),
+        CalcTool(
+          title: s.pick('Pascal mod m (Sierpiński)', 'Pascal mod m (Sierpiński)'),
+          description: s.pick(
+              'Triángulo de Pascal módulo m coloreado por residuo. Con m=2 aparece el fractal de Sierpiński.',
+              'Pascal triangle modulo m colored by residue. With m=2 the Sierpiński fractal appears.'),
+          fields: [
+            ToolField(s.pick('Filas', 'Rows'), initial: '32'),
+            ToolField('m', initial: '2'),
+          ],
+          compute: (i) {
+            final n = _int(i[0]), m = _int(i[1]);
+            if (n < 0) throw CalcException(CalcError.nNonNegative);
+            if (m < 2) throw CalcException(CalcError.nGreaterThanOne);
+            if (n > 128) {
+              throw CalcException(CalcError.inputTooLarge, {'max': '128'});
+            }
+            final rows = CombinatoricsExtraService.pascalTriangleMod(n - 1, m);
+            int zeros = 0, total = 0;
+            for (final row in rows) {
+              for (final v in row) {
+                total++;
+                if (v == 0) zeros++;
+              }
+            }
+            return '${s.pick('Filas', 'Rows')}: $n  (mod $m)\n'
+                '${s.pick('Coeficientes', 'Coefficients')}: $total, '
+                '${s.pick('divisibles por', 'divisible by')} $m: $zeros';
+          },
+          visualize: (ctx, i) {
+            final n = _int(i[0]), m = _int(i[1]);
+            if (n < 1 || n > 128 || m < 2) return null;
+            final scheme = Theme.of(ctx).colorScheme;
+            return CustomPaint(
+              painter: PascalModPainter(
+                rows: CombinatoricsExtraService.pascalTriangleMod(n - 1, m),
+                modulus: m,
+                fillColor: scheme.primary,
+                textColor: scheme.onSurface,
+              ),
+              child: const SizedBox.expand(),
+            );
+          },
+        ),
+        CalcTool(
+          title: s.pick('Expansión binomial (a+b)ⁿ', 'Binomial expansion (a+b)ⁿ'),
+          fields: [ToolField('n', initial: '5')],
+          compute: (i) {
+            final n = _int(i[0]);
+            if (n < 0) throw CalcException(CalcError.nNonNegative);
+            if (n > 30) {
+              throw CalcException(CalcError.inputTooLarge, {'max': '30'});
+            }
+            final row = CombinatoricsExtraService.pascalRow(n);
+            final terms = <String>[];
+            for (int k = 0; k <= n; k++) {
+              final coef = row[k];
+              final pa = n - k, pb = k;
+              final sb = StringBuffer();
+              if (coef != BigInt.one || (pa == 0 && pb == 0)) sb.write(coef);
+              if (pa > 0) sb.write(pa == 1 ? 'a' : 'a${_superscript(pa)}');
+              if (pb > 0) sb.write(pb == 1 ? 'b' : 'b${_superscript(pb)}');
+              terms.add(sb.toString());
+            }
+            return '(a+b)${_superscript(n)} = ${terms.join(' + ')}';
+          },
+        ),
+      ],
+    );
+  }
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// ESTADÍSTICA
+// ════════════════════════════════════════════════════════════════════════════
+
+class StatisticsToolScreen extends StatelessWidget {
+  const StatisticsToolScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final s = OlympiadStrings.of(context);
+    return _ToolScaffold(
+      title: s.catStatistics,
+      tools: [
+        CalcTool(
+          title: s.pick('Estadística descriptiva', 'Descriptive statistics'),
+          description: s.pick(
+              'Valores (enteros, fracciones o decimales) separados por comas.',
+              'Comma-separated values (integers, fractions or decimals).'),
+          fields: [
+            ToolField(s.pick('Valores', 'Values'), initial: '2, 4, 4, 5, 7'),
+          ],
+          compute: (i) {
+            final r = StatisticsService.descriptive(_fracList(i[0]));
+            final modes = r.modes.isEmpty
+                ? s.pick('ninguna', 'none')
+                : r.modes.join(', ');
+            final sb = StringBuffer();
+            sb.writeln('n = ${r.count}');
+            sb.writeln('min = ${r.min}, max = ${r.max}, '
+                '${s.pick('rango', 'range')} = ${r.range}');
+            sb.writeln('${s.pick('Media', 'Mean')}: ${r.mean}'
+                '  ≈ ${r.mean.toDouble().toStringAsFixed(6)}');
+            sb.writeln('${s.pick('Mediana', 'Median')}: ${r.median}');
+            sb.writeln('${s.pick('Moda', 'Mode')}: $modes');
+            sb.writeln('${s.pick('Varianza (poblacional)', 'Variance (population)')}: '
+                '${r.variancePopulation}');
+            if (r.varianceSample != null) {
+              sb.writeln('${s.pick('Varianza (muestral)', 'Variance (sample)')}: '
+                  '${r.varianceSample}');
+            }
+            sb.write('${s.pick('Desv. estándar', 'Std. deviation')} ≈ '
+                '${r.stdDevPopulation.toStringAsFixed(6)}');
+            return sb.toString();
+          },
+        ),
+        CalcTool(
+          title: s.pick('Desigualdad de medias (QM ≥ AM ≥ GM ≥ HM)',
+              'Mean inequality (QM ≥ AM ≥ GM ≥ HM)'),
+          description: s.pick('Valores positivos separados por comas.',
+              'Comma-separated positive values.'),
+          fields: [
+            ToolField(s.pick('Valores', 'Values'), initial: '1, 2, 4'),
+          ],
+          compute: (i) {
+            final r = StatisticsService.means(_fracList(i[0]));
+            return 'QM ≈ ${r.quadratic.toStringAsFixed(6)}\n'
+                'AM = ${r.arithmetic}  ≈ ${r.arithmetic.toDouble().toStringAsFixed(6)}\n'
+                'GM ≈ ${r.geometric.toStringAsFixed(6)}\n'
+                'HM = ${r.harmonic}  ≈ ${r.harmonic.toDouble().toStringAsFixed(6)}\n'
+                'QM ≥ AM ≥ GM ≥ HM ✓';
+          },
         ),
       ],
     );

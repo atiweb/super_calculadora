@@ -258,7 +258,7 @@ class PolynomialService {
       // Tres raíces reales distintas (caso trigonométrico).
       final double m = 2 * math.sqrt(-p / 3);
       final double theta =
-          math.acos((3 * q) / (p * m)) / 3;
+          math.acos(((3 * q) / (p * m)).clamp(-1.0, 1.0)) / 3;
       for (int k = 0; k < 3; k++) {
         roots.add(m * math.cos(theta - 2 * math.pi * k / 3) - shift);
       }

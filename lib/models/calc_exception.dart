@@ -39,6 +39,10 @@ enum CalcError {
   partsNonNegative,
   invalidOperation,
   listsSameSize,
+  inputTooLarge,
+  integerCoordinatesRequired,
+  collinearPoints,
+  invalidSystem,
 }
 
 /// Excepción de cálculo con un código localizable y argumentos opcionales.

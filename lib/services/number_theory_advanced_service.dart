@@ -228,8 +228,12 @@ class NumberTheoryAdvancedService {
   }
 
   /// Representación n = a² + b² + c² + d² (teorema de Lagrange, siempre existe).
+  /// Limitado a n ≤ 10^8 para evitar cuelgues en dispositivos móviles.
   static ({BigInt a, BigInt b, BigInt c, BigInt d}) sumOfFourSquares(BigInt n) {
     if (n < _zero) throw CalcException(CalcError.nNonNegative);
+    if (n > BigInt.from(100000000)) {
+      throw CalcException(CalcError.inputTooLarge, {'max': '100000000'});
+    }
     BigInt a = _zero;
     while (a * a <= n) {
       BigInt b = a;
@@ -344,6 +348,23 @@ class NumberTheoryAdvancedService {
       gamma = (gamma * gm) % n;
     }
     return null;
+  }
+
+  // ── Criba de Eratóstenes ─────────────────────────────────────────────────
+
+  /// Criba de Eratóstenes: `flags[i]` indica si i es primo, para i en [0, n].
+  static List<bool> sieveOfEratosthenes(int n) {
+    if (n < 0) throw CalcException(CalcError.nNonNegative);
+    final flags = List<bool>.filled(n + 1, true);
+    if (n >= 0) flags[0] = false;
+    if (n >= 1) flags[1] = false;
+    for (int p = 2; p * p <= n; p++) {
+      if (!flags[p]) continue;
+      for (int q = p * p; q <= n; q += p) {
+        flags[q] = false;
+      }
+    }
+    return flags;
   }
 
   // ── Helpers ──────────────────────────────────────────────────────────────

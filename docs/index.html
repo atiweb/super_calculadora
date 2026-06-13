@@ -215,6 +215,7 @@
   <a href="#tools-numtheory"><span class="en">Adv. Number Theory</span><span class="es">T.N. Avanzada</span></a>
   <a href="#tools-steps"><span class="en">Step by step</span><span class="es">Procedimientos</span></a>
   <a href="#tools-complex"><span class="en">Complex &amp; Sequences</span><span class="es">Complejos y Sucesiones</span></a>
+  <a href="#tools-statistics"><span class="en">Statistics</span><span class="es">Estadística</span></a>
   <a href="#tools-practice"><span class="en">Practice</span><span class="es">Práctica</span></a>
 
   <div class="nav-section"><span class="en">Reference</span><span class="es">Referencia</span></div>
@@ -770,8 +771,12 @@ Esta desigualdad es fundamental en olimpiadas.</pre></div>
 (13,14,15) → <span class="en">scalene, acute</span><span class="es">escaleno, acutángulo</span>, area=84, R=65/8, r=4</div>
   <div class="tool-row" style="margin-top:10px"><span class="tool-name"><span class="en">Pythagorean triples</span><span class="es">Ternas pitagóricas</span></span><span><span class="en">Lists primitive triples (a,b,c) with a²+b²=c², gcd=1, using Euclid's formula m>n, gcd(m,n)=1, different parity.</span><span class="es">Lista ternas primitivas (a,b,c) con a²+b²=c², mcd=1, usando la fórmula de Euclides m>n, mcd(m,n)=1, distinta paridad.</span></span></div>
   <div class="tool-ex"><span class="en">Up to 50:</span><span class="es">Hasta 50:</span> (3,4,5), (5,12,13), (8,15,17), (7,24,25), (20,21,29)</div>
-  <div class="tool-row" style="margin-top:10px"><span class="tool-name">Shoelace</span><span><span class="en">Exact polygon area from rational coordinates. Enter vertices as "x,y" separated by ";".</span><span class="es">Área exacta de un polígono a partir de coordenadas racionales. Ingresa vértices como "x,y" separados por ";".</span></span></div>
+  <div class="tool-row" style="margin-top:10px"><span class="tool-name">Shoelace</span><span><span class="en">Exact polygon area from rational coordinates, with a drawing of the polygon. Enter vertices as "x,y" separated by ";".</span><span class="es">Área exacta de un polígono a partir de coordenadas racionales, con dibujo del polígono. Ingresa vértices como "x,y" separados por ";".</span></span></div>
   <div class="tool-ex">"0,0; 4,0; 0,3" → area = 6</div>
+  <div class="tool-row" style="margin-top:10px"><span class="tool-name"><span class="en">Pick's theorem</span><span class="es">Teorema de Pick</span></span><span><span class="en">For integer-vertex polygons: A = I + B/2 − 1. Computes exact area, boundary lattice points B and interior points I, and draws them on the polygon.</span><span class="es">Para polígonos de vértices enteros: A = I + B/2 − 1. Calcula el área exacta, los puntos reticulares de frontera B e interiores I, y los dibuja sobre el polígono.</span></span></div>
+  <div class="tool-ex">"0,0; 5,0; 5,4; 0,4" → A=20, B=18, I=12</div>
+  <div class="tool-row" style="margin-top:10px"><span class="tool-name"><span class="en">Triangle centers</span><span class="es">Centros del triángulo</span></span><span><span class="en">Centroid G, circumcenter O and orthocenter H as exact fractions; incenter approximated. Draws the triangle, the four centers and the Euler line (H = 3G − 2O).</span><span class="es">Baricentro G, circuncentro O y ortocentro H como fracciones exactas; incentro aproximado. Dibuja el triángulo, los cuatro centros y la recta de Euler (H = 3G − 2O).</span></span></div>
+  <div class="tool-ex">A=(0,0), B=(4,0), C=(0,3) → O=(2, 3/2), H=(0,0), G=(4/3, 1)</div>
 </div>
 
 <!-- Polynomials -->
@@ -784,7 +789,13 @@ Esta desigualdad es fundamental en olimpiadas.</pre></div>
   <div class="tool-row" style="margin-top:10px"><span class="tool-name"><span class="en">Solve quadratic</span><span class="es">Resolver cuadrática</span></span><span><span class="en">Discriminant, nature of roots, exact rational roots when possible, approximate real roots.</span><span class="es">Discriminante, naturaleza de las raíces, raíces racionales exactas cuando es posible, raíces reales aproximadas.</span></span></div>
   <div class="tool-row" style="margin-top:10px"><span class="tool-name"><span class="en">Real roots of cubic</span><span class="es">Raíces reales cúbica</span></span><span><span class="en">Depressed cubic / Cardano / trigonometric method (3 real roots case).</span><span class="es">Cúbica deprimida / Cardano / método trigonométrico (caso 3 raíces reales).</span></span></div>
   <div class="tool-ex">x³−6x²+11x−6 → 1, 2, 3</div>
+  <div class="tool-row" style="margin-top:10px"><span class="tool-name">Ruffini</span><span><span class="en">Synthetic division of p(x) by (x − c) with every step shown; verifies the remainder theorem p(c) = remainder.</span><span class="es">División sintética de p(x) entre (x − c) mostrando cada paso; verifica el teorema del resto p(c) = resto.</span></span></div>
+  <div class="tool-ex">x³−6x²+11x−6 ÷ (x−1) → x²−5x+6, <span class="en">remainder</span><span class="es">resto</span> 0</div>
+  <div class="tool-row" style="margin-top:10px"><span class="tool-name"><span class="en">Linear system 2×2 / 3×3</span><span class="es">Sistema lineal 2×2 / 3×3</span></span><span><span class="en">Cramer's rule with exact fractions. Rows "a,b,…,k" (coefficients + constant) separated by ";". Shows the determinant.</span><span class="es">Regla de Cramer con fracciones exactas. Filas "a,b,…,k" (coeficientes + término independiente) separadas por ";". Muestra el determinante.</span></span></div>
+  <div class="tool-ex">"2,1,5; 1,-1,1" → x=2, y=1 (det=−3)</div>
 </div>
+<p class="en-blk" style="margin-top:8px"><em>Analyze polynomial</em> also plots y = p(x) marking rational roots and extrema.</p>
+<p class="es-blk" style="margin-top:8px"><em>Analizar polinomio</em> además grafica y = p(x) marcando raíces racionales y extremos.</p>
 
 <!-- Advanced Number Theory -->
 <h3 id="tools-numtheory"><span class="en">Advanced Number Theory</span><span class="es">Teoría de Números Avanzada</span></h3>
@@ -793,8 +804,10 @@ Esta desigualdad es fundamental en olimpiadas.</pre></div>
 <div class="tool-card">
   <div class="tool-row"><span class="tool-name">√a mod p</span><span><span class="en">Modular square root (Tonelli-Shanks). Returns ±r such that r²≡a (mod p) for prime p.</span><span class="es">Raíz cuadrada modular (Tonelli-Shanks). Devuelve ±r tal que r²≡a (mod p) para p primo.</span></span></div>
   <div class="tool-ex">√2 mod 7 → ±3  (3²=9≡2)</div>
-  <div class="tool-row" style="margin-top:8px"><span class="tool-name">ax≡b (mod n)</span><span><span class="en">Linear congruence — all solutions in [0,n). Has solutions iff gcd(a,n)|b.</span><span class="es">Congruencia lineal — todas las soluciones en [0,n). Tiene soluciones ssi mcd(a,n)|b.</span></span></div>
+  <div class="tool-row" style="margin-top:8px"><span class="tool-name">ax≡b (mod n)</span><span><span class="en">Linear congruence — all solutions in [0,n). Has solutions iff gcd(a,n)|b. Shows the solutions highlighted on a "modular clock" (n ≤ 120).</span><span class="es">Congruencia lineal — todas las soluciones en [0,n). Tiene soluciones ssi mcd(a,n)|b. Muestra las soluciones resaltadas en un "reloj modular" (n ≤ 120).</span></span></div>
   <div class="tool-ex">3x≡6 (mod 9) → x∈{2,5,8}</div>
+  <div class="tool-row" style="margin-top:8px"><span class="tool-name"><span class="en">Sieve of Eratosthenes</span><span class="es">Criba de Eratóstenes</span></span><span><span class="en">Numbered grid up to n (≤ 400) with primes highlighted; lists the primes and π(n).</span><span class="es">Cuadrícula numerada hasta n (≤ 400) con los primos resaltados; lista los primos y π(n).</span></span></div>
+  <div class="tool-ex">n=100 → π(100)=25: 2, 3, 5, 7, 11, …, 97</div>
   <div class="tool-row" style="margin-top:8px"><span class="tool-name">x²−Dy²=1</span><span><span class="en">Pell equation — fundamental solution via continued fraction of √D.</span><span class="es">Ecuación de Pell — solución fundamental vía fracción continua de √D.</span></span></div>
   <div class="tool-ex">D=61 → x=1766319049, y=226153980</div>
   <div class="tool-row" style="margin-top:8px"><span class="tool-name">CF(√n)</span><span><span class="en">Periodic continued fraction [a₀;(a₁,…,aₖ)] of √n.</span><span class="es">Fracción continua periódica [a₀;(a₁,…,aₖ)] de √n.</span></span></div>
@@ -803,6 +816,10 @@ Esta desigualdad es fundamental en olimpiadas.</pre></div>
   <div class="tool-ex">25=3²+4²  |  7=0²+1²+1²+√5... → 0²+1²+1²+√5</div>
   <div class="tool-row" style="margin-top:8px"><span class="tool-name"><span class="en">Frobenius number</span><span class="es">Número de Frobenius</span></span><span><span class="en">Largest integer that CANNOT be represented as a non-negative combination of the given denominations (gcd must be 1).</span><span class="es">El mayor entero que NO se puede representar como combinación no negativa de las denominaciones dadas (mcd debe ser 1).</span></span></div>
   <div class="tool-ex">{6,9,20} → 43  |  {3,5} → 7  (Chicken McNugget)</div>
+  <div class="tool-row" style="margin-top:8px"><span class="tool-name"><span class="en">Quadratic residues mod n</span><span class="es">Residuos cuadráticos mod n</span></span><span><span class="en">The set {x² mod n} and its size. For odd prime p there are (p+1)/2 residues.</span><span class="es">El conjunto {x² mod n} y su tamaño. Para p primo impar hay (p+1)/2 residuos.</span></span></div>
+  <div class="tool-ex">mod 11 → {0, 1, 3, 4, 5, 9}  (6 <span class="en">residues</span><span class="es">residuos</span>)</div>
+  <div class="tool-row" style="margin-top:8px"><span class="tool-name">φ, τ, σ, μ</span><span><span class="en">Table of multiplicative functions (totient, divisor count, divisor sum, Möbius) for n in a range (max 30 rows).</span><span class="es">Tabla de funciones multiplicativas (totiente, cantidad de divisores, suma de divisores, Möbius) para n en un rango (máx 30 filas).</span></span></div>
+  <div class="tool-ex">n=12 → φ=4, τ=6, σ=28, μ=0</div>
 </div>
 
 <!-- Step by step -->
@@ -816,12 +833,13 @@ Esta desigualdad es fundamental en olimpiadas.</pre></div>
   <div class="tool-ex">360: 360÷2=180 / 180÷2=90 / 90÷2=45 / 45÷3=15 / 15÷3=5 → 2³×3²×5</div>
   <div class="tool-row" style="margin-top:8px"><span class="tool-name">CRT / TCR</span><span><span class="en">Combines congruences pairwise showing each intermediate step.</span><span class="es">Combina las congruencias de a pares mostrando cada paso intermedio.</span></span></div>
   <div class="tool-ex">x≡2(3), x≡3(5), x≡2(7) → x≡23(mod 105)</div>
+  <div class="tool-row" style="margin-top:8px"><span class="tool-name">Ruffini</span><span><span class="en">Also available under Polynomials: synthetic division by (x − c) with each column shown.</span><span class="es">También disponible en Polinomios: división sintética entre (x − c) mostrando cada columna.</span></span></div>
 </div>
 
 <!-- Complex & Sequences -->
 <h3 id="tools-complex"><span class="en">Complex Numbers &amp; Sequences</span><span class="es">Números Complejos y Sucesiones</span></h3>
 <div class="tool-card">
-  <div class="tool-row"><span class="tool-name"><span class="en">Roots of unity</span><span class="es">Raíces de la unidad</span></span><span><span class="en">All n-th roots e^(2πik/n). Their sum is always 0 for n&gt;1.</span><span class="es">Todas las raíces n-ésimas e^(2πik/n). Su suma es siempre 0 para n&gt;1.</span></span></div>
+  <div class="tool-row"><span class="tool-name"><span class="en">Roots of unity</span><span class="es">Raíces de la unidad</span></span><span><span class="en">All n-th roots e^(2πik/n), drawn on the unit circle as a regular polygon. Their sum is always 0 for n&gt;1.</span><span class="es">Todas las raíces n-ésimas e^(2πik/n), dibujadas sobre el círculo unitario como polígono regular. Su suma es siempre 0 para n&gt;1.</span></span></div>
   <div class="tool-row" style="margin-top:8px"><span class="tool-name"><span class="en">De Moivre power</span><span class="es">Potencia (De Moivre)</span></span><span><span class="en">Computes (re+im·i)^n. Example: (1+i)^8=16, (1+i)^4=−4.</span><span class="es">Calcula (re+im·i)^n. Ejemplo: (1+i)^8=16, (1+i)^4=−4.</span></span></div>
   <div class="tool-row" style="margin-top:8px"><span class="tool-name"><span class="en">n-th roots of complex</span><span class="es">Raíces n-ésimas</span></span><span><span class="en">All n roots, evenly spaced on a circle of radius |z|^(1/n).</span><span class="es">Las n raíces, equidistantes en un círculo de radio |z|^(1/n).</span></span></div>
   <div class="tool-row" style="margin-top:8px"><span class="tool-name"><span class="en">Linear recurrence</span><span class="es">Recurrencia lineal</span></span><span><span class="en">Generates terms of aₙ=c₁aₙ₋₁+…+cₖaₙ₋ₖ with given seeds. Works with rational coefficients.</span><span class="es">Genera términos de aₙ=c₁aₙ₋₁+…+cₖaₙ₋ₖ con iniciales dados. Funciona con coeficientes racionales.</span></span></div>
@@ -830,6 +848,19 @@ Esta desigualdad es fundamental en olimpiadas.</pre></div>
 <span class="en">Pell:</span><span class="es">Pell:</span> coeffs=[2,1], seeds=[0,1] → 0,1,2,5,12,29</div>
   <div class="tool-row" style="margin-top:8px"><span class="tool-name"><span class="en">Pascal row n</span><span class="es">Fila n de Pascal</span></span><span><span class="en">[C(n,0),…,C(n,n)]. Row sum = 2^n. Also: multinomial coefficients.</span><span class="es">[C(n,0),…,C(n,n)]. Suma de la fila = 2^n. También: coeficientes multinomiales.</span></span></div>
   <div class="tool-ex"><span class="en">Row</span><span class="es">Fila</span> 6 = 1, 6, 15, 20, 15, 6, 1  (sum=64)</div>
+  <div class="tool-row" style="margin-top:8px"><span class="tool-name">(a+b)ⁿ</span><span><span class="en">Full binomial expansion with superscript formatting (n ≤ 30).</span><span class="es">Expansión binomial completa con superíndices (n ≤ 30).</span></span></div>
+  <div class="tool-ex">(a+b)³ = a³ + 3a²b + 3ab² + b³</div>
+  <div class="tool-row" style="margin-top:8px"><span class="tool-name"><span class="en">Pascal mod m</span><span class="es">Pascal mod m</span></span><span><span class="en">Pascal's triangle modulo m drawn as a colored grid (up to 128 rows); counts coefficients divisible by m. With m=2 the Sierpiński fractal appears (Kummer/Lucas theorems).</span><span class="es">Triángulo de Pascal módulo m dibujado como cuadrícula coloreada (hasta 128 filas); cuenta los coeficientes divisibles por m. Con m=2 aparece el fractal de Sierpiński (teoremas de Kummer/Lucas).</span></span></div>
+  <div class="tool-ex">32 <span class="en">rows</span><span class="es">filas</span>, m=2 → Sierpiński</div>
+</div>
+
+<!-- Statistics -->
+<h3 id="tools-statistics"><span class="en">Statistics — Exact Descriptive</span><span class="es">Estadística — Descriptiva Exacta</span></h3>
+<div class="tool-card">
+  <div class="tool-row"><span class="tool-name"><span class="en">Descriptive statistics</span><span class="es">Estadística descriptiva</span></span><span><span class="en">Count, min/max/range, mean, median and variance as exact fractions; mode(s); standard deviation approximated.</span><span class="es">Cantidad, min/max/rango, media, mediana y varianza como fracciones exactas; moda(s); desviación estándar aproximada.</span></span></div>
+  <div class="tool-ex">2, 4, 4, 5, 7 → <span class="en">mean</span><span class="es">media</span>=22/5, <span class="en">median</span><span class="es">mediana</span>=4, <span class="en">mode</span><span class="es">moda</span>=4, σ²=66/25</div>
+  <div class="tool-row" style="margin-top:8px"><span class="tool-name">QM ≥ AM ≥ GM ≥ HM</span><span><span class="en">The four classical means of a positive list — AM and HM exact, QM and GM approximate — verifying the chain of inequalities.</span><span class="es">Las cuatro medias clásicas de una lista positiva — AM y HM exactas, QM y GM aproximadas — verificando la cadena de desigualdades.</span></span></div>
+  <div class="tool-ex">1, 2, 4 → AM=7/3, GM=2, HM=12/7</div>
 </div>
 
 <!-- Practice -->

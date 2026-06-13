@@ -109,9 +109,14 @@ class GeometryService {
   }
 
   /// Área aproximada (double) para lados reales arbitrarios.
+  /// Devuelve [double.nan] si los lados no forman un triángulo válido.
   static double heronAreaApprox(double a, double b, double c) {
+    if (a <= 0 || b <= 0 || c <= 0) return double.nan;
+    if (a + b <= c || a + c <= b || b + c <= a) return double.nan;
     final double s = (a + b + c) / 2;
-    return math.sqrt(s * (s - a) * (s - b) * (s - c));
+    final double product = s * (s - a) * (s - b) * (s - c);
+    if (product < 0) return double.nan;
+    return math.sqrt(product);
   }
 
   /// Verdadero si el triángulo es heroniano (lados enteros, área entera).
@@ -183,6 +188,106 @@ class GeometryService {
       sum = sum + (p.x * q.y - q.x * p.y);
     }
     return (sum * Fraction(BigInt.one, BigInt.two)).abs();
+  }
+
+  /// Teorema de Pick para un polígono simple con vértices enteros:
+  /// A = I + B/2 − 1, donde B son los puntos reticulares de la frontera
+  /// (Σ mcd(|Δx|, |Δy|) por arista) e I los interiores.
+  /// Devuelve (área exacta, B, I).
+  static ({Fraction area, BigInt boundary, BigInt interior}) pickAnalysis(
+      List<Point> vertices) {
+    if (vertices.length < 3) {
+      throw CalcException(CalcError.needAtLeast3Vertices);
+    }
+    for (final v in vertices) {
+      if (!v.x.isInteger || !v.y.isInteger) {
+        throw CalcException(CalcError.integerCoordinatesRequired);
+      }
+    }
+    final Fraction area = shoelaceArea(vertices);
+
+    BigInt boundary = BigInt.zero;
+    for (int i = 0; i < vertices.length; i++) {
+      final Point p = vertices[i];
+      final Point q = vertices[(i + 1) % vertices.length];
+      final BigInt dx = (q.x.numerator - p.x.numerator).abs();
+      final BigInt dy = (q.y.numerator - p.y.numerator).abs();
+      boundary += dx.gcd(dy);
+    }
+
+    // I = A − B/2 + 1
+    final Fraction interiorF = area -
+        Fraction(boundary, BigInt.two) +
+        Fraction.one;
+    return (area: area, boundary: boundary, interior: interiorF.truncate());
+  }
+
+  /// Centros del triángulo dado por coordenadas racionales.
+  ///
+  /// Baricentro G, circuncentro O y ortocentro H son exactos ([Point] con
+  /// fracciones); el incentro involucra √ y se devuelve aproximado.
+  /// G, O y H son colineales (recta de Euler) con H = 3G − 2O.
+  static ({
+    Point centroid,
+    Point circumcenter,
+    Point orthocenter,
+    double incenterX,
+    double incenterY,
+  }) triangleCenters(Point a, Point b, Point c) {
+    final Fraction three = Fraction.fromInt(3);
+
+    // Doble del área con signo (shoelace); 0 ⇒ colineales.
+    final Fraction cross = (b.x - a.x) * (c.y - a.y) - (c.x - a.x) * (b.y - a.y);
+    if (cross.isZero) {
+      throw CalcException(CalcError.collinearPoints);
+    }
+
+    final Point centroid = Point(
+      (a.x + b.x + c.x) / three,
+      (a.y + b.y + c.y) / three,
+    );
+
+    // Circuncentro: sistema lineal de las mediatrices (Cramer 2×2 exacto).
+    //   2(bx−ax)·Ox + 2(by−ay)·Oy = |b|² − |a|²
+    //   2(cx−ax)·Ox + 2(cy−ay)·Oy = |c|² − |a|²
+    final Fraction a11 = (b.x - a.x) * Fraction.fromInt(2);
+    final Fraction a12 = (b.y - a.y) * Fraction.fromInt(2);
+    final Fraction a21 = (c.x - a.x) * Fraction.fromInt(2);
+    final Fraction a22 = (c.y - a.y) * Fraction.fromInt(2);
+    final Fraction r1 =
+        b.x * b.x + b.y * b.y - a.x * a.x - a.y * a.y;
+    final Fraction r2 =
+        c.x * c.x + c.y * c.y - a.x * a.x - a.y * a.y;
+    final Fraction det = a11 * a22 - a12 * a21; // = 4·cross ≠ 0
+    final Point circumcenter = Point(
+      (r1 * a22 - r2 * a12) / det,
+      (a11 * r2 - a21 * r1) / det,
+    );
+
+    // Ortocentro por la identidad de Euler: H = A + B + C − 2O.
+    final Fraction two = Fraction.fromInt(2);
+    final Point orthocenter = Point(
+      a.x + b.x + c.x - two * circumcenter.x,
+      a.y + b.y + c.y - two * circumcenter.y,
+    );
+
+    // Incentro = (a·A + b·B + c·C)/(a+b+c) con a=|BC|, b=|CA|, c=|AB|.
+    final double la = b.distanceTo(c);
+    final double lb = a.distanceTo(c);
+    final double lc = a.distanceTo(b);
+    final double per = la + lb + lc;
+    final double ix =
+        (la * a.x.toDouble() + lb * b.x.toDouble() + lc * c.x.toDouble()) / per;
+    final double iy =
+        (la * a.y.toDouble() + lb * b.y.toDouble() + lc * c.y.toDouble()) / per;
+
+    return (
+      centroid: centroid,
+      circumcenter: circumcenter,
+      orthocenter: orthocenter,
+      incenterX: ix,
+      incenterY: iy,
+    );
   }
 
   // ── Ternas pitagóricas ───────────────────────────────────────────────────

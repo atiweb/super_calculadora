@@ -22,6 +22,26 @@ class CombinatoricsExtraService {
   static List<List<BigInt>> pascalTriangle(int n) =>
       List.generate(n + 1, (i) => pascalRow(i));
 
+  /// Triángulo de Pascal módulo m hasta la fila n (inclusive), construido
+  /// aditivamente (sin números grandes). Con m = 2 aparece el patrón de
+  /// Sierpiński.
+  static List<List<int>> pascalTriangleMod(int n, int m) {
+    if (n < 0) throw CalcException(CalcError.nNonNegative);
+    if (m < 2) throw CalcException(CalcError.nGreaterThanOne);
+    final List<List<int>> rows = [
+      [1 % m]
+    ];
+    for (int i = 1; i <= n; i++) {
+      final prev = rows.last;
+      final row = List<int>.filled(i + 1, 1 % m);
+      for (int k = 1; k < i; k++) {
+        row[k] = (prev[k - 1] + prev[k]) % m;
+      }
+      rows.add(row);
+    }
+    return rows;
+  }
+
   /// Coeficiente multinomial (k₁+k₂+…)! / (k₁!·k₂!·…).
   static BigInt multinomial(List<int> parts) {
     if (parts.any((k) => k < 0)) {
