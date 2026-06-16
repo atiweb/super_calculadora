@@ -119,9 +119,15 @@ class TrianglePainter extends CustomPainter {
   }
 
   void _angleLabel(Canvas canvas, Offset p, double deg, Offset centroid) {
-    final dir = _outward(p, centroid, -18); // inward
-    _text(canvas, Offset(p.dx + dir.dx - 14, p.dy + dir.dy - 6),
-        '${deg.toStringAsFixed(1)}°', textColor.withAlpha(180), 9);
+    // Coloca la etiqueta DENTRO de la cuña del ángulo, a una fracción del camino
+    // del vértice hacia el baricentro. Así escala con el tamaño del triángulo y
+    // no queda encima de las aristas (un desplazamiento fijo sí se solapaba).
+    final pos = Offset(
+      p.dx + (centroid.dx - p.dx) * 0.30,
+      p.dy + (centroid.dy - p.dy) * 0.30,
+    );
+    _text(canvas, Offset(pos.dx - 14, pos.dy - 6),
+        '${deg.toStringAsFixed(1)}°', textColor.withAlpha(200), 9);
   }
 
   /// Unit vector from [centroid] to [p], scaled by [dist].

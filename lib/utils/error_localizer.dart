@@ -23,6 +23,7 @@ String localizeError(BuildContext context, String key, [Map<String, String> args
     case 'errExprMalformed': return l.errExprMalformed;
     case 'errExprDivZero': return l.errExprDivZero;
     case 'errResultInvalid': return l.errResultInvalid;
+    case 'errResultTooLarge': return l.errResultTooLarge;
 
     // === Analysis ===
     case 'errAnalysisInvalid': return l.errAnalysisInvalid;
@@ -31,6 +32,7 @@ String localizeError(BuildContext context, String key, [Map<String, String> args
     // === Power / Roots ===
     case 'errPower': return l.errPower(err);
     case 'errSquareRoot': return l.errSquareRoot(err);
+    case 'errNegativeSqrt': return l.errNegativeSqrt;
     case 'errCubeRoot': return l.errCubeRoot(err);
 
     // === Binary conversion ===

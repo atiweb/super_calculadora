@@ -39,6 +39,7 @@
   "calcMathExpressions": "Math Expressions",
   "calcResult": "Result:",
   "calcProcessing": "Processing large numbers...",
+  "calcHighPrecision": "Calculating (high precision)…",
   "calcCancel": "Cancel",
   "displayPaste": "Paste",
   "displayCopy": "Copy",
@@ -139,6 +140,13 @@
   "settingsNumberFormat": "Number format",
   "settingsScientificNotation": "Use scientific notation",
   "settingsScientificHint": "Numbers will be displayed in full (e.g. 123000) when disabled",
+  "settingsHighPrecision": "High precision mode",
+  "settingsHighPrecisionHint": "Compute sin, cos, tan, ln, √… with exact constructive reals (slower). Singularities such as tan 90° are reported as undefined.",
+  "settingsPrecisionDigits": "Precision digits: {digits}",
+  "@settingsPrecisionDigits": {
+    "placeholders": { "digits": { "type": "int" } }
+  },
+  "settingsOpenSourceLicenses": "Open source licenses",
   "settingsFormatExamples": "Format examples",
   "settingsLargeNumber": "Large number:",
   "settingsSmallNumber": "Small number:",
@@ -300,6 +308,10 @@
         "type": "String"
       }
     }
+  },
+  "errNegativeSqrt": "Cannot take the square root of a negative number",
+  "@errNegativeSqrt": {
+    "description": "Error when taking square root of a negative number"
   },
   "errCubeRoot": "Cube root error: {error}",
   "@errCubeRoot": {
@@ -1070,6 +1082,7 @@
   "errExprMalformed": "Error: Malformed expression",
   "errExprDivZero": "Error: Division by zero",
   "errResultInvalid": "Error: Invalid result",
+  "errResultTooLarge": "The result is too large to compute exactly",
   "errAnalysisInvalid": "Error: Invalid number for analysis",
   "errAnalysisFail": "Cannot analyze the number",
   "errNoSolution": "No solution",

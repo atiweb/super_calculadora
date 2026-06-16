@@ -107,6 +107,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get calcProcessing => 'Procesando números grandes...';
 
   @override
+  String get calcHighPrecision => 'Calculando (alta precisión)…';
+
+  @override
   String get calcCancel => 'Cancelar';
 
   @override
@@ -257,6 +260,21 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get settingsScientificHint =>
       'Los números se mostrarán completos (ej: 123000) cuando esté deshabilitado';
+
+  @override
+  String get settingsHighPrecision => 'Modo de alta precisión';
+
+  @override
+  String get settingsHighPrecisionHint =>
+      'Calcula sin, cos, tan, ln, √… con reales constructivos exactos (más lento). Singularidades como tan 90° se reportan como indefinido.';
+
+  @override
+  String settingsPrecisionDigits(int digits) {
+    return 'Dígitos de precisión: $digits';
+  }
+
+  @override
+  String get settingsOpenSourceLicenses => 'Licencias de código abierto';
 
   @override
   String get settingsFormatExamples => 'Ejemplos de formato';
@@ -661,6 +679,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String errSquareRoot(String error) {
     return 'Error en raíz cuadrada: $error';
   }
+
+  @override
+  String get errNegativeSqrt =>
+      'No se puede calcular la raíz cuadrada de un número negativo';
 
   @override
   String errCubeRoot(String error) {
@@ -2197,6 +2219,10 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get errResultInvalid => 'Error: Resultado no válido';
+
+  @override
+  String get errResultTooLarge =>
+      'El resultado es demasiado grande para calcularse exactamente';
 
   @override
   String get errAnalysisInvalid => 'Error: número inválido para análisis';

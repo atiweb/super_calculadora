@@ -107,6 +107,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get calcProcessing => 'Processing large numbers...';
 
   @override
+  String get calcHighPrecision => 'Calculating (high precision)…';
+
+  @override
   String get calcCancel => 'Cancel';
 
   @override
@@ -255,6 +258,21 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get settingsScientificHint =>
       'Numbers will be displayed in full (e.g. 123000) when disabled';
+
+  @override
+  String get settingsHighPrecision => 'High precision mode';
+
+  @override
+  String get settingsHighPrecisionHint =>
+      'Compute sin, cos, tan, ln, √… with exact constructive reals (slower). Singularities such as tan 90° are reported as undefined.';
+
+  @override
+  String settingsPrecisionDigits(int digits) {
+    return 'Precision digits: $digits';
+  }
+
+  @override
+  String get settingsOpenSourceLicenses => 'Open source licenses';
 
   @override
   String get settingsFormatExamples => 'Format examples';
@@ -659,6 +677,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String errSquareRoot(String error) {
     return 'Square root error: $error';
   }
+
+  @override
+  String get errNegativeSqrt =>
+      'Cannot take the square root of a negative number';
 
   @override
   String errCubeRoot(String error) {
@@ -2184,6 +2206,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get errResultInvalid => 'Error: Invalid result';
+
+  @override
+  String get errResultTooLarge => 'The result is too large to compute exactly';
 
   @override
   String get errAnalysisInvalid => 'Error: Invalid number for analysis';

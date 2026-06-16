@@ -130,6 +130,10 @@
     "description": "Label shown before a calculation result"
   },
   "calcProcessing": "Procesando números grandes...",
+  "calcHighPrecision": "Calculando (alta precisión)…",
+  "@calcHighPrecision": {
+    "description": "Loader text while computing in high-precision mode"
+  },
   "@calcProcessing": {
     "description": "Message shown while processing large numbers"
   },
@@ -348,6 +352,23 @@
   "settingsScientificHint": "Los números se mostrarán completos (ej: 123000) cuando esté deshabilitado",
   "@settingsScientificHint": {
     "description": "Hint text for scientific notation toggle"
+  },
+  "settingsHighPrecision": "Modo de alta precisión",
+  "@settingsHighPrecision": {
+    "description": "High precision mode toggle title"
+  },
+  "settingsHighPrecisionHint": "Calcula sin, cos, tan, ln, √… con reales constructivos exactos (más lento). Singularidades como tan 90° se reportan como indefinido.",
+  "@settingsHighPrecisionHint": {
+    "description": "High precision mode hint"
+  },
+  "settingsPrecisionDigits": "Dígitos de precisión: {digits}",
+  "@settingsPrecisionDigits": {
+    "description": "Precision digits label",
+    "placeholders": { "digits": { "type": "int" } }
+  },
+  "settingsOpenSourceLicenses": "Licencias de código abierto",
+  "@settingsOpenSourceLicenses": {
+    "description": "Open source licenses entry"
   },
   "settingsFormatExamples": "Ejemplos de formato",
   "@settingsFormatExamples": {
@@ -895,6 +916,10 @@
         "type": "String"
       }
     }
+  },
+  "errNegativeSqrt": "No se puede calcular la raíz cuadrada de un número negativo",
+  "@errNegativeSqrt": {
+    "description": "Error when taking square root of a negative number"
   },
   "errCubeRoot": "Error en raíz cúbica: {error}",
   "@errCubeRoot": {
@@ -2939,6 +2964,10 @@
   "errExprDivZero": "Error: División por cero",
   "@errExprDivZero": { "description": "Error division by zero in expression" },
   "errResultInvalid": "Error: Resultado no válido",
+  "errResultTooLarge": "El resultado es demasiado grande para calcularse exactamente",
+  "@errResultTooLarge": {
+    "description": "Power/operation result would have too many digits"
+  },
   "@errResultInvalid": { "description": "Error when result is NaN or Infinite" },
   "errAnalysisInvalid": "Error: número inválido para análisis",
   "@errAnalysisInvalid": { "description": "Error when number is invalid for analysis" },

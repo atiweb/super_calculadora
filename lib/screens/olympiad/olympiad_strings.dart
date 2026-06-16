@@ -52,6 +52,14 @@ class OlympiadStrings {
   String get catStatisticsSub =>
       pick('Descriptiva exacta y desigualdad de medias',
           'Exact descriptive stats and mean inequality');
+  String get catMatrices => pick('Matrices', 'Matrices');
+  String get catMatricesSub =>
+      pick('Determinante, inversa, sistemas (exacto)',
+          'Determinant, inverse, systems (exact)');
+  String get catCalculus => pick('Cálculo', 'Calculus');
+  String get catCalculusSub =>
+      pick('Derivada, integral y límite numéricos',
+          'Numerical derivative, integral and limit');
 
   // Quiz
   String get catQuiz => pick('Práctica', 'Practice');

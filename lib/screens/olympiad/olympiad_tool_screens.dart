@@ -1,13 +1,17 @@
 import 'dart:math' as math;
 
+import 'package:flutter/foundation.dart' show compute;
 import 'package:flutter/material.dart';
 
+import '../../models/big_complex.dart';
 import '../../models/calc_exception.dart';
 import '../../models/complex.dart';
 import '../../models/fraction.dart';
+import '../../models/matrix.dart';
 import '../../models/point.dart';
 import '../../models/surd.dart';
 import '../../models/polynomial.dart';
+import '../../services/calculus_service.dart';
 import '../../services/combinatorics_extra_service.dart';
 import '../../services/geometry_service.dart';
 import '../../services/linear_system_service.dart';
@@ -54,6 +58,20 @@ List<Fraction> _fracList(String s) => s
     .where((e) => e.isNotEmpty)
     .map(Fraction.parse)
     .toList();
+
+/// Parsea una matriz: filas separadas por ';', entradas por ',' o espacios.
+Matrix _matrix(String s) {
+  final rows = s
+      .split(';')
+      .where((r) => r.trim().isNotEmpty)
+      .map((r) => r
+          .split(RegExp(r'[,\s]+'))
+          .where((e) => e.isNotEmpty)
+          .map(Fraction.parse)
+          .toList())
+      .toList();
+  return Matrix(rows);
+}
 
 /// Parsea "x,y" como punto de coordenadas racionales.
 Point _point(String s) {
@@ -496,7 +514,7 @@ class GeometryToolScreen extends StatelessWidget {
                 '${s.pick('Ortocentro', 'Orthocenter')} H: ${r.orthocenter}\n'
                 '${s.pick('Incentro', 'Incenter')} I ≈ '
                 '(${r.incenterX.toStringAsFixed(4)}, ${r.incenterY.toStringAsFixed(4)})\n'
-                '${s.pick('Recta de Euler', 'Euler line')}: H = 3G − 2O ✓';
+                '${s.pick('Recta de Euler', 'Euler line')}: H = 3·G − 2·O ✓';
           },
           visualize: (ctx, i) {
             final a = _point(i[0]), b = _point(i[1]), c = _point(i[2]);
@@ -941,9 +959,15 @@ class ComplexSequencesToolScreen extends StatelessWidget {
         CalcTool(
           title: s.pick('Raíces de la unidad', 'Roots of unity'),
           fields: [ToolField('n', initial: '3')],
-          compute: (i) => Complex.rootsOfUnity(_int(i[0]))
-              .map((c) => c.toString())
-              .join('\n'),
+          computeAsync: (i) async {
+            final n = _int(i[0]);
+            final res = await compute(bigComplexRootsOfUnityWorker,
+                <String, dynamic>{'n': n, 'digits': 20});
+            if (res['ok'] != true) {
+              throw FormatException(res['error'] as String? ?? 'error');
+            }
+            return res['result'] as String;
+          },
           visualize: (ctx, i) {
             final n = _int(i[0]);
             if (n < 1 || n > 60) return null;
@@ -968,9 +992,18 @@ class ComplexSequencesToolScreen extends StatelessWidget {
             ToolField('im', initial: '1'),
             ToolField('n', initial: '8'),
           ],
-          compute: (i) => Complex(double.parse(i[0]), double.parse(i[1]))
-              .pow(_int(i[2]))
-              .toString(),
+          computeAsync: (i) async {
+            final res = await compute(bigComplexPowWorker, <String, dynamic>{
+              're': i[0],
+              'im': i[1],
+              'n': _int(i[2]),
+              'digits': 20,
+            });
+            if (res['ok'] != true) {
+              throw FormatException(res['error'] as String? ?? 'error');
+            }
+            return res['result'] as String;
+          },
         ),
         CalcTool(
           title: s.pick('Raíces n-ésimas de complejo', 'n-th roots of complex'),
@@ -979,10 +1012,19 @@ class ComplexSequencesToolScreen extends StatelessWidget {
             ToolField('im', initial: '4'),
             ToolField('n', initial: '3'),
           ],
-          compute: (i) => Complex(double.parse(i[0]), double.parse(i[1]))
-              .nthRoots(_int(i[2]))
-              .map((c) => c.toString())
-              .join('\n'),
+          computeAsync: (i) async {
+            final res = await compute(bigComplexNthRootsWorker,
+                <String, dynamic>{
+                  're': i[0],
+                  'im': i[1],
+                  'n': _int(i[2]),
+                  'digits': 20,
+                });
+            if (res['ok'] != true) {
+              throw FormatException(res['error'] as String? ?? 'error');
+            }
+            return res['result'] as String;
+          },
           visualize: (ctx, i) {
             final n = _int(i[2]);
             if (n < 1 || n > 60) return null;
@@ -1157,4 +1199,191 @@ class StatisticsToolScreen extends StatelessWidget {
       ],
     );
   }
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// MATRICES (álgebra lineal exacta)
+// ════════════════════════════════════════════════════════════════════════════
+
+class MatricesToolScreen extends StatelessWidget {
+  const MatricesToolScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final s = OlympiadStrings.of(context);
+    final matrixHint = s.pick(
+        'Filas separadas por ";", entradas por ",". Admite fracciones.',
+        'Rows separated by ";", entries by ",". Fractions allowed.');
+    return _ToolScaffold(
+      title: s.catMatrices,
+      tools: [
+        CalcTool(
+          title: s.pick('Determinante', 'Determinant'),
+          description: matrixHint,
+          fields: [
+            ToolField(s.pick('Matriz', 'Matrix'), initial: '6,1,1; 4,-2,5; 2,8,7'),
+          ],
+          compute: (i) {
+            final m = _matrix(i[0]);
+            if (!m.isSquare) {
+              return s.pick('La matriz debe ser cuadrada', 'Matrix must be square');
+            }
+            final det = m.determinant();
+            return 'det = $det  ≈ ${det.toDouble()}';
+          },
+        ),
+        CalcTool(
+          title: s.pick('Inversa', 'Inverse'),
+          description: matrixHint,
+          fields: [
+            ToolField(s.pick('Matriz', 'Matrix'), initial: '4,7; 2,6'),
+          ],
+          compute: (i) {
+            final m = _matrix(i[0]);
+            final inv = m.inverse();
+            if (inv == null) {
+              return s.pick('Matriz singular o no cuadrada (sin inversa)',
+                  'Singular or non-square matrix (no inverse)');
+            }
+            return inv.toString();
+          },
+        ),
+        CalcTool(
+          title: s.pick('Multiplicar A × B', 'Multiply A × B'),
+          description: s.pick('Dos matrices separadas por "|".',
+              'Two matrices separated by "|".'),
+          fields: [
+            ToolField('A | B', initial: '1,2; 3,4 | 5,6; 7,8'),
+          ],
+          compute: (i) {
+            final parts = i[0].split('|');
+            if (parts.length != 2) {
+              throw CalcException(CalcError.invalidSystem);
+            }
+            return (_matrix(parts[0]) * _matrix(parts[1])).toString();
+          },
+        ),
+        CalcTool(
+          title: s.pick('Resolver A·x = b (n×n)', 'Solve A·x = b (n×n)'),
+          description: s.pick(
+              'Matriz A y vector b separados por "|".',
+              'Matrix A and vector b separated by "|".'),
+          fields: [
+            ToolField('A | b', initial: '2,1,1; 1,2,1; 1,1,2 | 1,1,1'),
+          ],
+          compute: (i) {
+            final parts = i[0].split('|');
+            if (parts.length != 2) {
+              throw CalcException(CalcError.invalidSystem);
+            }
+            final a = _matrix(parts[0]);
+            final b = _fracList(parts[1]);
+            final x = a.solve(b);
+            if (x == null) {
+              return s.pick('Sin solución única (singular)',
+                  'No unique solution (singular)');
+            }
+            final names = ['x', 'y', 'z', 'w'];
+            final sb = StringBuffer();
+            for (int k = 0; k < x.length; k++) {
+              final name = k < names.length ? names[k] : 'x${k + 1}';
+              sb.write('${k > 0 ? '\n' : ''}$name = ${x[k]}'
+                  '  ≈ ${x[k].toDouble().toStringAsFixed(6)}');
+            }
+            return sb.toString();
+          },
+        ),
+        CalcTool(
+          title: s.pick('Rango y transpuesta', 'Rank and transpose'),
+          description: matrixHint,
+          fields: [
+            ToolField(s.pick('Matriz', 'Matrix'), initial: '1,2,3; 2,4,6; 1,0,1'),
+          ],
+          compute: (i) {
+            final m = _matrix(i[0]);
+            return '${s.pick('Rango', 'Rank')}: ${m.rank()}\n'
+                '${s.pick('Transpuesta', 'Transpose')}:\n${m.transpose()}';
+          },
+        ),
+      ],
+    );
+  }
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// CÁLCULO (numérico)
+// ════════════════════════════════════════════════════════════════════════════
+
+class CalculusToolScreen extends StatelessWidget {
+  const CalculusToolScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final s = OlympiadStrings.of(context);
+    final fnHint = s.pick(
+        'Función de x. Trig en radianes. Ej: x^2+sin(x), 1/x, exp(x).',
+        'Function of x. Trig in radians. E.g. x^2+sin(x), 1/x, exp(x).');
+    return _ToolScaffold(
+      title: s.catCalculus,
+      tools: [
+        CalcTool(
+          title: s.pick('Derivada f\'(x₀)', 'Derivative f\'(x₀)'),
+          description: fnHint,
+          fields: [
+            ToolField('f(x)', initial: 'x^2 + sin(x)'),
+            ToolField('x₀', initial: '1'),
+          ],
+          compute: (i) {
+            final d = CalculusService.derivative(i[0], double.parse(i[1]));
+            if (!CalculusService.isUsable(d)) {
+              throw CalcException(CalcError.invalidOperation);
+            }
+            return "f'(${i[1]}) ≈ ${_fmtNum(d)}";
+          },
+        ),
+        CalcTool(
+          title: s.pick('Integral definida ∫', 'Definite integral ∫'),
+          description: fnHint,
+          fields: [
+            ToolField('f(x)', initial: 'x^2'),
+            ToolField('a', initial: '0'),
+            ToolField('b', initial: '1'),
+          ],
+          compute: (i) {
+            final v = CalculusService.integral(
+                i[0], double.parse(i[1]), double.parse(i[2]));
+            if (!CalculusService.isUsable(v)) {
+              throw CalcException(CalcError.invalidOperation);
+            }
+            return '∫ from ${i[1]} to ${i[2]} ≈ ${_fmtNum(v)}';
+          },
+        ),
+        CalcTool(
+          title: s.pick('Límite (numérico)', 'Limit (numerical)'),
+          description: fnHint,
+          fields: [
+            ToolField('f(x)', initial: 'sin(x)/x'),
+            ToolField('x₀', initial: '0'),
+          ],
+          compute: (i) {
+            final l = CalculusService.limit(i[0], double.parse(i[1]));
+            if (l == null) {
+              return s.pick(
+                  'No existe (límites laterales distintos o no finitos)',
+                  'Does not exist (one-sided limits differ or not finite)');
+            }
+            return 'lim x→${i[1]} ≈ ${_fmtNum(l)}';
+          },
+        ),
+      ],
+    );
+  }
+}
+
+/// Formatea un double: entero exacto sin decimales; si no, ~10 cifras limpias.
+String _fmtNum(double v) {
+  if (v == v.roundToDouble() && v.abs() < 1e15) {
+    return v.toInt().toString();
+  }
+  return double.parse(v.toStringAsPrecision(10)).toString();
 }

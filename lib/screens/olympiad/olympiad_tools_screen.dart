@@ -30,6 +30,10 @@ class OlympiadToolsScreen extends StatelessWidget {
           () => const ComplexSequencesToolScreen()),
       _Category(Icons.bar_chart, s.catStatistics, s.catStatisticsSub,
           () => const StatisticsToolScreen()),
+      _Category(Icons.grid_on, s.catMatrices, s.catMatricesSub,
+          () => const MatricesToolScreen()),
+      _Category(Icons.show_chart, s.catCalculus, s.catCalculusSub,
+          () => const CalculusToolScreen()),
       _Category(Icons.quiz_outlined, s.catQuiz, s.catQuizSub,
           () => const QuizScreen()),
     ];

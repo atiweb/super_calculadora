@@ -190,13 +190,40 @@ class _CalculatorDisplayState extends State<CalculatorDisplay> {
       displayText = _formatScientificNotation(calculator.display);
     }
 
-    bool isLargeNumber = displayText.length > 20 && !useScientificNotation && !calculator.hasError;
+    // Los mensajes de error son prosa: deben ajustarse en varias líneas en vez
+    // de desbordarse en una sola línea con scroll horizontal (que recorta el
+    // inicio del texto).
+    if (calculator.hasError) {
+      return _buildErrorDisplay(context, displayText);
+    }
+
+    bool isLargeNumber = displayText.length > 20 && !useScientificNotation;
 
   if (isLargeNumber) {
       return _buildScrollableDisplay(context, displayText, calculator);
     } else {
       return _buildSingleLineDisplay(context, displayText, calculator);
     }
+  }
+
+  Widget _buildErrorDisplay(BuildContext context, String displayText) {
+    return Container(
+      width: double.infinity,
+      constraints: const BoxConstraints(maxHeight: 140),
+      padding: const EdgeInsets.symmetric(horizontal: 4),
+      child: SingleChildScrollView(
+        child: SelectableText(
+          displayText,
+          style: TextStyle(
+            fontSize: displayText.length <= 24 ? 22 : 18,
+            fontWeight: FontWeight.bold,
+            color: Theme.of(context).colorScheme.error,
+            height: 1.2,
+          ),
+          textAlign: TextAlign.right,
+        ),
+      ),
+    );
   }
 
   String _cleanDecimalDisplay(String number) {

@@ -290,6 +290,12 @@ abstract class AppLocalizations {
   /// **'Procesando números grandes...'**
   String get calcProcessing;
 
+  /// Loader text while computing in high-precision mode
+  ///
+  /// In es, this message translates to:
+  /// **'Calculando (alta precisión)…'**
+  String get calcHighPrecision;
+
   /// Cancel button label during processing
   ///
   /// In es, this message translates to:
@@ -553,6 +559,30 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Los números se mostrarán completos (ej: 123000) cuando esté deshabilitado'**
   String get settingsScientificHint;
+
+  /// High precision mode toggle title
+  ///
+  /// In es, this message translates to:
+  /// **'Modo de alta precisión'**
+  String get settingsHighPrecision;
+
+  /// High precision mode hint
+  ///
+  /// In es, this message translates to:
+  /// **'Calcula sin, cos, tan, ln, √… con reales constructivos exactos (más lento). Singularidades como tan 90° se reportan como indefinido.'**
+  String get settingsHighPrecisionHint;
+
+  /// Precision digits label
+  ///
+  /// In es, this message translates to:
+  /// **'Dígitos de precisión: {digits}'**
+  String settingsPrecisionDigits(int digits);
+
+  /// Open source licenses entry
+  ///
+  /// In es, this message translates to:
+  /// **'Licencias de código abierto'**
+  String get settingsOpenSourceLicenses;
 
   /// Section title for format examples
   ///
@@ -1339,6 +1369,12 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Error en raíz cuadrada: {error}'**
   String errSquareRoot(String error);
+
+  /// Error when taking square root of a negative number
+  ///
+  /// In es, this message translates to:
+  /// **'No se puede calcular la raíz cuadrada de un número negativo'**
+  String get errNegativeSqrt;
 
   /// Error message for cube root operation
   ///
@@ -4081,6 +4117,12 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Error: Resultado no válido'**
   String get errResultInvalid;
+
+  /// Power/operation result would have too many digits
+  ///
+  /// In es, this message translates to:
+  /// **'El resultado es demasiado grande para calcularse exactamente'**
+  String get errResultTooLarge;
 
   /// Error when number is invalid for analysis
   ///

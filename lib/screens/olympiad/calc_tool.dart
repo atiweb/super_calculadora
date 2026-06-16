@@ -25,7 +25,14 @@ class CalcTool extends StatefulWidget {
   final String title;
   final String? description;
   final List<ToolField> fields;
-  final String Function(List<String> inputs) compute;
+
+  /// Cálculo síncrono (rápido). Usar para la mayoría de herramientas.
+  final String Function(List<String> inputs)? compute;
+
+  /// Cálculo asíncrono (p. ej. alta precisión en un isolate). Si se provee,
+  /// el botón muestra un indicador de progreso y NO se bloquea la UI.
+  final Future<String> Function(List<String> inputs)? computeAsync;
+
   final Widget? Function(BuildContext context, List<String> inputs)? visualize;
 
   const CalcTool({
@@ -33,9 +40,11 @@ class CalcTool extends StatefulWidget {
     required this.title,
     this.description,
     required this.fields,
-    required this.compute,
+    this.compute,
+    this.computeAsync,
     this.visualize,
-  });
+  }) : assert(compute != null || computeAsync != null,
+            'Provide compute or computeAsync');
 
   @override
   State<CalcTool> createState() => _CalcToolState();
@@ -46,6 +55,7 @@ class _CalcToolState extends State<CalcTool> {
   String? _result;
   String? _error;
   List<String>? _lastSuccessfulInputs;
+  bool _busy = false;
 
   @override
   void initState() {
@@ -63,28 +73,56 @@ class _CalcToolState extends State<CalcTool> {
     super.dispose();
   }
 
-  void _run() {
+  /// Traduce una excepción a texto legible (CalcException por código, etc.).
+  String _translate(Object e, OlympiadStrings s) {
+    if (e is CalcException) return s.errorText(e);
+    if (e is FormatException) return e.message;
+    if (e is ArgumentError) return e.message?.toString() ?? e.toString();
+    return e.toString();
+  }
+
+  Future<void> _run() async {
     final s = OlympiadStrings.of(context);
     final inputs = _controllers.map((c) => c.text.trim()).toList();
+
+    // Ruta asíncrona (alta precisión en isolate): muestra progreso, sin congelar.
+    if (widget.computeAsync != null) {
+      setState(() {
+        _busy = true;
+        _error = null;
+      });
+      String? result;
+      String? error;
+      try {
+        result = await widget.computeAsync!(inputs);
+      } catch (e) {
+        error = _translate(e, s);
+      }
+      if (!mounted) return;
+      setState(() {
+        _busy = false;
+        if (error == null) {
+          _result = result;
+          _lastSuccessfulInputs = inputs;
+          _error = null;
+        } else {
+          _error = '${s.errorPrefix}: $error';
+          _result = null;
+        }
+      });
+      return;
+    }
+
+    // Ruta síncrona (rápida).
     setState(() {
       try {
-        _result = widget.compute(inputs);
+        _result = widget.compute!(inputs);
         _lastSuccessfulInputs = inputs;
         _error = null;
       } catch (e) {
-        // CalcException primero (extiende ArgumentError): se traduce por código.
-        if (e is CalcException) {
-          _error = s.errorText(e);
-        } else if (e is FormatException) {
-          _error = e.message;
-        } else if (e is ArgumentError) {
-          _error = e.message?.toString() ?? e.toString();
-        } else {
-          _error = e.toString();
-        }
+        _error = '${s.errorPrefix}: ${_translate(e, s)}';
         _result = null;
       }
-      if (_error != null) _error = '${s.errorPrefix}: $_error';
     });
   }
 
@@ -126,8 +164,14 @@ class _CalcToolState extends State<CalcTool> {
             Align(
               alignment: Alignment.centerRight,
               child: FilledButton.icon(
-                onPressed: _run,
-                icon: const Icon(Icons.play_arrow, size: 18),
+                onPressed: _busy ? null : _run,
+                icon: _busy
+                    ? const SizedBox(
+                        width: 18,
+                        height: 18,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      )
+                    : const Icon(Icons.play_arrow, size: 18),
                 label: Text(s.compute),
               ),
             ),

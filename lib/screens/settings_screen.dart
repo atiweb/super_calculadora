@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../l10n/app_localizations.dart';
 import '../providers/theme_provider.dart';
 import '../models/theme_mode.dart' as app_theme;
+import '../services/settings_service.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -12,6 +13,16 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
+  late bool _highPrecision;
+  late int _precisionDigits;
+
+  @override
+  void initState() {
+    super.initState();
+    _highPrecision = SettingsService.getHighPrecisionMode();
+    _precisionDigits = SettingsService.getPrecisionDigits();
+  }
+
   String _themeDisplayName(app_theme.ThemeMode mode, AppLocalizations l) {
     switch (mode) {
       case app_theme.ThemeMode.light:
@@ -256,6 +267,66 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
               const SizedBox(height: 16),
 
+              // Alta precisión (reales constructivos)
+              Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Icon(Icons.precision_manufacturing,
+                              color: Theme.of(context).primaryColor),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              l.settingsHighPrecision,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium
+                                  ?.copyWith(fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      SwitchListTile(
+                        title: Text(l.settingsHighPrecision),
+                        subtitle: Text(l.settingsHighPrecisionHint),
+                        value: _highPrecision,
+                        onChanged: (bool value) async {
+                          await SettingsService.setHighPrecisionMode(value);
+                          setState(() => _highPrecision = value);
+                        },
+                        secondary: Icon(_highPrecision
+                            ? Icons.precision_manufacturing
+                            : Icons.calculate_outlined),
+                        contentPadding: EdgeInsets.zero,
+                      ),
+                      if (_highPrecision) ...[
+                        const SizedBox(height: 8),
+                        Text(l.settingsPrecisionDigits(_precisionDigits)),
+                        Slider(
+                          min: SettingsService.minPrecisionDigits.toDouble(),
+                          max: SettingsService.maxPrecisionDigits.toDouble(),
+                          divisions: SettingsService.maxPrecisionDigits -
+                              SettingsService.minPrecisionDigits,
+                          value: _precisionDigits.toDouble(),
+                          label: '$_precisionDigits',
+                          onChanged: (v) =>
+                              setState(() => _precisionDigits = v.round()),
+                          onChangeEnd: (v) =>
+                              SettingsService.setPrecisionDigits(v.round()),
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 16),
+
               // Informações do App
               Card(
                 child: Padding(
@@ -290,6 +361,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         title: Text(l.appDeveloped),
                         subtitle: Text(l.appDynamicThemes),
                         contentPadding: EdgeInsets.zero,
+                      ),
+                      ListTile(
+                        leading: const Icon(Icons.workspace_premium_outlined),
+                        title: Text(l.settingsOpenSourceLicenses),
+                        trailing: const Icon(Icons.chevron_right),
+                        contentPadding: EdgeInsets.zero,
+                        onTap: () => showLicensePage(
+                          context: context,
+                          applicationName: l.appTitle,
+                          applicationVersion: l.appVersion,
+                        ),
                       ),
                     ],
                   ),
