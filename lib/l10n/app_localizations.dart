@@ -4052,6 +4052,36 @@ abstract class AppLocalizations {
   /// **'Al ingresar cualquier número, el panel derecho (tablet) o inferior (móvil) muestra automáticamente:\n\n• Propiedades: dígitos, paridad, signo\n• Representaciones: binario, octal, hexadecimal\n• Primalidad: test Miller-Rabin, factorización completa\n• Primos vecinos: anterior y siguiente\n• Divisores: lista completa, suma, cantidad\n• Clasificaciones: cuadrado/cubo perfecto, potencia perfecta, Fibonacci, triangular, palíndromo\n\nPara números ≤ 15 dígitos, también muestra:\n\n• Funciones aritméticas: φ, λ, μ, ω, Ω, sopfr, sopf, rad, dr\n• Clasificaciones: libre de cuadrados, poderoso, Harshad, semiprimo, abundante/deficiente/perfecto'**
   String get hlpAutoAnalysisContent;
 
+  /// Help section header for high precision and new tools
+  ///
+  /// In es, this message translates to:
+  /// **'Alta Precisión y Herramientas'**
+  String get hlpHighPrecHeader;
+
+  /// High precision help card title
+  ///
+  /// In es, this message translates to:
+  /// **'Modo de alta precisión'**
+  String get hlpHighPrecTitle;
+
+  /// High precision help card content
+  ///
+  /// In es, this message translates to:
+  /// **'Actívalo en Ajustes. Calcula sin, cos, tan, ln, log, exp, √ y ∛ con reales constructivos EXACTOS y redondea solo al mostrar (5–100 dígitos). Sin error de punto flotante: √2 a 30 dígitos = 1.41421356237309504880168872421. Las singularidades se detectan por construcción (tan 90° = indefinido). Todo corre en segundo plano con un indicador de carga, sin congelar la app.'**
+  String get hlpHighPrecContent;
+
+  /// Olympiad tools overview card title
+  ///
+  /// In es, this message translates to:
+  /// **'Herramientas de Olimpiada'**
+  String get hlpNewToolsTitle;
+
+  /// Olympiad tools overview card content
+  ///
+  /// In es, this message translates to:
+  /// **'Desde el menú lateral → Herramientas de Olimpiada: Fracciones, Radicales, Geometría (con dibujos: triángulo, Pick, centros y recta de Euler), Polinomios (gráfica, Ruffini, sistemas n×n), Teoría de Números (criba, reloj modular, residuos), Procedimientos paso a paso, Complejos (círculo unitario, Sierpiński — en alta precisión), Estadística, Matrices (exactas), Cálculo (derivada/integral/límite) y Práctica con verificación.'**
+  String get hlpNewToolsContent;
+
   /// Olympiad formulas section header
   ///
   /// In es, this message translates to:

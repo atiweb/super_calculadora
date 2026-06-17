@@ -2928,6 +2928,16 @@
   "@hlpAutoAnalysisContent": {
     "description": "Auto analysis info card content"
   },
+  "hlpHighPrecHeader": "Alta Precisión y Herramientas",
+  "@hlpHighPrecHeader": { "description": "Help section header for high precision and new tools" },
+  "hlpHighPrecTitle": "Modo de alta precisión",
+  "@hlpHighPrecTitle": { "description": "High precision help card title" },
+  "hlpHighPrecContent": "Actívalo en Ajustes. Calcula sin, cos, tan, ln, log, exp, √ y ∛ con reales constructivos EXACTOS y redondea solo al mostrar (5–100 dígitos). Sin error de punto flotante: √2 a 30 dígitos = 1.41421356237309504880168872421. Las singularidades se detectan por construcción (tan 90° = indefinido). Todo corre en segundo plano con un indicador de carga, sin congelar la app.",
+  "@hlpHighPrecContent": { "description": "High precision help card content" },
+  "hlpNewToolsTitle": "Herramientas de Olimpiada",
+  "@hlpNewToolsTitle": { "description": "Olympiad tools overview card title" },
+  "hlpNewToolsContent": "Desde el menú lateral → Herramientas de Olimpiada: Fracciones, Radicales, Geometría (con dibujos: triángulo, Pick, centros y recta de Euler), Polinomios (gráfica, Ruffini, sistemas n×n), Teoría de Números (criba, reloj modular, residuos), Procedimientos paso a paso, Complejos (círculo unitario, Sierpiński — en alta precisión), Estadística, Matrices (exactas), Cálculo (derivada/integral/límite) y Práctica con verificación.",
+  "@hlpNewToolsContent": { "description": "Olympiad tools overview card content" },
   "hlpOlympiadHeader": "Fórmulas Clave para Olimpiadas",
   "@hlpOlympiadHeader": {
     "description": "Olympiad formulas section header"
