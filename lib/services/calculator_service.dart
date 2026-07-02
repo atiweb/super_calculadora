@@ -2040,6 +2040,11 @@ class CalculatorService extends ChangeNotifier {
     _isHistoryVisible = !_isHistoryVisible;
     notifyListeners();
   }
+
+  /// Recarga el historial desde el almacenamiento. Necesario cuando otra
+  /// pantalla (p. ej. HistoryScreen) muta HistoryService directamente: la
+  /// copia en memoria de este servicio quedaba desactualizada hasta reiniciar.
+  Future<void> reloadHistory() => _loadHistory();
   
   /// Evalúa una expresión matemática completa usando math_expressions
   String evaluateCompleteExpression(String expression) {

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import '../l10n/app_localizations.dart';
 import '../models/operation_entry.dart';
+import '../services/calculator_service.dart';
 import '../services/history_service.dart';
 
 class HistoryScreen extends StatefulWidget {
@@ -72,6 +74,10 @@ class _HistoryScreenState extends State<HistoryScreen> {
         await HistoryService.clearHistory();
         await _loadHistory();
         if (mounted) {
+          // Sincronizar la copia en memoria del panel de la calculadora
+          await context.read<CalculatorService>().reloadHistory();
+        }
+        if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(l.histCleared)),
           );
@@ -91,6 +97,10 @@ class _HistoryScreenState extends State<HistoryScreen> {
     try {
       await HistoryService.removeOperation(operation);
       await _loadHistory();
+      if (mounted) {
+        // Sincronizar la copia en memoria del panel de la calculadora
+        await context.read<CalculatorService>().reloadHistory();
+      }
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(l.histOperationDeleted)),
@@ -232,7 +242,10 @@ class _HistoryScreenState extends State<HistoryScreen> {
     );
   }
 
-  String _formatTimestamp(DateTime timestamp) {
+  String _formatTimestamp(OperationEntry operation) {
+    // Entradas del formato antiguo, sin marca de tiempo persistida
+    if (!operation.timestampKnown) return '—';
+    final timestamp = operation.timestamp;
     final now = DateTime.now();
     final difference = now.difference(timestamp);
 
@@ -471,7 +484,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                             ),
                             const SizedBox(height: 8),
                             Text(
-                              _formatTimestamp(operation.timestamp),
+                              _formatTimestamp(operation),
                               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                                 color: Theme.of(context).colorScheme.outline,
                               ),

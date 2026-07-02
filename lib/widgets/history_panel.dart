@@ -278,7 +278,7 @@ class HistoryPanel extends StatelessWidget {
                   const SizedBox(width: 8),
                   // Timestamp
                   Text(
-                    _formatTimestamp(context, entry.timestamp),
+                    _formatTimestamp(context, entry),
                     style: TextStyle(
                       fontSize: 11,
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
@@ -293,10 +293,12 @@ class HistoryPanel extends StatelessWidget {
     );
   }
 
-  String _formatTimestamp(BuildContext context, DateTime timestamp) {
+  String _formatTimestamp(BuildContext context, OperationEntry entry) {
+    // Entradas del formato antiguo, sin marca de tiempo persistida
+    if (!entry.timestampKnown) return '—';
     final l = AppLocalizations.of(context)!;
     final now = DateTime.now();
-    final difference = now.difference(timestamp);
+    final difference = now.difference(entry.timestamp);
 
     if (difference.inMinutes < 1) {
       return l.histNow;

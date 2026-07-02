@@ -123,11 +123,14 @@ void main() {
       );
 
       final serialized = operation.toStorageString();
-      expect(serialized, '2 ^ 3=8');
-
       final deserialized = OperationEntry.fromStorageString(serialized);
       expect(deserialized.expression, '2 ^ 3');
       expect(deserialized.result, '8');
+      // La marca de tiempo sobrevive al guardado (precisión de milisegundos);
+      // el formato antiguo la perdía y todo aparecía como "Ahora" al reiniciar.
+      expect(deserialized.timestampKnown, isTrue);
+      expect(deserialized.timestamp.millisecondsSinceEpoch,
+          operation.timestamp.millisecondsSinceEpoch);
     });
 
     test('Serialización con resultado que contiene "="', () {
@@ -137,11 +140,19 @@ void main() {
       );
 
       final serialized = operation.toStorageString();
-      expect(serialized, '2 + 3=5 = 5.0');
-
       final deserialized = OperationEntry.fromStorageString(serialized);
       expect(deserialized.expression, '2 + 3');
       expect(deserialized.result, '5 = 5.0');
+    });
+
+    test('Compatibilidad con el formato antiguo expresión=resultado', () {
+      final deserialized = OperationEntry.fromStorageString('2 + 3=5 = 5.0');
+      expect(deserialized.expression, '2 + 3');
+      expect(deserialized.result, '5 = 5.0');
+      // Sin marca de tiempo conocida: la UI no debe fingir "Ahora"
+      expect(deserialized.timestampKnown, isFalse);
+      // Devuelve la cadena original para que el borrado exacto siga funcionando
+      expect(deserialized.toStorageString(), '2 + 3=5 = 5.0');
     });
 
     test('Límite de historial', () async {
