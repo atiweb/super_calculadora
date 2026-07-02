@@ -14,6 +14,13 @@
   <img src="https://img.shields.io/badge/license-MIT-lightgrey?style=flat-square" alt="License"/>
   <img src="https://img.shields.io/badge/offline-100%25-brightgreen?style=flat-square" alt="Offline"/>
   <a href="https://play.google.com/store/apps/details?id=br.dev.ati.supercalculadora"><img src="https://img.shields.io/badge/Google%20Play-Available-success?style=flat-square" alt="Google Play"/></a>
+  <a href="https://atiweb.github.io/super_calculadora/"><img src="https://img.shields.io/badge/📖%20User%20Guide-online-6750a4?style=flat-square" alt="User Guide"/></a>
+</p>
+
+<p align="center">
+  <b><a href="https://atiweb.github.io/super_calculadora/">📖 Online User Guide &amp; Function Reference</a></b> (bilingual EN/ES)
+  &nbsp;·&nbsp;
+  🧪 <b><a href="https://atiweb.github.io/super_calculadora/#beta">Help test the app</a></b> (closed beta)
 </p>
 
 ---
@@ -198,7 +205,7 @@ lib/
 - **Constructive reals (optional)** — vendored `computable_reals` gives exact, lazily-evaluated transcendental functions to any precision
 - **Exact rational layer** — `Fraction`-based matrices and polynomials (Gaussian elimination, no rounding)
 - **Isolate-based computation** — heavy and high-precision operations run off the UI thread with a loader; an overflow guard rejects infeasible exact powers instantly
-- **Miller-Rabin primality** — probabilistic prime testing with deterministic bases for n < 3.2×10¹⁸
+- **Miller-Rabin primality** — deterministic for n < 3.3×10²⁴ using the first 12 prime bases (no false positives in that range)
 - **Fast Fibonacci** — O(log n) doubling algorithm
 - **Android 15 ready** — edge-to-edge layout, portrait-locked
 
