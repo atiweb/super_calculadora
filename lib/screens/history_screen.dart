@@ -28,11 +28,13 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
     try {
       final history = await HistoryService.getHistory();
+      if (!mounted) return; // volver atrás durante la carga disponía el estado
       setState(() {
         _history = history;
         _isLoading = false;
       });
     } catch (e) {
+      if (!mounted) return;
       setState(() {
         _isLoading = false;
       });

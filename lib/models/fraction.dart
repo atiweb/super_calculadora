@@ -70,9 +70,16 @@ class Fraction implements Comparable<Fraction> {
   factory Fraction.fromDecimalString(String input) {
     final s = input.trim();
     final bool negative = s.startsWith('-');
-    final String body = negative ? s.substring(1) : s;
+    final String body =
+        (negative || s.startsWith('+')) ? s.substring(1) : s;
     final parts = body.split('.');
-    if (parts.length > 2) {
+    // Tras extraer el signo inicial solo se admiten dígitos (BigInt.parse
+    // aceptaría signos incrustados como "5.-5" y corrompería el valor) y
+    // debe haber al menos un dígito ("." no es un número).
+    final RegExp digitsOnly = RegExp(r'^[0-9]*$');
+    if (parts.length > 2 ||
+        parts.any((p) => !digitsOnly.hasMatch(p)) ||
+        parts.every((p) => p.isEmpty)) {
       throw CalcException(CalcError.invalidNumber, {'value': input});
     }
     final BigInt intPart =

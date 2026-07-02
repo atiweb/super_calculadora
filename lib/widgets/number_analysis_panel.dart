@@ -4,9 +4,16 @@ import '../l10n/app_localizations.dart';
 import '../services/calculator_service.dart';
 import '../services/settings_service.dart';
 import '../services/special_functions_service.dart';
+import '../utils/error_localizer.dart';
 
 class NumberAnalysisPanel extends StatelessWidget {
   const NumberAnalysisPanel({super.key});
+
+  /// El servicio marca "no aplica" con un texto localizado; comparar contra
+  /// ambos idiomas (comparar solo el literal español dejaba pasar 'Not prime'
+  /// como si fuera un valor).
+  static bool _isNotPrimeMarker(dynamic value) =>
+      value == 'No es primo' || value == 'Not prime';
 
   @override
   Widget build(BuildContext context) {
@@ -89,7 +96,9 @@ class NumberAnalysisPanel extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  analysis['error'],
+                  // El servicio a veces guarda una clave ('errAnalysisFail');
+                  // localizeError la traduce y deja pasar el texto libre.
+                  localizeError(context, analysis['error'].toString()),
                   style: TextStyle(
                     fontSize: 14,
                     color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
@@ -313,11 +322,11 @@ class NumberAnalysisPanel extends StatelessWidget {
                     _buildInfoRow(l.analysisDigits, analysis['digitCount']?.toString() ?? 'N/A'),
 
                     // 4. Siguiente primo
-                    if (analysis['nextPrime'] != null && analysis['nextPrime'] != 'No es primo')
+                    if (analysis['nextPrime'] != null && !_isNotPrimeMarker(analysis['nextPrime']))
                       _buildInfoRow(l.analysisNextPrime, analysis['nextPrime']),
 
                     // 5. Anterior primo
-                    if (analysis['previousPrime'] != null && analysis['previousPrime'] != 'No es primo')
+                    if (analysis['previousPrime'] != null && !_isNotPrimeMarker(analysis['previousPrime']))
                       _buildInfoRow(l.analysisPrevPrime, analysis['previousPrime']),
 
                     // 6. Suma de dígitos
@@ -365,12 +374,12 @@ class NumberAnalysisPanel extends StatelessWidget {
                     // Mostrar estado de cálculo de primos o resultados
                     if (analysis.containsKey('calculatingPrimes') && analysis['calculatingPrimes'] == true)
                       _buildLoadingRow(l.analysisNextPrime, l.analysisCalculatingPrimes)
-                    else if (analysis['nextPrime'] != null && analysis['nextPrime'] != 'No es primo')
+                    else if (analysis['nextPrime'] != null && !_isNotPrimeMarker(analysis['nextPrime']))
                       _buildInfoRow(l.analysisNextPrime, analysis['nextPrime']),
 
                     if (analysis.containsKey('calculatingPrimes') && analysis['calculatingPrimes'] == true)
                       _buildLoadingRow(l.analysisPrevPrime, l.analysisCalculatingPrimes)
-                    else if (analysis['previousPrime'] != null && analysis['previousPrime'] != 'No es primo')
+                    else if (analysis['previousPrime'] != null && !_isNotPrimeMarker(analysis['previousPrime']))
                       _buildInfoRow(l.analysisPrevPrime, analysis['previousPrime']),
 
                     _buildInfoRow(l.analysisIsPerfect, _formatBooleanStatus(analysis['isPerfect'], l)),
@@ -521,21 +530,25 @@ class NumberAnalysisPanel extends StatelessWidget {
     // Formatear valor para notación científica si es necesario
     String displayValue = value;
     if (shouldUseScientific && value.length > 15 && value != 'N/A') {
-      try {
-        if (value.contains('e') || value.contains('E')) {
-          displayValue = value; // Ya está en notación científica
-        } else {
-          double numValue = double.parse(value);
-          displayValue = numValue.toStringAsExponential(6);
+      if (value.contains('e') || value.contains('E')) {
+        displayValue = value; // Ya está en notación científica
+      } else if (RegExp(r'^-?\d+$').hasMatch(value)) {
+        // Notación manual sobre los dígitos: double da Infinity con >308
+        // dígitos, y así no se redondea la mantisa.
+        final bool neg = value.startsWith('-');
+        final String digits = neg ? value.substring(1) : value;
+        String mantissa = digits[0];
+        if (digits.length > 1) {
+          final int end = digits.length < 7 ? digits.length : 7;
+          mantissa += '.${digits.substring(1, end)}';
         }
-      } catch (e) {
-        // Para números extremadamente grandes, crear notación científica manual
-        if (value.length > 15 && !value.contains('.')) {
-          String mantissa = value.substring(0, 1);
-          if (value.length > 1) {
-            mantissa += '.${value.substring(1, 7)}';
-          }
-          displayValue = '${mantissa}e+${value.length - 1}';
+        displayValue = '${neg ? '-' : ''}${mantissa}e+${digits.length - 1}';
+      } else {
+        // Decimales largos por double; la prosa ("No calculado (muy grande)")
+        // se deja intacta: antes se mutilaba a "N.o calce+24".
+        final double? numValue = double.tryParse(value);
+        if (numValue != null && numValue.isFinite) {
+          displayValue = numValue.toStringAsExponential(6);
         }
       }
     }

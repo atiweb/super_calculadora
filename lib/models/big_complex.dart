@@ -1,4 +1,5 @@
 import '../vendor/computable_reals/computable_reals.dart';
+import 'calc_exception.dart';
 
 /// Número complejo de **precisión arbitraria**, con parte real e imaginaria
 /// como reales constructivos ([CReal]).
@@ -104,14 +105,39 @@ class BigComplex {
   String toString() => toStringAsPrecision(15);
 }
 
+/// Signo (-1, 0, 1) de un literal decimal a partir de sus dígitos. No usa
+/// `double.parse`, que subdesborda a 0.0 por debajo de ~1e-308 mientras que
+/// aquí las entradas pueden exceder la precisión de double.
+double _decimalSign(String s) {
+  var t = s.trim().replaceAll('−', '-');
+  final bool neg = t.startsWith('-');
+  if (neg || t.startsWith('+')) t = t.substring(1);
+  final bool nonZero =
+      t.codeUnits.any((c) => c >= 0x31 && c <= 0x39); // dígitos 1-9
+  if (!nonZero) return 0;
+  return neg ? -1 : 1;
+}
+
 /// Worker (isolate-safe vía `compute`) para (re+im·i)^n de alta precisión.
 /// Entrada: `{re, im, n, digits}`. Salida: `{ok:true, result}` o
-/// `{ok:false, error}`.
+/// `{ok:false, error}`. Una división por cero (0^negativo) se lanza como
+/// [CalcException] para que el llamador la localice.
 Map<String, dynamic> bigComplexPowWorker(Map<String, dynamic> a) {
   try {
-    final z = BigComplex.parse(a['re'] as String, a['im'] as String);
-    final r = z.pow(a['n'] as int);
+    final reStr = a['re'] as String;
+    final imStr = a['im'] as String;
+    final n = a['n'] as int;
+    final z = BigComplex.parse(reStr, imStr);
+    // 0^negativo es 1/0. Hay que decidirlo aquí sobre el texto: invertir un
+    // CReal exactamente cero no falla rápido, itera precisiones crecientes
+    // hasta un 'precision overflow' tardío (en la práctica, un cuelgue).
+    if (n < 0 && _decimalSign(reStr) == 0 && _decimalSign(imStr) == 0) {
+      throw CalcException(CalcError.divisionByZero);
+    }
+    final r = z.pow(n);
     return {'ok': true, 'result': r.toStringAsPrecision(a['digits'] as int)};
+  } on CalcException {
+    rethrow; // sendable: cruza el isolate y el llamador la traduce
   } catch (e) {
     return {'ok': false, 'error': e.toString()};
   }
@@ -161,8 +187,8 @@ Map<String, dynamic> bigComplexNthRootsWorker(Map<String, dynamic> a) {
     final imStr = a['im'] as String;
     final re = BigComplex._parseReal(reStr);
     final im = BigComplex._parseReal(imStr);
-    final reSign = double.parse(reStr.trim().replaceAll('−', '-'));
-    final imSign = double.parse(imStr.trim().replaceAll('−', '-'));
+    final reSign = _decimalSign(reStr);
+    final imSign = _decimalSign(imStr);
 
     if (reSign == 0 && imSign == 0) {
       return {'ok': true, 'result': List.filled(n, '0').join('\n')};

@@ -12,6 +12,7 @@ import 'special_functions_service.dart';
 import '../models/calculator_config.dart';
 import '../models/operation_entry.dart';
 import '../models/pending_operation.dart';
+import '../utils/app_locale.dart';
 
 /// Servicio principal de la calculadora
 class CalculatorService extends ChangeNotifier {
@@ -22,6 +23,9 @@ class CalculatorService extends ChangeNotifier {
   String _errorMessage = '';
   Map<String, String> _errorArgs = {};
   bool _isCalculatingPrimes = false;
+  // Token de generación del análisis: los análisis en isolate pueden terminar
+  // fuera de orden y pisar el análisis del número actual con uno viejo.
+  int _analysisToken = 0;
   bool _isCalculatingOperation = false;
   String _operationProgress = '';
   bool _canCancelOperation = false;
@@ -78,6 +82,10 @@ class CalculatorService extends ChangeNotifier {
   // Constructor
   CalculatorService() {
     _loadHistory();
+    // La UI (botones de la pestaña de expresiones) deriva su estado habilitado
+    // del texto del controlador; al teclear directamente en el TextField nadie
+    // notificaba y los botones quedaban con estado obsoleto.
+    _expressionController.addListener(notifyListeners);
   }
 
   /// Cambia el tipo de calculadora
@@ -97,6 +105,7 @@ class CalculatorService extends ChangeNotifier {
   void clear() {
     _display = '0';
     _lastResult = '';
+    _analysisToken++; // descartar análisis en curso
     _currentAnalysis = {};
     _hasError = false;
     _errorMessage = '';
@@ -161,7 +170,18 @@ class CalculatorService extends ChangeNotifier {
   }
 
   /// Parsea un string como int, truncando decimales si los hay.
-  static int _parseStringAsInt(String numStr) => _parseStringAsBigInt(numStr).toInt();
+  /// Lanza si el valor no cabe en un int: `BigInt.toInt()` envuelve en 64 bits
+  /// y convertiría 2⁶⁴+2 en 2 sin ningún error.
+  static int _parseStringAsInt(String numStr) {
+    final BigInt value = _parseStringAsBigInt(numStr);
+    if (!value.isValidInt) {
+      throw ArgumentError(trLocale('Número demasiado grande', 'Number too large'));
+    }
+    return value.toInt();
+  }
+
+  /// Número actual del display como int, con la misma validación de rango.
+  int _getCurrentAsInt() => _parseStringAsInt(_getCurrentNumber());
 
   /// Verifica si el display termina en un operador
   bool _endsWithOperator() {
@@ -323,7 +343,7 @@ class CalculatorService extends ChangeNotifier {
       
       if (isHeavyOperation) {
         _isCalculatingOperation = true;
-        _operationProgress = 'Calculando potencia...';
+        _operationProgress = trLocale('Calculando potencia...', 'Calculating power...');
         _canCancelOperation = true;
         notifyListeners();
         
@@ -331,6 +351,7 @@ class CalculatorService extends ChangeNotifier {
           Map<String, dynamic> result = await compute(_calculatePowerInIsolate, {
             'base': base.toString(),
             'exponent': exp,
+            'isSpanish': appIsSpanish,
           });
           
           if (result['success']) {
@@ -395,12 +416,13 @@ class CalculatorService extends ChangeNotifier {
       
       if (isHeavyOperation) {
         _isCalculatingOperation = true;
-        _operationProgress = 'Calculando raíz cuadrada...';
+        _operationProgress = trLocale('Calculando raíz cuadrada...', 'Calculating square root...');
         _canCancelOperation = true;
         notifyListeners();
         
         try {
-          Map<String, dynamic> result = await compute(_calculateSqrtInIsolate, _display);
+          Map<String, dynamic> result = await compute(_calculateSqrtInIsolate,
+              {'value': _display, 'isSpanish': appIsSpanish});
           
           if (result['success']) {
             String resultStr = _formatNumber(result['result']);
@@ -459,12 +481,13 @@ class CalculatorService extends ChangeNotifier {
       
       if (isHeavyOperation) {
         _isCalculatingOperation = true;
-        _operationProgress = 'Calculando raíz cúbica...';
+        _operationProgress = trLocale('Calculando raíz cúbica...', 'Calculating cube root...');
         _canCancelOperation = true;
         notifyListeners();
         
         try {
-          Map<String, dynamic> result = await compute(_calculateCubeRootInIsolate, _display);
+          Map<String, dynamic> result = await compute(_calculateCubeRootInIsolate,
+              {'value': _display, 'isSpanish': appIsSpanish});
           
           if (result['success']) {
             String resultStr = _formatNumber(result['result']);
@@ -490,16 +513,9 @@ class CalculatorService extends ChangeNotifier {
           historyExpr: '∛$originalValue', originalValue: originalValue)) {
         return;
       } else {
-        // Cálculo directo para números pequeños/medianos
-        // Aproximación usando pow(1/3)
-        double value = number.toDouble();
-        if (value < 0) {
-          value = -math.pow(-value, 1/3).toDouble();
-        } else {
-          value = math.pow(value, 1/3).toDouble();
-        }
-
-        String resultStr = _formatNumber(BigDecimal.fromDouble(value).toString());
+        // Cálculo directo para números pequeños/medianos (exacto sobre
+        // enteros; la aproximación por double degradaba desde ~16 dígitos)
+        String resultStr = _formatNumber(number.cbrt().toString());
         _display = resultStr;
         _lastResult = resultStr;
         _updateAnalysis();
@@ -684,11 +700,14 @@ class CalculatorService extends ChangeNotifier {
 
   /// Actualiza el análisis del número actual
   void _updateAnalysis() {
+    // Invalidar cualquier análisis en curso, incluso si aquí salimos temprano:
+    // un resultado viejo no debe pisar el estado actual.
+    _analysisToken++;
     if (_hasError || _display == '0' || _display.isEmpty || _display == 'Error') {
       _currentAnalysis = {};
       return;
     }
-    
+
     // Solo hacer análisis si el display contiene solo un número
     String currentNumber = _getCurrentNumber();
     if (currentNumber == '0' || currentNumber.isEmpty || currentNumber.length < _display.length) {
@@ -696,16 +715,18 @@ class CalculatorService extends ChangeNotifier {
       _currentAnalysis = {};
       return;
     }
-    
+
     // Marcar que el análisis está en progreso
     _currentAnalysis = {'loading': true};
     notifyListeners();
-    
-    _performAnalysisAsync();
+
+    _performAnalysisAsync(_analysisToken);
   }
 
-  /// Realiza el análisis de forma asíncrona
-  Future<void> _performAnalysisAsync() async {
+  /// Realiza el análisis de forma asíncrona. [token] identifica esta petición:
+  /// si al terminar cada paso ya no es el token vigente, el resultado se
+  /// descarta en vez de sobrescribir el análisis del número actual.
+  Future<void> _performAnalysisAsync(int token) async {
     try {
       // Intentar parsear el número para análisis
       String numStr = _display.trim();
@@ -726,18 +747,23 @@ class CalculatorService extends ChangeNotifier {
           integerPart = withoutSign.split('.')[0];
           if (integerPart.isEmpty) integerPart = '0';
           number = BigInt.parse(integerPart);
-          analysisNote = 'Análisis basado en la parte entera del valor absoluto ($integerPart)';
+          analysisNote = trLocale(
+              'Análisis basado en la parte entera del valor absoluto ($integerPart)',
+              'Analysis based on the integer part of the absolute value ($integerPart)');
         } else {
           integerPart = numStr.split('.')[0];
           if (integerPart.isEmpty) integerPart = '0';
           number = BigInt.parse(integerPart);
-          analysisNote = 'Análisis basado en la parte entera ($integerPart)';
+          analysisNote = trLocale('Análisis basado en la parte entera ($integerPart)',
+              'Analysis based on the integer part ($integerPart)');
         }
       } else {
         // Para enteros, tomar valor absoluto si es negativo
         if (isNegative) {
           number = BigInt.parse(numStr.substring(1));
-          analysisNote = 'Análisis basado en el valor absoluto (${number.toString()})';
+          analysisNote = trLocale(
+              'Análisis basado en el valor absoluto (${number.toString()})',
+              'Analysis based on the absolute value (${number.toString()})');
         } else {
           number = BigInt.parse(numStr);
         }
@@ -760,87 +786,102 @@ class CalculatorService extends ChangeNotifier {
       
       // Realizar análisis básico primero
       Map<String, dynamic> analysis;
-      
+
       if (number.toString().length > 10) {
-        analysis = await compute(_analyzeNumberInIsolate, number);
+        // El idioma viaja en el payload: el isolate no comparte los globales
+        // del isolate principal y `appIsSpanish` volvería a su valor por
+        // defecto (inglés).
+        analysis = await compute(_analyzeNumberInIsolate, {
+          'number': number,
+          'isSpanish': appIsSpanish,
+        });
       } else {
         analysis = NumberAnalysisService.completeAnalysis(number);
       }
-      
+
+      if (token != _analysisToken) return; // llegó tarde: descartar
+
       // Agregar información sobre el procesamiento si el número original era diferente
       if (analysisNote.isNotEmpty) {
         analysis['processingNote'] = analysisNote;
         analysis['originalInput'] = _display;
         analysis['processedNumber'] = number.toString();
       }
-      
+
       // Actualizar con análisis básico
       _currentAnalysis = analysis;
       notifyListeners();
-      
+
       // Ahora calcular primos de forma asíncrona si el número es grande
-      if (number > BigInt.zero && 
-          number.toString().length > 10 && 
+      if (number > BigInt.zero &&
+          number.toString().length > 10 &&
           analysis['isPrime'] == false) {
-        
+
         _isCalculatingPrimes = true;
         _currentAnalysis['calculatingPrimes'] = true;
         notifyListeners();
-        
+
         try {
           // Calcular siguiente primo de forma asíncrona
           BigInt nextPrime = await NumberAnalysisService.nextPrimeAsync(number);
+          if (token != _analysisToken) return;
           _currentAnalysis['nextPrime'] = nextPrime.toString();
-          
+
           // Calcular primo anterior de forma asíncrona
           BigInt previousPrime = await NumberAnalysisService.previousPrimeAsync(number);
+          if (token != _analysisToken) return;
           _currentAnalysis['previousPrime'] = previousPrime.toString();
-          
+
           _isCalculatingPrimes = false;
           _currentAnalysis.remove('calculatingPrimes');
-          
+
           debugPrint('Cálculo de primos completado: anterior=$previousPrime, siguiente=$nextPrime');
-          
+
         } catch (e) {
           debugPrint('Error calculando primos: $e');
-          _currentAnalysis['nextPrime'] = 'Error en cálculo';
-          _currentAnalysis['previousPrime'] = 'Error en cálculo';
+          if (token != _analysisToken) return;
+          _currentAnalysis['nextPrime'] = trLocale('Error en cálculo', 'Calculation error');
+          _currentAnalysis['previousPrime'] = trLocale('Error en cálculo', 'Calculation error');
           _isCalculatingPrimes = false;
           _currentAnalysis.remove('calculatingPrimes');
         }
-        
+
         notifyListeners();
       }
-      
+
       // Calcular cuadrados y cubos perfectos de forma asíncrona para números grandes
       if (number > BigInt.zero && number.toString().length > 100) {
         try {
           // Calcular si es cuadrado perfecto de forma asíncrona
           bool isPerfectSquare = await NumberAnalysisService.isPerfectSquareAsync(number);
+          if (token != _analysisToken) return;
           _currentAnalysis['isPerfectSquare'] = isPerfectSquare;
-          
+
           // Calcular si es cubo perfecto de forma asíncrona
           bool isPerfectCube = await NumberAnalysisService.isPerfectCubeAsync(number);
+          if (token != _analysisToken) return;
           _currentAnalysis['isPerfectCube'] = isPerfectCube;
-          
+
           debugPrint('Cálculo de potencias perfectas completado: cuadrado=$isPerfectSquare, cubo=$isPerfectCube');
-          
+
         } catch (e) {
           debugPrint('Error calculando potencias perfectas: $e');
+          if (token != _analysisToken) return;
           _currentAnalysis['isPerfectSquare'] = false;
           _currentAnalysis['isPerfectCube'] = false;
         }
-        
+
         notifyListeners();
       }
-      
+
       // Debug: verificar que el análisis se completó
   debugPrint('Análisis completado para: $number');
   debugPrint('Propiedades encontradas: ${_currentAnalysis.keys.toList()}');
-      
+
     } catch (e) {
   debugPrint('Error en análisis: $e');
   debugPrint('Número original: $_display');
+      if (token != _analysisToken) return;
       _currentAnalysis = {
         'error': 'errAnalysisFail',
         'errorDetail': e.toString(),
@@ -851,13 +892,17 @@ class CalculatorService extends ChangeNotifier {
     }
   }
 
-  /// Función estática para analizar números en un isolate
-  static Map<String, dynamic> _analyzeNumberInIsolate(BigInt number) {
+  /// Función estática para analizar números en un isolate.
+  /// Recibe `{number, isSpanish}`: el idioma debe viajar en el payload porque
+  /// los globales no cruzan isolates.
+  static Map<String, dynamic> _analyzeNumberInIsolate(Map<String, dynamic> args) {
+    appIsSpanish = args['isSpanish'] as bool;
+    final BigInt number = args['number'] as BigInt;
     try {
       return NumberAnalysisService.completeAnalysis(number);
     } catch (e) {
       return {
-        'error': 'Error en análisis: ${e.toString()}',
+        'error': trLocale('Error en análisis: ${e.toString()}', 'Analysis error: ${e.toString()}'),
         'originalNumber': number.toString()
       };
     }
@@ -865,6 +910,7 @@ class CalculatorService extends ChangeNotifier {
 
   /// Función estática para calcular potencias en un isolate
   static Map<String, dynamic> _calculatePowerInIsolate(Map<String, dynamic> args) {
+    appIsSpanish = args['isSpanish'] as bool? ?? appIsSpanish;
     try {
       BigDecimal base = BigDecimal.fromString(args['base']);
       int exponent = args['exponent'];
@@ -884,10 +930,12 @@ class CalculatorService extends ChangeNotifier {
     }
   }
 
-  /// Función estática para calcular raíz cuadrada en un isolate
-  static Map<String, dynamic> _calculateSqrtInIsolate(String numberStr) {
+  /// Función estática para calcular raíz cuadrada en un isolate.
+  /// Recibe `{value, isSpanish}` (el idioma no cruza isolates como global).
+  static Map<String, dynamic> _calculateSqrtInIsolate(Map<String, dynamic> args) {
+    appIsSpanish = args['isSpanish'] as bool? ?? appIsSpanish;
     try {
-      BigDecimal number = BigDecimal.fromString(numberStr);
+      BigDecimal number = BigDecimal.fromString(args['value'] as String);
       BigDecimal result = number.sqrt();
       
       return {
@@ -902,20 +950,16 @@ class CalculatorService extends ChangeNotifier {
     }
   }
 
-  /// Función estática para calcular raíz cúbica en un isolate
-  static Map<String, dynamic> _calculateCubeRootInIsolate(String numberStr) {
+  /// Función estática para calcular raíz cúbica en un isolate.
+  /// Recibe `{value, isSpanish}` (el idioma no cruza isolates como global).
+  static Map<String, dynamic> _calculateCubeRootInIsolate(Map<String, dynamic> args) {
+    appIsSpanish = args['isSpanish'] as bool? ?? appIsSpanish;
     try {
-      BigDecimal number = BigDecimal.fromString(numberStr);
-      // Aproximación usando pow(1/3)
-      double value = number.toDouble();
-      if (value < 0) {
-        value = -math.pow(-value, 1/3).toDouble();
-      } else {
-        value = math.pow(value, 1/3).toDouble();
-      }
-      
-      BigDecimal result = BigDecimal.fromDouble(value);
-      
+      BigDecimal number = BigDecimal.fromString(args['value'] as String);
+      // Exacta sobre enteros: la ruta anterior por double devolvía basura a
+      // partir de ~16 dígitos (y 0 para ≥ 1e21 por la notación científica).
+      BigDecimal result = number.cbrt();
+
       return {
         'success': true,
         'result': result.toString(),
@@ -928,11 +972,14 @@ class CalculatorService extends ChangeNotifier {
     }
   }
 
-  /// Función auxiliar para calcular factorial en isolate
-  static Map<String, dynamic> _calculateFactorialInIsolate(int n) {
+  /// Función auxiliar para calcular factorial en isolate.
+  /// Recibe `{n, isSpanish}`.
+  static Map<String, dynamic> _calculateFactorialInIsolate(Map<String, dynamic> args) {
+    appIsSpanish = args['isSpanish'] as bool? ?? appIsSpanish;
+    final int n = args['n'] as int;
     try {
       if (n < 0) {
-        return {'success': false, 'error': 'Factorial no definido para números negativos'};
+        return {'success': false, 'error': trLocale('Factorial no definido para números negativos', 'Factorial is not defined for negative numbers')};
       }
       
       if (n == 0 || n == 1) {
@@ -1623,12 +1670,13 @@ class CalculatorService extends ChangeNotifier {
           _display = 'Error';
         } else {
           _isCalculatingOperation = true;
-          _operationProgress = 'Calculando factorial...';
+          _operationProgress = trLocale('Calculando factorial...', 'Calculating factorial...');
           _canCancelOperation = false;
           notifyListeners();
           
           try {
-            Map<String, dynamic> result = await compute(_calculateFactorialInIsolate, intValue.toInt());
+            Map<String, dynamic> result = await compute(_calculateFactorialInIsolate,
+                {'n': intValue.toInt(), 'isSpanish': appIsSpanish});
             
             if (result['success']) {
               // Reemplazar el último número con el resultado del factorial
@@ -1681,15 +1729,20 @@ class CalculatorService extends ChangeNotifier {
     }
     
     String piValue = math.pi.toString();
-    
+
     // Si ya es Pi, no hacer nada
     if (_display == piValue) {
       return;
     }
-    
-    // Reemplazar cualquier valor con Pi
-    _display = piValue;
-    
+
+    // En medio de una expresión ("2×"), π es el siguiente operando; antes se
+    // reemplazaba todo el display y el "2×" se perdía en silencio.
+    if (_endsWithOperator()) {
+      _display += piValue;
+    } else {
+      _display = piValue;
+    }
+
     _updateAnalysis();
     notifyListeners();
   }
@@ -1701,15 +1754,19 @@ class CalculatorService extends ChangeNotifier {
     }
     
     String eValue = math.e.toString();
-    
+
     // Si ya es e, no hacer nada
     if (_display == eValue) {
       return;
     }
-    
-    // Reemplazar cualquier valor con e
-    _display = eValue;
-    
+
+    // En medio de una expresión ("2×"), e es el siguiente operando (ver addPi)
+    if (_endsWithOperator()) {
+      _display += eValue;
+    } else {
+      _display = eValue;
+    }
+
     _updateAnalysis();
     notifyListeners();
   }
@@ -2000,8 +2057,9 @@ class CalculatorService extends ChangeNotifier {
       // Limpiar la expresión
       String cleanExpression = _prepareExpression(expression);
       
-      // Verificar división por cero explícita
-      if (cleanExpression.contains('/0') && !cleanExpression.contains('/0.')) {
+      // Verificar división por un cero literal (solo ceros y sin más dígitos
+      // ni punto detrás; "8/02" es 8÷2, no una división por cero)
+      if (RegExp(r'/\s*0+(?![\d.])').hasMatch(cleanExpression)) {
         return 'err:errExprDivZero';
       }
       
@@ -2065,7 +2123,7 @@ class CalculatorService extends ChangeNotifier {
       return _formatNumber(result.toString());
       
     } catch (e) {
-      throw Exception('Error en evaluación: ${e.toString()}');
+      throw Exception(trLocale('Error en evaluación: ${e.toString()}', 'Evaluation error: ${e.toString()}'));
     }
   }
   
@@ -2105,9 +2163,14 @@ class CalculatorService extends ChangeNotifier {
     prepared = prepared.replaceAll('÷', '/');
     prepared = prepared.replaceAll('√', 'sqrt');
     
-    // Reemplazar constantes
+    // Reemplazar constantes. Solo la 'e' suelta es la constante de Euler:
+    // reemplazar toda 'e' corrompía la notación científica ("2e3" pasaba a
+    // ser "2·2.718…·3" sin error visible).
     prepared = prepared.replaceAll('π', math.pi.toString());
-    prepared = prepared.replaceAll('e', math.e.toString());
+    prepared = prepared.replaceAllMapped(
+      RegExp(r'(?<![0-9A-Za-z.])e(?![0-9A-Za-z(])'),
+      (_) => math.e.toString(),
+    );
     
     // Agregar multiplicación implícita donde sea necesario
     prepared = _addImplicitMultiplication(prepared);
@@ -2137,29 +2200,47 @@ class CalculatorService extends ChangeNotifier {
     return result;
   }
   
-  /// Convierte funciones trigonométricas de grados a radianes
+  /// Convierte funciones trigonométricas de grados a radianes.
+  /// Recorre la expresión respetando paréntesis anidados: el regex anterior
+  /// (`sin\(([^)]+)\)`) cortaba el argumento en el primer ')', convirtiendo
+  /// solo una parte de él en `sin((1+2)+27)`.
   String _convertTrigFunctionsToRadians(String expression) {
     if (_isRadianMode) return expression;
-    
-    String result = expression;
-    
-    // Convertir sin, cos, tan de grados a radianes
-    result = result.replaceAllMapped(
-      RegExp(r'sin\(([^)]+)\)'),
-      (match) => 'sin((${match.group(1)})*${math.pi}/180)',
-    );
-    
-    result = result.replaceAllMapped(
-      RegExp(r'cos\(([^)]+)\)'),
-      (match) => 'cos((${match.group(1)})*${math.pi}/180)',
-    );
-    
-    result = result.replaceAllMapped(
-      RegExp(r'tan\(([^)]+)\)'),
-      (match) => 'tan((${match.group(1)})*${math.pi}/180)',
-    );
-    
-    return result;
+    return _degreesToRadiansCalls(expression);
+  }
+
+  static String _degreesToRadiansCalls(String s) {
+    final StringBuffer out = StringBuffer();
+    final RegExp letter = RegExp(r'[A-Za-z]');
+    int i = 0;
+    while (i < s.length) {
+      bool converted = false;
+      for (final String name in const ['sin', 'cos', 'tan']) {
+        // El guardia de letra previa evita convertir el 'sin(' de 'arcsin('.
+        if (s.startsWith('$name(', i) &&
+            (i == 0 || !letter.hasMatch(s[i - 1]))) {
+          final int open = i + name.length;
+          int depth = 1;
+          int j = open + 1;
+          while (j < s.length && depth > 0) {
+            if (s[j] == '(') depth++;
+            if (s[j] == ')') depth--;
+            j++;
+          }
+          if (depth != 0) break; // sin cerrar: dejar tal cual (fallará el parser)
+          final String arg = _degreesToRadiansCalls(s.substring(open + 1, j - 1));
+          out.write('$name((($arg)*${math.pi}/180))');
+          i = j;
+          converted = true;
+          break;
+        }
+      }
+      if (!converted) {
+        out.write(s[i]);
+        i++;
+      }
+    }
+    return out.toString();
   }
   
   /// Evalúa la expresión actual y la agrega al historial
@@ -2307,6 +2388,7 @@ class CalculatorService extends ChangeNotifier {
   /// Dispose del controlador
   @override
   void dispose() {
+    _expressionController.removeListener(notifyListeners);
     _expressionController.dispose();
     super.dispose();
   }
@@ -2339,82 +2421,89 @@ class CalculatorService extends ChangeNotifier {
     return false;
   }
 
-  /// Evalúa expresiones con BigDecimal para números muy grandes
+  /// Evalúa expresiones con BigDecimal para números muy grandes.
+  ///
+  /// Descenso recursivo por precedencia (+,− < ×,÷ < ^) sobre una expresión
+  /// plana (las que tienen paréntesis van por math_expressions). La versión
+  /// anterior partía por el PRIMER operador encontrado y solo soportaba una
+  /// operación: "2^68+1" devolvía 1.
   String _evaluateBigDecimalExpression(String expression) {
     try {
-      // Análisis simple de expresiones básicas
       expression = expression.replaceAll(' ', '');
-      
-      // Buscar operadores básicos (buscar desde la izquierda para mantener orden de operaciones)
-      List<String> operators = ['+', '-', '*', '/', '^'];
-      String? operator;
-      int operatorIndex = -1;
-      
-      // Buscar el primer operador que no sea un signo negativo al inicio
-      for (String op in operators) {
-        for (int i = 1; i < expression.length; i++) { // Empezar desde 1 para evitar signo negativo inicial
-          if (expression[i] == op) {
-            operator = op;
-            operatorIndex = i;
-            break;
-          }
-        }
-        if (operator != null) break;
+      if (expression.isEmpty) {
+        throw ArgumentError(trLocale('Expresión inválida: operandos vacíos', 'Invalid expression: empty operands'));
       }
-      
-      if (operator == null) {
-        return expression; // No hay operador, devolver el número
-      }
-      
-      String leftStr = expression.substring(0, operatorIndex);
-      String rightStr = expression.substring(operatorIndex + 1);
-      
-      // Verificar que ambos operandos sean válidos
-      if (leftStr.isEmpty || rightStr.isEmpty) {
-        throw ArgumentError('Expresión inválida: operandos vacíos');
-      }
-      
-      BigDecimal left = BigDecimal.fromString(leftStr);
-      BigDecimal right = BigDecimal.fromString(rightStr);
-      
-      BigDecimal result;
-      switch (operator) {
-        case '+':
-          result = left + right;
-          break;
-        case '-':
-          result = left - right;
-          break;
-        case '*':
-          result = left * right;
-          break;
-        case '/':
-          if (right == BigDecimal.zero) {
-            throw ArgumentError('División por cero');
-          }
-          result = left / right;
-          break;
-        case '^':
-          int exponent = right.toDouble().toInt();
-          if (exponent < 0) {
-            throw ArgumentError('Exponente negativo no soportado');
-          }
-          if (_powerExceedsDigitLimit(left, exponent)) {
-            throw const _ResultTooLargeException();
-          }
-          result = left.pow(exponent);
-          break;
-        default:
-          throw ArgumentError('Operador no soportado: $operator');
-      }
-      
-      return result.toString();
-
+      return _evalBigAdditive(expression).toString();
     } on _ResultTooLargeException {
       return 'err:errResultTooLarge';
     } catch (e) {
-      throw ArgumentError('Error evaluando expresión: $e');
+      throw ArgumentError(trLocale('Error evaluando expresión: $e', 'Error evaluating expression: $e'));
     }
+  }
+
+  /// ¿El carácter en [i] es un operador binario? (Si lo precede otro operador
+  /// o está al inicio, es un signo unario del operando derecho.)
+  static bool _isBinaryOperatorAt(String s, int i) {
+    return i > 0 && RegExp(r'[0-9.]').hasMatch(s[i - 1]);
+  }
+
+  /// Nivel +/−. Se parte por el operador de MÁS a la derecha para respetar la
+  /// asociatividad izquierda (1-2-3 = (1-2)-3).
+  BigDecimal _evalBigAdditive(String s) {
+    for (int i = s.length - 1; i > 0; i--) {
+      final String c = s[i];
+      if ((c == '+' || c == '-') && _isBinaryOperatorAt(s, i)) {
+        final BigDecimal left = _evalBigAdditive(s.substring(0, i));
+        final BigDecimal right = _evalBigMultiplicative(s.substring(i + 1));
+        return c == '+' ? left + right : left - right;
+      }
+    }
+    return _evalBigMultiplicative(s);
+  }
+
+  /// Nivel ×/÷ (asociatividad izquierda).
+  BigDecimal _evalBigMultiplicative(String s) {
+    for (int i = s.length - 1; i > 0; i--) {
+      final String c = s[i];
+      if ((c == '*' || c == '/') && _isBinaryOperatorAt(s, i)) {
+        final BigDecimal left = _evalBigMultiplicative(s.substring(0, i));
+        final BigDecimal right = _evalBigPower(s.substring(i + 1));
+        if (c == '*') return left * right;
+        if (right == BigDecimal.zero) {
+          throw ArgumentError(trLocale('División por cero', 'Division by zero'));
+        }
+        return left / right;
+      }
+    }
+    return _evalBigPower(s);
+  }
+
+  /// Nivel ^ (asociatividad derecha: 2^3^2 = 2^(3^2)).
+  BigDecimal _evalBigPower(String s) {
+    final int i = s.indexOf('^');
+    if (i <= 0) {
+      return BigDecimal.fromString(s);
+    }
+    final BigDecimal base = BigDecimal.fromString(s.substring(0, i));
+    final BigDecimal exp = _evalBigPower(s.substring(i + 1));
+
+    if (exp.fractionalPart != BigInt.zero) {
+      // Antes se truncaba en silencio (x^2.5 calculaba x^2).
+      throw ArgumentError(trLocale('Exponente no entero no soportado en modo de números grandes',
+          'Non-integer exponent not supported in big-number mode'));
+    }
+    if (exp.isNegative) {
+      throw ArgumentError(trLocale('Exponente negativo no soportado', 'Negative exponent not supported'));
+    }
+    final BigInt expInt = exp.integerPart;
+    if (!expInt.isValidInt) {
+      throw const _ResultTooLargeException();
+    }
+    final int exponent = expInt.toInt();
+    if (_powerExceedsDigitLimit(base, exponent)) {
+      throw const _ResultTooLargeException();
+    }
+    return base.pow(exponent);
   }
 
   /// Método auxiliar para agregar operaciones directas al historial
@@ -3036,7 +3125,7 @@ class CalculatorService extends ChangeNotifier {
   Future<void> factorialFunction() async {
     try {
       String originalValue = _display;
-      int n = _getCurrentAsBigInt().toInt();
+      int n = _getCurrentAsInt();
       if (n < 0) {
         _setError('errFactorialNeg');
         _display = 'Error';
@@ -3062,7 +3151,7 @@ class CalculatorService extends ChangeNotifier {
   Future<void> doubleFactorialFunction() async {
     try {
       String originalValue = _display;
-      int n = _getCurrentAsBigInt().toInt();
+      int n = _getCurrentAsInt();
       if (n < 0) {
         _setError('errDoubleFactorialNeg');
         _display = 'Error';
@@ -3085,7 +3174,7 @@ class CalculatorService extends ChangeNotifier {
   Future<void> fibonacciN() async {
     try {
       String originalValue = _display;
-      int n = _getCurrentAsBigInt().toInt();
+      int n = _getCurrentAsInt();
       if (n < 0) {
         _setError('errFibonacciNeg');
         _display = 'Error';
@@ -3108,7 +3197,7 @@ class CalculatorService extends ChangeNotifier {
   Future<void> catalanNumber() async {
     try {
       String originalValue = _display;
-      int n = _getCurrentAsBigInt().toInt();
+      int n = _getCurrentAsInt();
       if (n < 0) {
         _setError('errCatalanNeg');
         _display = 'Error';
@@ -3131,7 +3220,7 @@ class CalculatorService extends ChangeNotifier {
   Future<void> derangementFunction() async {
     try {
       String originalValue = _display;
-      int n = _getCurrentAsBigInt().toInt();
+      int n = _getCurrentAsInt();
       if (n < 0) {
         _setError('errDerangementNeg');
         _display = 'Error';
@@ -3154,7 +3243,7 @@ class CalculatorService extends ChangeNotifier {
   Future<void> partitionFunction() async {
     try {
       String originalValue = _display;
-      int n = _getCurrentAsBigInt().toInt();
+      int n = _getCurrentAsInt();
       if (n < 0) {
         _setError('errPartitionNeg');
         _display = 'Error';
@@ -3177,7 +3266,7 @@ class CalculatorService extends ChangeNotifier {
   Future<void> bellNumber() async {
     try {
       String originalValue = _display;
-      int n = _getCurrentAsBigInt().toInt();
+      int n = _getCurrentAsInt();
       if (n < 0) {
         _setError('errBellNeg');
         _display = 'Error';

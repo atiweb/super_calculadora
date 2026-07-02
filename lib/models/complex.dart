@@ -39,6 +39,11 @@ class Complex {
   /// Potencia entera mediante De Moivre.
   Complex pow(int n) {
     if (n == 0) return one;
+    // 0^negativo es 1/0: sin este chequeo math.pow(0, n) devuelve Infinity y
+    // fromPolar produce (Infinity, NaN) en silencio.
+    if (n < 0 && re == 0 && im == 0) {
+      throw CalcException(CalcError.divisionByZero);
+    }
     final double r = math.pow(modulus, n).toDouble();
     final double theta = argument * n;
     return Complex.fromPolar(r, theta);

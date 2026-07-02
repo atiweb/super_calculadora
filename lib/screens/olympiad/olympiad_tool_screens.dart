@@ -1074,7 +1074,9 @@ class ComplexSequencesToolScreen extends StatelessWidget {
           ],
           compute: (i) {
             final n = _int(i[0]), m = _int(i[1]);
-            if (n < 0) throw CalcException(CalcError.nNonNegative);
+            // n es un conteo de filas: con n=0 se llamaba pascalTriangleMod(-1)
+            // y estallaba con el mensaje contradictorio "n debe ser ≥ 0".
+            if (n < 1) throw CalcException(CalcError.nPositive);
             if (m < 2) throw CalcException(CalcError.nGreaterThanOne);
             if (n > 128) {
               throw CalcException(CalcError.inputTooLarge, {'max': '128'});

@@ -354,13 +354,17 @@ class _CalculatorDisplayState extends State<CalculatorDisplay> {
         return value.toStringAsExponential(6);
       }
       if (number.contains('.')) return number;
-      final length = number.length;
-      String mantissa = number.substring(0, 1);
+      // Separar el signo: si entra en la mantisa, el resultado sale
+      // malformado y con el exponente corrido ("-99…9" → "-.99e+20").
+      final bool negative = number.startsWith('-');
+      final String digits = negative ? number.substring(1) : number;
+      final length = digits.length;
+      String mantissa = digits.substring(0, 1);
       if (length > 1) {
         final digitsToTake = length > 8 ? 8 : length - 1;
-        mantissa += '.${number.substring(1, 1 + digitsToTake)}';
+        mantissa += '.${digits.substring(1, 1 + digitsToTake)}';
       }
-      return '${mantissa}e+${length - 1}';
+      return '${negative ? '-' : ''}${mantissa}e+${length - 1}';
     } catch (_) {
       return number;
     }

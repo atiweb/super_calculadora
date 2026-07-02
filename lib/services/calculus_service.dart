@@ -30,6 +30,9 @@ class CalculusService {
   /// Integral definida ∫ₐᵇ f(x) dx por la regla de Simpson compuesta.
   static double integral(String expr, double a, double b, {int n = 1000}) {
     final f = _compile(expr);
+    // n < 2 producía NaN (n=0) o un valor finito incorrecto (n negativo:
+    // el bucle no corre y se divide por un paso negativo).
+    if (n < 2) n = 2;
     if (n.isOdd) n++; // Simpson requiere n par
     final h = (b - a) / n;
     double sum = f(a) + f(b);

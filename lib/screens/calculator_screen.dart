@@ -12,6 +12,7 @@ import '../widgets/history_panel.dart';
 import '../widgets/about_dialog.dart';
 import '../services/calculator_service.dart';
 import '../models/calculator_config.dart';
+import '../utils/app_locale.dart';
 
 class CalculatorScreen extends StatefulWidget {
   const CalculatorScreen({super.key});
@@ -33,6 +34,10 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context)!;
+    // Publish the current UI language to the context-free service layer so its
+    // analysis fallback strings (very-large-number / error messages) match the
+    // app language instead of being hardcoded in Spanish.
+    appIsSpanish = Localizations.localeOf(context).languageCode == 'es';
     return Consumer<CalculatorService>(
       builder: (context, calculator, child) {
         return Scaffold(
@@ -129,6 +134,11 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                     flex: _currentPage == 2 ? 3 : 4,
                     child: PageView(
                       controller: _pageController,
+                      // Swipe deshabilitado: al teclear números rápido, los
+                      // toques se interpretaban como arrastre y la app cambiaba
+                      // de pestaña sola. Las pestañas solo cambian con los
+                      // botones (feedback de tester).
+                      physics: const NeverScrollableScrollPhysics(),
                       onPageChanged: (index) {
                         setState(() {
                           _currentPage = index;

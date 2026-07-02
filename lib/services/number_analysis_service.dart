@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'prime_utils.dart';
 import 'big_decimal.dart';
 import '../constants/numeric_precision.dart';
+import '../utils/app_locale.dart';
 
 /// Clase para análisis avanzado de números
 class NumberAnalysisService {
@@ -33,7 +34,7 @@ class NumberAnalysisService {
     // Agregar nota si el número fue modificado
     if (originalNumber != integerPart) {
       if (originalNumber < BigInt.zero) {
-        result['note'] = 'Se usó el valor absoluto del número negativo';
+        result['note'] = trLocale('Se usó el valor absoluto del número negativo', 'Used the absolute value of the negative number');
       }
       // Nota: Para decimales, esto se manejaría en un nivel superior
     }
@@ -42,9 +43,9 @@ class NumberAnalysisService {
     if (integerPart < BigInt.two) {
       result['isPrime'] = false;
       if (integerPart == BigInt.zero) {
-        result['note'] = 'El cero no es primo';
+        result['note'] = trLocale('El cero no es primo', 'Zero is not prime');
       } else if (integerPart == BigInt.one) {
-        result['note'] = 'El uno no es primo por definición';
+        result['note'] = trLocale('El uno no es primo por definición', 'One is not prime by definition');
       }
     } else {
       result['isPrime'] = isPrime(integerPart);
@@ -119,8 +120,10 @@ class NumberAnalysisService {
   /// Solo busca en números enteros positivos
   static BigInt previousPrime(BigInt number) {
     BigInt integerPart = number.abs();
-    if (integerPart <= BigInt.two) return BigInt.two;
-    
+    // ≤ 3: el anterior es 2 (con solo `<= 2`, previousPrime(3) bajaba a
+    // candidato 1 y lo devolvía como "primo").
+    if (integerPart <= BigInt.from(3)) return BigInt.two;
+
     BigInt candidate = integerPart - BigInt.one;
     if (candidate % BigInt.two == BigInt.zero) {
       candidate -= BigInt.one;
@@ -133,47 +136,73 @@ class NumberAnalysisService {
     return candidate;
   }
 
-  /// Descomposición en factores primos (optimizada para números grandes)
+  /// Descomposición en factores primos, completa y correcta.
+  ///
+  /// División de prueba hasta 10⁵ y, para el resto compuesto, Pollard-rho.
+  /// La versión anterior cortaba en 10⁶ y añadía el resto compuesto como si
+  /// fuera primo: 1000036000099 (= 1000003 × 1000033) se reportaba como su
+  /// propio "factor primo" a la vez que isPrime decía que era compuesto.
   static List<BigInt> primeFactorization(BigInt number) {
     if (number < BigInt.two) return [];
-    
+
     List<BigInt> factors = [];
     BigInt n = number;
-    
+
     // Dividir por 2
     while (n % BigInt.two == BigInt.zero) {
       factors.add(BigInt.two);
       n ~/= BigInt.two;
     }
-    
-    // Dividir por números impares, pero con límite para números muy grandes
+
+    // División de prueba por impares pequeños (barata y elimina la mayoría)
     BigInt divisor = BigInt.from(3);
-    BigInt limit = _sqrt(n);
-    
-    // Para números muy grandes, limitar la búsqueda
-    if (limit > BigInt.from(1000000)) {
-      limit = BigInt.from(1000000);
-    }
-    
-    while (divisor <= limit && divisor * divisor <= n) {
+    final BigInt trialLimit = BigInt.from(100000);
+    while (divisor <= trialLimit && divisor * divisor <= n) {
       while (n % divisor == BigInt.zero) {
         factors.add(divisor);
         n ~/= divisor;
       }
       divisor += BigInt.two;
-      
-      // Si ya encontramos muchos factores, parar
-      if (factors.length > 50) {
-        break;
-      }
     }
-    
-    // Si n es un primo mayor que 2
-    if (n > BigInt.two) {
-      factors.add(n);
+
+    // Resto: primo → añadir; compuesto → factorizar con Pollard-rho
+    if (n > BigInt.one) {
+      _factorCompletely(n, factors);
     }
-    
+
+    factors.sort((a, b) => a.compareTo(b));
     return factors;
+  }
+
+  /// Factoriza [n] (impar, sin factores ≤ 10⁵) recursivamente en [factors].
+  static void _factorCompletely(BigInt n, List<BigInt> factors) {
+    if (n == BigInt.one) return;
+    if (isPrime(n)) {
+      factors.add(n);
+      return;
+    }
+    final BigInt d = _pollardRho(n);
+    _factorCompletely(d, factors);
+    _factorCompletely(n ~/ d, factors);
+  }
+
+  /// Encuentra un divisor no trivial de un compuesto impar mediante
+  /// Pollard-rho (Floyd), reintentando con otra constante si degenera.
+  static BigInt _pollardRho(BigInt n) {
+    BigInt c = BigInt.one;
+    while (true) {
+      BigInt x = BigInt.two;
+      BigInt y = BigInt.two;
+      BigInt d = BigInt.one;
+      while (d == BigInt.one) {
+        x = (x * x + c) % n;
+        y = (y * y + c) % n;
+        y = (y * y + c) % n;
+        d = gcd((x - y).abs(), n);
+      }
+      if (d != n) return d;
+      c += BigInt.one;
+    }
   }
 
   /// Verifica si es una potencia perfecta
@@ -251,32 +280,32 @@ class NumberAnalysisService {
     return sum == number;
   }
 
-  /// Obtiene todos los divisores (optimizado para números grandes)
+  /// Obtiene todos los divisores, generados desde la factorización prima
+  /// (completa). El barrido anterior cortaba en 10⁵, así que a un semiprimo
+  /// de factores grandes le "faltaban" sus divisores no triviales.
   static List<BigInt> getDivisors(BigInt number) {
     if (number <= BigInt.zero) return [];
-    
-    List<BigInt> divisors = [];
-    BigInt limit = _sqrt(number);
-    
-    // Para números muy grandes, limitar la búsqueda de divisores
-    if (limit > BigInt.from(100000)) {
-      limit = BigInt.from(100000);
+    if (number == BigInt.one) return [BigInt.one];
+
+    // Agrupar factores primos: p → exponente
+    final Map<BigInt, int> powers = {};
+    for (final BigInt f in primeFactorization(number)) {
+      powers[f] = (powers[f] ?? 0) + 1;
     }
-    
-    for (BigInt i = BigInt.one; i <= limit; i += BigInt.one) {
-      if (number % i == BigInt.zero) {
-        divisors.add(i);
-        if (i != number ~/ i) {
-          divisors.add(number ~/ i);
+
+    List<BigInt> divisors = [BigInt.one];
+    powers.forEach((p, e) {
+      final List<BigInt> extended = [];
+      BigInt pk = BigInt.one;
+      for (int k = 0; k <= e; k++) {
+        for (final BigInt d in divisors) {
+          extended.add(d * pk);
         }
+        pk *= p;
       }
-      
-      // Si ya encontramos muchos divisores, parar
-      if (divisors.length > 100) {
-        break;
-      }
-    }
-    
+      divisors = extended;
+    });
+
     divisors.sort((a, b) => a.compareTo(b));
     return divisors;
   }
@@ -393,7 +422,18 @@ class NumberAnalysisService {
           analysis['nextPrime'] = nextPrime(number).toString();
           analysis['previousPrime'] = previousPrime(number).toString();
           analysis['primeFactors'] = primeFactorization(number).map((f) => f.toString()).toList();
-          analysis['divisors'] = getDivisors(number).map((d) => d.toString()).toList();
+          // Acotar la lista mostrada: un número altamente compuesto puede
+          // tener decenas de miles de divisores.
+          final List<BigInt> divisors = getDivisors(number);
+          if (divisors.length <= 100) {
+            analysis['divisors'] = divisors.map((d) => d.toString()).toList();
+          } else {
+            analysis['divisors'] = [
+              ...divisors.take(100).map((d) => d.toString()),
+              trLocale('… y ${divisors.length - 100} más',
+                  '… and ${divisors.length - 100} more'),
+            ];
+          }
           analysis['isPerfect'] = isPerfectNumber(number);
         } else {
           // Análisis limitado para números medianos
@@ -402,18 +442,20 @@ class NumberAnalysisService {
             analysis['previousPrime'] = previousPrime(number).toString();
             analysis['primeFactors'] = [number.toString()];
           } else {
-            analysis['nextPrime'] = 'No es primo';
-            analysis['previousPrime'] = 'No es primo';
+            analysis['nextPrime'] = trLocale('No es primo', 'Not prime');
+            analysis['previousPrime'] = trLocale('No es primo', 'Not prime');
             
             try {
               List<BigInt> factors = primeFactorization(number);
               if (factors.length <= 20) {
                 analysis['primeFactors'] = factors.map((f) => f.toString()).toList();
               } else {
-                analysis['primeFactors'] = ['Demasiados factores'];
+                analysis['primeFactors'] = [trLocale('Demasiados factores', 'Too many factors')];
               }
             } catch (e) {
-              analysis['primeFactors'] = ['Factorización muy compleja'];
+              analysis['primeFactors'] = [
+                trLocale('Factorización muy compleja', 'Factorization too complex')
+              ];
             }
           }
           
@@ -453,12 +495,12 @@ class NumberAnalysisService {
           }
         }
       } catch (e) {
-        analysis['square'] = 'Error en cálculo';
-        analysis['cube'] = 'Error en cálculo';
+        analysis['square'] = trLocale('Error en cálculo', 'Calculation error');
+        analysis['cube'] = trLocale('Error en cálculo', 'Calculation error');
       }
       
     } catch (e) {
-      analysis['error'] = 'Error en análisis: ${e.toString()}';
+      analysis['error'] = trLocale('Error en análisis: ${e.toString()}', 'Analysis error: ${e.toString()}');
       analysis['value'] = number.toString();
       analysis['digitCount'] = number.toString().replaceAll('-', '').length;
     }
@@ -495,14 +537,14 @@ class NumberAnalysisService {
           analysis['octal'] = number.toRadixString(8);
           analysis['hexadecimal'] = number.toRadixString(16).toUpperCase();
         } catch (e) {
-          analysis['binary'] = 'No calculado (muy grande)';
-          analysis['octal'] = 'No calculado (muy grande)';
-          analysis['hexadecimal'] = 'No calculado (muy grande)';
+          analysis['binary'] = trLocale('No calculado (muy grande)', 'Not computed (too large)');
+          analysis['octal'] = trLocale('No calculado (muy grande)', 'Not computed (too large)');
+          analysis['hexadecimal'] = trLocale('No calculado (muy grande)', 'Not computed (too large)');
         }
       } else {
-        analysis['binary'] = 'No calculado (número extremadamente grande)';
-        analysis['octal'] = 'No calculado (número extremadamente grande)';
-        analysis['hexadecimal'] = 'No calculado (número extremadamente grande)';
+        analysis['binary'] = trLocale('No calculado (número extremadamente grande)', 'Not computed (extremely large number)');
+        analysis['octal'] = trLocale('No calculado (número extremadamente grande)', 'Not computed (extremely large number)');
+        analysis['hexadecimal'] = trLocale('No calculado (número extremadamente grande)', 'Not computed (extremely large number)');
       }
       
       // Análisis limitado para números muy grandes
@@ -512,7 +554,7 @@ class NumberAnalysisService {
           analysis['isPrime'] = isPrime(number);
         } catch (e) {
           analysis['isPrime'] = false;
-          analysis['primeNote'] = 'Error en verificación de primalidad';
+          analysis['primeNote'] = trLocale('Error en verificación de primalidad', 'Primality check error');
         }
         
         try {
@@ -532,45 +574,45 @@ class NumberAnalysisService {
         } else {
           analysis['isFibonacci'] = false;
           analysis['isTriangular'] = false;
-          analysis['largeNumberNote'] = 'Algunas propiedades no calculadas debido al tamaño extremo';
+          analysis['largeNumberNote'] = trLocale('Algunas propiedades no calculadas debido al tamaño extremo', 'Some properties not computed due to extreme size');
         }
         
         // Propiedades que no se calculan para números muy grandes
-        analysis['perfectPower'] = {'isPower': false, 'reason': 'Número muy grande'};
-        analysis['primeFactors'] = ['No calculado (número muy grande)'];
-        analysis['divisors'] = ['No calculado (número muy grande)'];
+        analysis['perfectPower'] = {'isPower': false, 'reason': trLocale('Número muy grande', 'Very large number')};
+        analysis['primeFactors'] = [trLocale('No calculado (número muy grande)', 'Not computed (very large number)')];
+        analysis['divisors'] = [trLocale('No calculado (número muy grande)', 'Not computed (very large number)')];
         analysis['isPerfect'] = false;
         
         // Los primos se calcularán de forma asíncrona en el CalculatorService
-        analysis['nextPrime'] = 'Calculando...';
-        analysis['previousPrime'] = 'Calculando...';
+        analysis['nextPrime'] = trLocale('Calculando...', 'Calculating...');
+        analysis['previousPrime'] = trLocale('Calculando...', 'Calculating...');
         
         // Operaciones matemáticas básicas
         if (digitCount <= 50) {
           try {
             analysis['square'] = (number * number).toString();
           } catch (e) {
-            analysis['square'] = 'Error en cálculo';
+            analysis['square'] = trLocale('Error en cálculo', 'Calculation error');
           }
           
           try {
             analysis['cube'] = (number * number * number).toString();
           } catch (e) {
-            analysis['cube'] = 'Error en cálculo';
+            analysis['cube'] = trLocale('Error en cálculo', 'Calculation error');
           }
         } else {
-          analysis['square'] = 'No calculado (resultado muy grande)';
-          analysis['cube'] = 'No calculado (resultado muy grande)';
+          analysis['square'] = trLocale('No calculado (resultado muy grande)', 'Not computed (result too large)');
+          analysis['cube'] = trLocale('No calculado (resultado muy grande)', 'Not computed (result too large)');
         }
         
         // Raíces no se calculan para números muy grandes
-        analysis['squareRoot'] = 'No calculado (número muy grande)';
-        analysis['cubeRoot'] = 'No calculado (número muy grande)';
+        analysis['squareRoot'] = trLocale('No calculado (número muy grande)', 'Not computed (very large number)');
+        analysis['cubeRoot'] = trLocale('No calculado (número muy grande)', 'Not computed (very large number)');
       }
       
     } catch (e) {
       // En caso de error, devolver información básica
-      analysis['error'] = 'Error en análisis: ${e.toString()}';
+      analysis['error'] = trLocale('Error en análisis: ${e.toString()}', 'Analysis error: ${e.toString()}');
       analysis['value'] = number.toString();
       analysis['digitCount'] = number.toString().replaceAll('-', '').length;
       analysis['isZero'] = number == BigInt.zero;
@@ -578,7 +620,9 @@ class NumberAnalysisService {
       analysis['isNegative'] = number < BigInt.zero;
       analysis['isEven'] = number % BigInt.two == BigInt.zero;
       analysis['isOdd'] = number % BigInt.two != BigInt.zero;
-      analysis['errorNote'] = 'Se produjo un error durante el análisis. Mostrando información básica.';
+      analysis['errorNote'] = trLocale(
+          'Se produjo un error durante el análisis. Mostrando información básica.',
+          'An error occurred during analysis. Showing basic information.');
     }
     
     return analysis;
@@ -825,7 +869,7 @@ class NumberAnalysisService {
 
   /// Calcula la raíz cuadrada de un BigInt (optimizado para números grandes)
   static BigInt _sqrtBigInt(BigInt n) {
-    if (n < BigInt.zero) throw ArgumentError('Raíz cuadrada de número negativo');
+    if (n < BigInt.zero) throw ArgumentError(trLocale('Raíz cuadrada de número negativo', 'Square root of a negative number'));
     if (n == BigInt.zero || n == BigInt.one) return n;
     
     BigInt low = BigInt.zero;
@@ -845,7 +889,7 @@ class NumberAnalysisService {
   }
 
   static BigInt _sqrt(BigInt number) {
-    if (number < BigInt.zero) throw ArgumentError('Raíz cuadrada de número negativo');
+    if (number < BigInt.zero) throw ArgumentError(trLocale('Raíz cuadrada de número negativo', 'Square root of a negative number'));
     if (number == BigInt.zero) return BigInt.zero;
     if (number == BigInt.one) return BigInt.one;
     
@@ -865,9 +909,9 @@ class NumberAnalysisService {
   /// tamaño, sin aproximaciones, lo que permite detectar potencias perfectas
   /// grandes correctamente.
   static BigInt _nthRoot(BigInt number, int n) {
-    if (n < 1) throw ArgumentError('El índice de la raíz debe ser ≥ 1');
+    if (n < 1) throw ArgumentError(trLocale('El índice de la raíz debe ser ≥ 1', 'The root index must be ≥ 1'));
     if (number < BigInt.zero && n.isEven) {
-      throw ArgumentError('Raíz par de número negativo');
+      throw ArgumentError(trLocale('Raíz par de número negativo', 'Even root of a negative number'));
     }
     if (number == BigInt.zero) return BigInt.zero;
     if (n == 1) return number;

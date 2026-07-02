@@ -71,7 +71,9 @@ class PolynomialService {
       } else {
         coeff = Fraction.parse(coeffStr);
       }
-      if (!hasX && coeffStr.isEmpty) {
+      // Un signo suelto solo es coeficiente implícito (±1) junto a una x;
+      // como término constante ("5-", "3--2") es entrada inválida.
+      if (!hasX && (coeffStr.isEmpty || coeffStr == '+' || coeffStr == '-')) {
         throw CalcException(CalcError.invalidTerm, {'value': term});
       }
 

@@ -1,4 +1,5 @@
 import '../models/calc_exception.dart';
+import '../utils/app_locale.dart';
 import '../models/fraction.dart';
 import 'special_functions_service.dart';
 
@@ -84,11 +85,17 @@ class NumberTheoryAdvancedService {
     final BigInt aR = a ~/ g;
     final BigInt bR = b ~/ g;
     final BigInt nR = n ~/ g;
-    final BigInt? inv = SpecialFunctionsService.modularInverse(aR % nR, nR);
-    if (inv == null) return [];
-
-    BigInt x0 = (bR * inv) % nR;
-    if (x0.isNegative) x0 += nR;
+    BigInt x0;
+    if (nR == _one) {
+      // a ≡ 0 y b ≡ 0 (mod n): toda x es solución. Pedir el inverso mod 1
+      // lanzaba ArgumentError (n debe ser > 1) en vez de resolver.
+      x0 = _zero;
+    } else {
+      final BigInt? inv = SpecialFunctionsService.modularInverse(aR % nR, nR);
+      if (inv == null) return [];
+      x0 = (bR * inv) % nR;
+      if (x0.isNegative) x0 += nR;
+    }
 
     final List<BigInt> solutions = [];
     for (BigInt k = _zero; k < g; k += _one) {
@@ -248,7 +255,7 @@ class NumberTheoryAdvancedService {
       a += _one;
     }
     // Inalcanzable por el teorema de Lagrange.
-    throw StateError('No se encontró representación (no debería ocurrir)');
+    throw StateError(trLocale('No se encontró representación (no debería ocurrir)', 'No representation found (should not happen)'));
   }
 
   // ── Número de Frobenius ──────────────────────────────────────────────────
@@ -333,6 +340,12 @@ class NumberTheoryAdvancedService {
       e = (e * g) % n;
     }
 
+    // Consultar primero la tabla: cubre todas las soluciones x < m incluso
+    // cuando g no es invertible mod n (p. ej. 2^x ≡ 4 (mod 8), x = 2), caso
+    // en que antes se devolvía null con solución existente.
+    final BigInt? direct = table[h];
+    if (direct != null) return direct;
+
     // factor = g^(-m) mod n
     final BigInt? gm = SpecialFunctionsService.modularInverse(
         SpecialFunctionsService.modPow(g, m, n), n);
@@ -402,7 +415,7 @@ class NumberTheoryAdvancedService {
   }
 
   static BigInt _isqrt(BigInt n) {
-    if (n < _zero) throw ArgumentError('Raíz de número negativo');
+    if (n < _zero) throw ArgumentError(trLocale('Raíz de número negativo', 'Root of a negative number'));
     if (n < _two) return n;
     BigInt x = n;
     BigInt y = (x + _one) >> 1;

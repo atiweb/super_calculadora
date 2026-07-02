@@ -297,6 +297,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         value: _highPrecision,
                         onChanged: (bool value) async {
                           await SettingsService.setHighPrecisionMode(value);
+                          if (!mounted) return; // salir durante el await disponía el estado
                           setState(() => _highPrecision = value);
                         },
                         secondary: Icon(_highPrecision

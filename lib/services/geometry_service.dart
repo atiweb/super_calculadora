@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+import '../utils/app_locale.dart';
 import '../models/calc_exception.dart';
 import '../models/fraction.dart';
 import '../models/surd.dart';
@@ -367,7 +368,7 @@ class GeometryService {
 
   /// Raíz cuadrada entera (piso) de un BigInt no negativo.
   static BigInt _integerSqrt(BigInt n) {
-    if (n < BigInt.zero) throw ArgumentError('Raíz de número negativo');
+    if (n < BigInt.zero) throw ArgumentError(trLocale('Raíz de número negativo', 'Root of a negative number'));
     if (n < BigInt.two) return n;
     BigInt x = n;
     BigInt y = (x + BigInt.one) >> 1;

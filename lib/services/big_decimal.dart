@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+import '../utils/app_locale.dart';
 
 /// Clase personalizada para manejar números decimales de precisión arbitraria
 /// Simula 1024 bits enteros + 64 bits decimales
@@ -11,36 +12,54 @@ class BigDecimal {
 
   BigDecimal._(this._integerPart, this._fractionalPart, this._scale);
 
-  /// Constructor desde string
+  /// Constructor desde string. Acepta notación científica ("1e+25",
+  /// "3.16e-7") expandiéndola a forma plana. Lanza [FormatException] si el
+  /// texto no es un número: degradar en silencio a 0 (comportamiento
+  /// anterior) corrompía raíces, potencias y el formateo de resultados
+  /// grandes, porque `double.toString()` emite exponente desde 1e21.
   factory BigDecimal.fromString(String value) {
     if (value.isEmpty) {
       return BigDecimal.zero;
     }
 
-    // Remover espacios y validar formato
     value = value.trim();
-    
-    // Manejar signo negativo
+
+    // Expandir notación científica antes de trocear.
+    final Match? expMatch =
+        RegExp(r'^([+-]?[0-9]*\.?[0-9]+)[eE]([+-]?[0-9]+)$').firstMatch(value);
+    if (expMatch != null) {
+      value = _expandScientific(
+          expMatch.group(1)!, int.parse(expMatch.group(2)!));
+    }
+
+    // Manejar signo
     bool isNegative = value.startsWith('-');
-    if (isNegative) {
+    if (isNegative || value.startsWith('+')) {
       value = value.substring(1);
     }
 
     // Dividir en parte entera y decimal
     List<String> parts = value.split('.');
-    
-    BigInt integerPart = BigInt.tryParse(parts[0]) ?? BigInt.zero;
+    final RegExp digitsOnly = RegExp(r'^[0-9]*$');
+    if (parts.length > 2 ||
+        parts.any((p) => !digitsOnly.hasMatch(p)) ||
+        parts.every((p) => p.isEmpty)) {
+      throw FormatException('Número inválido: $value');
+    }
+
+    BigInt integerPart =
+        parts[0].isEmpty ? BigInt.zero : BigInt.parse(parts[0]);
     BigInt fractionalPart = BigInt.zero;
     int scale = 0;
 
-    if (parts.length > 1) {
+    if (parts.length > 1 && parts[1].isNotEmpty) {
       String decimalStr = parts[1];
       // Limitar a maxDecimalPlaces dígitos decimales
       if (decimalStr.length > maxDecimalPlaces) {
         decimalStr = decimalStr.substring(0, maxDecimalPlaces);
       }
-      
-      fractionalPart = BigInt.tryParse(decimalStr) ?? BigInt.zero;
+
+      fractionalPart = BigInt.parse(decimalStr);
       scale = decimalStr.length;
     }
 
@@ -52,6 +71,29 @@ class BigDecimal {
     }
 
     return BigDecimal._(integerPart, fractionalPart, scale);
+  }
+
+  /// Expande "mantisa × 10^exponente" a un literal decimal plano.
+  static String _expandScientific(String mantissa, int exponent) {
+    final bool neg = mantissa.startsWith('-');
+    if (neg || mantissa.startsWith('+')) {
+      mantissa = mantissa.substring(1);
+    }
+    final int dot = mantissa.indexOf('.');
+    final String digits = mantissa.replaceAll('.', '');
+    // Posición del punto decimal dentro de `digits` tras aplicar el exponente
+    int pointPos = (dot == -1 ? mantissa.length : dot) + exponent;
+
+    String result;
+    if (pointPos <= 0) {
+      result = '0.${'0' * (-pointPos)}$digits';
+    } else if (pointPos >= digits.length) {
+      result = digits + '0' * (pointPos - digits.length);
+    } else {
+      result =
+          '${digits.substring(0, pointPos)}.${digits.substring(pointPos)}';
+    }
+    return neg ? '-$result' : result;
   }
 
   /// Constructor desde BigInt
@@ -153,7 +195,7 @@ class BigDecimal {
   /// División
   BigDecimal operator /(BigDecimal other) {
     if (other.isZero) {
-      throw ArgumentError('División por cero');
+      throw ArgumentError(trLocale('División por cero', 'Division by zero'));
     }
 
   // Convertir a forma decimal completa con precisión extra.
@@ -201,102 +243,74 @@ class BigDecimal {
     return result;
   }
 
-  /// Raíz cuadrada (aproximación)
+  /// Raíz cuadrada, exacta a [maxDecimalPlaces] decimales (truncada).
+  ///
+  /// Trabaja sobre enteros: √(t/10^s) = ⌊√(t·10^(2p−s))⌋ / 10^p. La versión
+  /// anterior pasaba por `double.toString()`, cuya notación científica
+  /// (≥ 1e21) corrompía el resultado (√10^44 devolvía 0).
   BigDecimal sqrt() {
     if (isNegative) {
-      throw ArgumentError('Raíz cuadrada de número negativo');
+      throw ArgumentError(trLocale('Raíz cuadrada de número negativo', 'Square root of a negative number'));
     }
     if (isZero) return BigDecimal.zero;
     if (this == BigDecimal.one) return BigDecimal.one;
-    
-    // Para números simples, usar la función sqrt de dart y convertir
-    try {
-      double thisAsDouble = double.parse(toString());
-      if (!thisAsDouble.isInfinite && !thisAsDouble.isNaN) {
-        double sqrtResult = math.sqrt(thisAsDouble);
-        if (!sqrtResult.isInfinite && !sqrtResult.isNaN) {
-          return BigDecimal.fromString(sqrtResult.toString());
-        }
-      }
-    } catch (e) {
-      // Si falla la conversión, usar método de Newton-Raphson
-    }
-    
-    // Usar método de Newton-Raphson como respaldo
-    BigDecimal x = this;
-    BigDecimal two = BigDecimal.fromInt(2);
-    
-    // Mejor aproximación inicial
-    if (this > BigDecimal.one) {
-      x = this / two; // Empezar con la mitad del número
-    } else {
-      x = this; // Para números entre 0 y 1
-    }
-    
-    // Iterar hasta convergencia
-    for (int i = 0; i < 100; i++) {
-      BigDecimal xPrev = x;
-      try {
-        x = (x + (this / x)) / two;
-        
-        // Verificar convergencia con mayor precisión
-        BigDecimal diff = (x - xPrev).abs();
-        if (diff < BigDecimal.fromString('0.000000000001')) {
-          break;
-        }
-      } catch (e) {
-        // Si hay error en la división, devolver la aproximación actual
-        break;
-      }
-    }
-    
-    return x;
+
+    const int p = maxDecimalPlaces;
+    // La escala interna puede superar p (p. ej. tras dividir); el desfase
+    // negativo se trunca, lo que solo descarta decimales más allá de 2p.
+    final int shift = 2 * p - _scale;
+    final BigInt scaled = shift >= 0
+        ? _toTotalDecimal() * BigInt.from(10).pow(shift)
+        : _toTotalDecimal() ~/ BigInt.from(10).pow(-shift);
+    return BigDecimal._fromTotal(_sqrtBigInt(scaled), p);
   }
 
-  /// Raíz cúbica (aproximación)
+  /// ⌊√n⌋ por Newton entero con estimación inicial 2^⌈bits/2⌉ (≥ √n, decrece
+  /// monótonamente hasta la raíz).
+  static BigInt _sqrtBigInt(BigInt n) {
+    if (n < BigInt.two) return n;
+    BigInt x = BigInt.one << ((n.bitLength + 1) >> 1);
+    while (true) {
+      final BigInt y = (x + n ~/ x) >> 1;
+      if (y >= x) return x;
+      x = y;
+    }
+  }
+
+  /// Raíz cúbica, exacta a [maxDecimalPlaces] decimales (truncada).
+  /// ∛(t/10^s) = ⌊∛(t·10^(3p−s))⌋ / 10^p, todo en enteros.
   BigDecimal cbrt() {
     if (isZero) return BigDecimal.zero;
     // Manejo de negativos: la raíz cúbica de negativo es negativa
     if (isNegative) {
-      return (-this).cbrt() * BigDecimal.fromInt(-1);
+      return -((-this).cbrt());
     }
 
-    // Intento rápido con double si es posible
-    try {
-      double thisAsDouble = double.parse(toString());
-      if (!thisAsDouble.isInfinite && !thisAsDouble.isNaN) {
-        double cbrtResult = thisAsDouble.sign * math.pow(thisAsDouble.abs(), 1 / 3).toDouble();
-        if (!cbrtResult.isInfinite && !cbrtResult.isNaN) {
-          return BigDecimal.fromString(cbrtResult.toString());
-        }
-      }
-    } catch (e) {
-      // caemos al método iterativo
+    const int p = maxDecimalPlaces;
+    final int shift = 3 * p - _scale;
+    final BigInt scaled = shift >= 0
+        ? _toTotalDecimal() * BigInt.from(10).pow(shift)
+        : _toTotalDecimal() ~/ BigInt.from(10).pow(-shift);
+    return BigDecimal._fromTotal(_cbrtBigInt(scaled), p);
+  }
+
+  /// ⌊∛n⌋ por Newton entero, con ajuste final por si la iteración se detiene
+  /// a ±1 de la raíz.
+  static BigInt _cbrtBigInt(BigInt n) {
+    if (n < BigInt.two) return n;
+    final BigInt three = BigInt.from(3);
+    BigInt x = BigInt.one << (n.bitLength ~/ 3 + 1);
+    while (true) {
+      final BigInt y = (BigInt.two * x + n ~/ (x * x)) ~/ three;
+      if (y >= x) break;
+      x = y;
     }
-
-    // Método de Newton-Raphson para raíz cúbica
-    BigDecimal x = this; // estimación inicial
-    BigDecimal three = BigDecimal.fromInt(3);
-
-    if (this > BigDecimal.one) {
-      // estimación inicial mejorada
-      x = this / three;
+    while (x * x * x > n) {
+      x -= BigInt.one;
     }
-
-    for (int i = 0; i < 100; i++) {
-      BigDecimal xPrev = x;
-      try {
-        // x_{n+1} = (2x_n + N / x_n^2) / 3
-        x = (x * BigDecimal.fromInt(2) + (this / (x * x))) / three;
-        BigDecimal diff = (x - xPrev).abs();
-        if (diff < BigDecimal.fromString('0.000000000001')) {
-          break;
-        }
-      } catch (e) {
-        break;
-      }
+    while ((x + BigInt.one) * (x + BigInt.one) * (x + BigInt.one) <= n) {
+      x += BigInt.one;
     }
-
     return x;
   }
 
