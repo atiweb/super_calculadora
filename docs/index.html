@@ -75,6 +75,20 @@
     .step-num{flex-shrink:0;width:22px;height:22px;background:var(--accent);color:#fff;border-radius:50%;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center}
     .note-box{margin-top:12px;padding:10px 14px;background:#fff;border-radius:6px;font-size:13px;color:var(--text-muted);border:1px solid var(--border)}
 
+    /* ── Beta / testers banner (fixed colors for contrast in both themes) ── */
+    .beta-banner{background:linear-gradient(135deg,#6750a4,#4a3880);color:#fff;border-radius:12px;padding:22px 24px;margin-bottom:32px}
+    .beta-banner h2{color:#fff;border:none;margin:0 0 6px;padding:0;font-size:1.25rem}
+    .beta-banner>p{color:rgba(255,255,255,.92);margin:0 0 14px;font-size:14px}
+    .beta-steps{list-style:none;margin:0 0 16px;padding:0;display:flex;flex-direction:column;gap:6px}
+    .beta-steps li{display:flex;align-items:flex-start;gap:8px;font-size:13.5px;color:rgba(255,255,255,.95)}
+    .bnum{flex-shrink:0;width:22px;height:22px;background:#fff;color:#4a3880;border-radius:50%;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center}
+    .beta-actions{display:flex;flex-wrap:wrap;gap:10px}
+    .beta-btn{display:inline-flex;align-items:center;gap:8px;text-decoration:none;font-weight:700;font-size:14px;padding:11px 18px;border-radius:24px;transition:transform .1s,box-shadow .15s}
+    .beta-btn.primary{background:#fff;color:#4a3880}
+    .beta-btn.secondary{background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.55)}
+    .beta-btn:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,.25)}
+    .beta-note{margin-top:12px;font-size:12px;color:rgba(255,255,255,.82)}
+
     /* ── Param types ── */
     .param-types{display:flex;flex-direction:column;gap:12px;margin-bottom:16px}
     .param-type{display:flex;gap:12px;align-items:flex-start;padding:12px 16px;border:1px solid var(--border);border-radius:8px}
@@ -151,6 +165,7 @@
 <!-- ══ NAV ══════════════════════════════════════════════════════════════ -->
 <nav>
   <div class="nav-section"><span class="en">Getting Started</span><span class="es">Inicio</span></div>
+  <a href="#beta"><span class="en">🧪 Become a Tester</span><span class="es">🧪 Sé Tester</span></a>
   <a href="#quick-start"><span class="en">Quick Start</span><span class="es">Inicio Rápido</span></a>
   <a href="#parameter-system"><span class="en">Parameter System</span><span class="es">Sistema de Parámetros</span></a>
   <a href="#high-precision"><span class="en">High-Precision Mode</span><span class="es">Alta Precisión</span></a>
@@ -238,9 +253,27 @@
     <span class="badge">Android</span>
     <span class="badge">Flutter</span>
     <span class="badge">Offline</span>
-    <span class="badge">v1.1.0</span>
+    <span class="badge">v1.1.1</span>
   </div>
 </div>
+
+<!-- ════ BETA TESTERS ═══════════════════════════════════════════════════ -->
+<section class="beta-banner" id="beta">
+  <h2>🧪 <span class="en">Help test the app — it's free</span><span class="es">Ayuda a probar la app — es gratis</span></h2>
+  <p class="en">We're finishing the closed test on Google Play and need a few testers. No cost, no ads — and you get a genuinely useful olympiad-training tool. Android only.</p>
+  <p class="es">Estamos terminando la prueba cerrada en Google Play y necesitamos algunos testers. Sin costo, sin anuncios — y obtienes una herramienta realmente útil para entrenar olimpiada. Solo Android.</p>
+  <ol class="beta-steps">
+    <li><span class="bnum">1</span><span><span class="en">Join the tester group (use the Google account on your phone).</span><span class="es">Únete al grupo de testers (usa la cuenta de Google de tu teléfono).</span></span></li>
+    <li><span class="bnum">2</span><span><span class="en">Open the opt-in link and tap “Become a tester”.</span><span class="es">Abre el enlace de participación y pulsa “Convertirse en tester”.</span></span></li>
+    <li><span class="bnum">3</span><span><span class="en">Install from Google Play and open the app a few times over 2 weeks.</span><span class="es">Instala desde Google Play y abre la app unas veces durante 2 semanas.</span></span></li>
+  </ol>
+  <div class="beta-actions">
+    <a class="beta-btn secondary" href="https://groups.google.com/g/super-calculadora-testers" target="_blank" rel="noopener">👥 <span class="en">1. Join the group</span><span class="es">1. Unirse al grupo</span></a>
+    <a class="beta-btn primary" href="https://play.google.com/apps/testing/br.dev.ati.supercalculadora" target="_blank" rel="noopener">🚀 <span class="en">2. Become a tester</span><span class="es">2. Convertirse en tester</span></a>
+  </div>
+  <p class="beta-note en">Step 2 works only after you've joined the group — both are required for the test to count. Thank you for helping! 🙏</p>
+  <p class="beta-note es">El paso 2 solo funciona después de unirte al grupo — ambos son necesarios para que la prueba cuente. ¡Gracias por ayudar! 🙏</p>
+</section>
 
 <!-- ════ QUICK START ════════════════════════════════════════════════════ -->
 <h2 id="quick-start"><span class="en">Quick Start</span><span class="es">Inicio Rápido</span></h2>
@@ -1024,8 +1057,9 @@ Nota: presionar CE limpia el panel de análisis de inmediato.</pre></div>
 </div>
 
 <footer>
-  <span><span class="en">Super Calculator</span><span class="es">Super Calculadora</span> v1.1.0 — Adalberto Garcia Garces</span>
+  <span><span class="en">Super Calculator</span><span class="es">Super Calculadora</span> v1.1.1 — Adalberto Garcia Garces</span>
   <span>
+    <a href="#beta"><span class="en">Become a Tester</span><span class="es">Sé Tester</span></a> ·
     <a href="privacy.html"><span class="en">Privacy Policy</span><span class="es">Política de Privacidad</span></a> ·
     <a href="https://github.com/atiweb/super_calculadora">GitHub</a>
   </span>

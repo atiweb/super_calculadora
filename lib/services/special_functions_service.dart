@@ -232,20 +232,17 @@ class SpecialFunctionsService {
     return primeFactorCount % 2 == 0 ? 1 : -1;
   }
   
-  /// Resto de división (mod)
+  /// Resto de división (mod): menor residuo NO NEGATIVO en [0, |b|).
+  ///
+  /// El operador `%` de Dart ya devuelve un resto no negativo, pero con el
+  /// signo del divisor cuando este es negativo; usamos `|b|` para que el
+  /// resultado sea siempre no negativo con independencia del signo de `b`
+  /// (p. ej. mod(7, -3) = 1, no -2).
   static BigInt mod(BigInt a, BigInt b) {
     if (b == BigInt.zero) {
       throw ArgumentError('División por cero');
     }
-    
-    BigInt result = a % b;
-    if (result.isNegative && b > BigInt.zero) {
-      result += b;
-    } else if (result > BigInt.zero && b.isNegative) {
-      result += b;
-    }
-    
-    return result;
+    return a % b.abs();
   }
   
   /// Valuación p-ádica - máxima potencia de p que divide a n

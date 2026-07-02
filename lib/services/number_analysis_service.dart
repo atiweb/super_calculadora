@@ -1,4 +1,3 @@
-import 'dart:math' as math;
 import 'package:flutter/foundation.dart';
 import 'prime_utils.dart';
 import 'big_decimal.dart';
@@ -211,27 +210,44 @@ class NumberAnalysisService {
     return str == str.split('').reversed.join('');
   }
 
-  /// Verifica si es un número perfecto (optimizado para números grandes)
+  /// Verifica si es un número perfecto.
+  ///
+  /// Usa el teorema de Euclides–Euler: todo número perfecto par tiene la forma
+  /// 2^(a)·(2^(a+1) − 1) donde 2^(a+1) − 1 es primo (primo de Mersenne). Esto
+  /// permite una comprobación exacta e instantánea incluso para números
+  /// perfectos enormes. No se conocen números perfectos impares (se ha probado
+  /// que, de existir, superan 10^1500), así que para impares se hace una
+  /// verificación exacta solo cuando el número es pequeño y se devuelve `false`
+  /// en caso contrario.
   static bool isPerfectNumber(BigInt number) {
-    if (number < BigInt.two) return false;
-    
-    // Para números muy grandes, no calcular (es computacionalmente costoso)
-    if (number.toString().length > 10) {
-      return false; // Asumimos que no es perfecto para números muy grandes
+    if (number < BigInt.from(6)) return false; // el menor perfecto es 6
+
+    if (number.isEven) {
+      // number = 2^a · m con m impar (a ≥ 1). Es perfecto ⟺ m = 2^(a+1) − 1
+      // y m es primo.
+      int a = 0;
+      BigInt m = number;
+      while (m.isEven) {
+        m >>= 1;
+        a++;
+      }
+      final BigInt mersenne = (BigInt.one << (a + 1)) - BigInt.one;
+      return m == mersenne && isPrime(m);
     }
-    
+
+    // Impar: no se conoce ninguno perfecto. Verificación exacta solo para
+    // números manejables; para el resto devolvemos `false` (correcto según la
+    // cota inferior conocida de 10^1500) evitando un cálculo prohibitivo.
+    if (number > BigInt.from(100000000)) return false;
     BigInt sum = BigInt.one;
-    BigInt limit = _sqrt(number);
-    
-    for (BigInt i = BigInt.two; i <= limit; i += BigInt.one) {
+    final BigInt limit = _sqrt(number);
+    for (BigInt i = BigInt.from(3); i <= limit; i += BigInt.two) {
       if (number % i == BigInt.zero) {
         sum += i;
-        if (i != number ~/ i) {
-          sum += number ~/ i;
-        }
+        final BigInt q = number ~/ i;
+        if (q != i) sum += q;
       }
     }
-    
     return sum == number;
   }
 
@@ -828,30 +844,6 @@ class NumberAnalysisService {
     return high;
   }
 
-  /// Potencia segura que evita overflow
-  static BigInt _safePow(BigInt base, int exponent) {
-    if (exponent == 0) return BigInt.one;
-    if (exponent == 1) return base;
-    
-    BigInt result = BigInt.one;
-    BigInt currentBase = base;
-    
-    while (exponent > 0) {
-      if (exponent % 2 == 1) {
-        result *= currentBase;
-      }
-      currentBase *= currentBase;
-      exponent ~/= 2;
-      
-      // Si el resultado se vuelve muy grande, parar
-      if (result.toString().length > 1000) {
-        break;
-      }
-    }
-    
-    return result;
-  }
-
   static BigInt _sqrt(BigInt number) {
     if (number < BigInt.zero) throw ArgumentError('Raíz cuadrada de número negativo');
     if (number == BigInt.zero) return BigInt.zero;
@@ -868,38 +860,39 @@ class NumberAnalysisService {
     return x;
   }
 
+  /// Raíz n-ésima entera exacta: devuelve ⌊|number|^(1/n)⌋ (con el signo
+  /// adecuado) mediante búsqueda binaria. Es exacta para BigInt de cualquier
+  /// tamaño, sin aproximaciones, lo que permite detectar potencias perfectas
+  /// grandes correctamente.
   static BigInt _nthRoot(BigInt number, int n) {
-    if (number < BigInt.zero && n % 2 == 0) {
+    if (n < 1) throw ArgumentError('El índice de la raíz debe ser ≥ 1');
+    if (number < BigInt.zero && n.isEven) {
       throw ArgumentError('Raíz par de número negativo');
     }
-    
     if (number == BigInt.zero) return BigInt.zero;
-    if (number == BigInt.one) return BigInt.one;
     if (n == 1) return number;
-    
-    // Para números muy grandes, usar aproximación logarítmica
-    if (number.toString().length > 100) {
-      // Aproximación usando logaritmos
-      double logValue = number.toString().length * math.log(10) / n;
-      double approx = math.exp(logValue);
-      return BigInt.from(approx.floor());
+
+    final bool negative = number < BigInt.zero;
+    final BigInt magnitude = number.abs();
+    if (magnitude == BigInt.one) return negative ? -BigInt.one : BigInt.one;
+
+    // Cota superior: duplicar `hi` hasta que hi^n supere `magnitude`.
+    BigInt lo = BigInt.one;
+    BigInt hi = BigInt.two;
+    while (hi.pow(n) <= magnitude) {
+      hi <<= 1;
     }
-    
-    BigInt x = number;
-    BigInt nBig = BigInt.from(n);
-    BigInt nMinus1 = BigInt.from(n - 1);
-    
-    int maxIterations = 100; // Limitar iteraciones para evitar bucles infinitos
-    int iteration = 0;
-    
-    while (iteration < maxIterations) {
-      BigInt y = (nMinus1 * x + number ~/ _safePow(x, n - 1)) ~/ nBig;
-      if (y >= x) break;
-      x = y;
-      iteration++;
+
+    // Búsqueda binaria de ⌊magnitude^(1/n)⌋ en el intervalo (lo, hi].
+    while (lo < hi) {
+      final BigInt mid = (lo + hi + BigInt.one) >> 1;
+      if (mid.pow(n) <= magnitude) {
+        lo = mid;
+      } else {
+        hi = mid - BigInt.one;
+      }
     }
-    
-    return x;
+    return negative ? -lo : lo;
   }
 
   /// Calcula la suma de los dígitos de un número (optimizado para números grandes)

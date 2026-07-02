@@ -471,8 +471,13 @@ void main() {
     test('7 is prime',  () => expect(NumberAnalysisService.isPrime(bi(7)),  true));
     test('1 is not prime', () => expect(NumberAnalysisService.isPrime(bi(1)), false));
     test('4 is not prime', () => expect(NumberAnalysisService.isPrime(bi(4)), false));
-    test('large prime 3215031751', () =>
-        expect(NumberAnalysisService.isPrime(bi(3215031751)), true));
+    // 3215031751 = 151·751·28351 es COMPUESTO: es el menor pseudoprimo fuerte
+    // a las bases 2,3,5,7, por lo que un Miller–Rabin con esas bases fijas lo
+    // reportaría erróneamente como primo (ver prime_utils.dart).
+    test('3215031751 es compuesto (pseudoprimo fuerte a 2,3,5,7)', () =>
+        expect(NumberAnalysisService.isPrime(bi(3215031751)), false));
+    test('large prime 2147483647 (2^31−1)', () =>
+        expect(NumberAnalysisService.isPrime(bi(2147483647)), true));
     test('large composite 3215031752', () =>
         expect(NumberAnalysisService.isPrime(bi(3215031752)), false));
   });
