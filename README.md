@@ -14,6 +14,13 @@
   <img src="https://img.shields.io/badge/license-MIT-lightgrey?style=flat-square" alt="License"/>
   <img src="https://img.shields.io/badge/offline-100%25-brightgreen?style=flat-square" alt="Offline"/>
   <a href="https://play.google.com/store/apps/details?id=br.dev.ati.supercalculadora"><img src="https://img.shields.io/badge/Google%20Play-Available-success?style=flat-square" alt="Google Play"/></a>
+  <a href="https://atiweb.github.io/super_calculadora/"><img src="https://img.shields.io/badge/📖%20User%20Guide-online-6750a4?style=flat-square" alt="User Guide"/></a>
+</p>
+
+<p align="center">
+  <b><a href="https://atiweb.github.io/super_calculadora/">📖 Online User Guide &amp; Function Reference</a></b> (bilingual EN/ES)
+  &nbsp;·&nbsp;
+  🧪 <b><a href="https://atiweb.github.io/super_calculadora/#beta">Help test the app</a></b> (closed beta)
 </p>
 
 ---
@@ -26,6 +33,19 @@
 | **Standard** | Basic arithmetic with arbitrary-precision BigDecimal engine |
 | **Scientific** | Trigonometric, logarithmic, exponential functions; degree/radian toggle |
 | **Special Functions** | 100+ advanced mathematical functions (see below) |
+
+### High-Precision Mode *(optional toggle in Settings)*
+An optional engine backed by **constructive (computable) real numbers** that
+computes `sin, cos, tan, asin, acos, atan, ln, log, exp, √ and ∛` **exactly** and
+rounds only when displaying — to a configurable number of digits (5–100).
+
+- No floating-point error: e.g. `√2` to 30 digits is `1.41421356237309504880168872421`.
+- Singularities are detected by construction: `tan(90°)` reports *undefined*
+  instead of a misleading huge number.
+- All high-precision work runs **in a background isolate with a loader**, so the
+  UI never freezes.
+- Powered by a vendored copy of [`computable_reals`](https://github.com/aarol/computable_reals)
+  (a Dart port of Hans Boehm's constructive reals; attribution in *Settings → Open source licenses*).
 
 ### Number Theory Functions
 - **Euler's Totient φ(n)** — count of coprimes
@@ -67,14 +87,20 @@ Every number you enter is automatically analyzed:
 - Number classifications: prime, perfect, abundant, deficient, squarefree, powerful, Harshad, semiprime, Fibonacci, triangular, palindrome…
 
 ### Olympiad Tools *(training toolkit for IMO-style problems)*
-A dedicated section (from the navigation drawer) with **exact** tools across the four olympiad pillars:
+A dedicated section (from the navigation drawer) with **exact** tools, many with
+**visual diagrams**, across 10 categories plus a practice quiz:
+
 - **Fractions** — exact rational arithmetic, simplify/convert
 - **Radicals** — √n and ⁿ√n simplification, denominator rationalization
-- **Geometry** — triangle classification, Heron area, circumradius/inradius, shoelace area, Pythagorean & Heronian triples
-- **Polynomials** — rational roots, Vieta's relations, discriminant, quadratic/cubic solving
-- **Number Theory** — modular square root (Tonelli-Shanks), linear congruences, Pell equation, continued fractions, sums of squares, Frobenius number
+- **Geometry** — triangle classification + diagram, Heron area, circumradius/inradius, shoelace area (drawn), **Pick's theorem** (with lattice points), **triangle centers** (centroid/circumcenter/orthocenter + **Euler line**), Pythagorean & Heronian triples
+- **Polynomials** — rational roots, Vieta's relations, discriminant, **function plot** (roots + extrema), **Ruffini** synthetic division (steps), **n×n linear systems** (Cramer), quadratic/cubic solving
+- **Number Theory** — modular square root (Tonelli-Shanks), linear congruences (with a **modular clock**), Pell equation, continued fractions, sums of squares, Frobenius number, **Sieve of Eratosthenes** (grid), quadratic residues, φ/τ/σ/μ table
 - **Step by step** — Euclid, CRT and factorization shown with worked steps
-- **Complex & Sequences** — roots of unity, De Moivre, linear recurrences, Pascal triangle
+- **Complex & Sequences** — roots of unity (drawn on the **unit circle**), De Moivre power, n-th roots, linear recurrences, Pascal triangle, **Pascal mod m** (Sierpiński fractal), binomial expansion — *complex tools compute in high precision*
+- **Statistics** — exact descriptive stats (mean, median, mode, variance) and the QM ≥ AM ≥ GM ≥ HM inequality
+- **Matrices** — exact (fraction) determinant, inverse, multiplication, **n×n system solving**, rank & transpose
+- **Calculus** — numerical derivative, definite integral and limit of any `f(x)`
+- **Practice** — self-checking quiz of number-theory problems with scoring
 
 ### Other
 - **Persistent history** — last 100 operations saved on device
@@ -147,20 +173,27 @@ Both files are listed in `.gitignore` and will never be committed.
 
 ```
 lib/
-├── main.dart                           # App entry point, locale & theme setup
+├── main.dart                           # App entry point, locale, theme, orientation
+├── models/
+│   ├── fraction.dart  big_complex.dart  matrix.dart  polynomial.dart  …
 ├── services/
 │   ├── calculator_service.dart         # Main calculation engine
 │   ├── special_functions_service.dart  # Number theory implementations
 │   ├── number_analysis_service.dart    # Real-time number analysis
-│   └── big_decimal.dart                # Arbitrary-precision arithmetic
+│   ├── big_decimal.dart                # Arbitrary-precision decimal
+│   ├── precision_service.dart          # High-precision (constructive reals) + isolate worker
+│   ├── calculus_service.dart           # Numerical derivative/integral/limit
+│   └── geometry_/linear_system_/statistics_/steps_… services
 ├── widgets/
 │   ├── calculator_display.dart         # Main display with copy/paste
 │   ├── number_analysis_panel.dart      # Live analysis panel
-│   ├── special_calculator_keyboard.dart
-│   └── ...
+│   ├── geometry_painters.dart  number_painters.dart   # diagrams & plots
+│   └── …
 ├── screens/
 │   ├── calculator_screen.dart          # 3-tab main screen
+│   ├── olympiad/                        # hub + 10 tool screens + quiz
 │   └── settings_screen.dart
+├── vendor/computable_reals/             # vendored constructive-reals (see its LICENSE)
 └── l10n/                               # English + Spanish translations
 ```
 
@@ -169,9 +202,12 @@ lib/
 ## Technical Highlights
 
 - **Custom BigDecimal engine** — arbitrary-precision arithmetic without `double` precision loss
-- **Isolate-based computation** — heavy operations run off the UI thread
-- **Miller-Rabin primality** — probabilistic prime testing with deterministic bases for n < 3.2×10¹⁸
+- **Constructive reals (optional)** — vendored `computable_reals` gives exact, lazily-evaluated transcendental functions to any precision
+- **Exact rational layer** — `Fraction`-based matrices and polynomials (Gaussian elimination, no rounding)
+- **Isolate-based computation** — heavy and high-precision operations run off the UI thread with a loader; an overflow guard rejects infeasible exact powers instantly
+- **Miller-Rabin primality** — deterministic for n < 3.3×10²⁴ using the first 12 prime bases (no false positives in that range)
 - **Fast Fibonacci** — O(log n) doubling algorithm
+- **Android 15 ready** — edge-to-edge layout, portrait-locked
 
 ---
 
@@ -197,6 +233,13 @@ flutter analyze   # must pass with zero issues
 ## License
 
 [MIT](LICENSE)
+
+### Third-party
+
+- [`computable_reals`](https://github.com/aarol/computable_reals) is vendored under
+  `lib/vendor/computable_reals/` (permissive Apache-2.0 + SGI + HP license — a Dart
+  port of Hans Boehm's constructive reals). Its notice is retained in that folder's
+  `LICENSE` and surfaced in-app via *Settings → Open source licenses*.
 
 ---
 

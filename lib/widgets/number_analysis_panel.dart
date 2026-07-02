@@ -514,7 +514,7 @@ class NumberAnalysisPanel extends StatelessWidget {
     );
   }
 
-  Widget _buildInfoRow(String label, String value, {int maxLines = 1}) {
+  Widget _buildInfoRow(String label, String value, {int? maxLines}) {
     // Verificar la configuración del usuario para notación científica
     bool shouldUseScientific = SettingsService.getUseScientificNotation();
     

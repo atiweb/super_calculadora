@@ -75,8 +75,13 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
           ),
           body: Stack(
             children: [
-              Column(
-                children: [
+              // top:false → el AppBar ya consume el inset superior; protegemos
+              // el inferior (barra de navegación) y los laterales (cutouts) para
+              // la vista edge-to-edge de Android 15.
+              SafeArea(
+                top: false,
+                child: Column(
+                  children: [
                   // Mostrar ExpressionInput solo en la pestaña de expresiones
                   if (_currentPage == 2) const ExpressionInput(),
 
@@ -186,7 +191,8 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                       ],
                     ),
                   ),
-                ],
+                  ],
+                ),
               ),
 
               // Overlay para operaciones pesadas
@@ -306,7 +312,9 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
               ),
               const SizedBox(height: 20),
               Text(
-                calculator.operationProgress,
+                calculator.operationProgress.isEmpty
+                    ? l.calcHighPrecision
+                    : calculator.operationProgress,
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,

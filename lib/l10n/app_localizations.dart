@@ -290,6 +290,12 @@ abstract class AppLocalizations {
   /// **'Procesando números grandes...'**
   String get calcProcessing;
 
+  /// Loader text while computing in high-precision mode
+  ///
+  /// In es, this message translates to:
+  /// **'Calculando (alta precisión)…'**
+  String get calcHighPrecision;
+
   /// Cancel button label during processing
   ///
   /// In es, this message translates to:
@@ -553,6 +559,30 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Los números se mostrarán completos (ej: 123000) cuando esté deshabilitado'**
   String get settingsScientificHint;
+
+  /// High precision mode toggle title
+  ///
+  /// In es, this message translates to:
+  /// **'Modo de alta precisión'**
+  String get settingsHighPrecision;
+
+  /// High precision mode hint
+  ///
+  /// In es, this message translates to:
+  /// **'Calcula sin, cos, tan, ln, √… con reales constructivos exactos (más lento). Singularidades como tan 90° se reportan como indefinido.'**
+  String get settingsHighPrecisionHint;
+
+  /// Precision digits label
+  ///
+  /// In es, this message translates to:
+  /// **'Dígitos de precisión: {digits}'**
+  String settingsPrecisionDigits(int digits);
+
+  /// Open source licenses entry
+  ///
+  /// In es, this message translates to:
+  /// **'Licencias de código abierto'**
+  String get settingsOpenSourceLicenses;
 
   /// Section title for format examples
   ///
@@ -1339,6 +1369,12 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Error en raíz cuadrada: {error}'**
   String errSquareRoot(String error);
+
+  /// Error when taking square root of a negative number
+  ///
+  /// In es, this message translates to:
+  /// **'No se puede calcular la raíz cuadrada de un número negativo'**
+  String get errNegativeSqrt;
 
   /// Error message for cube root operation
   ///
@@ -4016,6 +4052,36 @@ abstract class AppLocalizations {
   /// **'Al ingresar cualquier número, el panel derecho (tablet) o inferior (móvil) muestra automáticamente:\n\n• Propiedades: dígitos, paridad, signo\n• Representaciones: binario, octal, hexadecimal\n• Primalidad: test Miller-Rabin, factorización completa\n• Primos vecinos: anterior y siguiente\n• Divisores: lista completa, suma, cantidad\n• Clasificaciones: cuadrado/cubo perfecto, potencia perfecta, Fibonacci, triangular, palíndromo\n\nPara números ≤ 15 dígitos, también muestra:\n\n• Funciones aritméticas: φ, λ, μ, ω, Ω, sopfr, sopf, rad, dr\n• Clasificaciones: libre de cuadrados, poderoso, Harshad, semiprimo, abundante/deficiente/perfecto'**
   String get hlpAutoAnalysisContent;
 
+  /// Help section header for high precision and new tools
+  ///
+  /// In es, this message translates to:
+  /// **'Alta Precisión y Herramientas'**
+  String get hlpHighPrecHeader;
+
+  /// High precision help card title
+  ///
+  /// In es, this message translates to:
+  /// **'Modo de alta precisión'**
+  String get hlpHighPrecTitle;
+
+  /// High precision help card content
+  ///
+  /// In es, this message translates to:
+  /// **'Actívalo en Ajustes. Calcula sin, cos, tan, ln, log, exp, √ y ∛ con reales constructivos EXACTOS y redondea solo al mostrar (5–100 dígitos). Sin error de punto flotante: √2 a 30 dígitos = 1.41421356237309504880168872421. Las singularidades se detectan por construcción (tan 90° = indefinido). Todo corre en segundo plano con un indicador de carga, sin congelar la app.'**
+  String get hlpHighPrecContent;
+
+  /// Olympiad tools overview card title
+  ///
+  /// In es, this message translates to:
+  /// **'Herramientas de Olimpiada'**
+  String get hlpNewToolsTitle;
+
+  /// Olympiad tools overview card content
+  ///
+  /// In es, this message translates to:
+  /// **'Desde el menú lateral → Herramientas de Olimpiada: Fracciones, Radicales, Geometría (con dibujos: triángulo, Pick, centros y recta de Euler), Polinomios (gráfica, Ruffini, sistemas n×n), Teoría de Números (criba, reloj modular, residuos), Procedimientos paso a paso, Complejos (círculo unitario, Sierpiński — en alta precisión), Estadística, Matrices (exactas), Cálculo (derivada/integral/límite) y Práctica con verificación.'**
+  String get hlpNewToolsContent;
+
   /// Olympiad formulas section header
   ///
   /// In es, this message translates to:
@@ -4081,6 +4147,12 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Error: Resultado no válido'**
   String get errResultInvalid;
+
+  /// Power/operation result would have too many digits
+  ///
+  /// In es, this message translates to:
+  /// **'El resultado es demasiado grande para calcularse exactamente'**
+  String get errResultTooLarge;
 
   /// Error when number is invalid for analysis
   ///

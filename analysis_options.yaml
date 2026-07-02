@@ -15,6 +15,8 @@ analyzer:
     - 'debug_test.dart'
     - 'test_*.dart'
     - '*_debug.dart'
+    # Third-party vendored code (computable_reals) — not ours to lint/modify
+    - 'lib/vendor/**'
   errors:
     # Relax a few diagnostics that are mostly noisy in tests
     avoid_print: ignore

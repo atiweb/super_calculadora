@@ -107,6 +107,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get calcProcessing => 'Processing large numbers...';
 
   @override
+  String get calcHighPrecision => 'Calculating (high precision)…';
+
+  @override
   String get calcCancel => 'Cancel';
 
   @override
@@ -255,6 +258,21 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get settingsScientificHint =>
       'Numbers will be displayed in full (e.g. 123000) when disabled';
+
+  @override
+  String get settingsHighPrecision => 'High precision mode';
+
+  @override
+  String get settingsHighPrecisionHint =>
+      'Compute sin, cos, tan, ln, √… with exact constructive reals (slower). Singularities such as tan 90° are reported as undefined.';
+
+  @override
+  String settingsPrecisionDigits(int digits) {
+    return 'Precision digits: $digits';
+  }
+
+  @override
+  String get settingsOpenSourceLicenses => 'Open source licenses';
 
   @override
   String get settingsFormatExamples => 'Format examples';
@@ -659,6 +677,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String errSquareRoot(String error) {
     return 'Square root error: $error';
   }
+
+  @override
+  String get errNegativeSqrt =>
+      'Cannot take the square root of a negative number';
 
   @override
   String errCubeRoot(String error) {
@@ -2151,6 +2173,23 @@ class AppLocalizationsEn extends AppLocalizations {
       'When any number is entered, the right panel (tablet) or bottom panel (mobile) automatically shows:\n\n• Properties: digits, parity, sign\n• Representations: binary, octal, hexadecimal\n• Primality: Miller-Rabin test, full factorization\n• Neighboring primes: previous and next\n• Divisors: complete list, sum, count\n• Classifications: perfect square/cube, perfect power, Fibonacci, triangular, palindrome\n\nFor numbers ≤ 15 digits, it also shows:\n\n• Arithmetic functions: φ, λ, μ, ω, Ω, sopfr, sopf, rad, dr\n• Classifications: square-free, powerful, Harshad, semiprime, abundant/deficient/perfect';
 
   @override
+  String get hlpHighPrecHeader => 'High Precision & Tools';
+
+  @override
+  String get hlpHighPrecTitle => 'High precision mode';
+
+  @override
+  String get hlpHighPrecContent =>
+      'Enable it in Settings. Computes sin, cos, tan, ln, log, exp, √ and ∛ with EXACT constructive reals and rounds only when displaying (5–100 digits). No floating-point error: √2 to 30 digits = 1.41421356237309504880168872421. Singularities are detected by construction (tan 90° = undefined). Everything runs in the background with a loader, so the app never freezes.';
+
+  @override
+  String get hlpNewToolsTitle => 'Olympiad Tools';
+
+  @override
+  String get hlpNewToolsContent =>
+      'From the side menu → Olympiad Tools: Fractions, Radicals, Geometry (with diagrams: triangle, Pick, centers and the Euler line), Polynomials (plot, Ruffini, n×n systems), Number Theory (sieve, modular clock, residues), Step-by-step procedures, Complex (unit circle, Sierpiński — in high precision), Statistics, Matrices (exact), Calculus (derivative/integral/limit) and a self-checking Practice quiz.';
+
+  @override
   String get hlpOlympiadHeader => 'Key Olympiad Formulas';
 
   @override
@@ -2184,6 +2223,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get errResultInvalid => 'Error: Invalid result';
+
+  @override
+  String get errResultTooLarge => 'The result is too large to compute exactly';
 
   @override
   String get errAnalysisInvalid => 'Error: Invalid number for analysis';

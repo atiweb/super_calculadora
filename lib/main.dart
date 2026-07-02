@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show LicenseRegistry, LicenseEntryWithLineBreaks;
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'l10n/app_localizations.dart';
@@ -13,6 +15,29 @@ import 'providers/theme_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // Android 15 (SDK 35) fuerza la vista de extremo a extremo. Activamos el
+  // modo edge-to-edge de forma explícita con la API vigente (no obsoleta).
+  // No fijamos statusBarColor/systemNavigationBarColor: en SDK 35 esos
+  // colores se ignoran y, al asignarlos, Flutter llamaría a las APIs
+  // obsoletas que reporta Google Play. El contenido respeta los insets vía
+  // SafeArea en las pantallas.
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+
+  // La app está diseñada para retrato (teclados densos). Bloqueamos la
+  // orientación para evitar desbordes de layout en horizontal.
+  await SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+
+  // Atribución del paquete vendorizado `computable_reals` (Apache-2.0 + SGI +
+  // HP): registramos su licencia para que aparezca en showLicensePage, ya que
+  // al estar vendorizado Flutter no la agrega automáticamente.
+  LicenseRegistry.addLicense(() async* {
+    final license =
+        await rootBundle.loadString('lib/vendor/computable_reals/LICENSE');
+    yield LicenseEntryWithLineBreaks(
+        const ['computable_reals (vendored)'], license);
+  });
+
   await SettingsService.init();
   runApp(const SuperCalculadoraApp());
 }

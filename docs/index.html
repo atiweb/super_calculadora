@@ -75,6 +75,20 @@
     .step-num{flex-shrink:0;width:22px;height:22px;background:var(--accent);color:#fff;border-radius:50%;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center}
     .note-box{margin-top:12px;padding:10px 14px;background:#fff;border-radius:6px;font-size:13px;color:var(--text-muted);border:1px solid var(--border)}
 
+    /* ── Beta / testers banner (fixed colors for contrast in both themes) ── */
+    .beta-banner{background:linear-gradient(135deg,#6750a4,#4a3880);color:#fff;border-radius:12px;padding:22px 24px;margin-bottom:32px}
+    .beta-banner h2{color:#fff;border:none;margin:0 0 6px;padding:0;font-size:1.25rem}
+    .beta-banner>p{color:rgba(255,255,255,.92);margin:0 0 14px;font-size:14px}
+    .beta-steps{list-style:none;margin:0 0 16px;padding:0;display:flex;flex-direction:column;gap:6px}
+    .beta-steps li{display:flex;align-items:flex-start;gap:8px;font-size:13.5px;color:rgba(255,255,255,.95)}
+    .bnum{flex-shrink:0;width:22px;height:22px;background:#fff;color:#4a3880;border-radius:50%;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center}
+    .beta-actions{display:flex;flex-wrap:wrap;gap:10px}
+    .beta-btn{display:inline-flex;align-items:center;gap:8px;text-decoration:none;font-weight:700;font-size:14px;padding:11px 18px;border-radius:24px;transition:transform .1s,box-shadow .15s}
+    .beta-btn.primary{background:#fff;color:#4a3880}
+    .beta-btn.secondary{background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.55)}
+    .beta-btn:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,.25)}
+    .beta-note{margin-top:12px;font-size:12px;color:rgba(255,255,255,.82)}
+
     /* ── Param types ── */
     .param-types{display:flex;flex-direction:column;gap:12px;margin-bottom:16px}
     .param-type{display:flex;gap:12px;align-items:flex-start;padding:12px 16px;border:1px solid var(--border);border-radius:8px}
@@ -151,8 +165,10 @@
 <!-- ══ NAV ══════════════════════════════════════════════════════════════ -->
 <nav>
   <div class="nav-section"><span class="en">Getting Started</span><span class="es">Inicio</span></div>
+  <a href="#beta"><span class="en">🧪 Become a Tester</span><span class="es">🧪 Sé Tester</span></a>
   <a href="#quick-start"><span class="en">Quick Start</span><span class="es">Inicio Rápido</span></a>
   <a href="#parameter-system"><span class="en">Parameter System</span><span class="es">Sistema de Parámetros</span></a>
+  <a href="#high-precision"><span class="en">High-Precision Mode</span><span class="es">Alta Precisión</span></a>
 
   <div class="nav-section"><span class="en">Number Theory</span><span class="es">Teoría de Números</span></div>
   <a href="#euler-phi"><span class="en">φ(n) Euler's Totient</span><span class="es">φ(n) Totiente de Euler</span></a>
@@ -216,6 +232,8 @@
   <a href="#tools-steps"><span class="en">Step by step</span><span class="es">Procedimientos</span></a>
   <a href="#tools-complex"><span class="en">Complex &amp; Sequences</span><span class="es">Complejos y Sucesiones</span></a>
   <a href="#tools-statistics"><span class="en">Statistics</span><span class="es">Estadística</span></a>
+  <a href="#tools-matrices"><span class="en">Matrices</span><span class="es">Matrices</span></a>
+  <a href="#tools-calculus"><span class="en">Calculus</span><span class="es">Cálculo</span></a>
   <a href="#tools-practice"><span class="en">Practice</span><span class="es">Práctica</span></a>
 
   <div class="nav-section"><span class="en">Reference</span><span class="es">Referencia</span></div>
@@ -235,9 +253,27 @@
     <span class="badge">Android</span>
     <span class="badge">Flutter</span>
     <span class="badge">Offline</span>
-    <span class="badge">v1.0.0</span>
+    <span class="badge">v1.1.1</span>
   </div>
 </div>
+
+<!-- ════ BETA TESTERS ═══════════════════════════════════════════════════ -->
+<section class="beta-banner" id="beta">
+  <h2>🧪 <span class="en">Help test the app — it's free</span><span class="es">Ayuda a probar la app — es gratis</span></h2>
+  <p class="en">We're finishing the closed test on Google Play and need a few testers. No cost, no ads — and you get a genuinely useful olympiad-training tool. Android only.</p>
+  <p class="es">Estamos terminando la prueba cerrada en Google Play y necesitamos algunos testers. Sin costo, sin anuncios — y obtienes una herramienta realmente útil para entrenar olimpiada. Solo Android.</p>
+  <ol class="beta-steps">
+    <li><span class="bnum">1</span><span><span class="en">Join the tester group (use the Google account on your phone).</span><span class="es">Únete al grupo de testers (usa la cuenta de Google de tu teléfono).</span></span></li>
+    <li><span class="bnum">2</span><span><span class="en">Open the opt-in link and tap “Become a tester”.</span><span class="es">Abre el enlace de participación y pulsa “Convertirse en tester”.</span></span></li>
+    <li><span class="bnum">3</span><span><span class="en">Install from Google Play and open the app a few times over 2 weeks.</span><span class="es">Instala desde Google Play y abre la app unas veces durante 2 semanas.</span></span></li>
+  </ol>
+  <div class="beta-actions">
+    <a class="beta-btn secondary" href="https://groups.google.com/g/super-calculadora-testers" target="_blank" rel="noopener">👥 <span class="en">1. Join the group</span><span class="es">1. Unirse al grupo</span></a>
+    <a class="beta-btn primary" href="https://play.google.com/apps/testing/br.dev.ati.supercalculadora" target="_blank" rel="noopener">🚀 <span class="en">2. Become a tester</span><span class="es">2. Convertirse en tester</span></a>
+  </div>
+  <p class="beta-note en">Step 2 works only after you've joined the group — both are required for the test to count. Thank you for helping! 🙏</p>
+  <p class="beta-note es">El paso 2 solo funciona después de unirte al grupo — ambos son necesarios para que la prueba cuente. ¡Gracias por ayudar! 🙏</p>
+</section>
 
 <!-- ════ QUICK START ════════════════════════════════════════════════════ -->
 <h2 id="quick-start"><span class="en">Quick Start</span><span class="es">Inicio Rápido</span></h2>
@@ -303,6 +339,44 @@
   <strong><span class="en">Pending operation indicator</span><span class="es">Indicador de operación pendiente</span></strong>
   <span class="en">"C(10, _)" means k is missing. "GCD(12, 18, _) [= add, GCD solve]" is a variable-length operation.</span>
   <span class="es">"C(10, _)" significa que falta k. "MCD(12, 18, _) [= agregar, MCD ejecutar]" es una operación de longitud variable.</span>
+</div>
+
+<!-- ════ HIGH PRECISION ════════════════════════════════════════════════════ -->
+<h2 id="high-precision"><span class="en">High-Precision Mode</span><span class="es">Modo de Alta Precisión</span></h2>
+<div class="info-card">
+  <div class="en-blk"><pre>Optional toggle in Settings → "High precision mode" (with a 5–100 digit slider).
+
+When ON, the transcendental/irrational functions — sin, cos, tan, asin, acos,
+atan, ln, log, exp, √ and ∛ — are computed with CONSTRUCTIVE (computable) real
+numbers: the value is exact internally and only rounded when displayed.
+
+  • No floating-point error.   √2 (30 digits) = 1.41421356237309504880168872421
+  • sin(45°) (30 digits) = 0.707106781186547524400844362105
+  • Singularities are detected by construction: tan(90°) → "undefined"
+    (instead of a misleading 1.6×10¹⁶).
+  • All computation runs in a background isolate with a loader — the UI never
+    freezes. (Powers that would explode to billions of digits, e.g.
+    1.0006^99999999, are rejected instantly as "too large".)
+
+Powered by a vendored copy of computable_reals (a Dart port of Hans Boehm's
+constructive reals). See Settings → Open source licenses.</pre></div>
+  <div class="es-blk"><pre>Interruptor opcional en Ajustes → "Modo de alta precisión" (con deslizador de
+5 a 100 dígitos).
+
+Al activarlo, las funciones trascendentes/irracionales — sin, cos, tan, asin,
+acos, atan, ln, log, exp, √ y ∛ — se calculan con números reales CONSTRUCTIVOS:
+el valor es exacto internamente y solo se redondea al mostrarlo.
+
+  • Sin error de punto flotante.  √2 (30 díg.) = 1.41421356237309504880168872421
+  • sin(45°) (30 díg.) = 0.707106781186547524400844362105
+  • Las singularidades se detectan por construcción: tan(90°) → "indefinido"
+    (en vez de un engañoso 1.6×10¹⁶).
+  • Todo corre en un isolate en segundo plano con indicador de carga — la
+    interfaz nunca se congela. (Potencias que explotarían a miles de millones de
+    dígitos, p. ej. 1.0006^99999999, se rechazan al instante como "demasiado grande".)
+
+Usa una copia vendorizada de computable_reals (port en Dart de los reales
+constructivos de Hans Boehm). Ver Ajustes → Licencias de código abierto.</pre></div>
 </div>
 
 <!-- ════ NUMBER THEORY ════════════════════════════════════════════════════ -->
@@ -863,6 +937,35 @@ Esta desigualdad es fundamental en olimpiadas.</pre></div>
   <div class="tool-ex">1, 2, 4 → AM=7/3, GM=2, HM=12/7</div>
 </div>
 
+<!-- Matrices -->
+<h3 id="tools-matrices"><span class="en">Matrices — Exact Linear Algebra</span><span class="es">Matrices — Álgebra Lineal Exacta</span></h3>
+<p class="en-blk" style="margin-bottom:10px">Fraction-exact (no floating-point error). Rows separated by "<code>;</code>", entries by "<code>,</code>"; two matrices separated by "<code>|</code>".</p>
+<p class="es-blk" style="margin-bottom:10px">Exactas con fracciones (sin error de punto flotante). Filas separadas por "<code>;</code>", entradas por "<code>,</code>"; dos matrices separadas por "<code>|</code>".</p>
+<div class="tool-card">
+  <div class="tool-row"><span class="tool-name"><span class="en">Determinant</span><span class="es">Determinante</span></span><span><span class="en">Determinant of a square matrix by Gaussian elimination.</span><span class="es">Determinante de una matriz cuadrada por eliminación gaussiana.</span></span></div>
+  <div class="tool-ex">"6,1,1; 4,-2,5; 2,8,7" → det = −306</div>
+  <div class="tool-row" style="margin-top:8px"><span class="tool-name"><span class="en">Inverse</span><span class="es">Inversa</span></span><span><span class="en">Exact inverse (fractions); reports singular matrices.</span><span class="es">Inversa exacta (fracciones); avisa si es singular.</span></span></div>
+  <div class="tool-ex">"4,7; 2,6" → [[3/5, −7/10], [−1/5, 2/5]]</div>
+  <div class="tool-row" style="margin-top:8px"><span class="tool-name">A × B</span><span><span class="en">Matrix product of two matrices.</span><span class="es">Producto de dos matrices.</span></span></div>
+  <div class="tool-ex">"1,2; 3,4 | 5,6; 7,8" → [[19,22],[43,50]]</div>
+  <div class="tool-row" style="margin-top:8px"><span class="tool-name"><span class="en">Solve A·x = b (n×n)</span><span class="es">Resolver A·x = b (n×n)</span></span><span><span class="en">Exact solution of a square system, or "no unique solution" if singular.</span><span class="es">Solución exacta de un sistema cuadrado, o "sin solución única" si es singular.</span></span></div>
+  <div class="tool-ex">"2,1,1; 1,2,1; 1,1,2 | 1,1,1" → x=y=z=1/4</div>
+  <div class="tool-row" style="margin-top:8px"><span class="tool-name"><span class="en">Rank &amp; transpose</span><span class="es">Rango y transpuesta</span></span><span><span class="en">Matrix rank and its transpose.</span><span class="es">Rango de la matriz y su transpuesta.</span></span></div>
+</div>
+
+<!-- Calculus -->
+<h3 id="tools-calculus"><span class="en">Calculus — Numerical</span><span class="es">Cálculo — Numérico</span></h3>
+<p class="en-blk" style="margin-bottom:10px">Numerical analysis of any function <code>f(x)</code> (e.g. <code>x^2+sin(x)</code>, <code>1/x</code>, <code>exp(x)</code>). Trigonometry in radians.</p>
+<p class="es-blk" style="margin-bottom:10px">Análisis numérico de cualquier función <code>f(x)</code> (ej. <code>x^2+sin(x)</code>, <code>1/x</code>, <code>exp(x)</code>). Trigonometría en radianes.</p>
+<div class="tool-card">
+  <div class="tool-row"><span class="tool-name"><span class="en">Derivative f'(x₀)</span><span class="es">Derivada f'(x₀)</span></span><span><span class="en">Central differences with Richardson extrapolation.</span><span class="es">Diferencias centrales con extrapolación de Richardson.</span></span></div>
+  <div class="tool-ex">d/dx (x²+sin x) at 1 ≈ 2.540302306</div>
+  <div class="tool-row" style="margin-top:8px"><span class="tool-name"><span class="en">Definite integral ∫</span><span class="es">Integral definida ∫</span></span><span><span class="en">Composite Simpson's rule over [a,b].</span><span class="es">Regla de Simpson compuesta sobre [a,b].</span></span></div>
+  <div class="tool-ex">∫₀¹ x² dx ≈ 0.3333333333</div>
+  <div class="tool-row" style="margin-top:8px"><span class="tool-name"><span class="en">Limit</span><span class="es">Límite</span></span><span><span class="en">Two-sided numerical limit; reports "does not exist" when the sides differ.</span><span class="es">Límite numérico bilateral; indica "no existe" si los lados difieren.</span></span></div>
+  <div class="tool-ex">lim<sub>x→0</sub> sin(x)/x ≈ 1</div>
+</div>
+
 <!-- Practice -->
 <h3 id="tools-practice"><span class="en">Practice Mode</span><span class="es">Modo Práctica</span></h3>
 <div class="info-card">
@@ -954,8 +1057,9 @@ Nota: presionar CE limpia el panel de análisis de inmediato.</pre></div>
 </div>
 
 <footer>
-  <span><span class="en">Super Calculator</span><span class="es">Super Calculadora</span> v1.0.0 — Adalberto Garcia Garces</span>
+  <span><span class="en">Super Calculator</span><span class="es">Super Calculadora</span> v1.1.1 — Adalberto Garcia Garces</span>
   <span>
+    <a href="#beta"><span class="en">Become a Tester</span><span class="es">Sé Tester</span></a> ·
     <a href="privacy.html"><span class="en">Privacy Policy</span><span class="es">Política de Privacidad</span></a> ·
     <a href="https://github.com/atiweb/super_calculadora">GitHub</a>
   </span>

@@ -528,6 +528,24 @@ class SpecialFunctionsHelpScreen extends StatelessWidget {
           const SizedBox(height: 16),
 
           // ============================================================
+          // ALTA PRECISIÓN Y HERRAMIENTAS NUEVAS
+          // ============================================================
+          _SectionHeader(
+              title: l.hlpHighPrecHeader,
+              icon: Icons.precision_manufacturing),
+          _InfoCard(
+            title: l.hlpHighPrecTitle,
+            icon: Icons.precision_manufacturing,
+            content: l.hlpHighPrecContent,
+          ),
+          _InfoCard(
+            title: l.hlpNewToolsTitle,
+            icon: Icons.workspace_premium,
+            content: l.hlpNewToolsContent,
+          ),
+          const SizedBox(height: 16),
+
+          // ============================================================
           // FÓRMULAS CLAVE PARA OLIMPIADAS
           // ============================================================
           _SectionHeader(title: l.hlpOlympiadHeader, icon: Icons.emoji_events),

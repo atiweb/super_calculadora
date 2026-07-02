@@ -6,6 +6,13 @@ class SettingsService {
   static const String _useScientificNotationKey = 'use_scientific_notation';
   static const String _themeModeKey = 'theme_mode';
   static const String _localeKey = 'locale';
+  static const String _highPrecisionKey = 'high_precision_mode';
+  static const String _precisionDigitsKey = 'precision_digits';
+
+  /// Dígitos por defecto y límites para el modo de alta precisión.
+  static const int defaultPrecisionDigits = 30;
+  static const int minPrecisionDigits = 5;
+  static const int maxPrecisionDigits = 100;
   
   static SharedPreferences? _prefs;
   static bool _useMemoryStore = false;
@@ -55,6 +62,42 @@ class SettingsService {
       return;
     }
     await _prefs?.setString(_themeModeKey, mode.name);
+  }
+
+  /// Obtiene si el modo de alta precisión (reales constructivos) está activo.
+  static bool getHighPrecisionMode() {
+    if (_useMemoryStore) {
+      return (_memoryStore[_highPrecisionKey] as bool?) ?? false;
+    }
+    return _prefs?.getBool(_highPrecisionKey) ?? false;
+  }
+
+  /// Activa/desactiva el modo de alta precisión.
+  static Future<void> setHighPrecisionMode(bool value) async {
+    if (_useMemoryStore) {
+      _memoryStore[_highPrecisionKey] = value;
+      return;
+    }
+    await _prefs?.setBool(_highPrecisionKey, value);
+  }
+
+  /// Dígitos de precisión a mostrar en modo alta precisión (acotado a límites).
+  static int getPrecisionDigits() {
+    final raw = _useMemoryStore
+        ? (_memoryStore[_precisionDigitsKey] as int?)
+        : _prefs?.getInt(_precisionDigitsKey);
+    final value = raw ?? defaultPrecisionDigits;
+    return value.clamp(minPrecisionDigits, maxPrecisionDigits);
+  }
+
+  /// Establece los dígitos de precisión (se acota a [minPrecisionDigits, maxPrecisionDigits]).
+  static Future<void> setPrecisionDigits(int value) async {
+    final clamped = value.clamp(minPrecisionDigits, maxPrecisionDigits);
+    if (_useMemoryStore) {
+      _memoryStore[_precisionDigitsKey] = clamped;
+      return;
+    }
+    await _prefs?.setInt(_precisionDigitsKey, clamped);
   }
 
   /// Obtiene el código de idioma guardado (cadena vacía = automático del sistema)

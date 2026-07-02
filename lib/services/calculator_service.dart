@@ -7,6 +7,7 @@ import 'number_analysis_service.dart';
 import '../constants/numeric_precision.dart';
 import 'settings_service.dart';
 import 'history_service.dart';
+import 'precision_service.dart';
 import 'special_functions_service.dart';
 import '../models/calculator_config.dart';
 import '../models/operation_entry.dart';
@@ -208,11 +209,19 @@ class CalculatorService extends ChangeNotifier {
       clear();
     }
     
-    // Si el display está vacío o termina en operador, no agregar otro operador
-    if (_display.isEmpty || _display == '0') {
+    // Display vacío: solo '-' puede iniciar (número negativo); ignorar el resto.
+    if (_display.isEmpty) {
       if (operator == '-') {
         _display = '-';
+        notifyListeners();
       }
+      return;
+    }
+    // Display '0': '-' inicia un número negativo; los demás operadores tratan
+    // el 0 como operando válido (p. ej. 0×5 = 0, 0^3 = 0) y continúan abajo.
+    if (_display == '0' && operator == '-') {
+      _display = '-';
+      notifyListeners();
       return;
     }
     
@@ -372,7 +381,15 @@ class CalculatorService extends ChangeNotifier {
     try {
       String originalValue = _display;
       BigDecimal number = BigDecimal.fromString(_display);
-      
+
+      // Raíz de un negativo: mensaje localizado claro (no filtrar la excepción).
+      if (number.isNegative) {
+        _setError('errNegativeSqrt');
+        _display = 'Error';
+        notifyListeners();
+        return;
+      }
+
       // Verificar si la operación será pesada (números muy grandes)
       bool isHeavyOperation = _display.replaceAll('.', '').replaceAll('-', '').length > 1000;
       
@@ -405,6 +422,9 @@ class CalculatorService extends ChangeNotifier {
           _operationProgress = '';
           _canCancelOperation = false;
         }
+      } else if (await _tryHighPrecision('sqrt', originalValue,
+          historyExpr: '√$originalValue', originalValue: originalValue)) {
+        return;
       } else {
         // Cálculo directo para números pequeños/medianos
         BigDecimal result = number.sqrt();
@@ -412,7 +432,7 @@ class CalculatorService extends ChangeNotifier {
         _display = resultStr;
         _lastResult = resultStr;
         _updateAnalysis();
-        
+
         // Registrar en historial
   await _addDirectOperationToHistory('√$originalValue', originalValue, resultStr);
       }
@@ -466,6 +486,9 @@ class CalculatorService extends ChangeNotifier {
           _operationProgress = '';
           _canCancelOperation = false;
         }
+      } else if (await _tryHighPrecision('cbrt', originalValue,
+          historyExpr: '∛$originalValue', originalValue: originalValue)) {
+        return;
       } else {
         // Cálculo directo para números pequeños/medianos
         // Aproximación usando pow(1/3)
@@ -475,12 +498,12 @@ class CalculatorService extends ChangeNotifier {
         } else {
           value = math.pow(value, 1/3).toDouble();
         }
-        
+
         String resultStr = _formatNumber(BigDecimal.fromDouble(value).toString());
         _display = resultStr;
         _lastResult = resultStr;
         _updateAnalysis();
-        
+
         // Registrar en historial
   await _addDirectOperationToHistory('∛$originalValue', originalValue, resultStr);
       }
@@ -1124,19 +1147,26 @@ class CalculatorService extends ChangeNotifier {
         return;
       }
       
+      final angleSuffixSin = _isRadianMode ? '' : '°';
+      if (await _tryHighPrecision('sin', currentNumber,
+          degrees: !_isRadianMode,
+          historyExpr: 'sin($currentNumber$angleSuffixSin)',
+          originalValue: originalValue)) {
+        return;
+      }
+
       double value = double.parse(currentNumber);
       double angleInRadians = _convertAngle(value);
       double result = math.sin(angleInRadians);
-      
+
       String resultStr = _formatScientificResult(result);
       _display = resultStr;
       _lastResult = resultStr;
       _updateAnalysis();
-      
+
       // Registrar en historial
-  final angleSuffixSin = _isRadianMode ? '' : '°';
   await _addDirectOperationToHistory('sin($currentNumber$angleSuffixSin)', originalValue, resultStr);
-      
+
     } catch (e) {
       _setError('errSin', {'error': e.toString()});
       _display = 'Error';
@@ -1159,19 +1189,26 @@ class CalculatorService extends ChangeNotifier {
         return;
       }
       
+      final angleSuffixCos = _isRadianMode ? '' : '°';
+      if (await _tryHighPrecision('cos', currentNumber,
+          degrees: !_isRadianMode,
+          historyExpr: 'cos($currentNumber$angleSuffixCos)',
+          originalValue: originalValue)) {
+        return;
+      }
+
       double value = double.parse(currentNumber);
       double angleInRadians = _convertAngle(value);
       double result = math.cos(angleInRadians);
-      
+
       String resultStr = _formatScientificResult(result);
       _display = resultStr;
       _lastResult = resultStr;
       _updateAnalysis();
-      
+
       // Registrar en historial
-  final angleSuffixCos = _isRadianMode ? '' : '°';
   await _addDirectOperationToHistory('cos($currentNumber$angleSuffixCos)', originalValue, resultStr);
-      
+
     } catch (e) {
       _setError('errCos', {'error': e.toString()});
       _display = 'Error';
@@ -1196,10 +1233,34 @@ class CalculatorService extends ChangeNotifier {
       
       double value = double.parse(currentNumber);
       double angleInRadians = _convertAngle(value);
+
+      // tan(θ) = sin(θ)/cos(θ) tiene polos donde cos(θ) = 0 (90°, 270°, −90°,
+      // π/2 + kπ…). Por el redondeo de π, math.tan no devuelve `Infinity`
+      // exacto en esos puntos sino un número enorme (p. ej. 1.6e16 en 90°).
+      // Detectamos el polo por el DENOMINADOR (cos ≈ 0): es general para todos
+      // los polos, no un caso particular de 90°. El umbral 1e-12 separa el polo
+      // real del valor (grande pero legítimo) de un ángulo cercano que el
+      // usuario sí pudo escribir. Esta verificación va ANTES de la ruta de alta
+      // precisión para evitar el timeout (3 s) de los reales constructivos en
+      // el polo exacto.
+      final bool atPole = math.cos(angleInRadians).abs() < 1e-12;
+      if (atPole) {
+        _setError('errTanUndefined');
+        _display = 'Error';
+        notifyListeners();
+        return;
+      }
+
+      final angleSuffixTan = _isRadianMode ? '' : '°';
+      if (await _tryHighPrecision('tan', currentNumber,
+          degrees: !_isRadianMode,
+          historyExpr: 'tan($currentNumber$angleSuffixTan)',
+          originalValue: originalValue)) {
+        return;
+      }
+
       double result = math.tan(angleInRadians);
-      
-      // Verificar si el resultado es infinito (tangente de 90°, 270°, etc.)
-      if (result.isInfinite) {
+      if (result.isInfinite || result.isNaN) {
         _setError('errTanUndefined');
         _display = 'Error';
       } else {
@@ -1207,9 +1268,8 @@ class CalculatorService extends ChangeNotifier {
         _display = resultStr;
         _lastResult = resultStr;
         _updateAnalysis();
-        
+
         // Registrar en historial
-  final angleSuffixTan = _isRadianMode ? '' : '°';
   await _addDirectOperationToHistory('tan($currentNumber$angleSuffixTan)', originalValue, resultStr);
       }
       
@@ -1240,17 +1300,22 @@ class CalculatorService extends ChangeNotifier {
       if (value < -1 || value > 1) {
         _setError('errAsinDomain');
         _display = 'Error';
+      } else if (await _tryHighPrecision('asin', currentNumber,
+          degrees: !_isRadianMode,
+          historyExpr: 'asin($currentNumber)',
+          originalValue: originalValue)) {
+        return;
       } else {
         double result = math.asin(value);
         if (!_isRadianMode) {
           result = _toDegrees(result);
         }
-        
+
         String resultStr = _formatScientificResult(result);
         _display = resultStr;
         _lastResult = resultStr;
         _updateAnalysis();
-        
+
         // Registrar en historial
   await _addDirectOperationToHistory('asin($currentNumber)', originalValue, resultStr);
       }
@@ -1282,17 +1347,22 @@ class CalculatorService extends ChangeNotifier {
       if (value < -1 || value > 1) {
         _setError('errAcosDomain');
         _display = 'Error';
+      } else if (await _tryHighPrecision('acos', currentNumber,
+          degrees: !_isRadianMode,
+          historyExpr: 'acos($currentNumber)',
+          originalValue: originalValue)) {
+        return;
       } else {
         double result = math.acos(value);
         if (!_isRadianMode) {
           result = _toDegrees(result);
         }
-        
+
         String resultStr = _formatScientificResult(result);
         _display = resultStr;
         _lastResult = resultStr;
         _updateAnalysis();
-        
+
         // Registrar en historial
   await _addDirectOperationToHistory('acos($currentNumber)', originalValue, resultStr);
       }
@@ -1319,21 +1389,28 @@ class CalculatorService extends ChangeNotifier {
         return;
       }
       
+      if (await _tryHighPrecision('atan', currentNumber,
+          degrees: !_isRadianMode,
+          historyExpr: 'atan($currentNumber)',
+          originalValue: originalValue)) {
+        return;
+      }
+
       double value = double.parse(currentNumber);
       double result = math.atan(value);
-      
+
       if (!_isRadianMode) {
         result = _toDegrees(result);
       }
-      
+
       String resultStr = _formatScientificResult(result);
       _display = resultStr;
       _lastResult = resultStr;
       _updateAnalysis();
-      
+
       // Registrar en historial
   await _addDirectOperationToHistory('atan($currentNumber)', originalValue, resultStr);
-      
+
     } catch (e) {
       _setError('errAtan', {'error': e.toString()});
       _display = 'Error';
@@ -1363,13 +1440,18 @@ class CalculatorService extends ChangeNotifier {
           return;
         }
         
+        if (await _tryHighPrecision('ln', currentNumber,
+            historyExpr: 'ln($currentNumber)', originalValue: originalValue)) {
+          return;
+        }
+
         double value = double.parse(currentNumber);
         double result = math.log(value);
         String resultStr = _formatScientificResult(result);
         _display = resultStr;
         _lastResult = resultStr;
         _updateAnalysis();
-        
+
         // Registrar en historial
   await _addDirectOperationToHistory('ln($currentNumber)', originalValue, resultStr);
       }
@@ -1403,13 +1485,18 @@ class CalculatorService extends ChangeNotifier {
           return;
         }
         
+        if (await _tryHighPrecision('log10', currentNumber,
+            historyExpr: 'log($currentNumber)', originalValue: originalValue)) {
+          return;
+        }
+
         double value = double.parse(currentNumber);
         double result = math.log(value) / math.log(10);
         String resultStr = _formatScientificResult(result);
         _display = resultStr;
         _lastResult = resultStr;
         _updateAnalysis();
-        
+
         // Registrar en historial
   await _addDirectOperationToHistory('log($currentNumber)', originalValue, resultStr);
       }
@@ -1442,13 +1529,16 @@ class CalculatorService extends ChangeNotifier {
       if (value > 700) {
         _setError('errExpTooLarge');
         _display = 'Error';
+      } else if (await _tryHighPrecision('exp', currentNumber,
+          historyExpr: 'e^$currentNumber', originalValue: originalValue)) {
+        return;
       } else {
         double result = math.exp(value);
         String resultStr = _formatScientificResult(result);
         _display = resultStr;
         _lastResult = resultStr;
         _updateAnalysis();
-        
+
         // Registrar en historial
   await _addDirectOperationToHistory('e^$currentNumber', originalValue, resultStr);
       }
@@ -1642,8 +1732,30 @@ class CalculatorService extends ChangeNotifier {
     // Operaciones pesadas: números grandes o exponentes altos
     String baseStr = base.toString();
     int digits = baseStr.replaceAll('.', '').replaceAll('-', '').length;
-    
+
     return digits > 100 || exponent > 100 || (digits > 10 && exponent > 10);
+  }
+
+  /// Estima si base^exp produciría un resultado EXACTO con demasiados dígitos
+  /// para computarse (p. ej. una base no entera con exponente enorme explota
+  /// a miles de millones de decimales). Evita el bloqueo de la UI rechazando
+  /// la operación al instante, como hacen las calculadoras con "overflow".
+  bool _powerExceedsDigitLimit(BigDecimal base, int exponent,
+      {int maxDigits = 100000}) {
+    if (exponent <= 1) return false;
+    final d = base.toDouble();
+    if (d == 0 || d == 1 || d == -1) return false; // casos triviales
+    // Dígitos significativos de la base (parte entera sin ceros líderes + decimales).
+    final body = base.toString().replaceAll('-', '');
+    final dot = body.indexOf('.');
+    final intPart = (dot < 0 ? body : body.substring(0, dot))
+        .replaceAll(RegExp(r'^0+'), '');
+    final fracPlaces = dot < 0 ? 0 : body.length - dot - 1;
+    final sigDigits = intPart.length + fracPlaces;
+    // El número de dígitos del resultado exacto crece ~ exp × sigDigits.
+    // Usamos BigInt para evitar desbordes con exponentes enormes.
+    return BigInt.from(exponent) * BigInt.from(sigDigits) >
+        BigInt.from(maxDigits);
   }
 
   /// Detecta operaciones de potencia que pueden producir números grandes
@@ -2287,6 +2399,9 @@ class CalculatorService extends ChangeNotifier {
           if (exponent < 0) {
             throw ArgumentError('Exponente negativo no soportado');
           }
+          if (_powerExceedsDigitLimit(left, exponent)) {
+            throw const _ResultTooLargeException();
+          }
           result = left.pow(exponent);
           break;
         default:
@@ -2294,7 +2409,9 @@ class CalculatorService extends ChangeNotifier {
       }
       
       return result.toString();
-      
+
+    } on _ResultTooLargeException {
+      return 'err:errResultTooLarge';
     } catch (e) {
       throw ArgumentError('Error evaluando expresión: $e');
     }
@@ -2863,6 +2980,54 @@ class CalculatorService extends ChangeNotifier {
     _errorArgs = args;
   }
 
+  /// Ruta de alta precisión para funciones transcendentes. Si el modo está
+  /// activo, ejecuta la operación [op] en un **isolate** (vía `compute`) para no
+  /// congelar la UI, mostrando el overlay de carga. Muestra el resultado y lo
+  /// registra; ante un fallo (singularidad/divergencia) muestra la clave de
+  /// error localizada sin filtrar la excepción. Devuelve `true` si manejó la
+  /// operación (el llamador debe `return`), `false` si el modo está desactivado
+  /// (seguir por la ruta `double`).
+  Future<bool> _tryHighPrecision(String op, String value,
+      {bool degrees = false,
+      required String historyExpr,
+      required String originalValue}) async {
+    if (!PrecisionService.isEnabled) return false;
+
+    _isCalculatingOperation = true;
+    _operationProgress = ''; // el overlay usa el texto localizado por defecto
+    _canCancelOperation = false;
+    notifyListeners();
+
+    try {
+      final Map<String, dynamic> res =
+          await compute(precisionWorker, <String, dynamic>{
+        'op': op,
+        'value': value,
+        'degrees': degrees,
+        'digits': SettingsService.getPrecisionDigits(),
+      });
+
+      if (res['ok'] == true) {
+        final String resultStr = res['result'] as String;
+        _display = resultStr;
+        _lastResult = resultStr;
+        _updateAnalysis();
+        await _addDirectOperationToHistory(historyExpr, originalValue, resultStr);
+      } else {
+        _setError(res['errorKey'] as String);
+        _display = 'Error';
+      }
+    } catch (_) {
+      _setError('errResultInvalid');
+      _display = 'Error';
+    } finally {
+      _isCalculatingOperation = false;
+      _operationProgress = '';
+      notifyListeners();
+    }
+    return true;
+  }
+
   // ====================================================================
   // FUNCIONES DE 1 PARÁMETRO NUEVAS
   // ====================================================================
@@ -3340,4 +3505,10 @@ class CalculatorService extends ChangeNotifier {
     }
     notifyListeners();
   }
+}
+
+/// Señala que un resultado exacto (p. ej. una potencia) tendría demasiados
+/// dígitos para computarse; se traduce a "errResultTooLarge".
+class _ResultTooLargeException implements Exception {
+  const _ResultTooLargeException();
 }
