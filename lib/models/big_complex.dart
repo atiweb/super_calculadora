@@ -13,20 +13,33 @@ class BigComplex {
   final CReal re;
   final CReal im;
 
-  BigComplex(this.re, this.im);
+  /// `true` solo cuando ambas partes se construyeron a partir de literales
+  /// cero (texto o enteros). Decidir si un CReal arbitrario es cero es
+  /// semidecidible (invertirlo itera precisiones crecientes hasta un
+  /// 'precision overflow' tardío), así que este indicador permite al menos
+  /// fallar rápido en los casos detectables.
+  final bool knownZero;
+
+  BigComplex(this.re, this.im) : knownZero = false;
+
+  BigComplex._(this.re, this.im, this.knownZero);
 
   factory BigComplex.fromInts(int re, int im) =>
-      BigComplex(CReal.from(re), CReal.from(im));
+      BigComplex._(CReal.from(re), CReal.from(im), re == 0 && im == 0);
 
   /// Parsea partes real e imaginaria desde texto (entero o decimal, con signo).
   /// Lanza [FormatException] si el texto no es un número válido.
-  factory BigComplex.parse(String re, String im) =>
-      BigComplex(_parseReal(re), _parseReal(im));
+  factory BigComplex.parse(String re, String im) => BigComplex._(
+        _parseReal(re),
+        _parseReal(im),
+        _decimalSign(re) == 0 && _decimalSign(im) == 0,
+      );
 
   static CReal _parseReal(String s) =>
       CReal.parse(s.trim().replaceAll('−', '-').replaceAll('+', ''));
 
-  static final BigComplex zero = BigComplex(CReal.from(0), CReal.from(0));
+  static final BigComplex zero =
+      BigComplex._(CReal.from(0), CReal.from(0), true);
   static final BigComplex one = BigComplex(CReal.from(1), CReal.from(0));
 
   BigComplex operator +(BigComplex o) => BigComplex(re + o.re, im + o.im);
@@ -38,6 +51,7 @@ class BigComplex {
 
   /// (a+bi)/(c+di) = [(ac+bd) + (bc−ad)i] / (c²+d²).
   BigComplex operator /(BigComplex o) {
+    if (o.knownZero) throw CalcException(CalcError.divisionByZero);
     final denom = o.re * o.re + o.im * o.im;
     return BigComplex(
       (re * o.re + im * o.im) / denom,
@@ -57,6 +71,9 @@ class BigComplex {
   /// sin trigonometría). Admite exponente negativo.
   BigComplex pow(int n) {
     if (n == 0) return one;
+    // 0^negativo es 1/0: sin el indicador, la inversión del CReal cero no
+    // falla rápido (ver [knownZero]).
+    if (n < 0 && knownZero) throw CalcException(CalcError.divisionByZero);
     if (n < 0) return one / pow(-n);
     BigComplex result = one;
     BigComplex base = this;
@@ -124,17 +141,9 @@ double _decimalSign(String s) {
 /// [CalcException] para que el llamador la localice.
 Map<String, dynamic> bigComplexPowWorker(Map<String, dynamic> a) {
   try {
-    final reStr = a['re'] as String;
-    final imStr = a['im'] as String;
-    final n = a['n'] as int;
-    final z = BigComplex.parse(reStr, imStr);
-    // 0^negativo es 1/0. Hay que decidirlo aquí sobre el texto: invertir un
-    // CReal exactamente cero no falla rápido, itera precisiones crecientes
-    // hasta un 'precision overflow' tardío (en la práctica, un cuelgue).
-    if (n < 0 && _decimalSign(reStr) == 0 && _decimalSign(imStr) == 0) {
-      throw CalcException(CalcError.divisionByZero);
-    }
-    final r = z.pow(n);
+    final z = BigComplex.parse(a['re'] as String, a['im'] as String);
+    // 0^negativo lanza CalcException desde pow (ver BigComplex.knownZero)
+    final r = z.pow(a['n'] as int);
     return {'ok': true, 'result': r.toStringAsPrecision(a['digits'] as int)};
   } on CalcException {
     rethrow; // sendable: cruza el isolate y el llamador la traduce

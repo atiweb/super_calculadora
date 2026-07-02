@@ -72,7 +72,6 @@ lib/
 │   ├── scientific_calculator_keyboard.dart
 │   ├── special_calculator_keyboard.dart
 │   ├── number_analysis_panel.dart   # Live analysis sidebar
-│   ├── number_analysis_card.dart    # Individual analysis row
 │   ├── expression_input.dart        # Free-text expression entry
 │   ├── history_panel.dart           # Inline history widget
 │   └── calculator_drawer.dart       # Navigation drawer

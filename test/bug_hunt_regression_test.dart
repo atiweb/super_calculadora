@@ -1,10 +1,13 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:super_calculadora/models/big_complex.dart';
 import 'package:super_calculadora/models/calc_exception.dart';
 import 'package:super_calculadora/models/complex.dart';
 import 'package:super_calculadora/models/fraction.dart';
+import 'package:super_calculadora/models/operation_entry.dart';
 import 'package:super_calculadora/services/big_decimal.dart';
 import 'package:super_calculadora/services/calculator_service.dart';
 import 'package:super_calculadora/services/calculus_service.dart';
+import 'package:super_calculadora/services/history_service.dart';
 import 'package:super_calculadora/services/number_analysis_service.dart';
 import 'package:super_calculadora/services/number_theory_advanced_service.dart';
 import 'package:super_calculadora/services/polynomial_service.dart';
@@ -141,6 +144,64 @@ void main() {
     test('n inválido se corrige en vez de devolver NaN o un valor erróneo', () {
       expect(CalculusService.integral('x', 0, 1, n: -3), closeTo(0.5, 1e-9));
       expect(CalculusService.integral('x', 0, 1, n: 0), closeTo(0.5, 1e-9));
+    });
+  });
+
+  group('BigComplex división por cero conocido', () {
+    test('0^(-n) y z/0 fallan rápido con CalcException', () {
+      expect(() => BigComplex.zero.pow(-1), throwsA(isA<CalcException>()));
+      expect(() => BigComplex.parse('0', '0').pow(-2),
+          throwsA(isA<CalcException>()));
+      expect(() => BigComplex.one / BigComplex.parse('0', '0.00'),
+          throwsA(isA<CalcException>()));
+      // El worker devuelve la excepción localizable, no 'precision overflow'
+      expect(
+          () => bigComplexPowWorker(
+              {'re': '0', 'im': '0', 'n': -2, 'digits': 20}),
+          throwsA(isA<CalcException>()));
+    });
+  });
+
+  group('Historial: marcas de tiempo y borrado', () {
+    test('la marca de tiempo sobrevive al guardar y recargar', () async {
+      await HistoryService.clearHistory();
+      final entry = OperationEntry(expression: '6×7', result: '42');
+      await HistoryService.addOperation(entry);
+
+      final loaded = await HistoryService.getHistory();
+      expect(loaded, hasLength(1));
+      expect(loaded.first.timestampKnown, isTrue);
+      expect(loaded.first.timestamp.millisecondsSinceEpoch,
+          entry.timestamp.millisecondsSinceEpoch);
+    });
+
+    test('borrar un duplicado elimina esa entrada exacta, no la primera', () async {
+      await HistoryService.clearHistory();
+      final older = OperationEntry(
+          expression: '2+2',
+          result: '4',
+          timestamp: DateTime(2026, 1, 1, 10, 0));
+      final newer = OperationEntry(
+          expression: '2+2',
+          result: '4',
+          timestamp: DateTime(2026, 6, 1, 10, 0));
+      await HistoryService.addOperation(older);
+      await HistoryService.addOperation(newer);
+
+      await HistoryService.removeOperation(newer);
+
+      final loaded = await HistoryService.getHistory();
+      expect(loaded, hasLength(1));
+      expect(loaded.first.timestamp.year, 2026);
+      expect(loaded.first.timestamp.month, 1, reason: 'debe quedar la antigua');
+    });
+
+    test('las entradas del formato antiguo se leen y borran por su cadena original', () async {
+      final legacy = OperationEntry.fromStorageString('9-1=8');
+      expect(legacy.expression, '9-1');
+      expect(legacy.result, '8');
+      expect(legacy.timestampKnown, isFalse);
+      expect(legacy.toStorageString(), '9-1=8');
     });
   });
 }
