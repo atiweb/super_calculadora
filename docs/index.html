@@ -142,15 +142,24 @@
     footer a{color:var(--accent);text-decoration:none}
     footer a:hover{text-decoration:underline}
 
+    /* ── Mobile nav (hamburger drawer) ── */
+    .menu-toggle{display:none;position:fixed;top:10px;left:10px;z-index:210;width:42px;height:42px;border:none;border-radius:10px;background:#6750a4;color:#fff;font-size:20px;cursor:pointer;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,.25)}
+    .nav-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:190}
+
     @media(max-width:768px){
-      .layout{flex-direction:column}
-      nav{width:100%;height:auto;position:static;border-right:none;border-bottom:1px solid var(--border);padding:12px 0}
-      main{padding:24px 16px 60px}
-      .lang-pill{top:8px;right:8px}
+      .layout{flex-direction:column;padding:0}
+      .menu-toggle{display:flex}
+      nav{position:fixed;top:0;left:0;height:100vh;width:84%;max-width:300px;background:#fff;border-right:1px solid var(--border);border-bottom:none;transform:translateX(-100%);transition:transform .25s ease;z-index:200;box-shadow:2px 0 16px rgba(0,0,0,.25);padding:60px 0 24px;overflow-y:auto}
+      nav.open{transform:translateX(0)}
+      .nav-backdrop.show{display:block}
+      main{padding:64px 18px 60px}
     }
   </style>
 </head>
 <body>
+
+<button class="menu-toggle" onclick="toggleMenu()" aria-label="Menu" aria-controls="site-nav" aria-expanded="false">☰</button>
+<div class="nav-backdrop" id="nav-backdrop" onclick="toggleMenu(false)"></div>
 
 <div class="controls">
   <button class="theme-btn" id="theme-btn" onclick="toggleTheme()" title="Toggle theme / Cambiar tema">🌙</button>
@@ -163,7 +172,7 @@
 <div class="layout">
 
 <!-- ══ NAV ══════════════════════════════════════════════════════════════ -->
-<nav>
+<nav id="site-nav">
   <div class="nav-section"><span class="en">Getting Started</span><span class="es">Inicio</span></div>
   <a href="#beta"><span class="en">🧪 Become a Tester</span><span class="es">🧪 Sé Tester</span></a>
   <a href="#quick-start"><span class="en">Quick Start</span><span class="es">Inicio Rápido</span></a>
@@ -1085,6 +1094,16 @@ function setTheme(theme){
 function toggleTheme(){
   setTheme(document.documentElement.dataset.theme==='dark'?'light':'dark');
 }
+function toggleMenu(force){
+  var nav=document.getElementById('site-nav');
+  var bd=document.getElementById('nav-backdrop');
+  var btn=document.querySelector('.menu-toggle');
+  if(!nav) return;
+  var open=(force===undefined)?!nav.classList.contains('open'):force;
+  nav.classList.toggle('open',open);
+  if(bd) bd.classList.toggle('show',open);
+  if(btn) btn.setAttribute('aria-expanded',open?'true':'false');
+}
 (function(){
   var lang='en';
   try{lang=localStorage.getItem('sc-lang')||'en';}catch(e){console.warn('localStorage unavailable',e);}
@@ -1092,6 +1111,9 @@ function toggleTheme(){
   var theme='light';
   try{theme=localStorage.getItem('sc-theme')||'light';}catch(e){console.warn('localStorage unavailable',e);}
   setTheme(theme);
+  // Close the mobile drawer when a nav link is tapped
+  var nav=document.getElementById('site-nav');
+  if(nav) nav.addEventListener('click',function(e){ if(e.target.closest('a')) toggleMenu(false); });
 })();
 </script>
 </body>
