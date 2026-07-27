@@ -61,7 +61,22 @@ class PolynomialService {
       final bool hasX = m.group(2) != null;
       final String? powStr = m.group(4);
 
-      final int power = hasX ? (powStr != null ? int.parse(powStr) : 1) : 0;
+      // Bounded and reported as a domain error. int.parse threw a raw
+      // FormatException (shown verbatim, in English, whatever the UI language)
+      // on a huge exponent, and an accepted one like x^1000000 allocated a
+      // million-entry coefficient list on the UI thread.
+      int power = 0;
+      if (hasX) {
+        if (powStr == null) {
+          power = 1;
+        } else {
+          final int? parsed = int.tryParse(powStr);
+          if (parsed == null || parsed > 1000) {
+            throw CalcException(CalcError.inputTooLarge, {'max': '1000'});
+          }
+          power = parsed;
+        }
+      }
 
       Fraction coeff;
       if (coeffStr.isEmpty || coeffStr == '+') {

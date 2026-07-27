@@ -209,7 +209,9 @@ class NumberAnalysisService {
   static Map<String, dynamic> isPerfectPower(BigInt number) {
     if (number < BigInt.two) return {'isPower': false};
 
-    for (int exponent = 2; exponent <= 64; exponent++) {
+    // Up to bitLength, not a fixed 64: the largest possible exponent is
+    // log2(n) (base 2), so capping at 64 misclassified 2^67 as "not a power".
+    for (int exponent = 2; exponent <= number.bitLength; exponent++) {
       BigInt root = _nthRoot(number, exponent);
       if (root.pow(exponent) == number) {
         return {
@@ -341,8 +343,13 @@ class NumberAnalysisService {
 
   /// Generates the Fibonacci sequence up to the given number
   static List<BigInt> fibonacciSequence(BigInt limit) {
+    // The seeds were exempt from the limit, so a limit below 1 still returned
+    // [0, 1] — elements greater than the bound the caller asked for.
+    if (limit < BigInt.zero) return [];
+    if (limit < BigInt.one) return [BigInt.zero];
+
     List<BigInt> sequence = [BigInt.zero, BigInt.one];
-    
+
     while (true) {
       BigInt next = sequence[sequence.length - 1] + sequence[sequence.length - 2];
       if (next > limit) break;

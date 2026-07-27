@@ -155,8 +155,10 @@ class OlympiadStrings {
         return pick('D no debe ser un cuadrado perfecto',
             'D must not be a perfect square');
       case CalcError.needPositiveValue:
-        return pick('Se requiere al menos un valor positivo',
-            'At least one positive value is required');
+        // The rule is that EVERY value must be positive; the old wording said
+        // "at least one", contradicting the check that actually runs.
+        return pick('Todos los valores deben ser positivos',
+            'All values must be positive');
       case CalcError.nGreaterThanOne:
         return pick('n debe ser > 1', 'n must be > 1');
       case CalcError.needKInitialTerms:

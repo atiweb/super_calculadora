@@ -373,7 +373,20 @@ class NumberTheoryAdvancedService {
     // factor = g^(-m) mod n
     final BigInt? gm = SpecialFunctionsService.modularInverse(
         SpecialFunctionsService.modPow(g, m, n), n);
-    if (gm == null) return null;
+    if (gm == null) {
+      // Giant steps need g to be invertible. When it is not, walk the powers
+      // directly: they are eventually periodic, so stop as soon as a value
+      // repeats — nothing new can appear afterwards. Giving up here missed
+      // real solutions beyond the table, e.g. 2^50 ≡ 100 (mod 202).
+      final Set<BigInt> seen = {};
+      BigInt value = _one;
+      for (BigInt x = _zero; x < n; x += _one) {
+        if (value == h) return x;
+        if (!seen.add(value)) return null;
+        value = (value * g) % n;
+      }
+      return null;
+    }
 
     BigInt gamma = h;
     for (BigInt i = _zero; i < m; i += _one) {

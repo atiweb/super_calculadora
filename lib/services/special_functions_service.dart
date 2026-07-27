@@ -26,7 +26,13 @@ class SpecialFunctionsService {
   /// Primorial - product of all primes ≤ n
   static BigInt primorial(int n) {
     if (n < 2) return BigInt.one;
-    
+
+    // The sieve allocates n+1 booleans, so an unbounded n exhausted memory.
+    if (n > 10000000) {
+      throw ArgumentError(trLocale('n demasiado grande para el primorial (máx 10000000)',
+          'n too large for the primorial (max 10000000)'));
+    }
+
     BigInt result = BigInt.one;
     List<bool> isPrime = List.filled(n + 1, true);
     isPrime[0] = isPrime[1] = false;

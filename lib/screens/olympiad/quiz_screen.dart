@@ -20,11 +20,23 @@ class _QuizScreenState extends State<QuizScreen> {
   int _total = 0;
   bool _answered = false;
 
+  /// Language the current problem was generated in, so a locale change while
+  /// the screen is alive regenerates it instead of leaving the statement in
+  /// the previous language while the rest of the screen switches.
+  String? _problemLanguage;
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _problem ??= QuizService.generate(
-        spanish: Localizations.localeOf(context).languageCode == 'es');
+    final String language = Localizations.localeOf(context).languageCode;
+    if (_problem == null || _problemLanguage != language) {
+      // Regenerating mid-answer would be worse than a stale statement, so keep
+      // the problem once it has been answered until the user moves on.
+      if (_problem == null || !_answered) {
+        _problem = QuizService.generate(spanish: language == 'es');
+        _problemLanguage = language;
+      }
+    }
   }
 
   @override
@@ -46,8 +58,8 @@ class _QuizScreenState extends State<QuizScreen> {
 
   void _next() {
     setState(() {
-      _problem = QuizService.generate(
-          spanish: Localizations.localeOf(context).languageCode == 'es');
+      _problemLanguage = Localizations.localeOf(context).languageCode;
+      _problem = QuizService.generate(spanish: _problemLanguage == 'es');
       _controller.clear();
       _answered = false;
       _lastCorrect = null;

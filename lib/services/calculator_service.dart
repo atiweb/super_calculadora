@@ -2294,6 +2294,16 @@ class CalculatorService extends ChangeNotifier {
     // the '%' remainder operator the parser does understand.
     prepared = prepared.replaceAll(RegExp(r'\bmod\b'), '%');
     
+    // Expand scientific notation BEFORE touching 'e'. The parser reads a bare
+    // 'e' as Euler's number, so "1.0e+15 + 5" evaluated to 22.718 instead of
+    // 1000000000000005 — silently, and the wrong value reached history.
+    prepared = prepared.replaceAllMapped(
+      RegExp(r'(\d+\.?\d*)[eE]([+-]?)(\d+)'),
+      (m) => m.group(2) == '-'
+          ? '(${m.group(1)}/10^${m.group(3)})'
+          : '(${m.group(1)}*10^${m.group(3)})',
+    );
+
     // Replace constants. Only a standalone 'e' is Euler's constant:
     // replacing every 'e' corrupted scientific notation ("2e3" turned
     // into "2·2.718…·3" with no visible error).
@@ -2615,7 +2625,14 @@ class CalculatorService extends ChangeNotifier {
     if (i <= 0) {
       return BigDecimal.fromString(s);
     }
-    final BigDecimal base = BigDecimal.fromString(s.substring(0, i));
+    // Unary minus binds looser than '^': −2² is −4. Folding the sign into the
+    // base made identical keystrokes yield +4 once the operand grew large
+    // enough to route through this evaluator instead of the double one.
+    String baseStr = s.substring(0, i);
+    final bool negated = baseStr.startsWith('-');
+    if (negated) baseStr = baseStr.substring(1);
+
+    final BigDecimal base = BigDecimal.fromString(baseStr);
     final BigDecimal exp = _evalBigPower(s.substring(i + 1));
 
     if (exp.fractionalPart != BigInt.zero) {
@@ -2634,7 +2651,8 @@ class CalculatorService extends ChangeNotifier {
     if (_powerExceedsDigitLimit(base, exponent)) {
       throw const _ResultTooLargeException();
     }
-    return base.pow(exponent);
+    final BigDecimal result = base.pow(exponent);
+    return negated ? BigDecimal.zero - result : result;
   }
 
   /// Helper method to add direct operations to the history
