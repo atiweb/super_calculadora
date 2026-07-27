@@ -43,6 +43,18 @@ class CalculatorService extends ChangeNotifier {
 
   // Generic pending-operation system for N parameters
   PendingOperation? _pending;
+
+  /// True right after a pending-operation parameter was captured and the
+  /// display was reset: the '0' on screen is a placeholder, not a value the
+  /// user typed. Cleared as soon as a digit is entered.
+  bool _paramSlotEmpty = false;
+
+  /// Bumped whenever a long-running operation is cancelled or the state is
+  /// reset. Isolate continuations capture it before awaiting and drop their
+  /// result if it changed, since `compute()` cannot actually be interrupted:
+  /// without this, cancelling still let the finished isolate overwrite the
+  /// display, _lastResult and history seconds later.
+  int _operationToken = 0;
   
   // Existing getters
   String get display => _display;
@@ -115,6 +127,8 @@ class CalculatorService extends ChangeNotifier {
     _operationProgress = '';
     _canCancelOperation = false;
     _pending = null;
+    _paramSlotEmpty = false;
+    _operationToken++; // a reset also disowns any in-flight isolate result
     notifyListeners();
   }
 
@@ -138,6 +152,15 @@ class CalculatorService extends ChangeNotifier {
   String _getCurrentNumber() {
     if (_display.isEmpty || _display == '0') {
       return '0';
+    }
+
+    // A display holding a single number in scientific notation is that whole
+    // number. Without this the generic regex below matched only the exponent
+    // digits, so 3.3333333333333334e-7 became "-7" and every operation acted
+    // on the exponent: pressing % showed -0.07 instead of 3.33e-9.
+    final String trimmed = _display.trim();
+    if (RegExp(r'^-?\d*\.?\d+[eE][+-]?\d+$').hasMatch(trimmed)) {
+      return trimmed;
     }
 
     // Find the last number in the expression
@@ -187,9 +210,10 @@ class CalculatorService extends ChangeNotifier {
   bool _endsWithOperator() {
     if (_display.isEmpty) return false;
     String trimmed = _display.trim();
-    return trimmed.endsWith('+') || trimmed.endsWith('-') || 
-           trimmed.endsWith('×') || trimmed.endsWith('÷') || 
-           trimmed.endsWith('^') || trimmed.endsWith('(');
+    return trimmed.endsWith('+') || trimmed.endsWith('-') ||
+           trimmed.endsWith('×') || trimmed.endsWith('÷') ||
+           trimmed.endsWith('^') || trimmed.endsWith('(') ||
+           trimmed.endsWith('mod');
   }
 
   /// Checks whether the display ends with a number
@@ -204,7 +228,10 @@ class CalculatorService extends ChangeNotifier {
     if (_hasError) {
       clear();
     }
-    
+
+    // Anything typed fills the waiting parameter slot, including a literal 0.
+    _paramSlotEmpty = false;
+
     // If the display is '0' and it's not a decimal point, replace it
     if (_display == '0' && digit != '.') {
       _display = digit;
@@ -347,13 +374,16 @@ class CalculatorService extends ChangeNotifier {
         _canCancelOperation = true;
         notifyListeners();
         
+        final int token = _operationToken;
         try {
           Map<String, dynamic> result = await compute(_calculatePowerInIsolate, {
             'base': base.toString(),
             'exponent': exp,
             'isSpanish': appIsSpanish,
           });
-          
+
+          if (token != _operationToken) return; // cancelled or reset meanwhile
+
           if (result['success']) {
             String resultStr = _formatNumber(result['result']);
             _display = resultStr;
@@ -420,10 +450,13 @@ class CalculatorService extends ChangeNotifier {
         _canCancelOperation = true;
         notifyListeners();
         
+        final int token = _operationToken;
         try {
           Map<String, dynamic> result = await compute(_calculateSqrtInIsolate,
               {'value': _display, 'isSpanish': appIsSpanish});
-          
+
+          if (token != _operationToken) return; // cancelled or reset meanwhile
+
           if (result['success']) {
             String resultStr = _formatNumber(result['result']);
             _display = resultStr;
@@ -485,10 +518,13 @@ class CalculatorService extends ChangeNotifier {
         _canCancelOperation = true;
         notifyListeners();
         
+        final int token = _operationToken;
         try {
           Map<String, dynamic> result = await compute(_calculateCubeRootInIsolate,
               {'value': _display, 'isSpanish': appIsSpanish});
-          
+
+          if (token != _operationToken) return; // cancelled or reset meanwhile
+
           if (result['success']) {
             String resultStr = _formatNumber(result['result']);
             _display = resultStr;
@@ -1674,10 +1710,13 @@ class CalculatorService extends ChangeNotifier {
           _canCancelOperation = false;
           notifyListeners();
           
+          final int token = _operationToken;
           try {
             Map<String, dynamic> result = await compute(_calculateFactorialInIsolate,
                 {'n': intValue.toInt(), 'isSpanish': appIsSpanish});
-            
+
+            if (token != _operationToken) return; // cancelled or reset meanwhile
+
             if (result['success']) {
               // Replace the last number with the factorial result
               String factorialResult = result['result'];
@@ -1774,6 +1813,7 @@ class CalculatorService extends ChangeNotifier {
   /// Cancels the current operation
   void cancelCurrentOperation() {
     if (_canCancelOperation) {
+      _operationToken++; // invalidate whatever the isolate is still computing
       _isCalculatingOperation = false;
       _isCalculatingPrimes = false;
       _operationProgress = '';
@@ -2167,6 +2207,11 @@ class CalculatorService extends ChangeNotifier {
     prepared = prepared.replaceAll('×', '*');
     prepared = prepared.replaceAll('÷', '/');
     prepared = prepared.replaceAll('√', 'sqrt');
+
+    // The scientific keyboard's `mod` key writes the literal word, which the
+    // parser rejects — every "a mod b =" ended in a FormatException. Map it to
+    // the '%' remainder operator the parser does understand.
+    prepared = prepared.replaceAll(RegExp(r'\bmod\b'), '%');
     
     // Replace constants. Only a standalone 'e' is Euler's constant:
     // replacing every 'e' corrupted scientific notation ("2e3" turned
@@ -2879,18 +2924,22 @@ class CalculatorService extends ChangeNotifier {
   void _startPending(PendingOperation op) {
     // If there is already a VARIABLE pending operation of the same type → add param and execute
     if (_pending != null && _pending!.isVariable && _pending!.name == op.name) {
-      // Add the current number as an additional parameter
-      String currentNumber = _getCurrentNumber();
-      if (currentNumber == '0' && _lastResult.isNotEmpty) {
-        currentNumber = _lastResult;
+      // Only capture the display when it actually holds a number the user
+      // entered. Pressing the function key to SOLVE (the documented
+      // "12 → LCM → 18 → = → LCM" flow) leaves a placeholder '0' behind, and
+      // appending it — or worse, substituting a stale _lastResult — added a
+      // phantom operand: lcm(12,18,0) = 0 instead of 36, gcd(12,18,10) = 2
+      // instead of 6, and an odd operand count that broke CRT every time.
+      if (!_paramSlotEmpty) {
+        _pending = _pending!.addParam(_getCurrentNumber());
       }
-      _pending = _pending!.addParam(currentNumber);
       if (_pending!.canExecute) {
         _executeOperation(_pending!);
         return;
       }
       // Not enough yet, keep waiting
       _display = '0';
+      _paramSlotEmpty = true;
       notifyListeners();
       return;
     }
@@ -2902,6 +2951,7 @@ class CalculatorService extends ChangeNotifier {
 
     _pending = op.addParam(currentNumber);
     _display = '0';
+    _paramSlotEmpty = true;
     _hasError = false;
     _errorMessage = '';
     _errorArgs = {};
@@ -2922,6 +2972,7 @@ class CalculatorService extends ChangeNotifier {
     } else {
       // More parameters needed → reset display and wait
       _display = '0';
+      _paramSlotEmpty = true;
       notifyListeners();
     }
   }
@@ -2930,6 +2981,7 @@ class CalculatorService extends ChangeNotifier {
   void _executeOperation(PendingOperation op) {
     List<String> p = op.params;
     _pending = null;
+    _paramSlotEmpty = false;
 
     try {
       String resultStr;
@@ -3112,6 +3164,7 @@ class CalculatorService extends ChangeNotifier {
     _canCancelOperation = false;
     notifyListeners();
 
+    final int token = _operationToken;
     try {
       final Map<String, dynamic> res =
           await compute(precisionWorker, <String, dynamic>{
@@ -3120,6 +3173,8 @@ class CalculatorService extends ChangeNotifier {
         'degrees': degrees,
         'digits': SettingsService.getPrecisionDigits(),
       });
+
+      if (token != _operationToken) return true; // cancelled or reset meanwhile
 
       if (res['ok'] == true) {
         final String resultStr = res['result'] as String;
@@ -3390,7 +3445,8 @@ class CalculatorService extends ChangeNotifier {
       } else {
         var result = SpecialFunctionsService.primeCountingFunction(number);
         String resultStr = result['count'].toString();
-        String suffix = result['exact'] == true ? '' : ' (aprox)';
+        String suffix =
+            result['exact'] == true ? '' : trLocale(' (aprox)', ' (approx)');
         _display = _formatNumber(resultStr);
         _lastResult = resultStr;
         _updateAnalysis();

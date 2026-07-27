@@ -242,7 +242,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               style: Theme.of(context).textTheme.bodySmall,
                             ),
                             Text(
-                              '${l.settingsScientific} 1.23456789012345678e+14',
+                              '${l.settingsScientific} 1.23456789012345678e+19',
                               style: Theme.of(context).textTheme.bodySmall,
                             ),
                             const SizedBox(height: 4),

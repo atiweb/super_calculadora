@@ -96,6 +96,12 @@ class StepsService {
     if (remainders.length != moduli.length || remainders.isEmpty) {
       throw CalcException(CalcError.listsSameSize);
     }
+    // A zero modulus threw a raw IntegerDivisionByZeroException that the tool
+    // could not localize (the user saw the class name); a negative one gave a
+    // wrong answer, e.g. "x ≡ 5 (mod -15)" where the truth is x ≡ 8 (mod 15).
+    if (moduli.any((m) => m <= _zero)) {
+      throw CalcException(CalcError.moduliPositive);
+    }
     final List<String> steps = [];
     steps.add(_t(spanish, 'Sistema de congruencias:', 'System of congruences:'));
     for (int i = 0; i < remainders.length; i++) {

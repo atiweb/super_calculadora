@@ -195,7 +195,7 @@ class _CalcToolState extends State<CalcTool> {
                       ),
                     ),
                     IconButton(
-                      tooltip: 'Copy',
+                      tooltip: s.copy,
                       icon: const Icon(Icons.copy, size: 18),
                       onPressed: () {
                         Clipboard.setData(ClipboardData(text: _result!));

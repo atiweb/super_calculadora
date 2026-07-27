@@ -90,8 +90,17 @@ void main() {
       // numeric sanity
       expect((r.rational.toDouble() + r.surd.toDouble() - 1 / (1 + 1.4142135)).abs() < 1e-5, true);
     });
-    test('binomial with c²=d throws', () =>
-        expect(() => SurdService.rationalizeOverBinomial(Fraction.one, Fraction.fromInt(2), bi(4)),
+    // c² = d only makes the binomial vanish when c is negative (c + √d =
+    // c + |c|). For c > 0 the value is an ordinary rational, so it must be
+    // returned rather than rejected: 1/(2 + √4) = 1/4.
+    test('binomial with c²=d and c>0 gives a plain rational', () {
+      final r = SurdService.rationalizeOverBinomial(
+          Fraction.one, Fraction.fromInt(2), bi(4));
+      expect(r.rational, Fraction.parse('1/4'));
+      expect(r.surd.coefficient.isZero, true);
+    });
+    test('binomial with c²=d and c<0 throws', () =>
+        expect(() => SurdService.rationalizeOverBinomial(Fraction.one, Fraction.fromInt(-2), bi(4)),
             throwsArgumentError));
   });
 }

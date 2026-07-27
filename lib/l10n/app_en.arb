@@ -1,7 +1,7 @@
 {
   "@@locale": "en",
   "appTitle": "Super Calculator",
-  "appVersion": "Version 1.0.0",
+  "appVersion": "Version 1.1.2",
   "appDeveloped": "Developed in Flutter",
   "appDynamicThemes": "With dynamic theme support",
   "navStandard": "Standard",

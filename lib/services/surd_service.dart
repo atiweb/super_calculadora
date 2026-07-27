@@ -1,6 +1,7 @@
 import '../models/calc_exception.dart';
 import '../models/fraction.dart';
 import '../models/surd.dart';
+import 'prime_utils.dart';
 
 /// Result of rationalizing a denominator with a binomial `c + √d`:
 /// the value is left as `rational + surd` (rational part + radical part).
@@ -48,15 +49,16 @@ class SurdService {
     BigInt inside = n.abs();
     if (inside == BigInt.zero) return (coefficient: BigInt.zero, radicand: BigInt.zero);
 
+    // Each prime pᵉ contributes p^(e~/k) outside and p^(e%k) inside. Built
+    // from the factorization instead of scanning dᵏ ≤ inside, which for k = 2
+    // degenerates to an O(√n) walk that froze the UI on large radicands.
     BigInt outside = BigInt.one;
-
-    for (BigInt d = BigInt.two; d.pow(k) <= inside; d += BigInt.one) {
-      final BigInt dk = d.pow(k);
-      while (inside % dk == BigInt.zero) {
-        outside *= d;
-        inside ~/= dk;
-      }
-    }
+    BigInt remaining = BigInt.one;
+    factorize(inside).forEach((p, e) {
+      outside *= p.pow(e ~/ k);
+      remaining *= p.pow(e % k);
+    });
+    inside = remaining;
 
     // The sign (odd-index root of a negative) goes to the coefficient.
     if (negative) outside = -outside;
@@ -85,7 +87,14 @@ class SurdService {
     }
     final Fraction denom = c * c - Fraction.fromBigInt(d);
     if (denom.isZero) {
-      throw CalcException(CalcError.binomialVanishes);
+      // c² = d means √d = |c|, so the binomial is c + |c| and only actually
+      // vanishes when c ≤ 0. For c > 0 the value is the plain rational
+      // a/(2c) — it is the conjugate trick that breaks down here (it divides
+      // by c² − d), not the input: 1/(2 + √4) = 1/4 was reported as an error.
+      if (c.isNegative || c.isZero) {
+        throw CalcException(CalcError.binomialVanishes);
+      }
+      return RationalizedBinomial(a / (c + c), Surd(Fraction.zero, BigInt.one));
     }
     final Fraction rational = (a * c) / denom;
     final Surd surd = Surd(-(a / denom), d);

@@ -23,9 +23,18 @@ class QuizProblem {
   bool isCorrect(String input) {
     final a = input.trim();
     if (a.isEmpty) return false;
-    final ua = BigInt.tryParse(a);
+    final ua = BigInt.tryParse(_dropTrailingZeroDecimals(a));
     final ca = BigInt.tryParse(answer);
     if (ua != null && ca != null) return ua == ca;
     return a.replaceAll(' ', '') == answer.replaceAll(' ', '');
+  }
+
+  /// Strips a purely decorative decimal part ("6.0", "6,00" → "6").
+  ///
+  /// The answer field uses a numeric keyboard that offers a decimal point, so
+  /// typing the right value as "6.0" was being marked wrong.
+  static String _dropTrailingZeroDecimals(String s) {
+    final m = RegExp(r'^([+-]?\d+)[.,]0+$').firstMatch(s);
+    return m != null ? m.group(1)! : s;
   }
 }

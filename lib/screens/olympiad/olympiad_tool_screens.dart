@@ -17,6 +17,7 @@ import '../../services/geometry_service.dart';
 import '../../services/linear_system_service.dart';
 import '../../services/number_theory_advanced_service.dart';
 import '../../services/polynomial_service.dart';
+import '../../services/prime_utils.dart';
 import '../../services/sequence_service.dart';
 import '../../services/special_functions_service.dart';
 import '../../services/statistics_service.dart';
@@ -90,21 +91,19 @@ List<Point> _pointList(String s) => s
     .toList();
 
 /// Sum of divisors σ(n) for the multiplicative functions table.
+///
+/// σ(pᵉ) = 1 + p + … + pᵉ, multiplied across the factorization. Uses the
+/// shared factorizer rather than an O(√n) walk, which hung on large inputs.
 BigInt _sigma1(BigInt n) {
   BigInt result = BigInt.one;
-  BigInt temp = n;
-  for (BigInt p = BigInt.two; p * p <= temp; p += BigInt.one) {
-    if (temp % p == BigInt.zero) {
-      BigInt term = BigInt.one, power = BigInt.one;
-      while (temp % p == BigInt.zero) {
-        temp ~/= p;
-        power *= p;
-        term += power;
-      }
-      result *= term;
+  factorize(n).forEach((p, e) {
+    BigInt term = BigInt.one, power = BigInt.one;
+    for (int i = 0; i < e; i++) {
+      power *= p;
+      term += power;
     }
-  }
-  if (temp > BigInt.one) result *= temp + BigInt.one;
+    result *= term;
+  });
   return result;
 }
 
@@ -1065,8 +1064,16 @@ class ComplexSequencesToolScreen extends StatelessWidget {
         CalcTool(
           title: s.pick('Triángulo de Pascal (fila n)', 'Pascal triangle (row n)'),
           fields: [ToolField('n', initial: '6')],
-          compute: (i) =>
-              CombinatoricsExtraService.pascalRow(_int(i[0])).join(', '),
+          compute: (i) {
+            // Capped like its sibling tools: row n holds n+1 binomials whose
+            // digit count grows with n, so an uncapped n froze the UI and
+            // produced a megabyte-long string nobody can read.
+            final n = _int(i[0]);
+            if (n > 1000) {
+              throw CalcException(CalcError.inputTooLarge, {'max': '1000'});
+            }
+            return CombinatoricsExtraService.pascalRow(n).join(', ');
+          },
         ),
         CalcTool(
           title: s.pick('Pascal mod m (Sierpiński)', 'Pascal mod m (Sierpiński)'),
@@ -1362,7 +1369,8 @@ class CalculusToolScreen extends StatelessWidget {
             if (!CalculusService.isUsable(v)) {
               throw CalcException(CalcError.invalidOperation);
             }
-            return '∫ from ${i[1]} to ${i[2]} ≈ ${_fmtNum(v)}';
+            return s.pick('∫ de ${i[1]} a ${i[2]} ≈ ${_fmtNum(v)}',
+                '∫ from ${i[1]} to ${i[2]} ≈ ${_fmtNum(v)}');
           },
         ),
         CalcTool(

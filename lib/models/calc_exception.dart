@@ -43,6 +43,8 @@ enum CalcError {
   integerCoordinatesRequired,
   collinearPoints,
   invalidSystem,
+  primeRequired,
+  moduliPositive,
 }
 
 /// Calculation exception with a localizable code and optional arguments.

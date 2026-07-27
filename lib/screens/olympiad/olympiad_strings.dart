@@ -23,6 +23,7 @@ class OlympiadStrings {
 
   // Chrome
   String get compute => pick('Calcular', 'Compute');
+  String get copy => pick('Copiar', 'Copy');
   String get result => pick('Resultado', 'Result');
   String get errorPrefix => pick('Error', 'Error');
 
@@ -185,6 +186,12 @@ class OlympiadStrings {
         return pick(
             'Sistema inválido: 2 o 3 filas "a,b,…,k" separadas por ";"',
             'Invalid system: 2 or 3 rows "a,b,…,k" separated by ";"');
+      case CalcError.primeRequired:
+        return pick('p debe ser primo (${e.arg('value')} no lo es)',
+            'p must be prime (${e.arg('value')} is not)');
+      case CalcError.moduliPositive:
+        return pick('Los módulos deben ser positivos',
+            'The moduli must be positive');
     }
   }
 }
