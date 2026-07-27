@@ -4,23 +4,23 @@ import 'big_decimal.dart';
 import '../constants/numeric_precision.dart';
 import '../utils/app_locale.dart';
 
-/// Clase para análisis avanzado de números
+/// Class for advanced number analysis
 class NumberAnalysisService {
-  /// Verifica si un número es primo (usa Miller-Rabin optimizado)
-  /// Solo aplica a números enteros positivos > 1
+  /// Checks whether a number is prime (uses optimized Miller-Rabin)
+  /// Only applies to positive integers > 1
   static bool isPrime(BigInt number) {
-    // Convertir a parte entera del valor absoluto
+    // Convert to the integer part of the absolute value
     BigInt integerPart = number.abs();
     
     if (integerPart < BigInt.two) return false;
     if (integerPart == BigInt.two) return true;
     if (integerPart % BigInt.two == BigInt.zero) return false;
     
-    // Usar el algoritmo optimizado de prime_utils.dart
+    // Use the optimized algorithm from prime_utils.dart
     return isProbablyPrime(integerPart);
   }
 
-  /// Verifica si un número es primo con información adicional sobre el procesamiento
+  /// Checks whether a number is prime with additional processing information
   static Map<String, dynamic> isPrimeWithInfo(BigInt originalNumber) {
     BigInt integerPart = originalNumber.abs();
     
@@ -31,15 +31,15 @@ class NumberAnalysisService {
       'note': '',
     };
     
-    // Agregar nota si el número fue modificado
+    // Add a note if the number was modified
     if (originalNumber != integerPart) {
       if (originalNumber < BigInt.zero) {
         result['note'] = trLocale('Se usó el valor absoluto del número negativo', 'Used the absolute value of the negative number');
       }
-      // Nota: Para decimales, esto se manejaría en un nivel superior
+      // Note: For decimals, this would be handled at a higher level
     }
     
-    // Verificar primalidad
+    // Check primality
     if (integerPart < BigInt.two) {
       result['isPrime'] = false;
       if (integerPart == BigInt.zero) {
@@ -54,24 +54,24 @@ class NumberAnalysisService {
     return result;
   }
 
-  /// Encuentra el siguiente número primo (usa isolate para números grandes)
-  /// Solo busca en números enteros positivos
+  /// Finds the next prime number (uses an isolate for large numbers)
+  /// Only searches among positive integers
   static Future<BigInt> nextPrimeAsync(BigInt number) async {
     BigInt integerPart = number.abs();
     if (integerPart < BigInt.two) return BigInt.two;
     
-    // Para números grandes, usar el isolate optimizado
+    // For large numbers, use the optimized isolate
     if (integerPart > BigInt.from(1000000)) {
       String result = await findNextPrime(integerPart);
       return BigInt.parse(result);
     }
     
-    // Para números pequeños, usar método directo
+    // For small numbers, use the direct method
     return nextPrime(integerPart);
   }
 
-  /// Encuentra el siguiente número primo (método síncrono para números pequeños)
-  /// Solo busca en números enteros positivos
+  /// Finds the next prime number (synchronous method for small numbers)
+  /// Only searches among positive integers
   static BigInt nextPrime(BigInt number) {
     BigInt integerPart = number.abs();
     if (integerPart < BigInt.two) return BigInt.two;
@@ -88,20 +88,20 @@ class NumberAnalysisService {
     return candidate;
   }
 
-  /// Encuentra el número primo anterior (usa isolate para números grandes)
-  /// Solo busca en números enteros positivos
+  /// Finds the previous prime number (uses an isolate for large numbers)
+  /// Only searches among positive integers
   static Future<BigInt> previousPrimeAsync(BigInt number) async {
     BigInt integerPart = number.abs();
     if (integerPart <= BigInt.two) return BigInt.two;
     
-    // Para números grandes, buscar de forma más eficiente
+    // For large numbers, search more efficiently
     if (integerPart > BigInt.from(1000000)) {
       BigInt candidate = integerPart - BigInt.one;
       if (candidate % BigInt.two == BigInt.zero) {
         candidate -= BigInt.one;
       }
       
-      // Buscar en pasos más grandes para números muy grandes
+      // Search in larger steps for very large numbers
       while (candidate > BigInt.two) {
         if (isProbablyPrime(candidate)) {
           return candidate;
@@ -112,16 +112,16 @@ class NumberAnalysisService {
       return BigInt.two;
     }
     
-    // Para números pequeños, usar método directo
+    // For small numbers, use the direct method
     return previousPrime(integerPart);
   }
 
-  /// Encuentra el número primo anterior (método síncrono para números pequeños)
-  /// Solo busca en números enteros positivos
+  /// Finds the previous prime number (synchronous method for small numbers)
+  /// Only searches among positive integers
   static BigInt previousPrime(BigInt number) {
     BigInt integerPart = number.abs();
-    // ≤ 3: el anterior es 2 (con solo `<= 2`, previousPrime(3) bajaba a
-    // candidato 1 y lo devolvía como "primo").
+    // ≤ 3: the previous one is 2 (with just `<= 2`, previousPrime(3) went
+    // down to candidate 1 and returned it as "prime").
     if (integerPart <= BigInt.from(3)) return BigInt.two;
 
     BigInt candidate = integerPart - BigInt.one;
@@ -136,25 +136,25 @@ class NumberAnalysisService {
     return candidate;
   }
 
-  /// Descomposición en factores primos, completa y correcta.
+  /// Prime factorization, complete and correct.
   ///
-  /// División de prueba hasta 10⁵ y, para el resto compuesto, Pollard-rho.
-  /// La versión anterior cortaba en 10⁶ y añadía el resto compuesto como si
-  /// fuera primo: 1000036000099 (= 1000003 × 1000033) se reportaba como su
-  /// propio "factor primo" a la vez que isPrime decía que era compuesto.
+  /// Trial division up to 10⁵ and, for the composite remainder, Pollard-rho.
+  /// The previous version stopped at 10⁶ and added the composite remainder as
+  /// if it were prime: 1000036000099 (= 1000003 × 1000033) was reported as its
+  /// own "prime factor" while isPrime said it was composite.
   static List<BigInt> primeFactorization(BigInt number) {
     if (number < BigInt.two) return [];
 
     List<BigInt> factors = [];
     BigInt n = number;
 
-    // Dividir por 2
+    // Divide by 2
     while (n % BigInt.two == BigInt.zero) {
       factors.add(BigInt.two);
       n ~/= BigInt.two;
     }
 
-    // División de prueba por impares pequeños (barata y elimina la mayoría)
+    // Trial division by small odd numbers (cheap and removes most factors)
     BigInt divisor = BigInt.from(3);
     final BigInt trialLimit = BigInt.from(100000);
     while (divisor <= trialLimit && divisor * divisor <= n) {
@@ -165,7 +165,7 @@ class NumberAnalysisService {
       divisor += BigInt.two;
     }
 
-    // Resto: primo → añadir; compuesto → factorizar con Pollard-rho
+    // Remainder: prime → add; composite → factor with Pollard-rho
     if (n > BigInt.one) {
       _factorCompletely(n, factors);
     }
@@ -174,7 +174,7 @@ class NumberAnalysisService {
     return factors;
   }
 
-  /// Factoriza [n] (impar, sin factores ≤ 10⁵) recursivamente en [factors].
+  /// Factors [n] (odd, with no factors ≤ 10⁵) recursively into [factors].
   static void _factorCompletely(BigInt n, List<BigInt> factors) {
     if (n == BigInt.one) return;
     if (isPrime(n)) {
@@ -186,8 +186,8 @@ class NumberAnalysisService {
     _factorCompletely(n ~/ d, factors);
   }
 
-  /// Encuentra un divisor no trivial de un compuesto impar mediante
-  /// Pollard-rho (Floyd), reintentando con otra constante si degenera.
+  /// Finds a non-trivial divisor of an odd composite via
+  /// Pollard-rho (Floyd), retrying with another constant if it degenerates.
   static BigInt _pollardRho(BigInt n) {
     BigInt c = BigInt.one;
     while (true) {
@@ -205,7 +205,7 @@ class NumberAnalysisService {
     }
   }
 
-  /// Verifica si es una potencia perfecta
+  /// Checks whether it is a perfect power
   static Map<String, dynamic> isPerfectPower(BigInt number) {
     if (number < BigInt.two) return {'isPower': false};
 
@@ -224,7 +224,7 @@ class NumberAnalysisService {
     return {'isPower': false};
   }
 
-  /// Convierte un entero a cadena de superíndices Unicode (ej. 10 → '¹⁰')
+  /// Converts an integer to a Unicode superscript string (e.g. 10 → '¹⁰')
   static String _intToSuperscript(int n) {
     const Map<String, String> s = {
       '0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴',
@@ -233,27 +233,27 @@ class NumberAnalysisService {
     return n.toString().split('').map((d) => s[d] ?? d).join('');
   }
 
-  /// Verifica si es un número palindrómico
+  /// Checks whether it is a palindromic number
   static bool isPalindrome(BigInt number) {
     String str = number.toString();
     return str == str.split('').reversed.join('');
   }
 
-  /// Verifica si es un número perfecto.
+  /// Checks whether it is a perfect number.
   ///
-  /// Usa el teorema de Euclides–Euler: todo número perfecto par tiene la forma
-  /// 2^(a)·(2^(a+1) − 1) donde 2^(a+1) − 1 es primo (primo de Mersenne). Esto
-  /// permite una comprobación exacta e instantánea incluso para números
-  /// perfectos enormes. No se conocen números perfectos impares (se ha probado
-  /// que, de existir, superan 10^1500), así que para impares se hace una
-  /// verificación exacta solo cuando el número es pequeño y se devuelve `false`
-  /// en caso contrario.
+  /// Uses the Euclid–Euler theorem: every even perfect number has the form
+  /// 2^(a)·(2^(a+1) − 1) where 2^(a+1) − 1 is prime (a Mersenne prime). This
+  /// allows an exact and instantaneous check even for huge perfect
+  /// numbers. No odd perfect numbers are known (it has been proven that,
+  /// if any exist, they exceed 10^1500), so for odd numbers an exact
+  /// verification is done only when the number is small, and `false` is
+  /// returned otherwise.
   static bool isPerfectNumber(BigInt number) {
-    if (number < BigInt.from(6)) return false; // el menor perfecto es 6
+    if (number < BigInt.from(6)) return false; // the smallest perfect number is 6
 
     if (number.isEven) {
-      // number = 2^a · m con m impar (a ≥ 1). Es perfecto ⟺ m = 2^(a+1) − 1
-      // y m es primo.
+      // number = 2^a · m with m odd (a ≥ 1). It is perfect ⟺ m = 2^(a+1) − 1
+      // and m is prime.
       int a = 0;
       BigInt m = number;
       while (m.isEven) {
@@ -264,9 +264,9 @@ class NumberAnalysisService {
       return m == mersenne && isPrime(m);
     }
 
-    // Impar: no se conoce ninguno perfecto. Verificación exacta solo para
-    // números manejables; para el resto devolvemos `false` (correcto según la
-    // cota inferior conocida de 10^1500) evitando un cálculo prohibitivo.
+    // Odd: no perfect one is known. Exact verification only for
+    // manageable numbers; for the rest we return `false` (correct per the
+    // known lower bound of 10^1500), avoiding a prohibitive computation.
     if (number > BigInt.from(100000000)) return false;
     BigInt sum = BigInt.one;
     final BigInt limit = _sqrt(number);
@@ -280,14 +280,14 @@ class NumberAnalysisService {
     return sum == number;
   }
 
-  /// Obtiene todos los divisores, generados desde la factorización prima
-  /// (completa). El barrido anterior cortaba en 10⁵, así que a un semiprimo
-  /// de factores grandes le "faltaban" sus divisores no triviales.
+  /// Gets all divisors, generated from the (complete) prime
+  /// factorization. The previous sweep stopped at 10⁵, so a semiprime
+  /// with large factors was "missing" its non-trivial divisors.
   static List<BigInt> getDivisors(BigInt number) {
     if (number <= BigInt.zero) return [];
     if (number == BigInt.one) return [BigInt.one];
 
-    // Agrupar factores primos: p → exponente
+    // Group prime factors: p → exponent
     final Map<BigInt, int> powers = {};
     for (final BigInt f in primeFactorization(number)) {
       powers[f] = (powers[f] ?? 0) + 1;
@@ -310,7 +310,7 @@ class NumberAnalysisService {
     return divisors;
   }
 
-  /// Calcula el MCD (Máximo Común Divisor)
+  /// Computes the GCD (Greatest Common Divisor)
   static BigInt gcd(BigInt a, BigInt b) {
     a = a.abs();
     b = b.abs();
@@ -322,24 +322,24 @@ class NumberAnalysisService {
     return a;
   }
 
-  /// Calcula el MCM (Mínimo Común Múltiplo)
+  /// Computes the LCM (Least Common Multiple)
   static BigInt lcm(BigInt a, BigInt b) {
     if (a == BigInt.zero || b == BigInt.zero) return BigInt.zero;
     return (a * b).abs() ~/ gcd(a, b);
   }
 
-  /// Verifica si es un número de Fibonacci (optimizado para números grandes)
+  /// Checks whether it is a Fibonacci number (optimized for large numbers)
   static bool isFibonacci(BigInt number) {
     if (number < BigInt.zero) return false;
     if (number == BigInt.zero || number == BigInt.one) return true;
     
-    // Usar la propiedad: n es Fibonacci si y solo si 5n²+4 o 5n²-4 es un cuadrado perfecto
+    // Use the property: n is Fibonacci if and only if 5n²+4 or 5n²-4 is a perfect square
     BigInt fiveNSquare = BigInt.from(5) * number * number;
     return _isPerfectSquare(fiveNSquare + BigInt.from(4)) ||
            _isPerfectSquare(fiveNSquare - BigInt.from(4));
   }
 
-  /// Genera la secuencia de Fibonacci hasta el número dado
+  /// Generates the Fibonacci sequence up to the given number
   static List<BigInt> fibonacciSequence(BigInt limit) {
     List<BigInt> sequence = [BigInt.zero, BigInt.one];
     
@@ -352,41 +352,41 @@ class NumberAnalysisService {
     return sequence;
   }
 
-  /// Verifica si es un número triangular (optimizado para números grandes)
+  /// Checks whether it is a triangular number (optimized for large numbers)
   static bool isTriangular(BigInt number) {
     if (number < BigInt.zero) return false;
     if (number == BigInt.zero) return true;
     
-    // Formula: n es triangular si (8n + 1) es un cuadrado perfecto
+    // Formula: n is triangular if (8n + 1) is a perfect square
     BigInt value = BigInt.from(8) * number + BigInt.one;
     if (!_isPerfectSquare(value)) return false;
 
-    // Calcular raíz cuadrada y verificar que sea impar
+    // Compute the square root and verify it is odd
     BigInt sqrtValue = _sqrtBigInt(value);
     return ((sqrtValue - BigInt.one) % BigInt.from(2)) == BigInt.zero;
   }
 
-  /// Análisis completo de un número (versión síncrona - usa el asíncrono internamente)
+  /// Complete analysis of a number (synchronous version - uses the async one internally)
   static Map<String, dynamic> completeAnalysis(BigInt number) {
-    // Para mantener compatibilidad, llamar a la versión asíncrona pero de forma síncrona
-    // Esto no es ideal pero mantiene la API existente
+    // To keep compatibility, call the asynchronous version but in a synchronous way
+    // This is not ideal but keeps the existing API
     int digits = number.toString().length;
     
     if (digits <= 20) {
-      // Para números pequeños/medianos, usar método síncrono directo
+      // For small/medium numbers, use the direct synchronous method
       return _completeAnalysisSync(number);
     } else {
-      // Para números grandes, devolver análisis básico inmediatamente
+      // For large numbers, return a basic analysis immediately
       return _completeAnalysisBasic(number);
     }
   }
 
-  /// Análisis síncrono para números pequeños/medianos
+  /// Synchronous analysis for small/medium numbers
   static Map<String, dynamic> _completeAnalysisSync(BigInt number) {
     Map<String, dynamic> analysis = {};
     
     try {
-      // Propiedades básicas
+      // Basic properties
       analysis['value'] = number.toString();
       analysis['isZero'] = number == BigInt.zero;
       analysis['isPositive'] = number > BigInt.zero;
@@ -394,16 +394,16 @@ class NumberAnalysisService {
       analysis['isEven'] = number % BigInt.two == BigInt.zero;
       analysis['isOdd'] = number % BigInt.two != BigInt.zero;
       
-      // Longitud y dígitos
+      // Length and digits
       analysis['digitCount'] = number.toString().replaceAll('-', '').length;
       analysis['digitSum'] = _digitSum(number);
       
-      // Representaciones
+      // Representations
       analysis['binary'] = number.toRadixString(2);
       analysis['octal'] = number.toRadixString(8);
       analysis['hexadecimal'] = number.toRadixString(16).toUpperCase();
       
-      // Análisis numérico
+      // Numerical analysis
       if (number > BigInt.zero) {
         int digits = number.toString().length;
         
@@ -413,17 +413,17 @@ class NumberAnalysisService {
         analysis['isFibonacci'] = isFibonacci(number);
         analysis['isTriangular'] = isTriangular(number);
         
-        // Verificar si es cuadrado perfecto y cubo perfecto
+        // Check for perfect square and perfect cube
         analysis['isPerfectSquare'] = isPerfectSquare(number);
         analysis['isPerfectCube'] = isPerfectCube(number);
         
         if (digits <= 15) {
-          // Análisis completo para números pequeños
+          // Complete analysis for small numbers
           analysis['nextPrime'] = nextPrime(number).toString();
           analysis['previousPrime'] = previousPrime(number).toString();
           analysis['primeFactors'] = primeFactorization(number).map((f) => f.toString()).toList();
-          // Acotar la lista mostrada: un número altamente compuesto puede
-          // tener decenas de miles de divisores.
+          // Bound the displayed list: a highly composite number can
+          // have tens of thousands of divisors.
           final List<BigInt> divisors = getDivisors(number);
           if (divisors.length <= 100) {
             analysis['divisors'] = divisors.map((d) => d.toString()).toList();
@@ -436,7 +436,7 @@ class NumberAnalysisService {
           }
           analysis['isPerfect'] = isPerfectNumber(number);
         } else {
-          // Análisis limitado para números medianos
+          // Limited analysis for medium numbers
           if (analysis['isPrime'] == true) {
             analysis['nextPrime'] = nextPrime(number).toString();
             analysis['previousPrime'] = previousPrime(number).toString();
@@ -459,11 +459,11 @@ class NumberAnalysisService {
             }
           }
           
-          analysis['isPerfect'] = false; // No calcular para números medianos
+          analysis['isPerfect'] = false; // Do not compute for medium numbers
         }
       }
       
-      // Operaciones matemáticas básicas
+      // Basic mathematical operations
       try {
         if (number.toString().length <= 30) {
           analysis['square'] = (number * number).toString();
@@ -471,7 +471,7 @@ class NumberAnalysisService {
         }
         
         if (number > BigInt.zero && number.toString().length <= 20) {
-          // Mostrar raíces con decimales razonables para el panel
+          // Show roots with reasonable decimals for the panel
           try {
             final sqrtVal = BigDecimal.fromBigInt(number)
                 .sqrt()
@@ -479,7 +479,7 @@ class NumberAnalysisService {
                 .toString();
             analysis['squareRoot'] = sqrtVal;
           } catch (_) {
-            // Respaldo: al menos devolver la raíz entera
+            // Fallback: at least return the integer root
             analysis['squareRoot'] = _sqrt(number).toString();
           }
 
@@ -490,7 +490,7 @@ class NumberAnalysisService {
                 .toString();
             analysis['cubeRoot'] = cbrtVal;
           } catch (_) {
-            // Respaldo: raíz cúbica entera aproximada
+            // Fallback: approximate integer cube root
             analysis['cubeRoot'] = _nthRoot(number, 3).toString();
           }
         }
@@ -508,7 +508,7 @@ class NumberAnalysisService {
     return analysis;
   }
 
-  /// Análisis básico para números muy grandes
+  /// Basic analysis for very large numbers
   static Map<String, dynamic> _completeAnalysisBasic(BigInt number) {
     Map<String, dynamic> analysis = {};
     
@@ -516,7 +516,7 @@ class NumberAnalysisService {
       String numberStr = number.toString();
       int digitCount = numberStr.replaceAll('-', '').length;
       
-      // Propiedades básicas (siempre calculables)
+      // Basic properties (always computable)
       analysis['value'] = numberStr;
       analysis['isZero'] = number == BigInt.zero;
       analysis['isPositive'] = number > BigInt.zero;
@@ -524,13 +524,13 @@ class NumberAnalysisService {
       analysis['isEven'] = number % BigInt.two == BigInt.zero;
       analysis['isOdd'] = number % BigInt.two != BigInt.zero;
       
-      // Longitud y dígitos
+      // Length and digits
       analysis['digitCount'] = digitCount;
       
-      // Suma de dígitos - siempre calculable, incluso para números muy grandes
+      // Digit sum - always computable, even for very large numbers
       analysis['digitSum'] = _digitSum(number);
       
-      // Representaciones (solo para números no extremadamente grandes)
+      // Representations (only for numbers that are not extremely large)
       if (digitCount <= 100) {
         try {
           analysis['binary'] = number.toRadixString(2);
@@ -547,9 +547,9 @@ class NumberAnalysisService {
         analysis['hexadecimal'] = trLocale('No calculado (número extremadamente grande)', 'Not computed (extremely large number)');
       }
       
-      // Análisis limitado para números muy grandes
+      // Limited analysis for very large numbers
       if (number > BigInt.zero) {
-        // Estas propiedades son eficientes incluso para números muy grandes
+        // These properties are efficient even for very large numbers
         try {
           analysis['isPrime'] = isPrime(number);
         } catch (e) {
@@ -563,12 +563,12 @@ class NumberAnalysisService {
           analysis['isPalindrome'] = false;
         }
         
-        // Para números extremadamente grandes, no calcular estas propiedades
+        // For extremely large numbers, do not compute these properties
         if (digitCount <= 200) {
           analysis['isFibonacci'] = isFibonacci(number);
           analysis['isTriangular'] = isTriangular(number);
           
-          // Verificar si es cuadrado perfecto y cubo perfecto
+          // Check for perfect square and perfect cube
           analysis['isPerfectSquare'] = isPerfectSquare(number);
           analysis['isPerfectCube'] = isPerfectCube(number);
         } else {
@@ -577,17 +577,17 @@ class NumberAnalysisService {
           analysis['largeNumberNote'] = trLocale('Algunas propiedades no calculadas debido al tamaño extremo', 'Some properties not computed due to extreme size');
         }
         
-        // Propiedades que no se calculan para números muy grandes
+        // Properties not computed for very large numbers
         analysis['perfectPower'] = {'isPower': false, 'reason': trLocale('Número muy grande', 'Very large number')};
         analysis['primeFactors'] = [trLocale('No calculado (número muy grande)', 'Not computed (very large number)')];
         analysis['divisors'] = [trLocale('No calculado (número muy grande)', 'Not computed (very large number)')];
         analysis['isPerfect'] = false;
         
-        // Los primos se calcularán de forma asíncrona en el CalculatorService
+        // Primes will be computed asynchronously in the CalculatorService
         analysis['nextPrime'] = trLocale('Calculando...', 'Calculating...');
         analysis['previousPrime'] = trLocale('Calculando...', 'Calculating...');
         
-        // Operaciones matemáticas básicas
+        // Basic mathematical operations
         if (digitCount <= 50) {
           try {
             analysis['square'] = (number * number).toString();
@@ -605,13 +605,13 @@ class NumberAnalysisService {
           analysis['cube'] = trLocale('No calculado (resultado muy grande)', 'Not computed (result too large)');
         }
         
-        // Raíces no se calculan para números muy grandes
+        // Roots are not computed for very large numbers
         analysis['squareRoot'] = trLocale('No calculado (número muy grande)', 'Not computed (very large number)');
         analysis['cubeRoot'] = trLocale('No calculado (número muy grande)', 'Not computed (very large number)');
       }
       
     } catch (e) {
-      // En caso de error, devolver información básica
+      // In case of error, return basic information
       analysis['error'] = trLocale('Error en análisis: ${e.toString()}', 'Analysis error: ${e.toString()}');
       analysis['value'] = number.toString();
       analysis['digitCount'] = number.toString().replaceAll('-', '').length;
@@ -628,18 +628,18 @@ class NumberAnalysisService {
     return analysis;
   }
 
-  /// Verifica si un número es un cuadrado perfecto
+  /// Checks whether a number is a perfect square
   static bool isPerfectSquare(BigInt number) {
     if (number < BigInt.zero) return false;
     if (number == BigInt.zero || number == BigInt.one) return true;
     
     try {
-      // Para números grandes, usar búsqueda binaria
+      // For large numbers, use binary search
       if (number.toString().length > 15) {
         return _isPerfectSquareBinarySearch(number);
       }
       
-      // Para números pequeños, usar método directo
+      // For small numbers, use the direct method
       BigInt sqrt = _integerSquareRoot(number);
       return sqrt * sqrt == number;
     } catch (e) {
@@ -647,22 +647,22 @@ class NumberAnalysisService {
     }
   }
 
-  /// Verifica si un número es un cubo perfecto
+  /// Checks whether a number is a perfect cube
   static bool isPerfectCube(BigInt number) {
     if (number < BigInt.zero) {
-      // Los números negativos pueden ser cubos perfectos de números negativos
+      // Negative numbers can be perfect cubes of negative numbers
       BigInt absNumber = number.abs();
       return isPerfectCube(absNumber);
     }
     if (number == BigInt.zero || number == BigInt.one) return true;
     
     try {
-      // Para números grandes, usar búsqueda binaria
+      // For large numbers, use binary search
       if (number.toString().length > 15) {
         return _isPerfectCubeBinarySearch(number);
       }
       
-      // Para números pequeños, usar método directo
+      // For small numbers, use the direct method
       BigInt cubeRoot = _integerCubeRoot(number);
       return cubeRoot * cubeRoot * cubeRoot == number;
     } catch (e) {
@@ -670,7 +670,7 @@ class NumberAnalysisService {
     }
   }
 
-  /// Calcula la raíz cuadrada entera usando el método de Newton
+  /// Computes the integer square root using Newton's method
   static BigInt _integerSquareRoot(BigInt number) {
     if (number < BigInt.zero) throw ArgumentError('Square root of negative number');
     if (number == BigInt.zero) return BigInt.zero;
@@ -687,7 +687,7 @@ class NumberAnalysisService {
     return x;
   }
 
-  /// Calcula la raíz cúbica entera usando búsqueda binaria
+  /// Computes the integer cube root using binary search
   static BigInt _integerCubeRoot(BigInt number) {
     if (number < BigInt.zero) throw ArgumentError('Cube root of negative number');
     if (number == BigInt.zero) return BigInt.zero;
@@ -712,14 +712,14 @@ class NumberAnalysisService {
     return high;
   }
 
-  /// Verifica si un número grande es cuadrado perfecto usando búsqueda binaria
+  /// Checks whether a large number is a perfect square using binary search
   static bool _isPerfectSquareBinarySearch(BigInt number) {
     BigInt low = BigInt.zero;
     BigInt high = number;
     
-    // Optimización: reducir el rango de búsqueda
+    // Optimization: reduce the search range
     if (number > BigInt.from(1000000)) {
-      // Para números muy grandes, empezar con una estimación mejor
+      // For very large numbers, start with a better estimate
       int digits = number.toString().length;
       int sqrtDigits = (digits + 1) ~/ 2;
       high = BigInt.parse('1${'0' * sqrtDigits}');
@@ -741,14 +741,14 @@ class NumberAnalysisService {
     return false;
   }
 
-  /// Verifica si un número grande es cubo perfecto usando búsqueda binaria
+  /// Checks whether a large number is a perfect cube using binary search
   static bool _isPerfectCubeBinarySearch(BigInt number) {
     BigInt low = BigInt.zero;
     BigInt high = number;
     
-    // Optimización: reducir el rango de búsqueda
+    // Optimization: reduce the search range
     if (number > BigInt.from(1000000)) {
-      // Para números muy grandes, empezar con una estimación mejor
+      // For very large numbers, start with a better estimate
       int digits = number.toString().length;
       int cubeRootDigits = (digits + 2) ~/ 3;
       high = BigInt.parse('1${'0' * cubeRootDigits}');
@@ -770,12 +770,12 @@ class NumberAnalysisService {
     return false;
   }
 
-  /// Verifica si un número es cuadrado perfecto de forma asíncrona (para números muy grandes)
+  /// Checks whether a number is a perfect square asynchronously (for very large numbers)
   static Future<bool> isPerfectSquareAsync(BigInt number) async {
     if (number < BigInt.zero) return false;
     if (number == BigInt.zero || number == BigInt.one) return true;
     
-    // Para números extremadamente grandes, usar compute para evitar bloquear la UI
+    // For extremely large numbers, use compute to avoid blocking the UI
     if (number.toString().length > 1000) {
       return await compute(_isPerfectSquareInIsolate, number.toString());
     }
@@ -783,7 +783,7 @@ class NumberAnalysisService {
     return isPerfectSquare(number);
   }
 
-  /// Verifica si un número es cubo perfecto de forma asíncrona (para números muy grandes)
+  /// Checks whether a number is a perfect cube asynchronously (for very large numbers)
   static Future<bool> isPerfectCubeAsync(BigInt number) async {
     if (number < BigInt.zero) {
       BigInt absNumber = number.abs();
@@ -791,7 +791,7 @@ class NumberAnalysisService {
     }
     if (number == BigInt.zero || number == BigInt.one) return true;
     
-    // Para números extremadamente grandes, usar compute para evitar bloquear la UI
+    // For extremely large numbers, use compute to avoid blocking the UI
     if (number.toString().length > 1000) {
       return await compute(_isPerfectCubeInIsolate, number.toString());
     }
@@ -799,7 +799,7 @@ class NumberAnalysisService {
     return isPerfectCube(number);
   }
 
-  /// Función para ejecutar en isolate - cuadrado perfecto
+  /// Function to run in an isolate - perfect square
   static bool _isPerfectSquareInIsolate(String numberStr) {
     try {
       BigInt number = BigInt.parse(numberStr);
@@ -809,7 +809,7 @@ class NumberAnalysisService {
     }
   }
 
-  /// Función para ejecutar en isolate - cubo perfecto
+  /// Function to run in an isolate - perfect cube
   static bool _isPerfectCubeInIsolate(String numberStr) {
     try {
       BigInt number = BigInt.parse(numberStr);
@@ -819,25 +819,25 @@ class NumberAnalysisService {
     }
   }
 
-  /// Calcula la suma de los dígitos de un número (método público)
+  /// Computes the digit sum of a number (public method)
   static int digitSum(BigInt number) {
     return _digitSum(number);
   }
 
-  /// Calcula la suma de los dígitos de forma asíncrona (para números extremadamente grandes)
+  /// Computes the digit sum asynchronously (for extremely large numbers)
   static Future<int> digitSumAsync(BigInt number) async {
     String numStr = number.toString().replaceAll('-', '');
     
-    // Si el número es muy grande, usar isolate
+    // If the number is very large, use an isolate
     if (numStr.length > 50000) {
       return await compute(_digitSumInIsolate, numStr);
     } else {
-      // Para números más pequeños, usar método directo
+      // For smaller numbers, use the direct method
       return _digitSum(number);
     }
   }
 
-  /// Función para calcular suma de dígitos en isolate
+  /// Function to compute the digit sum in an isolate
   static int _digitSumInIsolate(String numStr) {
     int sum = 0;
     for (int i = 0; i < numStr.length; i++) {
@@ -846,7 +846,7 @@ class NumberAnalysisService {
     return sum;
   }
 
-  /// Verifica si un número es un cuadrado perfecto (optimizado para números grandes)
+  /// Checks whether a number is a perfect square (optimized for large numbers)
   static bool _isPerfectSquare(BigInt n) {
     if (n < BigInt.zero) return false;
     if (n == BigInt.zero || n == BigInt.one) return true;
@@ -867,7 +867,7 @@ class NumberAnalysisService {
     return false;
   }
 
-  /// Calcula la raíz cuadrada de un BigInt (optimizado para números grandes)
+  /// Computes the square root of a BigInt (optimized for large numbers)
   static BigInt _sqrtBigInt(BigInt n) {
     if (n < BigInt.zero) throw ArgumentError(trLocale('Raíz cuadrada de número negativo', 'Square root of a negative number'));
     if (n == BigInt.zero || n == BigInt.one) return n;
@@ -904,10 +904,10 @@ class NumberAnalysisService {
     return x;
   }
 
-  /// Raíz n-ésima entera exacta: devuelve ⌊|number|^(1/n)⌋ (con el signo
-  /// adecuado) mediante búsqueda binaria. Es exacta para BigInt de cualquier
-  /// tamaño, sin aproximaciones, lo que permite detectar potencias perfectas
-  /// grandes correctamente.
+  /// Exact integer n-th root: returns ⌊|number|^(1/n)⌋ (with the proper
+  /// sign) via binary search. It is exact for a BigInt of any
+  /// size, with no approximations, which allows detecting large perfect
+  /// powers correctly.
   static BigInt _nthRoot(BigInt number, int n) {
     if (n < 1) throw ArgumentError(trLocale('El índice de la raíz debe ser ≥ 1', 'The root index must be ≥ 1'));
     if (number < BigInt.zero && n.isEven) {
@@ -920,14 +920,14 @@ class NumberAnalysisService {
     final BigInt magnitude = number.abs();
     if (magnitude == BigInt.one) return negative ? -BigInt.one : BigInt.one;
 
-    // Cota superior: duplicar `hi` hasta que hi^n supere `magnitude`.
+    // Upper bound: double `hi` until hi^n exceeds `magnitude`.
     BigInt lo = BigInt.one;
     BigInt hi = BigInt.two;
     while (hi.pow(n) <= magnitude) {
       hi <<= 1;
     }
 
-    // Búsqueda binaria de ⌊magnitude^(1/n)⌋ en el intervalo (lo, hi].
+    // Binary search for ⌊magnitude^(1/n)⌋ in the interval (lo, hi].
     while (lo < hi) {
       final BigInt mid = (lo + hi + BigInt.one) >> 1;
       if (mid.pow(n) <= magnitude) {
@@ -939,13 +939,13 @@ class NumberAnalysisService {
     return negative ? -lo : lo;
   }
 
-  /// Calcula la suma de los dígitos de un número (optimizado para números grandes)
+  /// Computes the digit sum of a number (optimized for large numbers)
   static int _digitSum(BigInt number) {
     String numStr = number.toString().replaceAll('-', '');
     
-    // Para números muy grandes, usar un enfoque más eficiente
+    // For very large numbers, use a more efficient approach
     if (numStr.length > 10000) {
-      // Procesar en chunks para evitar problemas de memoria
+      // Process in chunks to avoid memory issues
       int sum = 0;
       const int chunkSize = 1000;
       
@@ -960,7 +960,7 @@ class NumberAnalysisService {
       
       return sum;
     } else {
-      // Para números más pequeños, usar el método directo
+      // For smaller numbers, use the direct method
       return numStr.split('').map(int.parse).reduce((a, b) => a + b);
     }
   }

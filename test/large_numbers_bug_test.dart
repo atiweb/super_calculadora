@@ -10,7 +10,7 @@ void main() {
     });
 
     test('Suma de números grandes (más de 16 dígitos)', () {
-      // Probar la suma que da 0 en lugar del resultado correcto
+      // Try the addition that yields 0 instead of the correct result
       calculatorService.addDigit('1');
       calculatorService.addDigit('2');
       calculatorService.addDigit('3');
@@ -31,7 +31,7 @@ void main() {
       calculatorService.addDigit('8');
       calculatorService.addDigit('9');
       calculatorService.addDigit('0');
-      // Ahora tenemos: 12345678901234567890 (20 dígitos)
+      // Now we have: 12345678901234567890 (20 digits)
       
       calculatorService.addOperator('+');
       calculatorService.addDigit('1');
@@ -42,7 +42,7 @@ void main() {
     });
 
     test('Suma de números de 16 dígitos', () {
-      // Probar con números de exactamente 16 dígitos
+      // Try with numbers of exactly 16 digits
       calculatorService.addDigit('1');
       calculatorService.addDigit('2');
       calculatorService.addDigit('3');
@@ -59,7 +59,7 @@ void main() {
       calculatorService.addDigit('4');
       calculatorService.addDigit('5');
       calculatorService.addDigit('6');
-      // Ahora tenemos: 1234567890123456 (16 dígitos)
+      // Now we have: 1234567890123456 (16 digits)
       
       calculatorService.addOperator('+');
       calculatorService.addDigit('1');
@@ -70,7 +70,7 @@ void main() {
     });
 
     test('Suma de números de 17 dígitos - caso que falla', () {
-      // Probar con números de 17 dígitos que causan el bug
+      // Try with 17-digit numbers that trigger the bug
       calculatorService.addDigit('1');
       calculatorService.addDigit('2');
       calculatorService.addDigit('3');
@@ -88,20 +88,20 @@ void main() {
       calculatorService.addDigit('5');
       calculatorService.addDigit('6');
       calculatorService.addDigit('7');
-      // Ahora tenemos: 12345678901234567 (17 dígitos)
+      // Now we have: 12345678901234567 (17 digits)
       
       calculatorService.addOperator('+');
       calculatorService.addDigit('1');
       calculatorService.calculate();
       
-      // Aquí es donde ocurre el bug - en lugar de 12345678901234568, da 0, 3, 6, etc.
+      // This is where the bug happens - instead of 12345678901234568, it gives 0, 3, 6, etc.
       print('Resultado: ${calculatorService.display}');
       expect(calculatorService.display, '12345678901234568');
       expect(calculatorService.hasError, false);
     });
 
     test('Multiplicación de números grandes', () {
-      // Probar multiplicación que también falla
+      // Try multiplication, which also fails
       calculatorService.addDigit('1');
       calculatorService.addDigit('2');
       calculatorService.addDigit('3');
@@ -119,7 +119,7 @@ void main() {
       calculatorService.addDigit('5');
       calculatorService.addDigit('6');
       calculatorService.addDigit('7');
-      // Ahora tenemos: 12345678901234567 (17 dígitos)
+      // Now we have: 12345678901234567 (17 digits)
       
       calculatorService.addOperator('×');
       calculatorService.addDigit('2');
@@ -131,7 +131,7 @@ void main() {
     });
 
     test('Resta de números grandes', () {
-      // Probar resta que también falla
+      // Try subtraction, which also fails
       calculatorService.addDigit('1');
       calculatorService.addDigit('2');
       calculatorService.addDigit('3');
@@ -149,7 +149,7 @@ void main() {
       calculatorService.addDigit('5');
       calculatorService.addDigit('6');
       calculatorService.addDigit('7');
-      // Ahora tenemos: 12345678901234567 (17 dígitos)
+      // Now we have: 12345678901234567 (17 digits)
       
       calculatorService.addOperator('-');
       calculatorService.addDigit('1');

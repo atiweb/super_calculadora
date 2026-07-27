@@ -5,35 +5,35 @@ import 'package:shared_preferences/shared_preferences.dart';
 void main() {
   group('Display con Historial', () {
     setUp(() async {
-      // Limpiar SharedPreferences antes de cada test
+      // Clear SharedPreferences before each test
       SharedPreferences.setMockInitialValues({});
     });
 
     test('Mostrar última operación en display', () async {
       final calculator = CalculatorService();
       
-      // Verificar que inicialmente no hay última operación
+      // Verify there is initially no last operation
       expect(calculator.lastOperation, isNull);
       
-      // Realizar una operación
+      // Perform an operation
       calculator.addDigit('2');
       calculator.addOperator('+');
       calculator.addDigit('3');
       calculator.calculate();
       
-      // Verificar que ahora hay una última operación
+      // Verify there is now a last operation
       expect(calculator.lastOperation, isNotNull);
       expect(calculator.lastOperation!.expression, '2 + 3');
       expect(calculator.lastOperation!.result, '5');
       
-      // Limpiar y realizar otra operación
+      // Clear and perform another operation
       calculator.clear();
       calculator.addDigit('4');
       calculator.addOperator('×');
       calculator.addDigit('5');
       calculator.calculate();
       
-      // Verificar que la última operación cambió
+      // Verify the last operation changed
       expect(calculator.lastOperation!.expression, '4 × 5');
       expect(calculator.lastOperation!.result, '20');
     });
@@ -41,17 +41,17 @@ void main() {
     test('Historial vacío no tiene última operación', () async {
       final calculator = CalculatorService();
       
-      // Limpiar historial
+      // Clear history
       await calculator.clearHistory();
       
-      // Verificar que no hay última operación
+      // Verify there is no last operation
       expect(calculator.lastOperation, isNull);
     });
 
     test('Múltiples operaciones mantienen orden correcto', () async {
       final calculator = CalculatorService();
       
-      // Realizar varias operaciones
+      // Perform several operations
       calculator.addDigit('1');
       calculator.addOperator('+');
       calculator.addDigit('1');
@@ -69,14 +69,14 @@ void main() {
       calculator.addDigit('2');
       calculator.calculate();
       
-      // La última operación debe ser la más reciente
+      // The last operation must be the most recent one
       expect(calculator.lastOperation!.expression, '10 ÷ 2');
       expect(calculator.lastOperation!.result, '5');
       
-      // Verificar que el historial tiene las 3 operaciones
+      // Verify the history holds the 3 operations
       expect(calculator.history.length, 3);
       
-      // Las operaciones deben estar en orden inverso (más reciente primero)
+      // The operations must be in reverse order (most recent first)
       expect(calculator.history[0].expression, '10 ÷ 2');
       expect(calculator.history[1].expression, '3 × 4');
       expect(calculator.history[2].expression, '1 + 1');
@@ -85,13 +85,13 @@ void main() {
     test('Operación con resultado largo', () async {
       final calculator = CalculatorService();
       
-      // Simular operación factorial (resultado largo)
+      // Simulate factorial operation (long result)
       calculator.addDigit('10');
       await calculator.factorial();
       
-      // El resultado debería estar en el historial pero truncado para display
-      // Nota: El factorial se aplica directamente al display, no genera historial automáticamente
-      // así que necesitamos simular una operación que genere historial
+      // The result should be in the history but truncated for display
+      // Note: The factorial is applied directly to the display, it doesn't generate history automatically
+      // so we need to simulate an operation that generates history
       
       calculator.clear();
       calculator.addDigit('999999999');

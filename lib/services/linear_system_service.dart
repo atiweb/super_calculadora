@@ -1,14 +1,14 @@
 import '../models/calc_exception.dart';
 import '../models/fraction.dart';
 
-/// Resolución exacta de sistemas lineales 2×2 y 3×3 por la regla de Cramer.
+/// Exact solving of 2×2 and 3×3 linear systems via Cramer's rule.
 ///
-/// Las soluciones se devuelven como fracciones exactas; si el determinante es
-/// cero (sistema sin solución única) se devuelve `null`.
+/// Solutions are returned as exact fractions; if the determinant is
+/// zero (system without a unique solution) `null` is returned.
 class LinearSystemService {
-  /// Resuelve el sistema dado por la matriz aumentada [rows]: cada fila tiene
-  /// n coeficientes y el término independiente al final (n filas, n = 2 o 3).
-  /// Devuelve [x, y] o [x, y, z], o `null` si el determinante es cero.
+  /// Solves the system given by the augmented matrix [rows]: each row holds
+  /// n coefficients with the constant term at the end (n rows, n = 2 or 3).
+  /// Returns [x, y] or [x, y, z], or `null` if the determinant is zero.
   static List<Fraction>? solveCramer(List<List<Fraction>> rows) {
     final int n = rows.length;
     if (n < 2 || n > 3) {
@@ -41,7 +41,7 @@ class LinearSystemService {
     if (det.isZero) return null;
     final List<Fraction> result = [];
     for (int col = 0; col < 3; col++) {
-      // Sustituir la columna `col` por los términos independientes.
+      // Replace column `col` with the constant terms.
       final replaced = [
         for (final row in rows)
           [for (int j = 0; j < 3; j++) j == col ? row[3] : row[j]],
@@ -51,7 +51,7 @@ class LinearSystemService {
     return result;
   }
 
-  /// Determinante del sistema (sin la columna aumentada), útil para mostrar.
+  /// Determinant of the system (without the augmented column), useful for display.
   static Fraction determinant(List<List<Fraction>> rows) {
     final int n = rows.length;
     if (n == 2) {

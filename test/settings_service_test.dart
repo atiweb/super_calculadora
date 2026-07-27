@@ -4,51 +4,51 @@ import 'package:super_calculadora/services/settings_service.dart';
 void main() {
   group('Settings Service Tests', () {
     setUpAll(() async {
-      // Inicializar el binding de Flutter para los tests
+      // Initialize the Flutter binding for the tests
       TestWidgetsFlutterBinding.ensureInitialized();
     });
 
     setUp(() async {
-      // Inicializar el servicio antes de cada test
+      // Initialize the service before each test
       await SettingsService.init();
     });
 
     test('configuración por defecto debe ser false', () {
-      // La configuración por defecto debe ser false (sin notación científica)
+      // The default setting must be false (no scientific notation)
       bool defaultValue = SettingsService.getUseScientificNotation();
       expect(defaultValue, false);
     });
 
     test('debe poder guardar y recuperar configuración', () async {
-      // Establecer notación científica como true
+      // Set scientific notation to true
       await SettingsService.setUseScientificNotation(true);
       
-      // Verificar que se guardó correctamente
+      // Verify it was saved correctly
       bool savedValue = SettingsService.getUseScientificNotation();
       expect(savedValue, true);
       
-      // Cambiar a false
+      // Change to false
       await SettingsService.setUseScientificNotation(false);
       
-      // Verificar que se cambió correctamente
+      // Verify it was changed correctly
       bool changedValue = SettingsService.getUseScientificNotation();
       expect(changedValue, false);
     });
 
     test('configuración debe persistir entre sesiones', () async {
-      // Establecer valor inicial
+      // Set initial value
       await SettingsService.setUseScientificNotation(true);
       bool initialValue = SettingsService.getUseScientificNotation();
       expect(initialValue, true);
       
-      // Simular reinicio de la aplicación reinicializando el servicio
+      // Simulate an app restart by re-initializing the service
       await SettingsService.init();
       
-      // Verificar que el valor persiste
+      // Verify the value persists
       bool persistedValue = SettingsService.getUseScientificNotation();
       expect(persistedValue, true);
       
-      // Limpiar para no afectar otros tests
+      // Clean up so other tests are not affected
       await SettingsService.setUseScientificNotation(false);
     });
   });

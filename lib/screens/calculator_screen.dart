@@ -80,17 +80,17 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
           ),
           body: Stack(
             children: [
-              // top:false → el AppBar ya consume el inset superior; protegemos
-              // el inferior (barra de navegación) y los laterales (cutouts) para
-              // la vista edge-to-edge de Android 15.
+              // top:false → the AppBar already consumes the top inset; we protect
+              // the bottom (navigation bar) and the sides (cutouts) for
+              // Android 15's edge-to-edge view.
               SafeArea(
                 top: false,
                 child: Column(
                   children: [
-                  // Mostrar ExpressionInput solo en la pestaña de expresiones
+                  // Show ExpressionInput only on the expressions tab
                   if (_currentPage == 2) const ExpressionInput(),
 
-                  // Display de la calculadora (solo en páginas 0 y 1)
+                  // Calculator display (only on pages 0 and 1)
                   if (_currentPage != 2)
                     Expanded(
                       flex: 2,
@@ -101,7 +101,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                       ),
                     ),
 
-                  // Navegación entre páginas
+                  // Navigation between pages
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     child: Row(
@@ -129,15 +129,15 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                     ),
                   ),
 
-                  // Contenido de las páginas
+                  // Page content
                   Expanded(
                     flex: _currentPage == 2 ? 3 : 4,
                     child: PageView(
                       controller: _pageController,
-                      // Swipe deshabilitado: al teclear números rápido, los
-                      // toques se interpretaban como arrastre y la app cambiaba
-                      // de pestaña sola. Las pestañas solo cambian con los
-                      // botones (feedback de tester).
+                      // Swipe disabled: when typing numbers quickly, the
+                      // taps were interpreted as a drag and the app switched
+                      // tabs on its own. Tabs only change via the
+                      // buttons (tester feedback).
                       physics: const NeverScrollableScrollPhysics(),
                       onPageChanged: (index) {
                         setState(() {
@@ -145,20 +145,20 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                         });
                       },
                       children: [
-                        // Página de calculadora
+                        // Calculator page
                         calculator.calculatorType == CalculatorType.scientific
                             ? const ScientificCalculatorKeyboard()
                             : calculator.calculatorType == CalculatorType.special
                                 ? const SpecialCalculatorKeyboard()
                                 : const CalculatorKeyboard(),
 
-                        // Página de análisis
+                        // Analysis page
                         const NumberAnalysisPanel(),
 
-                        // Página de expresiones matemáticas con historial
+                        // Math expressions page with history
                         Column(
                           children: [
-                            // Display del resultado actual
+                            // Current result display
                             if (calculator.display != '0' && !calculator.hasError) ...[
                               Container(
                                 width: double.infinity,
@@ -194,7 +194,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                               ),
                             ],
 
-                            // Panel de historial
+                            // History panel
                             const Expanded(child: HistoryPanel()),
                           ],
                         ),
@@ -205,7 +205,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                 ),
               ),
 
-              // Overlay para operaciones pesadas
+              // Overlay for heavy operations
               if (calculator.isCalculatingOperation)
                 _buildOperationLoadingOverlay(context, calculator, l),
             ],
@@ -295,7 +295,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
     );
   }
 
-  /// Construye el overlay de carga para operaciones pesadas
+  /// Builds the loading overlay for heavy operations
   Widget _buildOperationLoadingOverlay(BuildContext context, CalculatorService calculator, AppLocalizations l) {
     return Container(
       color: Colors.black.withValues(alpha: 0.7),

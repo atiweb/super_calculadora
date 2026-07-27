@@ -2,13 +2,13 @@ import 'dart:math' as math;
 import '../models/calc_exception.dart';
 import '../models/fraction.dart';
 
-/// Estadística descriptiva exacta sobre listas de racionales.
+/// Exact descriptive statistics over lists of rationals.
 ///
-/// Media, mediana y varianza se calculan como [Fraction] exactas; la
-/// desviación estándar y la media geométrica (que involucran raíces) se
-/// devuelven aproximadas en double.
+/// Mean, median and variance are computed as exact [Fraction]s; the
+/// standard deviation and the geometric mean (which involve roots) are
+/// returned as approximate doubles.
 class StatisticsService {
-  /// Resumen descriptivo de la lista (no vacía).
+  /// Descriptive summary of the (non-empty) list.
   static ({
     int count,
     Fraction mean,
@@ -35,7 +35,7 @@ class StatisticsService {
         ? sorted[n ~/ 2]
         : (sorted[n ~/ 2 - 1] + sorted[n ~/ 2]) / Fraction.fromInt(2);
 
-    // Moda(s): valores con frecuencia máxima > 1.
+    // Mode(s): values with maximum frequency > 1.
     final Map<Fraction, int> freq = {};
     for (final x in data) {
       freq[x] = (freq[x] ?? 0) + 1;
@@ -72,8 +72,8 @@ class StatisticsService {
     );
   }
 
-  /// Las cuatro medias clásicas de una lista de positivos, para verificar
-  /// la cadena QM ≥ AM ≥ GM ≥ HM. AM y HM exactas; QM y GM aproximadas.
+  /// The four classical means of a list of positives, to verify
+  /// the chain QM ≥ AM ≥ GM ≥ HM. AM and HM exact; QM and GM approximate.
   static ({
     Fraction arithmetic,
     double geometric,

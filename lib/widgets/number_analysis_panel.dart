@@ -9,9 +9,9 @@ import '../utils/error_localizer.dart';
 class NumberAnalysisPanel extends StatelessWidget {
   const NumberAnalysisPanel({super.key});
 
-  /// El servicio marca "no aplica" con un texto localizado; comparar contra
-  /// ambos idiomas (comparar solo el literal español dejaba pasar 'Not prime'
-  /// como si fuera un valor).
+  /// The service marks "not applicable" with a localized text; compare against
+  /// both languages (comparing only the Spanish literal let 'Not prime'
+  /// through as if it were a value).
   static bool _isNotPrimeMarker(dynamic value) =>
       value == 'No es primo' || value == 'Not prime';
 
@@ -45,7 +45,7 @@ class NumberAnalysisPanel extends StatelessWidget {
           );
         }
         
-        // Mostrar indicador de carga si el análisis está en progreso
+        // Show a loading indicator if the analysis is in progress
         if (analysis.containsKey('loading') && analysis['loading'] == true) {
           return Center(
             child: Column(
@@ -74,7 +74,7 @@ class NumberAnalysisPanel extends StatelessWidget {
           );
         }
         
-        // Mostrar error si existe
+        // Show error if present
         if (analysis.containsKey('error')) {
           return Center(
             child: Column(
@@ -96,8 +96,8 @@ class NumberAnalysisPanel extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  // El servicio a veces guarda una clave ('errAnalysisFail');
-                  // localizeError la traduce y deja pasar el texto libre.
+                  // The service sometimes stores a key ('errAnalysisFail');
+                  // localizeError translates it and lets free-form text through.
                   localizeError(context, analysis['error'].toString()),
                   style: TextStyle(
                     fontSize: 14,
@@ -140,7 +140,7 @@ class NumberAnalysisPanel extends StatelessWidget {
           child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Banner especial para números extremadamente grandes
+                // Special banner for extremely large numbers
                 if (analysis.containsKey('largeNumberNote'))
                   Container(
                     width: double.infinity,
@@ -195,7 +195,7 @@ class NumberAnalysisPanel extends StatelessWidget {
                     ),
                   ),
                   
-                // Mostrar nota de procesamiento si existe
+                // Show processing note if present
                 if (analysis.containsKey('processingNote'))
                   Container(
                     width: double.infinity,
@@ -253,7 +253,7 @@ class NumberAnalysisPanel extends StatelessWidget {
                     ),
                   ),
                 
-                // Mostrar indicador de cálculo de primos si está en progreso
+                // Show prime-computation indicator if it is in progress
                 if (analysis.containsKey('calculatingPrimes') && analysis['calculatingPrimes'] == true)
                   Container(
                     width: double.infinity,
@@ -306,33 +306,33 @@ class NumberAnalysisPanel extends StatelessWidget {
                     ),
                   ),
                 
-                // Información básica
+                // Basic information
                 _buildAnalysisCard(
                   context,
                   l.analysisBasicProperties,
                   Icons.info_outline,
                   [
-                    // 1. Valor
+                    // 1. Value
                     _buildInfoRow(l.analysisValue, analysis['value'] ?? 'N/A'),
 
-                    // 2. Es primo
+                    // 2. Is prime
                     _buildInfoRow(l.analysisIsPrime, _formatPrimeStatus(analysis['isPrime'], l)),
 
-                    // 3. Dígitos
+                    // 3. Digits
                     _buildInfoRow(l.analysisDigits, analysis['digitCount']?.toString() ?? 'N/A'),
 
-                    // 4. Siguiente primo
+                    // 4. Next prime
                     if (analysis['nextPrime'] != null && !_isNotPrimeMarker(analysis['nextPrime']))
                       _buildInfoRow(l.analysisNextPrime, analysis['nextPrime']),
 
-                    // 5. Anterior primo
+                    // 5. Previous prime
                     if (analysis['previousPrime'] != null && !_isNotPrimeMarker(analysis['previousPrime']))
                       _buildInfoRow(l.analysisPrevPrime, analysis['previousPrime']),
 
-                    // 6. Suma de dígitos
+                    // 6. Digit sum
                     _buildInfoRow(l.analysisDigitSum, analysis['digitSum']?.toString() ?? 'N/A'),
 
-                    // Factorización prima
+                    // Prime factorization
                     if (analysis['primeFactors'] != null &&
                         (analysis['primeFactors'] as List).isNotEmpty)
                       _buildPrimeFactorsRow(
@@ -340,7 +340,7 @@ class NumberAnalysisPanel extends StatelessWidget {
                         analysis['primeFactors'] as List,
                       ),
 
-                    // Potencia perfecta
+                    // Perfect power
                     if (analysis['perfectPower'] != null &&
                         analysis['perfectPower']['isPower'] == true)
                       _buildInfoRow(
@@ -350,7 +350,7 @@ class NumberAnalysisPanel extends StatelessWidget {
                   ],
                 ),
               
-              // Representaciones numéricas
+              // Numeric representations
               _buildAnalysisCard(
                 context,
                 l.analysisRepresentations,
@@ -362,7 +362,7 @@ class NumberAnalysisPanel extends StatelessWidget {
                 ],
               ),
               
-              // Análisis matemático
+              // Mathematical analysis
               if (analysis['isPrime'] != null)
                 _buildAnalysisCard(
                   context,
@@ -371,7 +371,7 @@ class NumberAnalysisPanel extends StatelessWidget {
                   [
                     _buildInfoRow(l.analysisIsPrime, _formatPrimeStatus(analysis['isPrime'], l)),
 
-                    // Mostrar estado de cálculo de primos o resultados
+                    // Show prime-computation status or results
                     if (analysis.containsKey('calculatingPrimes') && analysis['calculatingPrimes'] == true)
                       _buildLoadingRow(l.analysisNextPrime, l.analysisCalculatingPrimes)
                     else if (analysis['nextPrime'] != null && !_isNotPrimeMarker(analysis['nextPrime']))
@@ -389,7 +389,7 @@ class NumberAnalysisPanel extends StatelessWidget {
                   ],
                 ),
               
-              // Factorización
+              // Factorization
               if (analysis['primeFactors'] != null && 
                   (analysis['primeFactors'] as List).isNotEmpty)
                 _buildAnalysisCard(
@@ -405,7 +405,7 @@ class NumberAnalysisPanel extends StatelessWidget {
                   ],
                 ),
               
-              // Divisores
+              // Divisors
               if (analysis['divisors'] != null && 
                   (analysis['divisors'] as List).isNotEmpty)
                 _buildAnalysisCard(
@@ -425,7 +425,7 @@ class NumberAnalysisPanel extends StatelessWidget {
                   ],
                 ),
               
-              // Funciones aritméticas (nuevas)
+              // Arithmetic functions (new)
               if (analysis.containsKey('value') &&
                   analysis['isPositive'] == true &&
                   (analysis['digitCount'] ?? 0) <= 15)
@@ -436,7 +436,7 @@ class NumberAnalysisPanel extends StatelessWidget {
                   _buildArithmeticFunctions(analysis, l),
                 ),
 
-              // Potencia perfecta
+              // Perfect power
               if (analysis['perfectPower'] != null &&
                   analysis['perfectPower']['isPower'] == true)
                 _buildAnalysisCard(
@@ -459,7 +459,7 @@ class NumberAnalysisPanel extends StatelessWidget {
                   ],
                 ),
               
-              // Operaciones matemáticas
+              // Mathematical operations
               _buildAnalysisCard(
                 context,
                 l.analysisOperations,
@@ -524,17 +524,17 @@ class NumberAnalysisPanel extends StatelessWidget {
   }
 
   Widget _buildInfoRow(String label, String value, {int? maxLines}) {
-    // Verificar la configuración del usuario para notación científica
+    // Check the user's setting for scientific notation
     bool shouldUseScientific = SettingsService.getUseScientificNotation();
     
-    // Formatear valor para notación científica si es necesario
+    // Format the value in scientific notation if needed
     String displayValue = value;
     if (shouldUseScientific && value.length > 15 && value != 'N/A') {
       if (value.contains('e') || value.contains('E')) {
-        displayValue = value; // Ya está en notación científica
+        displayValue = value; // Already in scientific notation
       } else if (RegExp(r'^-?\d+$').hasMatch(value)) {
-        // Notación manual sobre los dígitos: double da Infinity con >308
-        // dígitos, y así no se redondea la mantisa.
+        // Manual notation over the digits: double yields Infinity with >308
+        // digits, and this way the mantissa isn't rounded.
         final bool neg = value.startsWith('-');
         final String digits = neg ? value.substring(1) : value;
         String mantissa = digits[0];
@@ -544,8 +544,8 @@ class NumberAnalysisPanel extends StatelessWidget {
         }
         displayValue = '${neg ? '-' : ''}${mantissa}e+${digits.length - 1}';
       } else {
-        // Decimales largos por double; la prosa ("No calculado (muy grande)")
-        // se deja intacta: antes se mutilaba a "N.o calce+24".
+        // Long decimals go through double; prose ("No calculado (muy grande)")
+        // is left intact: it used to get mangled into "N.o calce+24".
         final double? numValue = double.tryParse(value);
         if (numValue != null && numValue.isFinite) {
           displayValue = numValue.toStringAsExponential(6);
@@ -593,7 +593,7 @@ class NumberAnalysisPanel extends StatelessWidget {
     );
   }
   
-  // Método especializado para mostrar factores primos con exponentes estilizados
+  // Specialized method to display prime factors with styled exponents
   Widget _buildPrimeFactorsRow(String label, List<dynamic> factors) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
@@ -628,7 +628,7 @@ class NumberAnalysisPanel extends StatelessWidget {
     );
   }
 
-  // Construye un RichText con exponentes estilizados
+  // Builds a RichText with styled exponents
   Widget _buildPrimeFactorsRichText(List<dynamic> factors) {
     if (factors.isEmpty) {
       return const Text(
@@ -640,19 +640,19 @@ class NumberAnalysisPanel extends StatelessWidget {
       );
     }
     
-    // Contar la frecuencia de cada factor
+    // Count the frequency of each factor
     Map<String, int> factorCounts = {};
     for (var factor in factors) {
       String factorStr = factor.toString();
       factorCounts[factorStr] = (factorCounts[factorStr] ?? 0) + 1;
     }
     
-    // Crear lista de widgets para mostrar los factores
+    // Build the list of widgets to display the factors
     List<Widget> factorWidgets = [];
     bool isFirst = true;
     
     factorCounts.forEach((factor, count) {
-      // Agregar separador
+      // Add separator
       if (!isFirst) {
         factorWidgets.add(const Text(
           ' × ',
@@ -663,7 +663,7 @@ class NumberAnalysisPanel extends StatelessWidget {
         ));
       }
       
-      // Agregar factor con exponente
+      // Add factor with exponent
       if (count == 1) {
         factorWidgets.add(Text(
           factor,
@@ -685,7 +685,7 @@ class NumberAnalysisPanel extends StatelessWidget {
     );
   }
   
-  // Construye un widget para mostrar un factor con su exponente
+  // Builds a widget to display a factor with its exponent
   Widget _buildFactorWithExponent(String factor, int exponent) {
     return Row(
       mainAxisSize: MainAxisSize.min,
@@ -715,11 +715,11 @@ class NumberAnalysisPanel extends StatelessWidget {
   }
   
   void _copyToClipboard(String label, String value) {
-    // Implementar copia al portapapeles si es necesario
-    // Por ahora, el SelectableText ya permite seleccionar y copiar
+    // Implement clipboard copy if needed
+    // For now, the SelectableText already allows selecting and copying
   }
 
-  /// Formatea el estado de primalidad
+  /// Formats the primality status
   String _formatPrimeStatus(dynamic value, AppLocalizations l) {
     if (value == true) return l.analysisYes;
     if (value == false) return l.analysisNo;
@@ -727,7 +727,7 @@ class NumberAnalysisPanel extends StatelessWidget {
     return 'N/A';
   }
 
-  /// Formatea estados booleanos genéricos
+  /// Formats generic boolean statuses
   String _formatBooleanStatus(dynamic value, AppLocalizations l) {
     if (value == true) return l.analysisYes;
     if (value == false) return l.analysisNo;
@@ -735,7 +735,7 @@ class NumberAnalysisPanel extends StatelessWidget {
     return 'N/A';
   }
 
-  /// Construye una fila con loader para mostrar cálculos en progreso
+  /// Builds a row with a loader to show calculations in progress
   Widget _buildLoadingRow(String label, String loadingText) {
     return Builder(
       builder: (context) => Padding(
@@ -785,17 +785,17 @@ class NumberAnalysisPanel extends StatelessWidget {
     );
   }
 
-  /// Formatea números muy grandes para visualización
+  /// Formats very large numbers for display
   String _formatLargeNumber(String number) {
     if (number.length <= 30) {
       return number;
     }
     
-    // Para números muy grandes, mostrar primeros y últimos dígitos
+    // For very large numbers, show the first and last digits
     return '${number.substring(0, 15)}...${number.substring(number.length - 15)}';
   }
 
-  /// Formatea números con comas separadoras
+  /// Formats numbers with comma separators
   String _formatNumberWithCommas(int number) {
     return number.toString().replaceAllMapped(
       RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
@@ -803,24 +803,24 @@ class NumberAnalysisPanel extends StatelessWidget {
     );
   }
   
-  /// Formatea una lista de factores primos agrupándolos en potencias
+  /// Formats a list of prime factors by grouping them into powers
   String formatPrimeFactorsAsPowers(List<dynamic> factors) {
     if (factors.isEmpty) return 'N/A';
     
-    // Contar la frecuencia de cada factor
+    // Count the frequency of each factor
     Map<String, int> factorCounts = {};
     for (var factor in factors) {
       String factorStr = factor.toString();
       factorCounts[factorStr] = (factorCounts[factorStr] ?? 0) + 1;
     }
     
-    // Formatear como potencias
+    // Format as powers
     List<String> formattedFactors = [];
     factorCounts.forEach((factor, count) {
       if (count == 1) {
         formattedFactors.add(factor);
       } else {
-        // Usar superíndices Unicode para los exponentes
+        // Use Unicode superscripts for the exponents
         String exponent = _toSuperscript(count);
         formattedFactors.add('$factor$exponent');
       }
@@ -829,9 +829,9 @@ class NumberAnalysisPanel extends StatelessWidget {
     return formattedFactors.join(' × ');
   }
   
-  /// Convierte un número a superíndice usando caracteres Unicode con fallbacks
+  /// Converts a number to superscript using Unicode characters with fallbacks
   String _toSuperscript(int number) {
-    // Mapeo primario con Unicode
+    // Primary mapping with Unicode
     const Map<String, String> superscripts = {
       '0': '⁰',
       '1': '¹',
@@ -845,7 +845,7 @@ class NumberAnalysisPanel extends StatelessWidget {
       '9': '⁹',
     };
     
-    // Mapeo alternativo con caracteres más comunes
+    // Alternative mapping with more common characters
     const Map<String, String> superscriptsAlt = {
       '0': '⁰',
       '1': '¹',
@@ -866,7 +866,7 @@ class NumberAnalysisPanel extends StatelessWidget {
     return result;
   }
 
-  /// Construye las filas de funciones aritméticas para el panel de análisis
+  /// Builds the arithmetic function rows for the analysis panel
   List<Widget> _buildArithmeticFunctions(Map<String, dynamic> analysis, AppLocalizations l) {
     List<Widget> rows = [];
     try {
@@ -876,7 +876,7 @@ class NumberAnalysisPanel extends StatelessWidget {
       BigInt n = BigInt.parse(valueStr);
       if (n <= BigInt.zero) return rows;
 
-      // Limitar cálculos a números razonables
+      // Limit calculations to reasonably sized numbers
       int digits = n.toString().length;
       if (digits > 15) return rows;
 
@@ -890,7 +890,7 @@ class NumberAnalysisPanel extends StatelessWidget {
       rows.add(_buildInfoRow(l.analysisRadical, SpecialFunctionsService.radical(n).toString()));
       rows.add(_buildInfoRow(l.analysisDigitalRoot, SpecialFunctionsService.digitalRoot(n).toString()));
 
-      // Clasificaciones
+      // Classifications
       List<String> classifications = [];
       if (SpecialFunctionsService.isSquareFree(n)) classifications.add(l.analysisSquareFree);
       if (SpecialFunctionsService.isPowerful(n) && n > BigInt.one) classifications.add(l.analysisPowerful);
@@ -906,7 +906,7 @@ class NumberAnalysisPanel extends StatelessWidget {
         rows.add(_buildInfoRow(l.analysisClassification, classifications.join(', '), maxLines: 3));
       }
     } catch (_) {
-      // Si hay error en cálculos, simplemente no mostrar
+      // If a calculation error occurs, simply don't display
     }
     return rows;
   }

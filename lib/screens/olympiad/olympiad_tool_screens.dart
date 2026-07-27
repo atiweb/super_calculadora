@@ -27,7 +27,7 @@ import '../../widgets/number_painters.dart';
 import 'calc_tool.dart';
 import 'olympiad_strings.dart';
 
-// ── Helpers de parseo ────────────────────────────────────────────────────────
+// ── Parsing helpers ──────────────────────────────────────────────────────────
 
 BigInt _bi(String s) {
   final v = BigInt.tryParse(s.trim());
@@ -59,7 +59,7 @@ List<Fraction> _fracList(String s) => s
     .map(Fraction.parse)
     .toList();
 
-/// Parsea una matriz: filas separadas por ';', entradas por ',' o espacios.
+/// Parses a matrix: rows separated by ';', entries by ',' or spaces.
 Matrix _matrix(String s) {
   final rows = s
       .split(';')
@@ -73,7 +73,7 @@ Matrix _matrix(String s) {
   return Matrix(rows);
 }
 
-/// Parsea "x,y" como punto de coordenadas racionales.
+/// Parses "x,y" as a point with rational coordinates.
 Point _point(String s) {
   final xy = s.split(',');
   if (xy.length != 2) {
@@ -82,14 +82,14 @@ Point _point(String s) {
   return Point(Fraction.parse(xy[0]), Fraction.parse(xy[1]));
 }
 
-/// Parsea una lista de puntos "x,y" separados por ";".
+/// Parses a list of "x,y" points separated by ";".
 List<Point> _pointList(String s) => s
     .split(';')
     .where((p) => p.trim().isNotEmpty)
     .map(_point)
     .toList();
 
-/// Suma de divisores σ(n) para la tabla de funciones multiplicativas.
+/// Sum of divisors σ(n) for the multiplicative functions table.
 BigInt _sigma1(BigInt n) {
   BigInt result = BigInt.one;
   BigInt temp = n;
@@ -108,8 +108,8 @@ BigInt _sigma1(BigInt n) {
   return result;
 }
 
-/// Raíces reales aproximadas de un polinomio de grado 1–3 (para extremos del
-/// graficador); para grados mayores devuelve solo las raíces racionales.
+/// Approximate real roots of a degree 1–3 polynomial (for the plotter's
+/// extrema); for higher degrees it returns only the rational roots.
 List<double> _realRootsApprox(Polynomial p) {
   final c = p.coefficients;
   switch (p.degree) {
@@ -128,9 +128,9 @@ List<double> _realRootsApprox(Polynomial p) {
   }
 }
 
-/// Enumera los puntos reticulares de un polígono de vértices enteros, para
-/// dibujarlos: (frontera, interior). Si el área de barrido es muy grande,
-/// devuelve listas vacías (el dibujo omite los puntos).
+/// Enumerates the lattice points of an integer-vertex polygon, so they can
+/// be drawn: (boundary, interior). If the sweep area is too large,
+/// it returns empty lists (the drawing omits the points).
 ({List<Offset> boundary, List<Offset> interior}) _latticePoints(
     List<Point> poly) {
   final xs = poly.map((p) => p.x.toDouble()).toList();
@@ -162,7 +162,7 @@ List<double> _realRootsApprox(Polynomial p) {
   }
 
   bool inside(double px, double py) {
-    // Ray casting hacia +x.
+    // Ray casting towards +x.
     bool odd = false;
     for (int i = 0; i < poly.length; i++) {
       final j = (i + 1) % poly.length;
@@ -190,7 +190,7 @@ List<double> _realRootsApprox(Polynomial p) {
   return (boundary: boundary, interior: interior);
 }
 
-/// Convierte un entero a superíndices Unicode (3 → "³"), para el índice de raíz.
+/// Converts an integer to Unicode superscripts (3 → "³"), for the root index.
 String _superscript(int n) {
   const map = {
     '0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴',
@@ -199,7 +199,7 @@ String _superscript(int n) {
   return n.toString().split('').map((d) => map[d] ?? d).join();
 }
 
-// Localización de los resultados que los servicios devuelven como enumeraciones.
+// Localization of the results that the services return as enumerations.
 
 String _sidesLabel(OlympiadStrings s, TriangleSides v) {
   switch (v) {
@@ -234,7 +234,7 @@ String _natureLabel(OlympiadStrings s, QuadraticNature v) {
   }
 }
 
-/// Pantalla base: una lista desplazable de herramientas.
+/// Base screen: a scrollable list of tools.
 class _ToolScaffold extends StatelessWidget {
   final String title;
   final List<Widget> tools;
@@ -244,13 +244,18 @@ class _ToolScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(title), elevation: 0),
-      body: ListView(padding: const EdgeInsets.all(16), children: tools),
+      // Extra bottom padding: in edge-to-edge (Android 15) the content ends
+      // up behind the system navigation bar without this inset.
+      body: ListView(
+          padding: EdgeInsets.fromLTRB(
+              16, 16, 16, 16 + MediaQuery.paddingOf(context).bottom),
+          children: tools),
     );
   }
 }
 
 // ════════════════════════════════════════════════════════════════════════════
-// FRACCIONES
+// FRACTIONS
 // ════════════════════════════════════════════════════════════════════════════
 
 class FractionsToolScreen extends StatelessWidget {
@@ -308,7 +313,7 @@ class FractionsToolScreen extends StatelessWidget {
 }
 
 // ════════════════════════════════════════════════════════════════════════════
-// RADICALES
+// RADICALS
 // ════════════════════════════════════════════════════════════════════════════
 
 class SurdsToolScreen extends StatelessWidget {
@@ -367,7 +372,7 @@ class SurdsToolScreen extends StatelessWidget {
 }
 
 // ════════════════════════════════════════════════════════════════════════════
-// GEOMETRÍA
+// GEOMETRY
 // ════════════════════════════════════════════════════════════════════════════
 
 class GeometryToolScreen extends StatelessWidget {
@@ -548,7 +553,7 @@ class GeometryToolScreen extends StatelessWidget {
 }
 
 // ════════════════════════════════════════════════════════════════════════════
-// POLINOMIOS
+// POLYNOMIALS
 // ════════════════════════════════════════════════════════════════════════════
 
 class PolynomialsToolScreen extends StatelessWidget {
@@ -592,7 +597,7 @@ class PolynomialsToolScreen extends StatelessWidget {
                 .toList();
             final extrema =
                 p.degree >= 2 ? _realRootsApprox(p.derivative()) : <double>[];
-            // Rango centrado en los puntos de interés.
+            // Range centered on the points of interest.
             final interesting = [...roots, ...extrema];
             double xMin, xMax;
             if (interesting.isEmpty) {
@@ -651,7 +656,7 @@ class PolynomialsToolScreen extends StatelessWidget {
                 .where((r) => r.trim().isNotEmpty)
                 .map(_fracList)
                 .toList();
-            final sol = LinearSystemService.solveCramer(rows); // valida dimensiones
+            final sol = LinearSystemService.solveCramer(rows); // validates dimensions
             final det = LinearSystemService.determinant(
                 rows.map((r) => r.sublist(0, r.length - 1)).toList());
             final sb = StringBuffer();
@@ -715,7 +720,7 @@ class PolynomialsToolScreen extends StatelessWidget {
 }
 
 // ════════════════════════════════════════════════════════════════════════════
-// TEORÍA DE NÚMEROS
+// NUMBER THEORY
 // ════════════════════════════════════════════════════════════════════════════
 
 class NumberTheoryToolScreen extends StatelessWidget {
@@ -901,7 +906,7 @@ class NumberTheoryToolScreen extends StatelessWidget {
 }
 
 // ════════════════════════════════════════════════════════════════════════════
-// PROCEDIMIENTOS (PASO A PASO)
+// PROCEDURES (STEP BY STEP)
 // ════════════════════════════════════════════════════════════════════════════
 
 class StepsToolScreen extends StatelessWidget {
@@ -944,7 +949,7 @@ class StepsToolScreen extends StatelessWidget {
 }
 
 // ════════════════════════════════════════════════════════════════════════════
-// COMPLEJOS Y SUCESIONES
+// COMPLEX NUMBERS AND SEQUENCES
 // ════════════════════════════════════════════════════════════════════════════
 
 class ComplexSequencesToolScreen extends StatelessWidget {
@@ -1074,8 +1079,8 @@ class ComplexSequencesToolScreen extends StatelessWidget {
           ],
           compute: (i) {
             final n = _int(i[0]), m = _int(i[1]);
-            // n es un conteo de filas: con n=0 se llamaba pascalTriangleMod(-1)
-            // y estallaba con el mensaje contradictorio "n debe ser ≥ 0".
+            // n is a row count: with n=0 pascalTriangleMod(-1) was called
+            // and blew up with the contradictory message "n debe ser ≥ 0".
             if (n < 1) throw CalcException(CalcError.nPositive);
             if (m < 2) throw CalcException(CalcError.nGreaterThanOne);
             if (n > 128) {
@@ -1137,7 +1142,7 @@ class ComplexSequencesToolScreen extends StatelessWidget {
 }
 
 // ════════════════════════════════════════════════════════════════════════════
-// ESTADÍSTICA
+// STATISTICS
 // ════════════════════════════════════════════════════════════════════════════
 
 class StatisticsToolScreen extends StatelessWidget {
@@ -1204,7 +1209,7 @@ class StatisticsToolScreen extends StatelessWidget {
 }
 
 // ════════════════════════════════════════════════════════════════════════════
-// MATRICES (álgebra lineal exacta)
+// MATRICES (exact linear algebra)
 // ════════════════════════════════════════════════════════════════════════════
 
 class MatricesToolScreen extends StatelessWidget {
@@ -1313,7 +1318,7 @@ class MatricesToolScreen extends StatelessWidget {
 }
 
 // ════════════════════════════════════════════════════════════════════════════
-// CÁLCULO (numérico)
+// CALCULUS (numerical)
 // ════════════════════════════════════════════════════════════════════════════
 
 class CalculusToolScreen extends StatelessWidget {
@@ -1382,7 +1387,7 @@ class CalculusToolScreen extends StatelessWidget {
   }
 }
 
-/// Formatea un double: entero exacto sin decimales; si no, ~10 cifras limpias.
+/// Formats a double: exact integer without decimals; otherwise ~10 clean digits.
 String _fmtNum(double v) {
   if (v == v.roundToDouble() && v.abs() < 1e15) {
     return v.toInt().toString();

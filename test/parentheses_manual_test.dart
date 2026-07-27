@@ -10,13 +10,13 @@ void main() {
     test('Should correctly evaluate expressions with parentheses', () {
       final calculator = CalculatorService();
       
-      // Test case específico del usuario
+      // The user's specific test case
       String result = calculator.evaluateCompleteExpression('1 + (1+1)');
       print('Input: 1 + (1+1)');
       print('Output: $result');
       expect(result, '3');
       
-      // Casos adicionales
+      // Additional cases
       result = calculator.evaluateCompleteExpression('2 * (3 + 4)');
       print('Input: 2 * (3 + 4)');
       print('Output: $result');

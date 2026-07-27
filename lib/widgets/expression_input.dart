@@ -26,7 +26,7 @@ class ExpressionInput extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Header con título y botones de acción
+              // Header with title and action buttons
               Row(
                 children: [
                   Icon(
@@ -45,7 +45,7 @@ class ExpressionInput extends StatelessWidget {
                   ),
                   const Spacer(),
 
-                  // Botón de historial
+                  // History button
                   IconButton(
                     onPressed: calculator.toggleHistoryVisibility,
                     icon: Icon(
@@ -63,7 +63,7 @@ class ExpressionInput extends StatelessWidget {
                     ),
                   ),
 
-                  // Botón para limpiar
+                  // Clear button
                   IconButton(
                     onPressed: calculator.expressionController.text.isNotEmpty
                         ? calculator.clearExpression
@@ -76,7 +76,7 @@ class ExpressionInput extends StatelessWidget {
 
               const SizedBox(height: 12),
 
-              // Campo de entrada de expresión
+              // Expression input field
               TextField(
                 controller: calculator.expressionController,
                 style: const TextStyle(
@@ -98,7 +98,7 @@ class ExpressionInput extends StatelessWidget {
                   suffixIcon: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      // Botón de borrar último carácter
+                      // Delete-last-character button
                       IconButton(
                         onPressed: calculator.expressionController.text.isNotEmpty
                             ? calculator.backspaceExpression
@@ -107,7 +107,7 @@ class ExpressionInput extends StatelessWidget {
                         tooltip: l.exprDelete,
                       ),
 
-                      // Botón de evaluar
+                      // Evaluate button
                       IconButton(
                         onPressed: calculator.expressionController.text.isNotEmpty
                             ? calculator.evaluateAndAddToHistory
@@ -138,7 +138,7 @@ class ExpressionInput extends StatelessWidget {
 
               const SizedBox(height: 8),
 
-              // Botones de funciones matemáticas comunes
+              // Common math function buttons
               Wrap(
                 spacing: 4,
                 runSpacing: 4,
@@ -157,7 +157,7 @@ class ExpressionInput extends StatelessWidget {
                 ],
               ),
 
-              // Mostrar error si existe
+              // Show error if present
               if (calculator.hasError) ...[
                 const SizedBox(height: 8),
                 Container(

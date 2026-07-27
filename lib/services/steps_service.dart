@@ -3,10 +3,10 @@ import '../models/fraction.dart';
 import '../models/polynomial.dart';
 import '../models/step_result.dart';
 
-/// Versiones "con procedimiento" de algoritmos clásicos, para uso didáctico.
+/// "Step-by-step" versions of classic algorithms, for teaching use.
 ///
-/// El parámetro [spanish] elige el idioma de la prosa; las líneas matemáticas
-/// (ecuaciones) son neutrales al idioma.
+/// The [spanish] parameter picks the language of the prose; the math lines
+/// (equations) are language-neutral.
 class StepsService {
   static final BigInt _zero = BigInt.zero;
   static final BigInt _one = BigInt.one;
@@ -14,8 +14,8 @@ class StepsService {
   static String _t(bool es, String spanish, String english) =>
       es ? spanish : english;
 
-  /// Algoritmo de Euclides con pasos, incluyendo la identidad de Bézout
-  /// g = x·a + y·b. El resultado es el mcd.
+  /// Euclidean algorithm with steps, including the Bézout identity
+  /// g = x·a + y·b. The result is the gcd.
   static StepResult euclidSteps(BigInt a, BigInt b, {bool spanish = false}) {
     final BigInt origA = a, origB = b;
     final List<String> steps = [];
@@ -41,7 +41,7 @@ class StepsService {
     steps.add(_t(spanish, 'Último resto no nulo ⇒ mcd = $g',
         'Last nonzero remainder ⇒ gcd = $g'));
 
-    // Bézout por Euclides extendido.
+    // Bézout via extended Euclid.
     final ext = _extendedGcd(origA.abs(), origB.abs());
     BigInt bx = ext[1], by = ext[2];
     if (origA.isNegative) bx = -bx;
@@ -52,7 +52,7 @@ class StepsService {
     return StepResult(g.toString(), steps);
   }
 
-  /// Factorización en primos con los pasos de división sucesiva.
+  /// Prime factorization with the successive-division steps.
   static StepResult factorizationSteps(BigInt n, {bool spanish = false}) {
     final List<String> steps = [];
     if (n < BigInt.from(2)) {
@@ -89,8 +89,8 @@ class StepsService {
     return StepResult(factorStr, steps);
   }
 
-  /// Teorema Chino del Resto con pasos, combinando las congruencias de a pares.
-  /// Devuelve la solución como "x ≡ r (mod m)" o indica incompatibilidad.
+  /// Chinese Remainder Theorem with steps, combining the congruences pairwise.
+  /// Returns the solution as "x ≡ r (mod m)" or reports incompatibility.
   static StepResult crtSteps(List<BigInt> remainders, List<BigInt> moduli,
       {bool spanish = false}) {
     if (remainders.length != moduli.length || remainders.isEmpty) {
@@ -140,8 +140,8 @@ class StepsService {
     return StepResult(result, steps);
   }
 
-  /// División sintética (regla de Ruffini) de p(x) entre (x − c), con pasos.
-  /// El resultado es "cociente; resto"; si el resto es 0, c es raíz.
+  /// Synthetic division (Ruffini's rule) of p(x) by (x − c), with steps.
+  /// The result is "quotient; remainder"; if the remainder is 0, c is a root.
   static StepResult ruffiniSteps(Polynomial p, Fraction c,
       {bool spanish = false}) {
     if (p.isZero || p.degree < 1) {
@@ -151,14 +151,14 @@ class StepsService {
     steps.add(_t(spanish, 'Ruffini: dividir p(x) = $p entre (x − ${_paren(c)})',
         'Ruffini: divide p(x) = $p by (x − ${_paren(c)})'));
 
-    // Coeficientes de mayor a menor grado.
+    // Coefficients from highest to lowest degree.
     final List<Fraction> desc =
         p.coefficients.reversed.toList(growable: false);
     steps.add(_t(spanish,
         'Coeficientes (grado ${p.degree} → 0): ${desc.join(', ')}',
         'Coefficients (degree ${p.degree} → 0): ${desc.join(', ')}'));
 
-    // r[k] acumula el resultado de cada columna.
+    // r[k] accumulates the result of each column.
     final List<Fraction> r = List.filled(desc.length, Fraction.zero);
     r[0] = desc[0];
     steps.add(_t(spanish, 'Bajar el primer coeficiente: ${r[0]}',
@@ -189,7 +189,7 @@ class StepsService {
     return StepResult(result, steps);
   }
 
-  /// Envuelve en paréntesis los valores negativos o fraccionarios.
+  /// Wraps negative or fractional values in parentheses.
   static String _paren(Fraction f) =>
       (f.isNegative || !f.isInteger) ? '($f)' : '$f';
 
@@ -206,7 +206,7 @@ class StepsService {
     return a;
   }
 
-  /// Euclides extendido: devuelve [g, x, y] con a·x + b·y = g.
+  /// Extended Euclid: returns [g, x, y] with a·x + b·y = g.
   static List<BigInt> _extendedGcd(BigInt a, BigInt b) {
     if (b == _zero) return [a, _one, _zero];
     final r = _extendedGcd(b, a % b);

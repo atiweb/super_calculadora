@@ -1,34 +1,34 @@
-/// Modelo genérico para operaciones pendientes de N parámetros.
+/// Generic model for pending operations with N parameters.
 ///
-/// Soporta dos modos:
-/// - **Fijo**: se define [requiredParams] y se autojecuta al completarse.
-/// - **Variable**: [requiredParams] es null; el usuario agrega params con = y
-///   presiona el botón de la función otra vez para ejecutar.
+/// Supports two modes:
+/// - **Fixed**: [requiredParams] is defined and it auto-executes when complete.
+/// - **Variable**: [requiredParams] is null; the user adds params with = and
+///   presses the function button again to execute.
 ///
-/// Cada paso tiene una etiqueta que se muestra al usuario (ej: "12 mod _").
+/// Each step has a label shown to the user (e.g.: "12 mod _").
 class PendingOperation {
-  /// Identificador de la operación (ej: 'mod', 'gcd', 'crt')
+  /// Operation identifier (e.g.: 'mod', 'gcd', 'crt')
   final String name;
 
-  /// Símbolo visible en el display (ej: 'mod', 'MCD', 'TCR')
+  /// Symbol visible on the display (e.g.: 'mod', 'MCD', 'TCR')
   final String symbol;
 
-  /// Número de parámetros requeridos.
-  /// null = variable (se ejecuta manualmente).
+  /// Number of required parameters.
+  /// null = variable (executed manually).
   final int? requiredParams;
 
-  /// Parámetros recolectados hasta ahora.
+  /// Parameters collected so far.
   final List<String> params;
 
-  /// Si es variable, mínimo de parámetros antes de poder ejecutar.
+  /// If variable, minimum number of parameters before it can execute.
   final int minParams;
 
-  /// Etiquetas para cada paso (opcionales).
-  /// Si el paso i existe en la lista, se usa; si no, se genera automáticamente.
+  /// Labels for each step (optional).
+  /// If step i exists in the list, it is used; otherwise one is generated automatically.
   final List<String> stepLabels;
 
-  /// Función que construye el texto del display dados los params actuales.
-  /// Si es null, se usa un builder por defecto.
+  /// Function that builds the display text given the current params.
+  /// If null, a default builder is used.
   final String Function(List<String> params)? displayBuilder;
 
   PendingOperation({
@@ -41,22 +41,22 @@ class PendingOperation {
     this.displayBuilder,
   }) : params = params ?? [];
 
-  /// Si ya tiene todos los parámetros requeridos (modo fijo).
+  /// Whether it already has all required parameters (fixed mode).
   bool get isComplete =>
       requiredParams != null && params.length >= requiredParams!;
 
-  /// Si es de parámetros variables.
+  /// Whether it takes a variable number of parameters.
   bool get isVariable => requiredParams == null;
 
-  /// Si se puede ejecutar (tiene suficientes parámetros).
+  /// Whether it can be executed (has enough parameters).
   bool get canExecute =>
       isComplete || (isVariable && params.length >= minParams);
 
-  /// Cuántos parámetros faltan (modo fijo). -1 si es variable.
+  /// How many parameters are missing (fixed mode). -1 if variable.
   int get remaining =>
       requiredParams != null ? requiredParams! - params.length : -1;
 
-  /// Agrega un parámetro y retorna una copia nueva (inmutable).
+  /// Adds a parameter and returns a new copy (immutable).
   PendingOperation addParam(String value) {
     return PendingOperation(
       name: name,
@@ -69,12 +69,12 @@ class PendingOperation {
     );
   }
 
-  /// Construye la etiqueta para el display.
+  /// Builds the label for the display.
   String buildDisplayLabel() {
     if (displayBuilder != null) {
       return displayBuilder!(params);
     }
-    // Builder por defecto
+    // Default builder
     return _defaultDisplayLabel();
   }
 
@@ -90,7 +90,7 @@ class PendingOperation {
     int totalNeeded = requiredParams ?? 0;
     int got = params.length;
     if (got < totalNeeded) {
-      // Usar stepLabel si existe
+      // Use the stepLabel if it exists
       if (got < stepLabels.length) {
         return stepLabels[got];
       }

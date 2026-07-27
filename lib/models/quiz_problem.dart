@@ -1,15 +1,15 @@
-/// Un problema de práctica con su respuesta canónica.
+/// A practice problem with its canonical answer.
 ///
-/// Las respuestas son numéricas (un entero) para que la verificación sea
-/// independiente del idioma y tolere espacios o ceros a la izquierda.
+/// Answers are numeric (an integer) so that checking is
+/// language-independent and tolerates spaces or leading zeros.
 class QuizProblem {
-  /// Etiqueta breve del tema (notación matemática, neutral al idioma).
+  /// Short topic label (mathematical notation, language-neutral).
   final String topic;
 
-  /// Enunciado mostrado al estudiante.
+  /// Statement shown to the student.
   final String prompt;
 
-  /// Respuesta correcta en forma canónica.
+  /// Correct answer in canonical form.
   final String answer;
 
   const QuizProblem({
@@ -18,8 +18,8 @@ class QuizProblem {
     required this.answer,
   });
 
-  /// Compara la entrada del usuario con la respuesta. Intenta una comparación
-  /// numérica (BigInt) y, si no aplica, compara texto normalizado.
+  /// Compares the user's input against the answer. Tries a numeric
+  /// comparison (BigInt) and, if not applicable, compares normalized text.
   bool isCorrect(String input) {
     final a = input.trim();
     if (a.isEmpty) return false;

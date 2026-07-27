@@ -1,10 +1,10 @@
 import 'dart:math' as math;
 import 'fraction.dart';
 
-/// Punto 2D con coordenadas racionales exactas.
+/// 2D point with exact rational coordinates.
 ///
-/// Usar `Fraction` permite calcular áreas (shoelace) y otras cantidades de
-/// geometría analítica de forma exacta, sin pérdida por punto flotante.
+/// Using `Fraction` allows computing areas (shoelace) and other analytic
+/// geometry quantities exactly, with no floating-point loss.
 class Point {
   final Fraction x;
   final Fraction y;
@@ -14,11 +14,11 @@ class Point {
   factory Point.ints(int x, int y) =>
       Point(Fraction.fromInt(x), Fraction.fromInt(y));
 
-  /// Distancia al cuadrado (exacta).
+  /// Squared distance (exact).
   Fraction distanceSquaredTo(Point other) =>
       (x - other.x).pow(2) + (y - other.y).pow(2);
 
-  /// Distancia euclidiana (aproximada en double).
+  /// Euclidean distance (approximated as double).
   double distanceTo(Point other) =>
       math.sqrt(distanceSquaredTo(other).toDouble());
 

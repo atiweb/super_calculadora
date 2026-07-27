@@ -8,6 +8,9 @@ class SpecialFunctionsHelpScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final l = AppLocalizations.of(context)!;
+    // Button acronyms that differ per language (must match the
+    // special keyboard and the hlp* titles for each language).
+    final es = Localizations.localeOf(context).languageCode == 'es';
     return Scaffold(
       appBar: AppBar(
         title: Text(l.hlpTitle),
@@ -15,24 +18,27 @@ class SpecialFunctionsHelpScreen extends StatelessWidget {
         foregroundColor: theme.colorScheme.onPrimary,
       ),
       body: ListView(
-        padding: const EdgeInsets.all(16.0),
+        // Extra bottom padding: in edge-to-edge (Android 15) the content ends
+        // up behind the system navigation bar without this inset.
+        padding: EdgeInsets.fromLTRB(
+            16, 16, 16, 16 + MediaQuery.paddingOf(context).bottom),
         children: [
           // ============================================================
-          // GUÍA DE INICIO RÁPIDO
+          // QUICK START GUIDE
           // ============================================================
           _SectionHeader(title: l.hlpQuickStartHeader, icon: Icons.rocket_launch),
           _QuickStartCard(l: l),
           const SizedBox(height: 16),
 
           // ============================================================
-          // SISTEMA DE PARÁMETROS
+          // PARAMETER SYSTEM
           // ============================================================
           _SectionHeader(title: l.hlpParamHeader, icon: Icons.tune),
           _ParameterSystemCard(l: l),
           const SizedBox(height: 16),
 
           // ============================================================
-          // TEORÍA DE NÚMEROS
+          // NUMBER THEORY
           // ============================================================
           _SectionHeader(title: l.hlpNumberTheoryHeader, icon: Icons.calculate),
           _CollapsibleSection(
@@ -204,7 +210,7 @@ class SpecialFunctionsHelpScreen extends StatelessWidget {
           const SizedBox(height: 16),
 
           // ============================================================
-          // ARITMÉTICA MODULAR
+          // MODULAR ARITHMETIC
           // ============================================================
           _SectionHeader(title: l.hlpModArithHeader, icon: Icons.sync_alt),
           _CollapsibleSection(
@@ -281,7 +287,7 @@ class SpecialFunctionsHelpScreen extends StatelessWidget {
           ),
           _CollapsibleSection(
             title: l.hlpGcdTitle,
-            symbol: 'MCD',
+            symbol: es ? 'MCD' : 'GCD',
             params: l.hlpGcdParams,
             description: l.hlpGcdDesc,
             formula: l.hlpGcdFormula,
@@ -292,7 +298,7 @@ class SpecialFunctionsHelpScreen extends StatelessWidget {
           ),
           _CollapsibleSection(
             title: l.hlpLcmTitle,
-            symbol: 'MCM',
+            symbol: es ? 'MCM' : 'LCM',
             params: l.hlpLcmParams,
             description: l.hlpLcmDesc,
             formula: l.hlpLcmFormula,
@@ -303,7 +309,7 @@ class SpecialFunctionsHelpScreen extends StatelessWidget {
           ),
           _CollapsibleSection(
             title: l.hlpDiophTitle,
-            symbol: 'Diof',
+            symbol: es ? 'Diof' : 'Dioph',
             params: l.hlpDiophParams,
             description: l.hlpDiophDesc,
             formula: l.hlpDiophFormula,
@@ -314,7 +320,7 @@ class SpecialFunctionsHelpScreen extends StatelessWidget {
           ),
           _CollapsibleSection(
             title: l.hlpCrtTitle,
-            symbol: 'TCR',
+            symbol: es ? 'TCR' : 'CRT',
             params: l.hlpCrtParams,
             description: l.hlpCrtDesc,
             formula: l.hlpCrtFormula,
@@ -326,7 +332,7 @@ class SpecialFunctionsHelpScreen extends StatelessWidget {
           const SizedBox(height: 16),
 
           // ============================================================
-          // COMBINATORIA
+          // COMBINATORICS
           // ============================================================
           _SectionHeader(title: l.hlpCombinatoricsHeader, icon: Icons.grid_view),
           _CollapsibleSection(
@@ -443,7 +449,7 @@ class SpecialFunctionsHelpScreen extends StatelessWidget {
           ),
           _CollapsibleSection(
             title: l.hlpDigitSumBaseTitle,
-            symbol: 'ΣdígB',
+            symbol: es ? 'ΣdígB' : 'ΣdigB',
             params: l.hlpDigitSumBaseParams,
             description: l.hlpDigitSumBaseDesc,
             formula: l.hlpDigitSumBaseFormula,
@@ -454,7 +460,7 @@ class SpecialFunctionsHelpScreen extends StatelessWidget {
           const SizedBox(height: 16),
 
           // ============================================================
-          // ESTADÍSTICA
+          // STATISTICS
           // ============================================================
           _SectionHeader(title: l.hlpStatisticsHeader, icon: Icons.bar_chart),
           _CollapsibleSection(
@@ -517,7 +523,7 @@ class SpecialFunctionsHelpScreen extends StatelessWidget {
           const SizedBox(height: 16),
 
           // ============================================================
-          // PANEL DE ANÁLISIS
+          // ANALYSIS PANEL
           // ============================================================
           _SectionHeader(title: l.hlpAnalysisPanelHeader, icon: Icons.analytics),
           _InfoCard(
@@ -528,7 +534,7 @@ class SpecialFunctionsHelpScreen extends StatelessWidget {
           const SizedBox(height: 16),
 
           // ============================================================
-          // ALTA PRECISIÓN Y HERRAMIENTAS NUEVAS
+          // HIGH PRECISION AND NEW TOOLS
           // ============================================================
           _SectionHeader(
               title: l.hlpHighPrecHeader,
@@ -546,7 +552,7 @@ class SpecialFunctionsHelpScreen extends StatelessWidget {
           const SizedBox(height: 16),
 
           // ============================================================
-          // FÓRMULAS CLAVE PARA OLIMPIADAS
+          // KEY FORMULAS FOR OLYMPIADS
           // ============================================================
           _SectionHeader(title: l.hlpOlympiadHeader, icon: Icons.emoji_events),
           _InfoCard(
@@ -567,7 +573,7 @@ class SpecialFunctionsHelpScreen extends StatelessWidget {
 }
 
 // =============================================================================
-// WIDGETS AUXILIARES
+// HELPER WIDGETS
 // =============================================================================
 
 class _SectionHeader extends StatelessWidget {
@@ -597,7 +603,7 @@ class _SectionHeader extends StatelessWidget {
   }
 }
 
-/// Tarjeta informativa simple (no colapsable)
+/// Simple informational card (not collapsible)
 class _InfoCard extends StatelessWidget {
   final String title;
   final IconData icon;
@@ -650,7 +656,7 @@ class _InfoCard extends StatelessWidget {
   }
 }
 
-/// Tarjeta de inicio rápido
+/// Quick start card
 class _QuickStartCard extends StatelessWidget {
   final AppLocalizations l;
 
@@ -749,7 +755,7 @@ class _QuickStartCard extends StatelessWidget {
   }
 }
 
-/// Tarjeta explicativa del sistema de parámetros
+/// Card explaining the parameter system
 class _ParameterSystemCard extends StatelessWidget {
   final AppLocalizations l;
 
@@ -891,7 +897,7 @@ class _ParameterSystemCard extends StatelessWidget {
   }
 }
 
-/// Sección colapsable con documentación de función
+/// Collapsible section with function documentation
 class _CollapsibleSection extends StatelessWidget {
   final String title;
   final String symbol;
@@ -955,14 +961,14 @@ class _CollapsibleSection extends StatelessWidget {
           ),
         ),
         children: [
-          // Descripción
+          // Description
           Align(
             alignment: Alignment.centerLeft,
             child: Text(description, style: theme.textTheme.bodyMedium),
           ),
           const SizedBox(height: 8),
 
-          // Fórmula
+          // Formula
           Container(
             width: double.infinity,
             padding: const EdgeInsets.all(10),
@@ -980,7 +986,7 @@ class _CollapsibleSection extends StatelessWidget {
           ),
           const SizedBox(height: 8),
 
-          // Ejemplos
+          // Examples
           Align(
             alignment: Alignment.centerLeft,
             child: Text(examplesLabel,
@@ -1000,7 +1006,7 @@ class _CollapsibleSection extends StatelessWidget {
                 ),
               )),
 
-          // Tips opcionales
+          // Optional tips
           if (tips != null && tips!.isNotEmpty) ...[
             const SizedBox(height: 8),
             Container(

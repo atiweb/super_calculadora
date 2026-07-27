@@ -3,8 +3,8 @@ import '../../models/quiz_problem.dart';
 import '../../services/quiz_service.dart';
 import 'olympiad_strings.dart';
 
-/// Modo de práctica: presenta problemas con respuesta numérica, verifica la
-/// entrada del estudiante y lleva el puntaje.
+/// Practice mode: presents problems with a numeric answer, checks the
+/// student's input, and keeps score.
 class QuizScreen extends StatefulWidget {
   const QuizScreen({super.key});
 
@@ -75,7 +75,10 @@ class _QuizScreenState extends State<QuizScreen> {
         ],
       ),
       body: ListView(
-        padding: const EdgeInsets.all(16),
+        // Extra bottom padding: in edge-to-edge (Android 15) the content ends
+        // up behind the system navigation bar without this inset.
+        padding: EdgeInsets.fromLTRB(
+            16, 16, 16, 16 + MediaQuery.paddingOf(context).bottom),
         children: [
           Card(
             child: Padding(

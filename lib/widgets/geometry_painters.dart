@@ -119,9 +119,9 @@ class TrianglePainter extends CustomPainter {
   }
 
   void _angleLabel(Canvas canvas, Offset p, double deg, Offset centroid) {
-    // Coloca la etiqueta DENTRO de la cuña del ángulo, a una fracción del camino
-    // del vértice hacia el baricentro. Así escala con el tamaño del triángulo y
-    // no queda encima de las aristas (un desplazamiento fijo sí se solapaba).
+    // Place the label INSIDE the angle's wedge, at a fraction of the way
+    // from the vertex toward the centroid. That way it scales with the size of
+    // the triangle and doesn't sit on top of the edges (a fixed offset did overlap).
     final pos = Offset(
       p.dx + (centroid.dx - p.dx) * 0.30,
       p.dy + (centroid.dy - p.dy) * 0.30,

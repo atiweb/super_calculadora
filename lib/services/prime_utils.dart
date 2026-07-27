@@ -1,6 +1,6 @@
 import 'dart:isolate';
 
-/// Punto de entrada para el isolate
+/// Entry point for the isolate
 void nextPrimeIsolate(Map<String, dynamic> message) {
   final SendPort sendPort = message['sendPort'];
   final BigInt start = message['start'];
@@ -13,30 +13,30 @@ void nextPrimeIsolate(Map<String, dynamic> message) {
   sendPort.send(candidate.toString());
 }
 
-/// Las 12 primeras bases primas. Con este conjunto de testigos, el test de
-/// Miller–Rabin es DETERMINISTA (sin falsos positivos) para todo n menor que
-/// 3.317 × 10^24. Por encima de esa cota sigue siendo un test probabilístico
-/// extraordinariamente fiable (prob. de error < 4^-12 por compuesto).
+/// The first 12 prime bases. With this set of witnesses, the Miller–Rabin
+/// test is DETERMINISTIC (no false positives) for every n less than
+/// 3.317 × 10^24. Above that bound it remains an extraordinarily reliable
+/// probabilistic test (error prob. < 4^-12 per composite).
 ///
-/// Nota: la versión anterior usaba solo {2,3,5,7}, con la cual 3215031751
-/// (= 151·751·28351) —pseudoprimo fuerte a esas cuatro bases— se clasificaba
-/// erróneamente como primo.
+/// Note: the previous version used only {2,3,5,7}, with which 3215031751
+/// (= 151·751·28351) —a strong pseudoprime to those four bases— was
+/// wrongly classified as prime.
 const List<int> _millerRabinBases = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37];
 
-/// Test de primalidad de Miller–Rabin.
+/// Miller–Rabin primality test.
 ///
-/// [k] se mantiene por compatibilidad de firma pero ya no limita el número de
-/// testigos: siempre se usan las bases de [_millerRabinBases].
+/// [k] is kept for signature compatibility but no longer limits the number of
+/// witnesses: the bases from [_millerRabinBases] are always used.
 bool isProbablyPrime(BigInt n, {int k = 10}) {
   if (n < BigInt.two) return false;
 
-  // Criba rápida por las bases primas: resuelve además el caso n == base.
+  // Quick sieve by the prime bases: also handles the case n == base.
   for (final p in _millerRabinBases) {
     final bp = BigInt.from(p);
     if (n == bp) return true;
     if (n % bp == BigInt.zero) return false;
   }
-  // Aquí n > 37 y no es divisible por ninguna base, así que toda base < n-1.
+  // Here n > 37 and not divisible by any base, so every base < n-1.
 
   BigInt d = n - BigInt.one;
   int s = 0;
@@ -58,13 +58,13 @@ bool isProbablyPrime(BigInt n, {int k = 10}) {
         break;
       }
     }
-    if (!probablePrime) return false; // testigo de composición
+    if (!probablePrime) return false; // witness of compositeness
   }
 
   return true;
 }
 
-/// Lanza el isolate y devuelve el siguiente primo
+/// Spawns the isolate and returns the next prime
 Future<String> findNextPrime(BigInt number) async {
   final receivePort = ReceivePort();
   await Isolate.spawn(

@@ -10,7 +10,7 @@ void main() {
     test('Simple arithmetic expressions should be evaluated correctly', () {
       final calculator = CalculatorService();
       
-      // Pruebas básicas
+      // Basic checks
       expect(calculator.evaluateCompleteExpression('2+3'), '5');
       expect(calculator.evaluateCompleteExpression('10-4'), '6');
       expect(calculator.evaluateCompleteExpression('3*4'), '12');
@@ -20,7 +20,7 @@ void main() {
     test('Complex expressions with parentheses should work', () {
       final calculator = CalculatorService();
       
-      // Expresiones con paréntesis
+      // Expressions with parentheses
       expect(calculator.evaluateCompleteExpression('(5+3)*2'), '16');
       expect(calculator.evaluateCompleteExpression('2*(3+4)'), '14');
       expect(calculator.evaluateCompleteExpression('(10-5)/(2+3)'), '1');
@@ -29,11 +29,11 @@ void main() {
     test('Mathematical functions should be supported', () {
       final calculator = CalculatorService();
       
-      // Raíz cuadrada
+      // Square root
       expect(calculator.evaluateCompleteExpression('sqrt(9)'), '3');
       expect(calculator.evaluateCompleteExpression('sqrt(16)'), '4');
       
-      // Potencias
+      // Powers
       expect(calculator.evaluateCompleteExpression('2^3'), '8');
       expect(calculator.evaluateCompleteExpression('5^2'), '25');
     });
@@ -41,7 +41,7 @@ void main() {
     test('Symbol replacement should work correctly', () {
       final calculator = CalculatorService();
       
-      // Verificar reemplazo de símbolos
+      // Verify symbol replacement
       String prepared = calculator.evaluateCompleteExpression('3×4');
       expect(prepared, '12');
       
@@ -52,7 +52,7 @@ void main() {
     test('Constants should be supported', () {
       final calculator = CalculatorService();
       
-      // Pi (aproximadamente)
+      // Pi (approximately)
       String piResult = calculator.evaluateCompleteExpression('π');
       expect(double.parse(piResult), closeTo(3.14159, 0.001));
     });
@@ -86,7 +86,7 @@ void main() {
     test('Complex mathematical expression example should work', () {
       final calculator = CalculatorService();
       
-      // Expresión similar al ejemplo: (5 + 3) * sqrt(9) - 2^3
+      // Expression similar to the example: (5 + 3) * sqrt(9) - 2^3
       String result = calculator.evaluateCompleteExpression('(5+3)*sqrt(9)-2^3');
       
       // (5+3) = 8, sqrt(9) = 3, 2^3 = 8
@@ -97,15 +97,15 @@ void main() {
     test('Error handling should work for invalid expressions', () {
       final calculator = CalculatorService();
       
-      // División por cero
+      // Division by zero
       String result = calculator.evaluateCompleteExpression('5/0');
       expect(result, startsWith('err:'));
 
-      // Expresión malformada - paréntesis no balanceados
+      // Malformed expression - unbalanced parentheses
       result = calculator.evaluateCompleteExpression('(5 + 3');
       expect(result, startsWith('err:'));
 
-      // Función sin paréntesis
+      // Function without parentheses
       result = calculator.evaluateCompleteExpression('sin 45');
       expect(result, startsWith('err:'));
     });

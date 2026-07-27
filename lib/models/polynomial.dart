@@ -1,18 +1,18 @@
 import 'calc_exception.dart';
 import 'fraction.dart';
 
-/// Polinomio en una variable con coeficientes racionales exactos.
+/// Polynomial in one variable with exact rational coefficients.
 ///
-/// Los coeficientes se almacenan de menor a mayor grado:
-/// `coefficients[0]` es el término independiente. Se eliminan los ceros de
-/// mayor grado, de modo que el coeficiente líder nunca es cero (salvo el
-/// polinomio nulo, que tiene la lista vacía).
+/// Coefficients are stored from lowest to highest degree:
+/// `coefficients[0]` is the constant term. Highest-degree zeros are
+/// removed, so the leading coefficient is never zero (except for the
+/// zero polynomial, which has an empty list).
 class Polynomial {
   final List<Fraction> coefficients;
 
   const Polynomial._(this.coefficients);
 
-  /// Construye desde coeficientes (menor a mayor grado), recortando ceros líderes.
+  /// Builds from coefficients (lowest to highest degree), trimming leading zeros.
   factory Polynomial(List<Fraction> coeffs) {
     int last = coeffs.length - 1;
     while (last >= 0 && coeffs[last].isZero) {
@@ -25,17 +25,17 @@ class Polynomial {
   factory Polynomial.fromInts(List<int> coeffs) =>
       Polynomial(coeffs.map((c) => Fraction.fromInt(c)).toList());
 
-  /// Polinomio constante.
+  /// Constant polynomial.
   factory Polynomial.constant(Fraction c) => Polynomial([c]);
 
   static final Polynomial zero = Polynomial._(const []);
 
   bool get isZero => coefficients.isEmpty;
 
-  /// Grado del polinomio; el polinomio nulo tiene grado -1.
+  /// Degree of the polynomial; the zero polynomial has degree -1.
   int get degree => coefficients.length - 1;
 
-  /// Coeficiente líder (de mayor grado); cero para el polinomio nulo.
+  /// Leading coefficient (highest degree); zero for the zero polynomial.
   Fraction get leadingCoefficient =>
       isZero ? Fraction.zero : coefficients.last;
 
@@ -44,9 +44,9 @@ class Polynomial {
           ? coefficients[power]
           : Fraction.zero;
 
-  // ── Evaluación ─────────────────────────────────────────────────────────
+  // ── Evaluation ─────────────────────────────────────────────────────────
 
-  /// Evalúa el polinomio en [x] usando el método de Horner.
+  /// Evaluates the polynomial at [x] using Horner's method.
   Fraction evaluate(Fraction x) {
     Fraction result = Fraction.zero;
     for (int i = coefficients.length - 1; i >= 0; i--) {
@@ -55,7 +55,7 @@ class Polynomial {
     return result;
   }
 
-  // ── Aritmética ───────────────────────────────────────────────────────────
+  // ── Arithmetic ───────────────────────────────────────────────────────────
 
   Polynomial operator +(Polynomial other) {
     final int n =
@@ -89,7 +89,7 @@ class Polynomial {
   Polynomial scale(Fraction factor) =>
       Polynomial(coefficients.map((c) => c * factor).toList());
 
-  /// Derivada formal.
+  /// Formal derivative.
   Polynomial derivative() {
     if (degree < 1) return zero;
     final List<Fraction> result = [];
@@ -99,8 +99,8 @@ class Polynomial {
     return Polynomial(result);
   }
 
-  /// División con resto: devuelve (cociente, resto) tales que
-  /// this = cociente·divisor + resto, con grado(resto) < grado(divisor).
+  /// Division with remainder: returns (quotient, remainder) such that
+  /// this = quotient·divisor + remainder, with degree(remainder) < degree(divisor).
   ({Polynomial quotient, Polynomial remainder}) divMod(Polynomial divisor) {
     if (divisor.isZero) {
       throw CalcException(CalcError.zeroPolynomialDivision);
@@ -126,16 +126,16 @@ class Polynomial {
     return (quotient: Polynomial(quot), remainder: Polynomial(rem));
   }
 
-  /// Resto de la división (this mod divisor).
+  /// Remainder of the division (this mod divisor).
   Polynomial operator %(Polynomial divisor) => divMod(divisor).remainder;
 
-  /// Convierte a polinomio mónico (coeficiente líder 1) dividiendo por el líder.
+  /// Converts to a monic polynomial (leading coefficient 1) by dividing by the leader.
   Polynomial toMonic() {
     if (isZero) return this;
     return scale(leadingCoefficient.reciprocal());
   }
 
-  // ── Formato ────────────────────────────────────────────────────────────
+  // ── Formatting ─────────────────────────────────────────────────────────
 
   @override
   String toString() {

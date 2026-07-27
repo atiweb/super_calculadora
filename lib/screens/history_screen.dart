@@ -30,7 +30,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
     try {
       final history = await HistoryService.getHistory();
-      if (!mounted) return; // volver atrás durante la carga disponía el estado
+      if (!mounted) return; // navigating back during the load disposed the state
       setState(() {
         _history = history;
         _isLoading = false;
@@ -74,7 +74,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
         await HistoryService.clearHistory();
         await _loadHistory();
         if (mounted) {
-          // Sincronizar la copia en memoria del panel de la calculadora
+          // Sync the in-memory copy held by the calculator panel
           await context.read<CalculatorService>().reloadHistory();
         }
         if (mounted) {
@@ -98,7 +98,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
       await HistoryService.removeOperation(operation);
       await _loadHistory();
       if (mounted) {
-        // Sincronizar la copia en memoria del panel de la calculadora
+        // Sync the in-memory copy held by the calculator panel
         await context.read<CalculatorService>().reloadHistory();
       }
       if (mounted) {
@@ -243,7 +243,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
   }
 
   String _formatTimestamp(OperationEntry operation) {
-    // Entradas del formato antiguo, sin marca de tiempo persistida
+    // Entries from the old format, with no persisted timestamp
     if (!operation.timestampKnown) return '—';
     final timestamp = operation.timestamp;
     final now = DateTime.now();
@@ -342,7 +342,10 @@ class _HistoryScreenState extends State<HistoryScreen> {
                   ),
                 )
               : ListView.builder(
-                  padding: const EdgeInsets.all(16),
+                  // Extra bottom padding: in edge-to-edge (Android 15) the
+                  // content ends up behind the navigation bar without this inset.
+                  padding: EdgeInsets.fromLTRB(
+                      16, 16, 16, 16 + MediaQuery.paddingOf(context).bottom),
                   itemCount: _history.length,
                   itemBuilder: (context, index) {
                     final operation = _history[index];

@@ -13,7 +13,7 @@ class CalculatorKeyboard extends StatelessWidget {
           padding: const EdgeInsets.all(16),
           child: Column(
             children: [
-              // Fila 1: Funciones de memoria
+              // Row 1: Memory functions
               Expanded(
                 child: Row(
                   children: [
@@ -25,7 +25,7 @@ class CalculatorKeyboard extends StatelessWidget {
                 ),
               ),
               
-              // Fila 2: Funciones especiales y control
+              // Row 2: Special functions and control
               Expanded(
                 child: Row(
                   children: [
@@ -37,7 +37,7 @@ class CalculatorKeyboard extends StatelessWidget {
                 ),
               ),
               
-              // Fila 3: Funciones avanzadas y división
+              // Row 3: Advanced functions and division
               Expanded(
                 child: Row(
                   children: [
@@ -49,7 +49,7 @@ class CalculatorKeyboard extends StatelessWidget {
                 ),
               ),
               
-              // Fila 4: Números 7-9 y multiplicación
+              // Row 4: Numbers 7-9 and multiplication
               Expanded(
                 child: Row(
                   children: [
@@ -61,7 +61,7 @@ class CalculatorKeyboard extends StatelessWidget {
                 ),
               ),
               
-              // Fila 5: Números 4-6 y resta
+              // Row 5: Numbers 4-6 and subtraction
               Expanded(
                 child: Row(
                   children: [
@@ -73,7 +73,7 @@ class CalculatorKeyboard extends StatelessWidget {
                 ),
               ),
               
-              // Fila 6: Números 1-3 y suma
+              // Row 6: Numbers 1-3 and addition
               Expanded(
                 child: Row(
                   children: [
@@ -85,7 +85,7 @@ class CalculatorKeyboard extends StatelessWidget {
                 ),
               ),
               
-              // Fila 7: 0, punto decimal, cambio de signo y igual
+              // Row 7: 0, decimal point, sign toggle and equals
               Expanded(
                 child: Row(
                   children: [
@@ -97,7 +97,7 @@ class CalculatorKeyboard extends StatelessWidget {
                 ),
               ),
               
-              // Fila 8: Funciones adicionales
+              // Row 8: Additional functions
               Expanded(
                 child: Row(
                   children: [
@@ -109,14 +109,14 @@ class CalculatorKeyboard extends StatelessWidget {
                 ),
               ),
               
-              // Fila 9: Conversiones y backspace
+              // Row 9: Conversions and backspace
               Expanded(
                 child: Row(
                   children: [
                     Expanded(child: _buildButton(context, calculator.conversionButtonText, calculator.toggleBinaryDecimal, buttonType: ButtonType.function)),
                     Expanded(child: _buildButton(context, 'n!', calculator.factorial, buttonType: ButtonType.function)),
                     Expanded(child: _buildButton(context, '⌫', calculator.backspace, buttonType: ButtonType.function)),
-                    Expanded(child: Container()), // Espacio vacío
+                    Expanded(child: Container()), // Empty space
                   ],
                 ),
               ),

@@ -1,23 +1,23 @@
 import '../vendor/computable_reals/computable_reals.dart';
 import 'calc_exception.dart';
 
-/// Número complejo de **precisión arbitraria**, con parte real e imaginaria
-/// como reales constructivos ([CReal]).
+/// **Arbitrary-precision** complex number, with real and imaginary parts
+/// as constructive reals ([CReal]).
 ///
-/// A diferencia de `Complex` (basado en `double`), la aritmética es exacta y
-/// solo se redondea al formatear. Pensado para la capa de alta precisión
-/// (Fase 2). Las operaciones puramente algebraicas (+, −, ×, ÷, potencia
-/// entera) son exactas; las que requieren raíces/ángulos (módulo, raíces
-/// n-ésimas de la unidad) usan funciones de [CReal] a la precisión pedida.
+/// Unlike `Complex` (based on `double`), the arithmetic is exact and
+/// only rounds when formatting. Intended for the high-precision layer
+/// (Phase 2). Purely algebraic operations (+, −, ×, ÷, integer
+/// power) are exact; those requiring roots/angles (modulus, nth
+/// roots of unity) use [CReal] functions at the requested precision.
 class BigComplex {
   final CReal re;
   final CReal im;
 
-  /// `true` solo cuando ambas partes se construyeron a partir de literales
-  /// cero (texto o enteros). Decidir si un CReal arbitrario es cero es
-  /// semidecidible (invertirlo itera precisiones crecientes hasta un
-  /// 'precision overflow' tardío), así que este indicador permite al menos
-  /// fallar rápido en los casos detectables.
+  /// `true` only when both parts were built from zero literals
+  /// (text or integers). Deciding whether an arbitrary CReal is zero is
+  /// semi-decidable (inverting it iterates increasing precisions until a
+  /// late 'precision overflow'), so this flag at least allows
+  /// failing fast in the detectable cases.
   final bool knownZero;
 
   BigComplex(this.re, this.im) : knownZero = false;
@@ -27,8 +27,8 @@ class BigComplex {
   factory BigComplex.fromInts(int re, int im) =>
       BigComplex._(CReal.from(re), CReal.from(im), re == 0 && im == 0);
 
-  /// Parsea partes real e imaginaria desde texto (entero o decimal, con signo).
-  /// Lanza [FormatException] si el texto no es un número válido.
+  /// Parses real and imaginary parts from text (integer or decimal, signed).
+  /// Throws [FormatException] if the text is not a valid number.
   factory BigComplex.parse(String re, String im) => BigComplex._(
         _parseReal(re),
         _parseReal(im),
@@ -61,18 +61,18 @@ class BigComplex {
 
   BigComplex conjugate() => BigComplex(re, -im);
 
-  /// |z|² (exacto, sin raíz).
+  /// |z|² (exact, no root).
   CReal modulusSquared() => re * re + im * im;
 
   /// |z| = √(re² + im²).
   CReal modulus() => modulusSquared().sqrt();
 
-  /// Potencia entera por exponenciación binaria (exacta: solo multiplicaciones,
-  /// sin trigonometría). Admite exponente negativo.
+  /// Integer power via binary exponentiation (exact: only multiplications,
+  /// no trigonometry). Supports negative exponent.
   BigComplex pow(int n) {
     if (n == 0) return one;
-    // 0^negativo es 1/0: sin el indicador, la inversión del CReal cero no
-    // falla rápido (ver [knownZero]).
+    // 0^negative is 1/0: without the flag, inverting the zero CReal does not
+    // fail fast (see [knownZero]).
     if (n < 0 && knownZero) throw CalcException(CalcError.divisionByZero);
     if (n < 0) return one / pow(-n);
     BigComplex result = one;
@@ -86,9 +86,9 @@ class BigComplex {
     return result;
   }
 
-  /// Las n raíces n-ésimas de la unidad: e^(2πik/n) = cos(2πk/n) + i·sin(2πk/n).
-  /// Los ángulos son exactos (no requieren atan2), así que el resultado es de
-  /// alta precisión limpio.
+  /// The n nth roots of unity: e^(2πik/n) = cos(2πk/n) + i·sin(2πk/n).
+  /// The angles are exact (no atan2 needed), so the result is clean
+  /// high precision.
   static List<BigComplex> rootsOfUnity(int n) {
     if (n < 1) throw ArgumentError('n must be ≥ 1');
     final twoPi = CReal.pi * CReal.from(2);
@@ -98,9 +98,9 @@ class BigComplex {
     });
   }
 
-  /// Formatea "a + bi" a [digits] dígitos, limpiando ceros finales y eligiendo
-  /// el signo a partir de la representación textual (evita decidir el signo de
-  /// un real constructivo, que es semidecidible).
+  /// Formats "a + bi" to [digits] digits, cleaning trailing zeros and choosing
+  /// the sign from the textual representation (avoids deciding the sign of
+  /// a constructive real, which is semi-decidable).
   String toStringAsPrecision(int digits) {
     String fmt(CReal x) {
       var s = x.toStringAsPrecision(digits);
@@ -122,39 +122,39 @@ class BigComplex {
   String toString() => toStringAsPrecision(15);
 }
 
-/// Signo (-1, 0, 1) de un literal decimal a partir de sus dígitos. No usa
-/// `double.parse`, que subdesborda a 0.0 por debajo de ~1e-308 mientras que
-/// aquí las entradas pueden exceder la precisión de double.
+/// Sign (-1, 0, 1) of a decimal literal from its digits. Does not use
+/// `double.parse`, which underflows to 0.0 below ~1e-308 whereas
+/// inputs here may exceed double precision.
 double _decimalSign(String s) {
   var t = s.trim().replaceAll('−', '-');
   final bool neg = t.startsWith('-');
   if (neg || t.startsWith('+')) t = t.substring(1);
   final bool nonZero =
-      t.codeUnits.any((c) => c >= 0x31 && c <= 0x39); // dígitos 1-9
+      t.codeUnits.any((c) => c >= 0x31 && c <= 0x39); // digits 1-9
   if (!nonZero) return 0;
   return neg ? -1 : 1;
 }
 
-/// Worker (isolate-safe vía `compute`) para (re+im·i)^n de alta precisión.
-/// Entrada: `{re, im, n, digits}`. Salida: `{ok:true, result}` o
-/// `{ok:false, error}`. Una división por cero (0^negativo) se lanza como
-/// [CalcException] para que el llamador la localice.
+/// Worker (isolate-safe via `compute`) for high-precision (re+im·i)^n.
+/// Input: `{re, im, n, digits}`. Output: `{ok:true, result}` or
+/// `{ok:false, error}`. A division by zero (0^negative) is thrown as
+/// [CalcException] so the caller can localize it.
 Map<String, dynamic> bigComplexPowWorker(Map<String, dynamic> a) {
   try {
     final z = BigComplex.parse(a['re'] as String, a['im'] as String);
-    // 0^negativo lanza CalcException desde pow (ver BigComplex.knownZero)
+    // 0^negative throws CalcException from pow (see BigComplex.knownZero)
     final r = z.pow(a['n'] as int);
     return {'ok': true, 'result': r.toStringAsPrecision(a['digits'] as int)};
   } on CalcException {
-    rethrow; // sendable: cruza el isolate y el llamador la traduce
+    rethrow; // sendable: crosses the isolate and the caller translates it
   } catch (e) {
     return {'ok': false, 'error': e.toString()};
   }
 }
 
-/// Worker (isolate-safe) para las n raíces n-ésimas de la unidad de alta
-/// precisión. Entrada: `{n, digits}`. Salida: `{ok, result}` (una raíz por
-/// línea) o `{ok:false, error}`.
+/// Worker (isolate-safe) for the n high-precision nth roots of
+/// unity. Input: `{n, digits}`. Output: `{ok, result}` (one root per
+/// line) or `{ok:false, error}`.
 Map<String, dynamic> bigComplexRootsOfUnityWorker(Map<String, dynamic> a) {
   try {
     final digits = a['digits'] as int;
@@ -168,9 +168,9 @@ Map<String, dynamic> bigComplexRootsOfUnityWorker(Map<String, dynamic> a) {
   }
 }
 
-/// atan2(im, re) exacto con CReal. El cuadrante se decide con los signos
-/// `reSign`/`imSign` (derivados de la entrada en `double`), evitando decidir el
-/// signo de un real constructivo (semidecidible).
+/// Exact atan2(im, re) with CReal. The quadrant is decided using the signs
+/// `reSign`/`imSign` (derived from the input as `double`), avoiding deciding
+/// the sign of a constructive real (semi-decidable).
 CReal _atan2(CReal im, CReal re, double reSign, double imSign) {
   final halfPi = CReal.pi / CReal.from(2);
   if (reSign > 0) return (im / re).atan();
@@ -183,10 +183,10 @@ CReal _atan2(CReal im, CReal re, double reSign, double imSign) {
   return CReal.from(0);
 }
 
-/// Worker (isolate-safe) para las n raíces n-ésimas de un complejo arbitrario
-/// z = re + im·i, en alta precisión. Cada raíz es
-/// |z|^(1/n)·[cos((θ+2πk)/n) + i·sin(...)] con θ = atan2(im, re).
-/// Entrada: `{re, im, n, digits}`. Salida: `{ok, result}` o `{ok:false, error}`.
+/// Worker (isolate-safe) for the n nth roots of an arbitrary complex
+/// z = re + im·i, in high precision. Each root is
+/// |z|^(1/n)·[cos((θ+2πk)/n) + i·sin(...)] with θ = atan2(im, re).
+/// Input: `{re, im, n, digits}`. Output: `{ok, result}` or `{ok:false, error}`.
 Map<String, dynamic> bigComplexNthRootsWorker(Map<String, dynamic> a) {
   try {
     final n = a['n'] as int;

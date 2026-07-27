@@ -1,4 +1,4 @@
-/// Tipos de botones para las calculadoras
+/// Button types for the calculators
 enum ButtonType {
   number,
   operator,
@@ -6,7 +6,7 @@ enum ButtonType {
   equals,
 }
 
-/// Tipos de botones específicos para la calculadora científica
+/// Button types specific to the scientific calculator
 enum ScientificButtonType {
   number,
   operator,

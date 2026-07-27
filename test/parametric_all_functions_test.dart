@@ -20,7 +20,7 @@ BigInt _lcm(BigInt a, BigInt b) {
   return (a ~/ _gcd(a, b)) * b;
 }
 
-// _digits ya no se usa (las medias usan sistema N-param)
+// _digits is no longer used (the means use the N-param system)
 
 List<int> _sievePrimes(int n) {
   final sieve = List<bool>.filled(n + 1, true);
@@ -300,17 +300,17 @@ void main() {
     test('gcd(n,n-1)=1 and lcm(n,n+1)=n*(n+1)', () async {
       final svc = CalculatorService();
       for (final n in sampleNs) {
-        // gcdFunction usa sistema pendiente variable: presionar función otra vez ejecuta
+        // gcdFunction uses the variable pending system: pressing the function again executes
         _setN(svc, n);
-        svc.gcdFunction(); // captura n, display='0'
+        svc.gcdFunction(); // captures n, display='0'
         svc.addDigit('${n - 1}');
-        svc.gcdFunction(); // agrega param y ejecuta
+        svc.gcdFunction(); // adds param and executes
         expect(svc.display, '1', reason: 'gcd($n, ${n-1})');
 
         _setN(svc, n);
-        svc.lcmFunction(); // captura n, display='0'
+        svc.lcmFunction(); // captures n, display='0'
         svc.addDigit('${n + 1}');
-        svc.lcmFunction(); // agrega param y ejecuta
+        svc.lcmFunction(); // adds param and executes
         final expected = _lcm(BigInt.from(n), BigInt.from(n + 1)).toString();
         expect(svc.display, expected, reason: 'lcm($n, ${n+1})');
       }
@@ -327,19 +327,19 @@ void main() {
         await svc.moebiusMu();
         expect(svc.display, _moebius(n, primesUpTo100).toString(), reason: 'mu($n)');
 
-        // modFunction ahora usa 2 parámetros con sistema pendiente
+        // modFunction now uses 2 parameters with the pending system
         _setN(svc, n);
-        svc.modFunction(); // inicia operación pendiente
+        svc.modFunction(); // starts pending operation
         svc.addDigit('1');
         svc.addDigit('0');
-        svc.calculate(); // ejecuta mod 10
+        svc.calculate(); // executes mod 10
         expect(svc.display, (n % 10).toString(), reason: 'mod10($n)');
 
-        // pAdicValuation ahora usa 2 parámetros con sistema pendiente
+        // pAdicValuation now uses 2 parameters with the pending system
         _setN(svc, n);
-        svc.pAdicValuation(); // inicia operación pendiente
+        svc.pAdicValuation(); // starts pending operation
         svc.addDigit('2');
-        svc.calculate(); // ejecuta V₂
+        svc.calculate(); // executes V₂
         expect(svc.display, _v2(n).toString(), reason: 'v2($n)');
       }
     });
@@ -347,7 +347,7 @@ void main() {
     test('combinations C(n,2) and variations V(n,2)', () async {
       final svc = CalculatorService();
       for (final n in sampleNs) {
-        // combinations ahora usa 2 parámetros
+        // combinations now uses 2 parameters
         _setN(svc, n);
         svc.combinations();
         svc.addDigit('2');
@@ -355,7 +355,7 @@ void main() {
         final c = (BigInt.from(n) * BigInt.from(n - 1)) ~/ BigInt.two;
         expect(svc.display, c.toString(), reason: 'C($n,2)');
 
-        // variations ahora usa 2 parámetros
+        // variations now uses 2 parameters
         _setN(svc, n);
         svc.variations();
         svc.addDigit('2');
@@ -368,12 +368,12 @@ void main() {
     test('means over digits; min/max; radical; modular inverse mod 97', () async {
       final svc = CalculatorService();
       for (final n in sampleNs) {
-        // Media aritmética N-param: MedA(n, n+1) = (n + n+1) / 2
+        // N-param arithmetic mean: MedA(n, n+1) = (n + n+1) / 2
         final meanAExpected = (n + (n + 1)) / 2.0;
         _setN(svc, n);
-        svc.arithmeticMeanN(); // inicia pendiente con n
+        svc.arithmeticMeanN(); // starts pending with n
         svc.addDigit('${n + 1}');
-        svc.arithmeticMeanN(); // ejecuta
+        svc.arithmeticMeanN(); // executes
         expect(_relErr(double.parse(svc.display), meanAExpected) < 1e-12, true, reason: 'meanA($n, ${n+1})');
 
         // Min/Max N-param: min(n, n+1) = n, max(n, n+1) = n+1
@@ -393,7 +393,7 @@ void main() {
         await svc.radical();
         expect(svc.display, _radical(n, primesUpTo100).toString(), reason: 'rad($n)');
 
-        // modularInverse ahora usa 2 parámetros
+        // modularInverse now uses 2 parameters
         _setN(svc, n);
         svc.modularInverse();
         svc.addDigit('9');

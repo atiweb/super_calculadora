@@ -5,15 +5,15 @@ import '../models/fraction.dart';
 import '../models/surd.dart';
 import '../models/point.dart';
 
-/// Clasificación de un triángulo por la igualdad de sus lados.
+/// Classification of a triangle by the equality of its sides.
 enum TriangleSides { equilateral, isosceles, scalene }
 
-/// Clasificación de un triángulo por su mayor ángulo.
+/// Classification of a triangle by its largest angle.
 enum TriangleAngles { right, acute, obtuse }
 
-/// Clasificación de un triángulo por lados y por ángulos.
+/// Classification of a triangle by sides and by angles.
 ///
-/// Se usan enumeraciones (no texto) para que la capa de UI elija el idioma.
+/// Enums (not text) are used so that the UI layer picks the language.
 class TriangleType {
   final TriangleSides bySides;
   final TriangleAngles byAngles;
@@ -33,7 +33,7 @@ class TriangleType {
   int get hashCode => Object.hash(bySides, byAngles);
 }
 
-/// Un triángulo heroniano: lados enteros y área entera.
+/// A Heronian triangle: integer sides and integer area.
 class HeronianTriangle {
   final BigInt a;
   final BigInt b;
@@ -46,28 +46,28 @@ class HeronianTriangle {
   String toString() => '($a, $b, $c) área=$area';
 }
 
-/// Herramientas de geometría para entrenamiento de olimpiada.
+/// Geometry tools for olympiad training.
 ///
-/// Donde es posible los resultados son exactos: el área de Herón se devuelve
-/// como [Surd], los cosenos de los ángulos como [Fraction], y las áreas por
-/// coordenadas (shoelace) como [Fraction].
+/// Where possible the results are exact: Heron's area is returned
+/// as a [Surd], the cosines of the angles as [Fraction], and areas from
+/// coordinates (shoelace) as [Fraction].
 class GeometryService {
-  // ── Validez y clasificación ────────────────────────────────────────────
+  // ── Validity and classification ────────────────────────────────────────────
 
-  /// Verdadero si tres longitudes positivas forman un triángulo
-  /// (desigualdad triangular estricta).
+  /// True if three positive lengths form a triangle
+  /// (strict triangle inequality).
   static bool isValidTriangle(BigInt a, BigInt b, BigInt c) {
     if (a <= BigInt.zero || b <= BigInt.zero || c <= BigInt.zero) return false;
     return a + b > c && a + c > b && b + c > a;
   }
 
-  /// Clasifica el triángulo por lados y por ángulos.
+  /// Classifies the triangle by sides and by angles.
   static TriangleType triangleType(BigInt a, BigInt b, BigInt c) {
     if (!isValidTriangle(a, b, c)) {
       throw CalcException(CalcError.invalidTriangle);
     }
 
-    // Por lados
+    // By sides
     final TriangleSides bySides;
     if (a == b && b == c) {
       bySides = TriangleSides.equilateral;
@@ -77,9 +77,9 @@ class GeometryService {
       bySides = TriangleSides.scalene;
     }
 
-    // Por ángulos: comparar el cuadrado del lado mayor con la suma de los otros
+    // By angles: compare the square of the largest side with the sum of the others
     final sides = [a, b, c]..sort();
-    final BigInt x = sides[0], y = sides[1], z = sides[2]; // z es el mayor
+    final BigInt x = sides[0], y = sides[1], z = sides[2]; // z is the largest
     final BigInt diff = x * x + y * y - z * z;
     final TriangleAngles byAngles;
     if (diff == BigInt.zero) {
@@ -93,13 +93,13 @@ class GeometryService {
     return TriangleType(bySides, byAngles);
   }
 
-  // ── Área ──────────────────────────────────────────────────────────────
+  // ── Area ──────────────────────────────────────────────────────────────
 
-  /// Producto de Herón: 16·Área² = (a+b+c)(−a+b+c)(a−b+c)(a+b−c).
+  /// Heron product: 16·Area² = (a+b+c)(−a+b+c)(a−b+c)(a+b−c).
   static BigInt _heronProduct(BigInt a, BigInt b, BigInt c) =>
       (a + b + c) * (-a + b + c) * (a - b + c) * (a + b - c);
 
-  /// Área exacta por la fórmula de Herón, como radical: Área = √P / 4.
+  /// Exact area via Heron's formula, as a radical: Area = √P / 4.
   static Surd heronArea(BigInt a, BigInt b, BigInt c) {
     if (!isValidTriangle(a, b, c)) {
       throw CalcException(CalcError.invalidTriangle);
@@ -109,8 +109,8 @@ class GeometryService {
     return Surd(Fraction(BigInt.one, BigInt.from(4)), p);
   }
 
-  /// Área aproximada (double) para lados reales arbitrarios.
-  /// Devuelve [double.nan] si los lados no forman un triángulo válido.
+  /// Approximate area (double) for arbitrary real sides.
+  /// Returns [double.nan] if the sides do not form a valid triangle.
   static double heronAreaApprox(double a, double b, double c) {
     if (a <= 0 || b <= 0 || c <= 0) return double.nan;
     if (a + b <= c || a + c <= b || b + c <= a) return double.nan;
@@ -120,19 +120,19 @@ class GeometryService {
     return math.sqrt(product);
   }
 
-  /// Verdadero si el triángulo es heroniano (lados enteros, área entera).
+  /// True if the triangle is Heronian (integer sides, integer area).
   static bool isHeronian(BigInt a, BigInt b, BigInt c) {
     if (!isValidTriangle(a, b, c)) return false;
     final BigInt p = _heronProduct(a, b, c);
     final BigInt root = _integerSqrt(p);
-    if (root * root != p) return false; // √P no entero ⇒ área irracional
-    // Área = √P / 4 ⇒ entera sólo si 4 | √P
+    if (root * root != p) return false; // √P not an integer ⇒ irrational area
+    // Area = √P / 4 ⇒ integer only if 4 | √P
     return root % BigInt.from(4) == BigInt.zero;
   }
 
-  // ── Radios ──────────────────────────────────────────────────────────────
+  // ── Radii ──────────────────────────────────────────────────────────────
 
-  /// Radio circunscrito exacto: R = abc / (4·Área) = abc / √P  → (abc/P)·√P.
+  /// Exact circumradius: R = abc / (4·Area) = abc / √P  → (abc/P)·√P.
   static Surd circumradius(BigInt a, BigInt b, BigInt c) {
     if (!isValidTriangle(a, b, c)) {
       throw CalcException(CalcError.invalidTriangle);
@@ -141,7 +141,7 @@ class GeometryService {
     return Surd(Fraction(a * b * c, p), p);
   }
 
-  /// Radio inscrito exacto: r = Área / s = √P / (2(a+b+c)).
+  /// Exact inradius: r = Area / s = √P / (2(a+b+c)).
   static Surd inradius(BigInt a, BigInt b, BigInt c) {
     if (!isValidTriangle(a, b, c)) {
       throw CalcException(CalcError.invalidTriangle);
@@ -150,34 +150,34 @@ class GeometryService {
     return Surd(Fraction(BigInt.one, BigInt.two * (a + b + c)), p);
   }
 
-  // ── Trigonometría ────────────────────────────────────────────────────────
+  // ── Trigonometry ────────────────────────────────────────────────────────
 
-  /// Coseno (exacto) del ángulo opuesto al lado [opposite], entre los lados
-  /// [side1] y [side2]:  cos = (s1² + s2² − op²) / (2·s1·s2).
+  /// (Exact) cosine of the angle opposite side [opposite], between sides
+  /// [side1] and [side2]:  cos = (s1² + s2² − op²) / (2·s1·s2).
   static Fraction cosineOfAngle(BigInt opposite, BigInt side1, BigInt side2) {
     final BigInt num = side1 * side1 + side2 * side2 - opposite * opposite;
     final BigInt den = BigInt.two * side1 * side2;
     return Fraction(num, den);
   }
 
-  /// Ángulo (en grados, aproximado) opuesto al lado [opposite].
+  /// Angle (in degrees, approximate) opposite side [opposite].
   static double angleDegrees(BigInt opposite, BigInt side1, BigInt side2) {
     final double cos = cosineOfAngle(opposite, side1, side2).toDouble();
     return math.acos(cos.clamp(-1.0, 1.0)) * 180 / math.pi;
   }
 
-  /// Ley de senos: dado un lado y su ángulo opuesto, halla el lado opuesto a
-  /// otro ángulo conocido.  ladoBuscado = ladoConocido · sin(áng) / sin(ángConocido).
+  /// Law of sines: given a side and its opposite angle, find the side opposite
+  /// another known angle.  wantedSide = knownSide · sin(ang) / sin(knownAng).
   static double sideFromLawOfSines(
       double knownSide, double knownAngleDeg, double wantedAngleDeg) {
     final double k = knownSide / math.sin(knownAngleDeg * math.pi / 180);
     return k * math.sin(wantedAngleDeg * math.pi / 180);
   }
 
-  // ── Geometría analítica ──────────────────────────────────────────────────
+  // ── Analytic geometry ──────────────────────────────────────────────────
 
-  /// Área de un polígono simple por la fórmula del cordón (shoelace), exacta.
-  /// Los vértices deben ir en orden (horario o antihorario).
+  /// Area of a simple polygon via the shoelace formula, exact.
+  /// Vertices must be in order (clockwise or counterclockwise).
   static Fraction shoelaceArea(List<Point> vertices) {
     if (vertices.length < 3) {
       throw CalcException(CalcError.needAtLeast3Vertices);
@@ -191,10 +191,10 @@ class GeometryService {
     return (sum * Fraction(BigInt.one, BigInt.two)).abs();
   }
 
-  /// Teorema de Pick para un polígono simple con vértices enteros:
-  /// A = I + B/2 − 1, donde B son los puntos reticulares de la frontera
-  /// (Σ mcd(|Δx|, |Δy|) por arista) e I los interiores.
-  /// Devuelve (área exacta, B, I).
+  /// Pick's theorem for a simple polygon with integer vertices:
+  /// A = I + B/2 − 1, where B is the count of lattice points on the boundary
+  /// (Σ gcd(|Δx|, |Δy|) per edge) and I the interior ones.
+  /// Returns (exact area, B, I).
   static ({Fraction area, BigInt boundary, BigInt interior}) pickAnalysis(
       List<Point> vertices) {
     if (vertices.length < 3) {
@@ -223,11 +223,11 @@ class GeometryService {
     return (area: area, boundary: boundary, interior: interiorF.truncate());
   }
 
-  /// Centros del triángulo dado por coordenadas racionales.
+  /// Centers of the triangle given by rational coordinates.
   ///
-  /// Baricentro G, circuncentro O y ortocentro H son exactos ([Point] con
-  /// fracciones); el incentro involucra √ y se devuelve aproximado.
-  /// G, O y H son colineales (recta de Euler) con H = 3G − 2O.
+  /// Centroid G, circumcenter O and orthocenter H are exact ([Point] with
+  /// fractions); the incenter involves √ and is returned as an approximation.
+  /// G, O and H are collinear (Euler line) with H = 3G − 2O.
   static ({
     Point centroid,
     Point circumcenter,
@@ -237,7 +237,7 @@ class GeometryService {
   }) triangleCenters(Point a, Point b, Point c) {
     final Fraction three = Fraction.fromInt(3);
 
-    // Doble del área con signo (shoelace); 0 ⇒ colineales.
+    // Twice the signed area (shoelace); 0 ⇒ collinear.
     final Fraction cross = (b.x - a.x) * (c.y - a.y) - (c.x - a.x) * (b.y - a.y);
     if (cross.isZero) {
       throw CalcException(CalcError.collinearPoints);
@@ -248,7 +248,7 @@ class GeometryService {
       (a.y + b.y + c.y) / three,
     );
 
-    // Circuncentro: sistema lineal de las mediatrices (Cramer 2×2 exacto).
+    // Circumcenter: linear system of the perpendicular bisectors (exact 2×2 Cramer).
     //   2(bx−ax)·Ox + 2(by−ay)·Oy = |b|² − |a|²
     //   2(cx−ax)·Ox + 2(cy−ay)·Oy = |c|² − |a|²
     final Fraction a11 = (b.x - a.x) * Fraction.fromInt(2);
@@ -265,14 +265,14 @@ class GeometryService {
       (a11 * r2 - a21 * r1) / det,
     );
 
-    // Ortocentro por la identidad de Euler: H = A + B + C − 2O.
+    // Orthocenter via Euler's identity: H = A + B + C − 2O.
     final Fraction two = Fraction.fromInt(2);
     final Point orthocenter = Point(
       a.x + b.x + c.x - two * circumcenter.x,
       a.y + b.y + c.y - two * circumcenter.y,
     );
 
-    // Incentro = (a·A + b·B + c·C)/(a+b+c) con a=|BC|, b=|CA|, c=|AB|.
+    // Incenter = (a·A + b·B + c·C)/(a+b+c) with a=|BC|, b=|CA|, c=|AB|.
     final double la = b.distanceTo(c);
     final double lb = a.distanceTo(c);
     final double lc = a.distanceTo(b);
@@ -291,11 +291,11 @@ class GeometryService {
     );
   }
 
-  // ── Ternas pitagóricas ───────────────────────────────────────────────────
+  // ── Pythagorean triples ───────────────────────────────────────────────────
 
-  /// Ternas pitagóricas primitivas con hipotenusa ≤ [maxHypotenuse].
-  /// Usa la fórmula de Euclides: a=m²−n², b=2mn, c=m²+n²
-  /// con m>n>0, mcd(m,n)=1 y m,n de distinta paridad.
+  /// Primitive Pythagorean triples with hypotenuse ≤ [maxHypotenuse].
+  /// Uses Euclid's formula: a=m²−n², b=2mn, c=m²+n²
+  /// with m>n>0, gcd(m,n)=1 and m,n of opposite parity.
   static List<List<BigInt>> primitivePythagoreanTriples(int maxHypotenuse) {
     final List<List<BigInt>> triples = [];
     for (int m = 2; m * m <= maxHypotenuse; m++) {
@@ -315,8 +315,8 @@ class GeometryService {
     return triples;
   }
 
-  /// Todas las ternas pitagóricas (primitivas y sus múltiplos) con
-  /// hipotenusa ≤ [maxHypotenuse].
+  /// All Pythagorean triples (primitives and their multiples) with
+  /// hypotenuse ≤ [maxHypotenuse].
   static List<List<BigInt>> allPythagoreanTriples(int maxHypotenuse) {
     final List<List<BigInt>> result = [];
     for (final prim in primitivePythagoreanTriples(maxHypotenuse)) {
@@ -335,7 +335,7 @@ class GeometryService {
     return result;
   }
 
-  /// Triángulos heronianos con todos los lados ≤ [maxSide] (a ≤ b ≤ c).
+  /// Heronian triangles with all sides ≤ [maxSide] (a ≤ b ≤ c).
   static List<HeronianTriangle> heronianTriangles(int maxSide) {
     final List<HeronianTriangle> result = [];
     for (int a = 1; a <= maxSide; a++) {
@@ -366,7 +366,7 @@ class GeometryService {
     return a;
   }
 
-  /// Raíz cuadrada entera (piso) de un BigInt no negativo.
+  /// Integer (floor) square root of a non-negative BigInt.
   static BigInt _integerSqrt(BigInt n) {
     if (n < BigInt.zero) throw ArgumentError(trLocale('Raíz de número negativo', 'Root of a negative number'));
     if (n < BigInt.two) return n;

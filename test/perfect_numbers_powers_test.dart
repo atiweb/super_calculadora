@@ -1,14 +1,14 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:super_calculadora/services/number_analysis_service.dart';
 
-/// Regresión: números perfectos grandes y potencias perfectas de muchos
-/// dígitos. Antes:
-///   - `isPerfectNumber` devolvía `false` para cualquier número de más de
-///     10 dígitos (tope de rendimiento), clasificando mal el 7.º número
-///     perfecto 137438691328.
-///   - `_nthRoot` (usado por `isPerfectPower`) usaba una aproximación
-///     logarítmica basada solo en el nº de dígitos para números de >100
-///     dígitos, perdiendo potencias perfectas grandes reales (p. ej. 10^120).
+/// Regression: large perfect numbers and perfect powers with many
+/// digits. Previously:
+///   - `isPerfectNumber` returned `false` for any number with more than
+///     10 digits (performance cap), misclassifying the 7th perfect
+///     number 137438691328.
+///   - `_nthRoot` (used by `isPerfectPower`) used a logarithmic
+///     approximation based only on the digit count for numbers of >100
+///     digits, missing real large perfect powers (e.g. 10^120).
 void main() {
   group('isPerfectNumber', () {
     for (final p in [6, 28, 496, 8128, 33550336, 8589869056]) {

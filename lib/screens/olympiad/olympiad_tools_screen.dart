@@ -3,8 +3,8 @@ import 'olympiad_strings.dart';
 import 'olympiad_tool_screens.dart';
 import 'quiz_screen.dart';
 
-/// Pantalla principal (hub) de las Herramientas de Olimpiada: una tarjeta por
-/// categoría que abre la pantalla de herramientas correspondiente.
+/// Main (hub) screen of the Olympiad Tools: one card per
+/// category that opens the corresponding tool screen.
 class OlympiadToolsScreen extends StatelessWidget {
   const OlympiadToolsScreen({super.key});
 
@@ -41,7 +41,10 @@ class OlympiadToolsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text(s.title), elevation: 0),
       body: ListView(
-        padding: const EdgeInsets.all(16),
+        // Extra bottom padding: in edge-to-edge (Android 15) the content ends
+        // up behind the system navigation bar without this inset.
+        padding: EdgeInsets.fromLTRB(
+            16, 16, 16, 16 + MediaQuery.paddingOf(context).bottom),
         children: [
           Padding(
             padding: const EdgeInsets.only(bottom: 8),

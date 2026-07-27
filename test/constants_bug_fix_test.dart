@@ -15,15 +15,15 @@ void main() {
     test('should not duplicate Pi when pressed multiple times', () {
       String piValue = math.pi.toString();
       
-      // Primera vez - debería mostrar Pi
+      // First time - should show Pi
       calculator.addPi();
       expect(calculator.display, piValue);
       
-      // Segunda vez - debería seguir mostrando Pi (no duplicar)
+      // Second time - should keep showing Pi (no duplication)
       calculator.addPi();
       expect(calculator.display, piValue);
       
-      // Tercera vez - debería seguir mostrando Pi
+      // Third time - should keep showing Pi
       calculator.addPi();
       expect(calculator.display, piValue);
     });
@@ -31,39 +31,39 @@ void main() {
     test('should not duplicate e when pressed multiple times', () {
       String eValue = math.e.toString();
       
-      // Primera vez - debería mostrar e
+      // First time - should show e
       calculator.addE();
       expect(calculator.display, eValue);
       
-      // Segunda vez - debería seguir mostrando e (no duplicar)
+      // Second time - should keep showing e (no duplication)
       calculator.addE();
       expect(calculator.display, eValue);
       
-      // Tercera vez - debería seguir mostrando e
+      // Third time - should keep showing e
       calculator.addE();
       expect(calculator.display, eValue);
     });
 
     test('should replace any number with Pi', () {
-      // Comenzar con un número diferente
+      // Start with a different number
       calculator.addDigit('1');
       calculator.addDigit('2');
       calculator.addDigit('3');
       expect(calculator.display, '123');
       
-      // Presionar Pi - debería reemplazar completamente
+      // Press Pi - should replace completely
       calculator.addPi();
       expect(calculator.display, math.pi.toString());
     });
 
     test('should replace any number with e', () {
-      // Comenzar con un número diferente
+      // Start with a different number
       calculator.addDigit('4');
       calculator.addDigit('5');
       calculator.addDigit('6');
       expect(calculator.display, '456');
       
-      // Presionar e - debería reemplazar completamente
+      // Press e - should replace completely
       calculator.addE();
       expect(calculator.display, math.e.toString());
     });
@@ -72,15 +72,15 @@ void main() {
       String piValue = math.pi.toString();
       String eValue = math.e.toString();
       
-      // Comenzar con Pi
+      // Start with Pi
       calculator.addPi();
       expect(calculator.display, piValue);
       
-      // Cambiar a e - debería reemplazar
+      // Switch to e - should replace
       calculator.addE();
       expect(calculator.display, eValue);
       
-      // Cambiar de vuelta a Pi - debería reemplazar
+      // Switch back to Pi - should replace
       calculator.addPi();
       expect(calculator.display, piValue);
     });
@@ -88,14 +88,14 @@ void main() {
     test('should work correctly after operations', () {
       String piValue = math.pi.toString();
       
-      // Hacer una operación
+      // Perform an operation
       calculator.addDigit('2');
       calculator.addOperator('+');
       calculator.addDigit('3');
       calculator.calculate();
       expect(calculator.display, '5');
       
-      // Presionar Pi - debería reemplazar el resultado
+      // Press Pi - should replace the result
       calculator.addPi();
       expect(calculator.display, piValue);
     });
@@ -104,14 +104,14 @@ void main() {
       String piValue = math.pi.toString();
       String eValue = math.e.toString();
       
-      // Estado inicial (0)
+      // Initial state (0)
       expect(calculator.display, '0');
       
-      // Presionar Pi desde 0
+      // Press Pi from 0
       calculator.addPi();
       expect(calculator.display, piValue);
       
-      // Clear y probar e desde 0
+      // Clear and try e from 0
       calculator.clear();
       expect(calculator.display, '0');
       

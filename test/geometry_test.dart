@@ -69,9 +69,9 @@ void main() {
 
   group('law of sines', () {
     test('isósceles-like check', () {
-      // triángulo con un lado 10 opuesto a 30°, buscar lado opuesto a 90°
+      // triangle with a side 10 opposite 30°, find the side opposite 90°
       final s = GeometryService.sideFromLawOfSines(10, 30, 90);
-      expect((s - 20).abs() < 1e-9, true); // 10/sin30 = 20 = lado/sin90
+      expect((s - 20).abs() < 1e-9, true); // 10/sin30 = 20 = side/sin90
     });
   });
 

@@ -9,9 +9,9 @@ void main() {
     late CalculatorService calculator;
 
     setUp(() {
-      // Inicializar binding para tests
+      // Initialize binding for tests
       TestWidgetsFlutterBinding.ensureInitialized();
-      // Configurar mock para SharedPreferences
+      // Set up mock for SharedPreferences
       SharedPreferences.setMockInitialValues({});
       
       calculator = CalculatorService();

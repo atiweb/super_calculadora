@@ -30,7 +30,7 @@ class HistoryPanel extends StatelessWidget {
           ),
           child: Column(
             children: [
-              // Header del historial
+              // History header
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 decoration: BoxDecoration(
@@ -73,7 +73,7 @@ class HistoryPanel extends StatelessWidget {
                 ),
               ),
 
-              // Lista del historial
+              // History list
               Expanded(
                 child: calculator.history.isEmpty
                     ? _buildEmptyHistoryMessage(context)
@@ -138,7 +138,7 @@ class HistoryPanel extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Expresión
+              // Expression
               Row(
                 children: [
                   Expanded(
@@ -241,7 +241,7 @@ class HistoryPanel extends StatelessWidget {
 
               const SizedBox(height: 4),
 
-              // Separador
+              // Separator
               Container(
                 height: 1,
                 color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.2),
@@ -249,7 +249,7 @@ class HistoryPanel extends StatelessWidget {
 
               const SizedBox(height: 4),
 
-              // Resultado
+              // Result
               Row(
                 children: [
                   Text(
@@ -294,7 +294,7 @@ class HistoryPanel extends StatelessWidget {
   }
 
   String _formatTimestamp(BuildContext context, OperationEntry entry) {
-    // Entradas del formato antiguo, sin marca de tiempo persistida
+    // Entries from the old format, with no persisted timestamp
     if (!entry.timestampKnown) return '—';
     final l = AppLocalizations.of(context)!;
     final now = DateTime.now();

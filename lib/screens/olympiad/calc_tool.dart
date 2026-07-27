@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import '../../models/calc_exception.dart';
 import 'olympiad_strings.dart';
 
-/// Descripción de un campo de entrada de una herramienta.
+/// Description of a tool's input field.
 class ToolField {
   final String label;
   final String? hint;
@@ -12,25 +12,25 @@ class ToolField {
   const ToolField(this.label, {this.hint, this.initial = ''});
 }
 
-/// Tarjeta de herramienta reutilizable: muestra una descripción, los campos de
-/// entrada, un botón "Calcular" y el resultado (o el error) de forma legible.
+/// Reusable tool card: shows a description, the input fields,
+/// a "Calcular" button, and the result (or the error) in a readable form.
 ///
-/// [compute] recibe los valores de los campos y devuelve el resultado como
-/// texto (puede ser multilínea). Si lanza una excepción, se muestra el mensaje
-/// como error.
+/// [compute] receives the field values and returns the result as
+/// text (may be multiline). If it throws an exception, the message is shown
+/// as an error.
 ///
-/// [visualize] es opcional: si se provee, se llama con las mismas entradas que
-/// produjeron el último resultado exitoso y su Widget se muestra bajo el texto.
+/// [visualize] is optional: if provided, it is called with the same inputs that
+/// produced the last successful result and its Widget is shown below the text.
 class CalcTool extends StatefulWidget {
   final String title;
   final String? description;
   final List<ToolField> fields;
 
-  /// Cálculo síncrono (rápido). Usar para la mayoría de herramientas.
+  /// Synchronous (fast) computation. Use for most tools.
   final String Function(List<String> inputs)? compute;
 
-  /// Cálculo asíncrono (p. ej. alta precisión en un isolate). Si se provee,
-  /// el botón muestra un indicador de progreso y NO se bloquea la UI.
+  /// Asynchronous computation (e.g. high precision in an isolate). If provided,
+  /// the button shows a progress indicator and the UI is NOT blocked.
   final Future<String> Function(List<String> inputs)? computeAsync;
 
   final Widget? Function(BuildContext context, List<String> inputs)? visualize;
@@ -73,7 +73,7 @@ class _CalcToolState extends State<CalcTool> {
     super.dispose();
   }
 
-  /// Traduce una excepción a texto legible (CalcException por código, etc.).
+  /// Translates an exception into readable text (CalcException by code, etc.).
   String _translate(Object e, OlympiadStrings s) {
     if (e is CalcException) return s.errorText(e);
     if (e is FormatException) return e.message;
@@ -85,7 +85,7 @@ class _CalcToolState extends State<CalcTool> {
     final s = OlympiadStrings.of(context);
     final inputs = _controllers.map((c) => c.text.trim()).toList();
 
-    // Ruta asíncrona (alta precisión en isolate): muestra progreso, sin congelar.
+    // Async path (high precision in isolate): shows progress, without freezing.
     if (widget.computeAsync != null) {
       setState(() {
         _busy = true;
@@ -113,7 +113,7 @@ class _CalcToolState extends State<CalcTool> {
       return;
     }
 
-    // Ruta síncrona (rápida).
+    // Sync path (fast).
     setState(() {
       try {
         _result = widget.compute!(inputs);

@@ -8,10 +8,10 @@ import 'package:super_calculadora/services/calculator_service.dart';
 import 'package:super_calculadora/screens/calculator_screen.dart';
 import 'package:super_calculadora/widgets/calculator_keyboard.dart';
 
-/// Regresión del feedback de un tester: al teclear números rápido, los toques
-/// se interpretaban como arrastre horizontal del PageView de pestañas y la app
-/// saltaba de pestaña sola. La corrección deshabilita el swipe del PageView
-/// (las pestañas solo cambian con los botones), así que su `physics` debe ser
+/// Regression from a tester's feedback: when typing numbers quickly, the taps
+/// were interpreted as a horizontal drag of the tab PageView and the app
+/// jumped tabs on its own. The fix disables the PageView's swipe
+/// (tabs only change via the buttons), so its `physics` must be
 /// NeverScrollableScrollPhysics.
 Widget _wrap(Widget child) => ChangeNotifierProvider(
       create: (_) => CalculatorService(),
@@ -40,11 +40,11 @@ void main() {
     await tester.pumpWidget(_wrap(const CalculatorScreen()));
     await tester.pumpAndSettle();
 
-    // Arranca en el teclado de la calculadora.
+    // Starts on the calculator keyboard.
     expect(find.byType(CalculatorKeyboard), findsOneWidget);
 
-    // El swipe debe estar deshabilitado para que teclear rápido no cambie de
-    // pestaña; las pestañas solo cambian mediante los botones.
+    // Swipe must be disabled so that fast typing doesn't switch
+    // tabs; tabs only change via the buttons.
     final pageView = tester.widget<PageView>(find.byType(PageView));
     expect(pageView.physics, isA<NeverScrollableScrollPhysics>());
   });

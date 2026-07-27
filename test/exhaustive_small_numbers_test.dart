@@ -34,18 +34,18 @@ void main() {
 
     test('GCD and LCM neighbours for 2..100', () async {
       for (int n = 2; n <= 100; n++) {
-        // gcdFunction usa sistema pendiente variable: presionar función otra vez ejecuta
+        // gcdFunction uses the variable pending system: pressing the function again executes
         calc.setDisplay(n.toString());
         calc.gcdFunction();
         calc.addDigit('${n - 1}');
-        calc.gcdFunction(); // agrega param y ejecuta
-        // GCD(n, n-1) siempre es 1
+        calc.gcdFunction(); // adds param and executes
+        // GCD(n, n-1) is always 1
         expect(calc.display, '1');
 
         calc.setDisplay(n.toString());
         calc.lcmFunction();
         calc.addDigit('2');
-        calc.lcmFunction(); // agrega param y ejecuta
+        calc.lcmFunction(); // adds param and executes
         expect(BigInt.parse(calc.display) > BigInt.zero, isTrue);
       }
     });

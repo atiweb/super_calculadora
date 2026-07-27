@@ -1,10 +1,10 @@
 import 'package:flutter/widgets.dart';
 import '../../models/calc_exception.dart';
 
-/// Textos bilingües (ES/EN) del módulo de Herramientas de Olimpiada.
+/// Bilingual (ES/EN) texts for the Olympiad Tools module.
 ///
-/// Se mantienen co-localizados con la funcionalidad (en lugar de en los .arb
-/// compartidos) porque son un conjunto grande y específico de este módulo.
+/// They are kept co-located with the functionality (instead of in the shared
+/// .arb files) because they are a large set specific to this module.
 class OlympiadStrings {
   final bool es;
   const OlympiadStrings(this.es);
@@ -26,7 +26,7 @@ class OlympiadStrings {
   String get result => pick('Resultado', 'Result');
   String get errorPrefix => pick('Error', 'Error');
 
-  // Categorías
+  // Categories
   String get catFractions => pick('Fracciones', 'Fractions');
   String get catFractionsSub =>
       pick('Aritmética racional exacta', 'Exact rational arithmetic');
@@ -74,7 +74,7 @@ class OlympiadStrings {
   String quizScore(int correct, int total) =>
       pick('Puntaje: $correct / $total', 'Score: $correct / $total');
 
-  /// Traduce una [CalcException] al idioma activo.
+  /// Translates a [CalcException] into the active language.
   String errorText(CalcException e) {
     final v = e.arg('value');
     final k = e.arg('k');

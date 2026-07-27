@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/theme_mode.dart' as app_theme;
 import '../services/settings_service.dart';
 
-/// Provider para manejar el estado del tema de la aplicación
+/// Provider to manage the application theme state
 class ThemeProvider extends ChangeNotifier {
   app_theme.ThemeMode _currentTheme = app_theme.ThemeMode.system;
   bool _useScientificNotation = false;
@@ -10,10 +10,10 @@ class ThemeProvider extends ChangeNotifier {
 
   app_theme.ThemeMode get currentTheme => _currentTheme;
   bool get useScientificNotation => _useScientificNotation;
-  /// Retorna el locale seleccionado, o null para seguir el sistema
+  /// Returns the selected locale, or null to follow the system
   Locale? get locale => _locale;
 
-  /// Inicializa el provider con el tema guardado
+  /// Initializes the provider with the saved theme
   void init() {
     _currentTheme = SettingsService.getThemeMode();
     _useScientificNotation = SettingsService.getUseScientificNotation();
@@ -24,21 +24,21 @@ class ThemeProvider extends ChangeNotifier {
     notifyListeners();
   }
   
-  /// Cambia el tema y lo guarda en las preferencias
+  /// Changes the theme and saves it in preferences
   Future<void> setTheme(app_theme.ThemeMode theme) async {
     _currentTheme = theme;
     await SettingsService.setThemeMode(theme);
     notifyListeners();
   }
   
-  /// Cambia la configuración de notación científica
+  /// Changes the scientific notation setting
   Future<void> setUseScientificNotation(bool value) async {
     _useScientificNotation = value;
     await SettingsService.setUseScientificNotation(value);
     notifyListeners();
   }
 
-  /// Cambia el idioma de la aplicación (cadena vacía = automático del sistema)
+  /// Changes the application language (empty string = follow the system)
   Future<void> setLocale(String localeCode) async {
     if (localeCode.isEmpty) {
       _locale = null;
@@ -49,7 +49,7 @@ class ThemeProvider extends ChangeNotifier {
     notifyListeners();
   }
   
-  /// Convierte el tema de la app al ThemeMode de Flutter
+  /// Converts the app theme to Flutter's ThemeMode
   ThemeMode get flutterThemeMode {
     switch (_currentTheme) {
       case app_theme.ThemeMode.light:

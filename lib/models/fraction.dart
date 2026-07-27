@@ -1,25 +1,25 @@
 import 'calc_exception.dart';
 
-/// Número racional exacto p/q usando aritmética de precisión arbitraria.
+/// Exact rational number p/q using arbitrary-precision arithmetic.
 ///
-/// La matemática de olimpiada es exacta: una respuesta es `22/7`, no
-/// `3.142857…`. Esta clase mantiene siempre la forma canónica:
-///   - denominador estrictamente positivo,
-///   - mcd(|numerador|, denominador) == 1,
-///   - el cero se representa como 0/1.
+/// Olympiad math is exact: an answer is `22/7`, not
+/// `3.142857…`. This class always maintains the canonical form:
+///   - strictly positive denominator,
+///   - gcd(|numerator|, denominator) == 1,
+///   - zero is represented as 0/1.
 class Fraction implements Comparable<Fraction> {
   final BigInt numerator;
   final BigInt denominator;
 
   const Fraction._(this.numerator, this.denominator);
 
-  /// Constructor principal: reduce y canoniza el signo.
+  /// Main constructor: reduces and canonicalizes the sign.
   factory Fraction(BigInt numerator, BigInt denominator) {
     if (denominator == BigInt.zero) {
       throw CalcException(CalcError.zeroDenominator);
     }
 
-    // Mover el signo al numerador.
+    // Move the sign to the numerator.
     if (denominator.isNegative) {
       numerator = -numerator;
       denominator = -denominator;
@@ -38,7 +38,7 @@ class Fraction implements Comparable<Fraction> {
 
   factory Fraction.fromBigInt(BigInt value) => Fraction._(value, BigInt.one);
 
-  /// Parsea "3/4", "-3/4", "5", o un decimal "0.25".
+  /// Parses "3/4", "-3/4", "5", or a decimal "0.25".
   factory Fraction.parse(String input) {
     final s = input.trim();
     if (s.isEmpty) {
@@ -66,16 +66,16 @@ class Fraction implements Comparable<Fraction> {
     return Fraction.fromBigInt(n);
   }
 
-  /// Convierte un decimal exacto ("0.25", "-3.14") a fracción.
+  /// Converts an exact decimal ("0.25", "-3.14") to a fraction.
   factory Fraction.fromDecimalString(String input) {
     final s = input.trim();
     final bool negative = s.startsWith('-');
     final String body =
         (negative || s.startsWith('+')) ? s.substring(1) : s;
     final parts = body.split('.');
-    // Tras extraer el signo inicial solo se admiten dígitos (BigInt.parse
-    // aceptaría signos incrustados como "5.-5" y corrompería el valor) y
-    // debe haber al menos un dígito ("." no es un número).
+    // After stripping the leading sign only digits are allowed (BigInt.parse
+    // would accept embedded signs like "5.-5" and corrupt the value) and
+    // there must be at least one digit ("." is not a number).
     final RegExp digitsOnly = RegExp(r'^[0-9]*$');
     if (parts.length > 2 ||
         parts.any((p) => !digitsOnly.hasMatch(p)) ||
@@ -100,14 +100,14 @@ class Fraction implements Comparable<Fraction> {
   static final Fraction zero = Fraction._(BigInt.zero, BigInt.one);
   static final Fraction one = Fraction._(BigInt.one, BigInt.one);
 
-  // ── Propiedades ──────────────────────────────────────────────────────────
+  // ── Properties ───────────────────────────────────────────────────────────
 
   bool get isZero => numerator == BigInt.zero;
   bool get isNegative => numerator.isNegative;
   bool get isPositive => numerator > BigInt.zero;
   bool get isInteger => denominator == BigInt.one;
 
-  // ── Operadores aritméticos ───────────────────────────────────────────────
+  // ── Arithmetic operators ─────────────────────────────────────────────────
 
   Fraction operator +(Fraction other) => Fraction(
         numerator * other.denominator + other.numerator * denominator,
@@ -131,7 +131,7 @@ class Fraction implements Comparable<Fraction> {
 
   Fraction operator -() => Fraction._(-numerator, denominator);
 
-  /// Potencia entera (admite exponente negativo).
+  /// Integer power (supports negative exponent).
   Fraction pow(int exponent) {
     if (exponent == 0) return one;
     if (exponent < 0) {
@@ -151,30 +151,30 @@ class Fraction implements Comparable<Fraction> {
     return Fraction(denominator, numerator);
   }
 
-  /// Mediant (a/b ⊕ c/d = (a+c)/(b+d)). Útil para Stern-Brocot / Farey.
+  /// Mediant (a/b ⊕ c/d = (a+c)/(b+d)). Useful for Stern-Brocot / Farey.
   Fraction mediant(Fraction other) => Fraction(
         numerator + other.numerator,
         denominator + other.denominator,
       );
 
-  // ── Redondeos a entero ───────────────────────────────────────────────────
+  // ── Rounding to integer ──────────────────────────────────────────────────
 
-  /// Mayor entero ≤ valor.
+  /// Largest integer ≤ value.
   BigInt floor() => _floorDiv(numerator, denominator);
 
-  /// Menor entero ≥ valor.
+  /// Smallest integer ≥ value.
   BigInt ceil() => -_floorDiv(-numerator, denominator);
 
-  /// Redondeo al entero más cercano (mitades hacia +∞).
+  /// Rounding to the nearest integer (halves toward +∞).
   BigInt round() => _floorDiv(
         numerator * BigInt.two + denominator,
         denominator * BigInt.two,
       );
 
-  /// Parte entera truncada hacia cero.
+  /// Integer part truncated toward zero.
   BigInt truncate() => numerator ~/ denominator;
 
-  // ── Comparación ──────────────────────────────────────────────────────────
+  // ── Comparison ───────────────────────────────────────────────────────────
 
   @override
   int compareTo(Fraction other) =>
@@ -194,19 +194,19 @@ class Fraction implements Comparable<Fraction> {
   @override
   int get hashCode => Object.hash(numerator, denominator);
 
-  // ── Conversión / formato ─────────────────────────────────────────────────
+  // ── Conversion / formatting ──────────────────────────────────────────────
 
   double toDouble() => numerator / denominator;
 
-  /// "7/3", o "5" si es entero.
+  /// "7/3", or "5" if it is an integer.
   @override
   String toString() =>
       isInteger ? numerator.toString() : '$numerator/$denominator';
 
-  /// Número mixto: -7/3 → "-2 1/3"; enteros sin parte fraccionaria.
+  /// Mixed number: -7/3 → "-2 1/3"; integers without a fractional part.
   String toMixedString() {
     if (isInteger) return numerator.toString();
-    final BigInt whole = numerator ~/ denominator; // hacia cero
+    final BigInt whole = numerator ~/ denominator; // toward zero
     if (whole == BigInt.zero) return toString();
     final BigInt rem = (numerator - whole * denominator).abs();
     return '$whole $rem/$denominator';
@@ -225,16 +225,16 @@ class Fraction implements Comparable<Fraction> {
     return a;
   }
 
-  /// División con redondeo hacia abajo (floor) para divisor positivo.
+  /// Division rounding downward (floor) for a positive divisor.
   static BigInt _floorDiv(BigInt a, BigInt b) {
-    // Normalizar para que b sea positivo.
+    // Normalize so that b is positive.
     if (b.isNegative) {
       a = -a;
       b = -b;
     }
     final BigInt q = a ~/ b;
-    // En Dart, a % b es no negativo cuando b > 0; si hay resto y a es
-    // negativo, el truncamiento hacia cero quedó por encima del floor.
+    // In Dart, a % b is non-negative when b > 0; if there is a remainder and
+    // a is negative, truncation toward zero ended up above the floor.
     if (a.isNegative && a % b != BigInt.zero) {
       return q - BigInt.one;
     }

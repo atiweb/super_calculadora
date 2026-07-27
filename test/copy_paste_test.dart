@@ -68,15 +68,15 @@ void main() {
 bool _isValidNumber(String text) {
   if (text.isEmpty) return false;
   
-  // Remover espacios
+  // Remove spaces
   text = text.replaceAll(' ', '');
   
-  // Verificar si es binario
+  // Check if it is binary
   if (text.startsWith('0b')) {
     String binaryPart = text.substring(2);
     return RegExp(r'^[01]+$').hasMatch(binaryPart);
   }
   
-  // Verificar números regulares (enteros, decimales, notación científica)
+  // Check regular numbers (integers, decimals, scientific notation)
   return RegExp(r'^-?(\d+\.?\d*|\.\d+)([eE][+-]?\d+)?$').hasMatch(text);
 }

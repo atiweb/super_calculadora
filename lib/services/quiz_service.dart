@@ -2,11 +2,11 @@ import 'dart:math';
 import '../models/quiz_problem.dart';
 import 'special_functions_service.dart';
 
-/// Genera problemas de práctica de teoría de números y combinatoria, con
-/// respuesta numérica conocida. La fuente de aleatoriedad es inyectable para
-/// poder escribir pruebas deterministas.
+/// Generates number theory and combinatorics practice problems, with
+/// a known numeric answer. The randomness source is injectable so that
+/// deterministic tests can be written.
 class QuizService {
-  /// Genera un problema aleatorio. [spanish] controla el idioma del enunciado.
+  /// Generates a random problem. [spanish] controls the language of the statement.
   static QuizProblem generate({Random? rng, bool spanish = false}) {
     final r = rng ?? Random();
     final generators = <QuizProblem Function(Random, bool)>[
@@ -39,7 +39,7 @@ class QuizService {
     final a = 2 + r.nextInt(98);
     final b = 2 + r.nextInt(98);
     return QuizProblem(
-      topic: 'mcd',
+      topic: _t(es, 'mcd', 'gcd'),
       prompt: _t(es, 'Calcula mcd($a, $b)', 'Compute gcd($a, $b)'),
       answer:
           SpecialFunctionsService.gcd(BigInt.from(a), BigInt.from(b)).toString(),
@@ -84,7 +84,7 @@ class QuizService {
       s += int.parse(ch);
     }
     return QuizProblem(
-      topic: 'Σ díg',
+      topic: _t(es, 'Σ díg', 'Σ dig'),
       prompt: _t(es, 'Suma de los dígitos de $n', 'Digit sum of $n'),
       answer: s.toString(),
     );

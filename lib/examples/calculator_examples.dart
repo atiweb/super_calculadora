@@ -2,21 +2,21 @@ import 'package:super_calculadora/services/big_decimal.dart';
 import 'package:super_calculadora/services/number_analysis_service.dart';
 import 'package:flutter/foundation.dart';
 
-/// Ejemplos de uso de la Super Calculadora
+/// Usage examples for the Super Calculadora
 class SuperCalculadoraExamples {
   
-  /// Ejemplos de operaciones con números grandes
+  /// Examples of operations with big numbers
   static void demonstrateBigNumbers() {
   debugPrint('=== SUPER CALCULADORA - EJEMPLOS DE NÚMEROS GRANDES ===\n');
     
-    // Ejemplo 1: Número muy grande
+    // Example 1: Very large number
     String largeNumber = '123456789012345678901234567890123456789012345678901234567890';
     BigDecimal big1 = BigDecimal.fromString(largeNumber);
   debugPrint('Número grande: $big1');
   debugPrint('Cuadrado: ${big1 * big1}');
   debugPrint('Representación binaria: ${big1.toBinary()}\n');
     
-    // Ejemplo 2: Operaciones con decimales
+    // Example 2: Operations with decimals
     BigDecimal decimal1 = BigDecimal.fromString('123.456789012345678901234567890');
     BigDecimal decimal2 = BigDecimal.fromString('987.654321098765432109876543210');
   debugPrint('Decimal 1: $decimal1');
@@ -24,25 +24,25 @@ class SuperCalculadoraExamples {
   debugPrint('Suma: ${decimal1 + decimal2}');
   debugPrint('Multiplicación: ${decimal1 * decimal2}\n');
     
-    // Ejemplo 3: Potencias grandes
+    // Example 3: Large powers
     BigDecimal base = BigDecimal.fromString('2');
     BigDecimal result = base.pow(100);
   debugPrint('2^100 = $result');
   debugPrint('Número de dígitos: ${result.toString().length}\n');
   }
   
-  /// Ejemplos de análisis de números
+  /// Number analysis examples
   static void demonstrateNumberAnalysis() {
   debugPrint('=== ANÁLISIS DE NÚMEROS ===\n');
     
-    // Números primos grandes
+    // Large prime numbers
     List<String> testNumbers = [
-      '2147483647',  // Primo de Mersenne 2^31 - 1
-      '1024',        // Potencia de 2
-      '12321',       // Palíndromo
-      '144',         // Cuadrado perfecto y Fibonacci
-      '28',          // Número perfecto
-      '153',         // Número narcisista
+      '2147483647',  // Mersenne prime 2^31 - 1
+      '1024',        // Power of 2
+      '12321',       // Palindrome
+      '144',         // Perfect square and Fibonacci
+      '28',          // Perfect number
+      '153',         // Narcissistic number
     ];
     
     for (String numStr in testNumbers) {
@@ -66,18 +66,18 @@ class SuperCalculadoraExamples {
     }
   }
   
-  /// Ejemplos de conversiones
+  /// Conversion examples
   static void demonstrateConversions() {
   debugPrint('=== CONVERSIONES ===\n');
     
-    // Binario a decimal
+    // Binary to decimal
     String binary = '1111111111111111111111111111111'; // 2^31 - 1
     BigInt fromBinary = BigInt.parse(binary, radix: 2);
   debugPrint('Binario: $binary');
   debugPrint('Decimal: $fromBinary');
   debugPrint('Hexadecimal: ${fromBinary.toRadixString(16).toUpperCase()}\n');
     
-    // Decimal a otras bases
+    // Decimal to other bases
     BigInt decimal = BigInt.parse('255');
   debugPrint('Decimal: $decimal');
   debugPrint('Binario: ${decimal.toRadixString(2)}');
@@ -85,7 +85,7 @@ class SuperCalculadoraExamples {
   debugPrint('Hexadecimal: ${decimal.toRadixString(16).toUpperCase()}\n');
   }
   
-  /// Ejemplos de factorización
+  /// Factorization examples
   static void demonstrateFactorization() {
   debugPrint('=== FACTORIZACIÓN ===\n');
     
@@ -93,7 +93,7 @@ class SuperCalculadoraExamples {
       '60',         // 2^2 × 3 × 5
       '1024',       // 2^10
       '1000000',    // 2^6 × 5^6
-      '97',         // Primo
+      '97',         // Prime
       '2310',       // 2 × 3 × 5 × 7 × 11
     ];
     
@@ -104,24 +104,24 @@ class SuperCalculadoraExamples {
   debugPrint('Número: $numStr');
   debugPrint('Factores primos: ${factors.join(' × ')}');
       
-      // Verificar que la factorización es correcta
+      // Verify that the factorization is correct
       BigInt product = factors.fold(BigInt.one, (a, b) => a * b);
   debugPrint('Verificación: $product == $number : ${product == number}');
   debugPrint('---\n');
     }
   }
   
-  /// Ejemplos de números especiales
+  /// Special numbers examples
   static void demonstrateSpecialNumbers() {
   debugPrint('=== NÚMEROS ESPECIALES ===\n');
     
-    // Números de Fibonacci
+    // Fibonacci numbers
   debugPrint('Primeros 20 números de Fibonacci:');
     List<BigInt> fibonacci = NumberAnalysisService.fibonacciSequence(BigInt.parse('10000'));
   debugPrint(fibonacci.take(20).map((f) => f.toString()).join(', '));
   debugPrint('');
     
-    // Números primos
+    // Prime numbers
   debugPrint('Primeros 10 números primos:');
     List<BigInt> primes = [];
     BigInt current = BigInt.two;
@@ -136,7 +136,7 @@ class SuperCalculadoraExamples {
   debugPrint(primes.map((p) => p.toString()).join(', '));
   debugPrint('');
     
-    // Números perfectos (son muy escasos)
+    // Perfect numbers (they are very scarce)
   debugPrint('Verificando números perfectos hasta 10000:');
     List<BigInt> perfect = [];
     
@@ -149,7 +149,7 @@ class SuperCalculadoraExamples {
   debugPrint('Números perfectos encontrados: ${perfect.map((p) => p.toString()).join(', ')}');
   debugPrint('');
     
-    // Números palindrómicos
+    // Palindromic numbers
   debugPrint('Números palindrómicos de 3 dígitos:');
     List<BigInt> palindromes = [];
     
@@ -163,18 +163,18 @@ class SuperCalculadoraExamples {
   debugPrint('');
   }
   
-  /// Ejemplos de rendimiento con números extremadamente grandes
+  /// Performance examples with extremely large numbers
   static void demonstratePerformance() {
   debugPrint('=== RENDIMIENTO CON NÚMEROS EXTREMOS ===\n');
     
-    // Número con 100 dígitos
+    // Number with 100 digits
     String huge = '1${'0' * 100}';
     BigInt hugeNumber = BigInt.parse(huge);
     
   debugPrint('Número con 101 dígitos: $hugeNumber');
   debugPrint('Cantidad de dígitos: ${hugeNumber.toString().length}');
     
-    // Verificar si es potencia de 10
+    // Check whether it is a power of 10
     Map<String, dynamic> powerInfo = NumberAnalysisService.isPerfectPower(hugeNumber);
     if (powerInfo['isPower'] == true) {
   debugPrint('Es potencia perfecta: ${powerInfo['expression']}');
@@ -185,7 +185,7 @@ class SuperCalculadoraExamples {
   debugPrint('Hexadecimal: ${hugeNumber.toRadixString(16).toUpperCase()}');
   debugPrint('');
     
-    // Operaciones con números grandes
+    // Operations with big numbers
     BigInt result = hugeNumber * hugeNumber;
   debugPrint('Cuadrado del número (dígitos): ${result.toString().length}');
     
@@ -197,7 +197,7 @@ class SuperCalculadoraExamples {
   debugPrint('50! = ${factorial.toString().substring(0, 50)}...');
   }
   
-  /// Ejecutar todos los ejemplos
+  /// Run all examples
   static void runAllExamples() {
     demonstrateBigNumbers();
     demonstrateNumberAnalysis();
@@ -212,6 +212,6 @@ class SuperCalculadoraExamples {
 }
 
 void main() {
-  // Ejecutar ejemplos si se ejecuta este archivo directamente
+  // Run the examples if this file is executed directly
   SuperCalculadoraExamples.runAllExamples();
 }

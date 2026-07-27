@@ -8,22 +8,22 @@ void main() {
     late CalculatorService calculator;
 
     setUp(() {
-      // Inicializar binding para tests
+      // Initialize binding for tests
       TestWidgetsFlutterBinding.ensureInitialized();
-      // Configurar mock para SharedPreferences
+      // Set up mock for SharedPreferences
       SharedPreferences.setMockInitialValues({});
       calculator = CalculatorService();
     });
 
     test('should add factorial operation to history', () async {
-      // Limpiar historial
+      // Clear history
       await HistoryService.clearHistory();
       
-      // Calcular factorial de 5
+      // Compute factorial of 5
       calculator.addDigit('5');
       await calculator.factorial();
       
-      // Verificar que se agregó al historial
+      // Verify it was added to the history
       final history = await HistoryService.getHistory();
       expect(history.length, 1);
       expect(history[0].expression, '5!');
@@ -31,15 +31,15 @@ void main() {
     });
 
     test('should add square root operation to history', () async {
-      // Limpiar historial
+      // Clear history
       await HistoryService.clearHistory();
       
-      // Calcular raíz cuadrada de 16
+      // Compute square root of 16
       calculator.addDigit('1');
       calculator.addDigit('6');
       await calculator.squareRoot();
       
-      // Verificar que se agregó al historial
+      // Verify it was added to the history
       final history = await HistoryService.getHistory();
       expect(history.length, 1);
       expect(history[0].expression, '√16');
@@ -47,15 +47,15 @@ void main() {
     });
 
     test('should add cube root operation to history', () async {
-      // Limpiar historial
+      // Clear history
       await HistoryService.clearHistory();
       
-      // Calcular raíz cúbica de 27
+      // Compute cube root of 27
       calculator.addDigit('2');
       calculator.addDigit('7');
       await calculator.cubeRoot();
       
-      // Verificar que se agregó al historial
+      // Verify it was added to the history
       final history = await HistoryService.getHistory();
       expect(history.length, 1);
       expect(history[0].expression, '∛27');
@@ -63,15 +63,15 @@ void main() {
     });
 
     test('should add trigonometric operations to history', () async {
-      // Limpiar historial
+      // Clear history
       await HistoryService.clearHistory();
       
-      // Calcular seno de 30°
+      // Compute sine of 30°
       calculator.addDigit('3');
       calculator.addDigit('0');
       await calculator.sin();
       
-      // Verificar que se agregó al historial
+      // Verify it was added to the history
       final history = await HistoryService.getHistory();
       expect(history.length, 1);
       expect(history[0].expression, 'sin(30°)');
@@ -79,14 +79,14 @@ void main() {
     });
 
     test('should add logarithmic operations to history', () async {
-      // Limpiar historial
+      // Clear history
       await HistoryService.clearHistory();
       
-      // Calcular logaritmo natural de e
+      // Compute natural logarithm of e
       calculator.addE();
       await calculator.ln();
       
-      // Verificar que se agregó al historial
+      // Verify it was added to the history
       final history = await HistoryService.getHistory();
       expect(history.length, 1);
       expect(history[0].expression, 'ln(2.718281828459045)');
@@ -94,14 +94,14 @@ void main() {
     });
 
     test('should add exponential operations to history', () async {
-      // Limpiar historial
+      // Clear history
       await HistoryService.clearHistory();
       
-      // Calcular e^2
+      // Compute e^2
       calculator.addDigit('2');
       await calculator.exp();
       
-      // Verificar que se agregó al historial
+      // Verify it was added to the history
       final history = await HistoryService.getHistory();
       expect(history.length, 1);
       expect(history[0].expression, 'e^2');
@@ -109,14 +109,14 @@ void main() {
     });
 
     test('should add power operations to history', () async {
-      // Limpiar historial
+      // Clear history
       await HistoryService.clearHistory();
       
-      // Calcular 2^3 usando función power
+      // Compute 2^3 using the power function
       calculator.addDigit('2');
       await calculator.power('3');
       
-      // Verificar que se agregó al historial
+      // Verify it was added to the history
       final history = await HistoryService.getHistory();
       expect(history.length, 1);
       expect(history[0].expression, '2^3');
@@ -124,15 +124,15 @@ void main() {
     });
 
     test('should add binary conversion operations to history', () async {
-      // Limpiar historial
+      // Clear history
       await HistoryService.clearHistory();
       
-      // Convertir 10 a binario
+      // Convert 10 to binary
       calculator.addDigit('1');
       calculator.addDigit('0');
       await calculator.toBinary();
       
-      // Verificar que se agregó al historial
+      // Verify it was added to the history
       final history = await HistoryService.getHistory();
       expect(history.length, 1);
       expect(history[0].expression, '10 → BIN');
@@ -140,10 +140,10 @@ void main() {
     });
 
     test('should add multiple direct operations to history', () async {
-      // Limpiar historial
+      // Clear history
       await HistoryService.clearHistory();
       
-      // Realizar múltiples operaciones directas
+      // Perform multiple direct operations
       calculator.addDigit('5');
       await calculator.factorial();
       
@@ -157,11 +157,11 @@ void main() {
       calculator.addDigit('0');
       await calculator.sin();
       
-      // Verificar que todas se agregaron al historial
+      // Verify all of them were added to the history
       final history = await HistoryService.getHistory();
       expect(history.length, 3);
       
-      // Verificar que están en orden (más reciente primero)
+      // Verify they are in order (most recent first)
       expect(history[0].expression, 'sin(90°)');
       expect(history[0].result, '1');
       expect(history[1].expression, '√16');
@@ -171,17 +171,17 @@ void main() {
     });
 
     test('should handle history limits for direct operations', () async {
-      // Limpiar historial
+      // Clear history
       await HistoryService.clearHistory();
       
-      // Agregar más de 100 operaciones directas
+      // Add more than 100 direct operations
       for (int i = 0; i < 105; i++) {
         calculator.clear();
         calculator.addDigit('${i % 10}');
         await calculator.factorial();
       }
       
-      // Verificar que el historial se mantiene dentro del límite
+      // Verify the history stays within the limit
       final history = await HistoryService.getHistory();
       expect(history.length, 100);
     });

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-/// Enum para los modos de tema de la aplicación
+/// Enum for the application theme modes
 enum ThemeMode {
   light,
   dark,
   system,
 }
 
-/// Extensión para convertir el enum a string y viceversa
+/// Extension to convert the enum to string and vice versa
 extension ThemeModeExtension on ThemeMode {
   String get name {
     switch (this) {

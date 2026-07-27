@@ -4,20 +4,20 @@ import 'package:super_calculadora/services/settings_service.dart';
 void main() {
   group('Scientific Notation Settings Tests', () {
     test('SettingsService should return correct scientific notation preference', () {
-      // Verificar que la configuración se puede leer
+      // Verify the setting can be read
       bool useScientific = SettingsService.getUseScientificNotation();
       
-      // La configuración debería ser un booleano
+      // The setting should be a boolean
       expect(useScientific, isA<bool>());
       
       print('Configuración actual de notación científica: $useScientific');
     });
     
     test('Scientific notation should be disabled by default', () {
-      // Por defecto, la notación científica debería estar deshabilitada
+      // By default, scientific notation should be disabled
       bool useScientific = SettingsService.getUseScientificNotation();
       
-      // Según el reporte del usuario, está marcado como NO usar notación científica
+      // Per the user's report, it is set to NOT use scientific notation
       expect(useScientific, isFalse);
     });
   });

@@ -1,22 +1,22 @@
 import 'dart:math' as math;
 import '../utils/app_locale.dart';
 
-/// Clase personalizada para manejar números decimales de precisión arbitraria
-/// Simula 1024 bits enteros + 64 bits decimales
+/// Custom class for handling arbitrary-precision decimal numbers
+/// Simulates 1024 integer bits + 64 decimal bits
 class BigDecimal {
   final BigInt _integerPart;
   final BigInt _fractionalPart;
-  final int _scale; // Número de dígitos decimales
+  final int _scale; // Number of decimal digits
 
-  static const int maxDecimalPlaces = 20; // Simula 64 bits decimales
+  static const int maxDecimalPlaces = 20; // Simulates 64 decimal bits
 
   BigDecimal._(this._integerPart, this._fractionalPart, this._scale);
 
-  /// Constructor desde string. Acepta notación científica ("1e+25",
-  /// "3.16e-7") expandiéndola a forma plana. Lanza [FormatException] si el
-  /// texto no es un número: degradar en silencio a 0 (comportamiento
-  /// anterior) corrompía raíces, potencias y el formateo de resultados
-  /// grandes, porque `double.toString()` emite exponente desde 1e21.
+  /// Constructor from string. Accepts scientific notation ("1e+25",
+  /// "3.16e-7"), expanding it to plain form. Throws [FormatException] if the
+  /// text is not a number: silently degrading to 0 (the previous
+  /// behavior) corrupted roots, powers and the formatting of large
+  /// results, because `double.toString()` emits an exponent from 1e21.
   factory BigDecimal.fromString(String value) {
     if (value.isEmpty) {
       return BigDecimal.zero;
@@ -24,7 +24,7 @@ class BigDecimal {
 
     value = value.trim();
 
-    // Expandir notación científica antes de trocear.
+    // Expand scientific notation before splitting.
     final Match? expMatch =
         RegExp(r'^([+-]?[0-9]*\.?[0-9]+)[eE]([+-]?[0-9]+)$').firstMatch(value);
     if (expMatch != null) {
@@ -32,13 +32,13 @@ class BigDecimal {
           expMatch.group(1)!, int.parse(expMatch.group(2)!));
     }
 
-    // Manejar signo
+    // Handle sign
     bool isNegative = value.startsWith('-');
     if (isNegative || value.startsWith('+')) {
       value = value.substring(1);
     }
 
-    // Dividir en parte entera y decimal
+    // Split into integer and decimal parts
     List<String> parts = value.split('.');
     final RegExp digitsOnly = RegExp(r'^[0-9]*$');
     if (parts.length > 2 ||
@@ -54,7 +54,7 @@ class BigDecimal {
 
     if (parts.length > 1 && parts[1].isNotEmpty) {
       String decimalStr = parts[1];
-      // Limitar a maxDecimalPlaces dígitos decimales
+      // Limit to maxDecimalPlaces decimal digits
       if (decimalStr.length > maxDecimalPlaces) {
         decimalStr = decimalStr.substring(0, maxDecimalPlaces);
       }
@@ -73,7 +73,7 @@ class BigDecimal {
     return BigDecimal._(integerPart, fractionalPart, scale);
   }
 
-  /// Expande "mantisa × 10^exponente" a un literal decimal plano.
+  /// Expands "mantissa × 10^exponent" to a plain decimal literal.
   static String _expandScientific(String mantissa, int exponent) {
     final bool neg = mantissa.startsWith('-');
     if (neg || mantissa.startsWith('+')) {
@@ -81,7 +81,7 @@ class BigDecimal {
     }
     final int dot = mantissa.indexOf('.');
     final String digits = mantissa.replaceAll('.', '');
-    // Posición del punto decimal dentro de `digits` tras aplicar el exponente
+    // Position of the decimal point within `digits` after applying the exponent
     int pointPos = (dot == -1 ? mantissa.length : dot) + exponent;
 
     String result;
@@ -96,33 +96,33 @@ class BigDecimal {
     return neg ? '-$result' : result;
   }
 
-  /// Constructor desde BigInt
+  /// Constructor from BigInt
   factory BigDecimal.fromBigInt(BigInt value) {
     return BigDecimal._(value, BigInt.zero, 0);
   }
 
-  /// Constructor desde int
+  /// Constructor from int
   factory BigDecimal.fromInt(int value) {
     return BigDecimal._(BigInt.from(value), BigInt.zero, 0);
   }
 
-  /// Constructor desde double
+  /// Constructor from double
   factory BigDecimal.fromDouble(double value) {
     return BigDecimal.fromString(value.toString());
   }
 
-  /// Construye un BigDecimal a partir de un valor entero escalado (total)
-  /// y su escala, garantizando que la parte entera y la parte fraccionaria
-  /// compartan el mismo signo que el valor real.
+  /// Builds a BigDecimal from a scaled integer value (total)
+  /// and its scale, guaranteeing that the integer part and the fractional
+  /// part share the same sign as the actual value.
   ///
-  /// Usa truncamiento hacia cero (`~/`) y `remainder` (cuyo signo coincide con
-  /// el del dividendo) para que la invariante
+  /// Uses truncation toward zero (`~/`) and `remainder` (whose sign matches
+  /// the dividend's) so that the invariant
   ///   total = integerPart * 10^scale + fractionalPart
-  /// se cumpla con signos consistentes. Esto evita estados como
-  /// (integerPart > 0, fractionalPart < 0) que rompen `toString`.
+  /// holds with consistent signs. This avoids states like
+  /// (integerPart > 0, fractionalPart < 0) that break `toString`.
   factory BigDecimal._fromTotal(BigInt total, int scale) {
     if (scale <= 0) {
-      // El valor es un entero (posiblemente reescalado por 10^(-scale)).
+      // The value is an integer (possibly rescaled by 10^(-scale)).
       if (scale < 0) {
         total = total * BigInt.from(10).pow(-scale);
       }
@@ -130,9 +130,9 @@ class BigDecimal {
     }
 
     final BigInt scaleMultiplier = BigInt.from(10).pow(scale);
-    final BigInt integerPart = total ~/ scaleMultiplier; // trunca hacia cero
+    final BigInt integerPart = total ~/ scaleMultiplier; // truncates toward zero
     final BigInt fractionalPart =
-        total.remainder(scaleMultiplier); // signo = signo de total
+        total.remainder(scaleMultiplier); // sign = sign of total
     return BigDecimal._(integerPart, fractionalPart, scale);
   }
 
@@ -142,29 +142,29 @@ class BigDecimal {
   /// One constant
   static final BigDecimal one = BigDecimal._(BigInt.one, BigInt.zero, 0);
 
-  /// Getter para parte entera
+  /// Getter for the integer part
   BigInt get integerPart => _integerPart;
 
-  /// Getter para parte decimal
+  /// Getter for the decimal part
   BigInt get fractionalPart => _fractionalPart;
 
-  /// Getter para escala
+  /// Getter for the scale
   int get scale => _scale;
 
-  /// Verifica si es cero
+  /// Checks whether it is zero
   bool get isZero => _integerPart == BigInt.zero && _fractionalPart == BigInt.zero;
 
-  /// Verifica si es negativo
+  /// Checks whether it is negative
   bool get isNegative => _integerPart < BigInt.zero || (_integerPart == BigInt.zero && _fractionalPart < BigInt.zero);
 
-  /// Verifica si es positivo
+  /// Checks whether it is positive
   bool get isPositive => !isNegative && !isZero;
 
-  /// Suma
+  /// Addition
   BigDecimal operator +(BigDecimal other) {
-    // Normalizar ambos operandos a la misma escala y sumar como enteros
-    // escalados. La re-canonicalización (vía _fromTotal) garantiza signos
-    // consistentes incluso cuando la suma cruza el cero (p. ej. 1.0 + (-0.5)).
+    // Normalize both operands to the same scale and add as scaled
+    // integers. Re-canonicalization (via _fromTotal) guarantees consistent
+    // signs even when the sum crosses zero (e.g. 1.0 + (-0.5)).
     int maxScale = math.max(_scale, other._scale);
 
     BigInt totalThis =
@@ -175,35 +175,35 @@ class BigDecimal {
     return BigDecimal._fromTotal(totalThis + totalOther, maxScale);
   }
 
-  /// Resta
+  /// Subtraction
   BigDecimal operator -(BigDecimal other) {
     return this + (-other);
   }
 
-  /// Negación
+  /// Negation
   BigDecimal operator -() {
     return BigDecimal._(-_integerPart, -_fractionalPart, _scale);
   }
 
-  /// Multiplicación
+  /// Multiplication
   BigDecimal operator *(BigDecimal other) {
     // (a · 10^sa) · (b · 10^sb) = (a·b) · 10^(sa+sb)
     BigInt result = _toTotalDecimal() * other._toTotalDecimal();
     return BigDecimal._fromTotal(result, _scale + other._scale);
   }
 
-  /// División
+  /// Division
   BigDecimal operator /(BigDecimal other) {
     if (other.isZero) {
       throw ArgumentError(trLocale('División por cero', 'Division by zero'));
     }
 
-  // Convertir a forma decimal completa con precisión extra.
-  // Para preservar suficientes decimales independientemente de la escala del denominador,
-  // multiplicamos el numerador por 10^(extraPrecision + other._scale).
-  // Luego configuramos la escala final a (extraPrecision + _scale).
-  // Así, el valor representado será: floor((A * 10^(p + sb)) / B) / 10^(p + sa)
-  // que equivale a (A/B) * 10^(sb - sa), es decir, a / b.
+  // Convert to full decimal form with extra precision.
+  // To preserve enough decimals regardless of the denominator's scale,
+  // we multiply the numerator by 10^(extraPrecision + other._scale).
+  // Then we set the final scale to (extraPrecision + _scale).
+  // Thus, the represented value will be: floor((A * 10^(p + sb)) / B) / 10^(p + sa)
+  // which is equivalent to (A/B) * 10^(sb - sa), that is, a / b.
   int extraPrecision = maxDecimalPlaces;
   final int p = extraPrecision;
   final int sa = _scale;
@@ -213,17 +213,17 @@ class BigDecimal {
   BigInt B = other._toTotalDecimal();
 
   BigInt scaledNumerator = A * BigInt.from(10).pow(p + sb);
-  BigInt result = scaledNumerator ~/ B; // truncamiento intencional
+  BigInt result = scaledNumerator ~/ B; // intentional truncation
 
-  // La escala final se basa en la escala del numerador + precisión extra
+  // The final scale is based on the numerator's scale + extra precision
   int newScale = p + sa;
 
-    // _fromTotal maneja la re-canonicalización (signos consistentes) y el
-    // caso de escala negativa.
+    // _fromTotal handles re-canonicalization (consistent signs) and the
+    // negative-scale case.
     return BigDecimal._fromTotal(result, newScale);
   }
 
-  /// Potencia
+  /// Power
   BigDecimal pow(int exponent) {
     if (exponent == 0) return BigDecimal.one;
     if (exponent == 1) return this;
@@ -243,11 +243,11 @@ class BigDecimal {
     return result;
   }
 
-  /// Raíz cuadrada, exacta a [maxDecimalPlaces] decimales (truncada).
+  /// Square root, exact to [maxDecimalPlaces] decimals (truncated).
   ///
-  /// Trabaja sobre enteros: √(t/10^s) = ⌊√(t·10^(2p−s))⌋ / 10^p. La versión
-  /// anterior pasaba por `double.toString()`, cuya notación científica
-  /// (≥ 1e21) corrompía el resultado (√10^44 devolvía 0).
+  /// Works on integers: √(t/10^s) = ⌊√(t·10^(2p−s))⌋ / 10^p. The previous
+  /// version went through `double.toString()`, whose scientific notation
+  /// (≥ 1e21) corrupted the result (√10^44 returned 0).
   BigDecimal sqrt() {
     if (isNegative) {
       throw ArgumentError(trLocale('Raíz cuadrada de número negativo', 'Square root of a negative number'));
@@ -256,8 +256,8 @@ class BigDecimal {
     if (this == BigDecimal.one) return BigDecimal.one;
 
     const int p = maxDecimalPlaces;
-    // La escala interna puede superar p (p. ej. tras dividir); el desfase
-    // negativo se trunca, lo que solo descarta decimales más allá de 2p.
+    // The internal scale can exceed p (e.g. after dividing); the negative
+    // offset is truncated, which only discards decimals beyond 2p.
     final int shift = 2 * p - _scale;
     final BigInt scaled = shift >= 0
         ? _toTotalDecimal() * BigInt.from(10).pow(shift)
@@ -265,8 +265,8 @@ class BigDecimal {
     return BigDecimal._fromTotal(_sqrtBigInt(scaled), p);
   }
 
-  /// ⌊√n⌋ por Newton entero con estimación inicial 2^⌈bits/2⌉ (≥ √n, decrece
-  /// monótonamente hasta la raíz).
+  /// ⌊√n⌋ by integer Newton with initial estimate 2^⌈bits/2⌉ (≥ √n, decreases
+  /// monotonically down to the root).
   static BigInt _sqrtBigInt(BigInt n) {
     if (n < BigInt.two) return n;
     BigInt x = BigInt.one << ((n.bitLength + 1) >> 1);
@@ -277,11 +277,11 @@ class BigDecimal {
     }
   }
 
-  /// Raíz cúbica, exacta a [maxDecimalPlaces] decimales (truncada).
-  /// ∛(t/10^s) = ⌊∛(t·10^(3p−s))⌋ / 10^p, todo en enteros.
+  /// Cube root, exact to [maxDecimalPlaces] decimals (truncated).
+  /// ∛(t/10^s) = ⌊∛(t·10^(3p−s))⌋ / 10^p, all in integers.
   BigDecimal cbrt() {
     if (isZero) return BigDecimal.zero;
-    // Manejo de negativos: la raíz cúbica de negativo es negativa
+    // Handling negatives: the cube root of a negative is negative
     if (isNegative) {
       return -((-this).cbrt());
     }
@@ -294,8 +294,8 @@ class BigDecimal {
     return BigDecimal._fromTotal(_cbrtBigInt(scaled), p);
   }
 
-  /// ⌊∛n⌋ por Newton entero, con ajuste final por si la iteración se detiene
-  /// a ±1 de la raíz.
+  /// ⌊∛n⌋ by integer Newton, with a final adjustment in case the iteration
+  /// stops at ±1 from the root.
   static BigInt _cbrtBigInt(BigInt n) {
     if (n < BigInt.two) return n;
     final BigInt three = BigInt.from(3);
@@ -314,18 +314,18 @@ class BigDecimal {
     return x;
   }
 
-  /// Valor absoluto
+  /// Absolute value
   BigDecimal abs() {
     return isNegative ? -this : this;
   }
 
-  /// Comparación
+  /// Comparison
   int compareTo(BigDecimal other) {
-    // Comparar partes enteras primero
+    // Compare integer parts first
     int integerComparison = _integerPart.compareTo(other._integerPart);
     if (integerComparison != 0) return integerComparison;
     
-    // Normalizar escalas y comparar partes decimales
+    // Normalize scales and compare decimal parts
     int maxScale = math.max(_scale, other._scale);
     BigInt thisNormalizedFrac = _normalizeScale(_fractionalPart, _scale, maxScale);
     BigInt otherNormalizedFrac = _normalizeScale(other._fractionalPart, other._scale, maxScale);
@@ -333,7 +333,7 @@ class BigDecimal {
     return thisNormalizedFrac.compareTo(otherNormalizedFrac);
   }
 
-  /// Operadores de comparación
+  /// Comparison operators
   @override
   bool operator ==(Object other) {
     if (other is BigDecimal) {
@@ -350,13 +350,13 @@ class BigDecimal {
   @override
   int get hashCode => _integerPart.hashCode ^ _fractionalPart.hashCode ^ _scale.hashCode;
 
-  /// Convertir a string sin notación científica
+  /// Convert to string without scientific notation
   @override
   String toString() {
     if (isZero) return '0';
 
-    // El signo se determina con isNegative porque la parte entera puede ser 0
-    // para valores negativos pequeños (p. ej. -0.5 tiene integerPart == 0).
+    // The sign is determined with isNegative because the integer part can be 0
+    // for small negative values (e.g. -0.5 has integerPart == 0).
     final String sign = isNegative ? '-' : '';
     final String integerStr = _integerPart.abs().toString();
 
@@ -366,12 +366,12 @@ class BigDecimal {
 
     String fractionalStr = _fractionalPart.abs().toString();
 
-    // Rellenar con ceros a la izquierda si es necesario
+    // Pad with leading zeros if needed
     while (fractionalStr.length < _scale) {
       fractionalStr = '0$fractionalStr';
     }
 
-    // Remover ceros finales
+    // Remove trailing zeros
     fractionalStr = fractionalStr.replaceAll(RegExp(r'0+$'), '');
 
     if (fractionalStr.isEmpty) {
@@ -381,7 +381,7 @@ class BigDecimal {
     return '$sign$integerStr.$fractionalStr';
   }
 
-  /// Convertir a representación binaria
+  /// Convert to binary representation
   String toBinary() {
     if (isZero) return '0';
     
@@ -389,7 +389,7 @@ class BigDecimal {
     String result = isNegative ? '-$integerBinary' : integerBinary;
     
     if (_fractionalPart != BigInt.zero && _scale > 0) {
-      // Convertir parte decimal a binario (aproximación)
+      // Convert the decimal part to binary (approximation)
       double decimalValue = _fractionalPart.abs().toDouble() / math.pow(10, _scale);
       String fractionalBinary = _decimalToBinary(decimalValue);
       if (fractionalBinary.isNotEmpty) {
@@ -400,7 +400,7 @@ class BigDecimal {
     return result;
   }
 
-  /// Métodos auxiliares
+  /// Helper methods
   BigInt _normalizeScale(BigInt fractionalPart, int currentScale, int targetScale) {
     if (currentScale == targetScale) return fractionalPart;
     
@@ -420,7 +420,7 @@ class BigDecimal {
     if (decimal == 0) return '';
     
     String result = '';
-    int maxIterations = 20; // Limitar precisión
+    int maxIterations = 20; // Limit precision
     
     for (int i = 0; i < maxIterations && decimal > 0; i++) {
       decimal *= 2;
@@ -435,14 +435,14 @@ class BigDecimal {
     return result;
   }
 
-  /// Convertir a double (puede perder precisión para valores muy grandes)
+  /// Convert to double (may lose precision for very large values)
   double toDouble() {
     // Parsing from the string representation avoids precision loss that occurs
     // when _fractionalPart exceeds 2^53 and cannot round-trip through double.
     return double.parse(toString());
   }
 
-  /// Crear copia con precisión ajustada
+  /// Create a copy with adjusted precision
   BigDecimal withPrecision(int precision) {
     if (precision >= _scale) return this;
     

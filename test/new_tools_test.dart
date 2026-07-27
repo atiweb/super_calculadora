@@ -149,7 +149,7 @@ void main() {
       expect(r.min, f(2));
       expect(r.max, f(7));
       expect(r.range, f(5));
-      // varianza poblacional: ((2-4.4)²+(4-4.4)²·2+(5-4.4)²+(7-4.4)²)/5
+      // population variance: ((2-4.4)²+(4-4.4)²·2+(5-4.4)²+(7-4.4)²)/5
       // = (5.76+0.16+0.16+0.36+6.76)/5 = 13.2/5 = 66/25
       expect(r.variancePopulation, f(66, 25));
       expect(r.varianceSample, f(66, 20));
@@ -217,7 +217,7 @@ void main() {
 
   group('Cubic solver clamp regression', () {
     test('three real roots near acos boundary do not produce NaN', () {
-      // x³ − 3x = 0 → raíces −√3, 0, √3 (caso trigonométrico, q = 0)
+      // x³ − 3x = 0 → roots −√3, 0, √3 (trigonometric case, q = 0)
       final roots = PolynomialService.solveCubicReal(1, 0, -3, 0);
       expect(roots.length, 3);
       for (final r in roots) {

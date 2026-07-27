@@ -11,7 +11,7 @@ void main() {
     late CalculatorService calculator;
 
     setUp(() {
-      // Configurar mock para SharedPreferences
+      // Set up mock for SharedPreferences
       SharedPreferences.setMockInitialValues({});
       calculator = CalculatorService();
     });

@@ -21,7 +21,7 @@ class ScientificCalculatorKeyboard extends StatelessWidget {
           padding: const EdgeInsets.all(8),
           child: Column(
             children: [
-              // Fila 1: Funciones de memoria
+              // Row 1: Memory functions
               Expanded(
                 child: Row(
                   children: [
@@ -34,7 +34,7 @@ class ScientificCalculatorKeyboard extends StatelessWidget {
                 ),
               ),
               
-              // Fila 2: Funciones trigonométricas inversas y constantes
+              // Row 2: Inverse trigonometric functions and constants
               Expanded(
                 child: Row(
                   children: [
@@ -47,7 +47,7 @@ class ScientificCalculatorKeyboard extends StatelessWidget {
                 ),
               ),
               
-              // Fila 3: Funciones trigonométricas
+              // Row 3: Trigonometric functions
               Expanded(
                 child: Row(
                   children: [
@@ -60,7 +60,7 @@ class ScientificCalculatorKeyboard extends StatelessWidget {
                 ),
               ),
               
-              // Fila 4: Logaritmos y exponenciales
+              // Row 4: Logarithms and exponentials
               Expanded(
                 child: Row(
                   children: [
@@ -73,7 +73,7 @@ class ScientificCalculatorKeyboard extends StatelessWidget {
                 ),
               ),
               
-              // Fila 5: Potencias y raíces
+              // Row 5: Powers and roots
               Expanded(
                 child: Row(
                   children: [
@@ -86,7 +86,7 @@ class ScientificCalculatorKeyboard extends StatelessWidget {
                 ),
               ),
               
-              // Fila 6: Raíces y división
+              // Row 6: Roots and division
               Expanded(
                 child: Row(
                   children: [
@@ -99,7 +99,7 @@ class ScientificCalculatorKeyboard extends StatelessWidget {
                 ),
               ),
               
-              // Fila 7: Números 7-9 y multiplicación
+              // Row 7: Numbers 7-9 and multiplication
               Expanded(
                 child: Row(
                   children: [
@@ -112,7 +112,7 @@ class ScientificCalculatorKeyboard extends StatelessWidget {
                 ),
               ),
               
-              // Fila 8: Números 4-6 y resta
+              // Row 8: Numbers 4-6 and subtraction
               Expanded(
                 child: Row(
                   children: [
@@ -125,7 +125,7 @@ class ScientificCalculatorKeyboard extends StatelessWidget {
                 ),
               ),
               
-              // Fila 9: Números 1-3 y suma
+              // Row 9: Numbers 1-3 and addition
               Expanded(
                 child: Row(
                   children: [
@@ -138,14 +138,14 @@ class ScientificCalculatorKeyboard extends StatelessWidget {
                 ),
               ),
               
-              // Fila 10: Cero, punto decimal e igual
+              // Row 10: Zero, decimal point and equals
               Expanded(
                 child: Row(
                   children: [
                     _buildButton(context, '0', () => calculator.addDigit('0'), buttonType: ScientificButtonType.number, flex: 2),
                     _buildButton(context, '.', () => calculator.addDigit('.'), buttonType: ScientificButtonType.number),
                     _buildButton(context, '=', calculator.calculate, buttonType: ScientificButtonType.operator),
-                    const Expanded(child: SizedBox()), // Espacio vacío
+                    const Expanded(child: SizedBox()), // Empty space
                   ],
                 ),
               ),

@@ -15,22 +15,22 @@ import 'providers/theme_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // Android 15 (SDK 35) fuerza la vista de extremo a extremo. Activamos el
-  // modo edge-to-edge de forma explícita con la API vigente (no obsoleta).
-  // No fijamos statusBarColor/systemNavigationBarColor: en SDK 35 esos
-  // colores se ignoran y, al asignarlos, Flutter llamaría a las APIs
-  // obsoletas que reporta Google Play. El contenido respeta los insets vía
-  // SafeArea en las pantallas.
+  // Android 15 (SDK 35) enforces the edge-to-edge view. We enable
+  // edge-to-edge mode explicitly with the current (non-deprecated) API.
+  // We do not set statusBarColor/systemNavigationBarColor: on SDK 35 those
+  // colors are ignored and, if assigned, Flutter would call the deprecated
+  // APIs that Google Play flags. Content respects the insets via
+  // SafeArea in the screens.
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
 
-  // La app está diseñada para retrato (teclados densos). Bloqueamos la
-  // orientación para evitar desbordes de layout en horizontal.
+  // The app is designed for portrait (dense keypads). We lock the
+  // orientation to avoid layout overflows in landscape.
   await SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
 
-  // Atribución del paquete vendorizado `computable_reals` (Apache-2.0 + SGI +
-  // HP): registramos su licencia para que aparezca en showLicensePage, ya que
-  // al estar vendorizado Flutter no la agrega automáticamente.
+  // Attribution for the vendored `computable_reals` package (Apache-2.0 + SGI +
+  // HP): we register its license so it shows up in showLicensePage, since
+  // Flutter does not add it automatically for vendored packages.
   LicenseRegistry.addLicense(() async* {
     final license =
         await rootBundle.loadString('lib/vendor/computable_reals/LICENSE');

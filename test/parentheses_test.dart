@@ -10,7 +10,7 @@ void main() {
     test('Simple parentheses expressions should work correctly', () {
       final calculator = CalculatorService();
       
-      // Test básico: 1 + (1+1) = 3
+      // Basic test: 1 + (1+1) = 3
       String result = calculator.evaluateCompleteExpression('1 + (1+1)');
       expect(result, '3');
       
@@ -54,11 +54,11 @@ void main() {
     test('Complex expression from user example should work', () {
       final calculator = CalculatorService();
       
-      // El ejemplo específico del usuario
+      // The user's specific example
       String result = calculator.evaluateCompleteExpression('1 + (1+1)');
       expect(result, '3');
       
-      // Variaciones
+      // Variations
       result = calculator.evaluateCompleteExpression('5 + (2+3)');
       expect(result, '10');
       
@@ -69,26 +69,26 @@ void main() {
     test('Should prioritize math_expressions over BigDecimal for parentheses', () {
       final calculator = CalculatorService();
       
-      // Aunque tenga números "grandes", si tiene paréntesis debe usar math_expressions
+      // Even with "large" numbers, if it has parentheses it must use math_expressions
       String result = calculator.evaluateCompleteExpression('12345 + (67890 + 1)');
       expect(result, '80236');
       
-      // Test con decimales y paréntesis
+      // Test with decimals and parentheses
       result = calculator.evaluateCompleteExpression('1.5 + (2.5 * 3)');
-      expect(result, '9'); // Resultado es 9, no 9.0
+      expect(result, '9'); // Result is 9, not 9.0
     });
 
     test('Error cases with parentheses should be handled correctly', () {
       final calculator = CalculatorService();
       
-      // Paréntesis no balanceados
+      // Unbalanced parentheses
       String result = calculator.evaluateCompleteExpression('1 + (2 + 3');
       expect(result, startsWith('err:'));
       
       result = calculator.evaluateCompleteExpression('1 + 2 + 3)');
       expect(result, startsWith('err:'));
       
-      // Paréntesis vacíos
+      // Empty parentheses
       result = calculator.evaluateCompleteExpression('1 + ()');
       expect(result, startsWith('err:'));
     });

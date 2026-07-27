@@ -1,7 +1,7 @@
-/// Resultado de un cálculo acompañado de los pasos legibles que lo producen.
+/// Result of a computation along with the readable steps that produce it.
 ///
-/// Pensado para el modo didáctico: además del resultado final, se devuelve la
-/// secuencia de pasos para que el estudiante siga el procedimiento.
+/// Intended for the didactic mode: besides the final result, the sequence
+/// of steps is returned so the student can follow the procedure.
 class StepResult {
   final String result;
   final List<String> steps;

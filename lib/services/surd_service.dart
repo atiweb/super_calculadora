@@ -2,8 +2,8 @@ import '../models/calc_exception.dart';
 import '../models/fraction.dart';
 import '../models/surd.dart';
 
-/// Resultado de racionalizar un denominador con binomio `c + √d`:
-/// el valor queda como `rational + surd` (parte racional + parte radical).
+/// Result of rationalizing a denominator with a binomial `c + √d`:
+/// the value is left as `rational + surd` (rational part + radical part).
 class RationalizedBinomial {
   final Fraction rational;
   final Surd surd;
@@ -22,19 +22,19 @@ class RationalizedBinomial {
   }
 }
 
-/// Operaciones sobre radicales (surds) para resultados exactos.
+/// Operations on radicals (surds) for exact results.
 class SurdService {
-  /// Simplifica √n: devuelve (coeficiente, radicando) tal que
-  /// √n = coeficiente · √radicando, con radicando libre de cuadrados.
-  /// Ej: √72 → (6, 2).
+  /// Simplifies √n: returns (coefficient, radicand) such that
+  /// √n = coefficient · √radicand, with a squarefree radicand.
+  /// E.g.: √72 → (6, 2).
   static ({BigInt coefficient, BigInt radicand}) simplifySqrt(BigInt n) {
     final s = Surd.sqrt(n);
     return (coefficient: s.coefficient.numerator, radicand: s.radicand);
   }
 
-  /// Simplifica la raíz k-ésima de n: devuelve (coeficiente, radicando) tal que
-  /// ⁿ√n = coeficiente · ᵏ√radicando, extrayendo factores dᵏ.
-  /// Ej: ³√54 → (3, 2)  (54 = 27·2).
+  /// Simplifies the k-th root of n: returns (coefficient, radicand) such that
+  /// ⁿ√n = coefficient · ᵏ√radicand, extracting dᵏ factors.
+  /// E.g.: ³√54 → (3, 2)  (54 = 27·2).
   static ({BigInt coefficient, BigInt radicand}) simplifyNthRoot(
       BigInt n, int k) {
     if (k < 2) {
@@ -58,12 +58,12 @@ class SurdService {
       }
     }
 
-    // El signo (raíz de índice impar de negativo) va al coeficiente.
+    // The sign (odd-index root of a negative) goes to the coefficient.
     if (negative) outside = -outside;
     return (coefficient: outside, radicand: inside);
   }
 
-  /// Racionaliza a/√b → (a/b)·√b. Devuelve el Surd equivalente.
+  /// Rationalizes a/√b → (a/b)·√b. Returns the equivalent Surd.
   static Surd rationalizeOverSqrt(Fraction a, BigInt b) {
     if (b == BigInt.zero) {
       throw CalcException(CalcError.divisionByRootZero);
@@ -75,9 +75,9 @@ class SurdService {
     return Surd(a / Fraction.fromBigInt(b), b);
   }
 
-  /// Racionaliza a/(c + √d) multiplicando por el conjugado (c − √d):
+  /// Rationalizes a/(c + √d) by multiplying by the conjugate (c − √d):
   ///   a(c − √d) / (c² − d)
-  /// Devuelve la parte racional y la parte radical por separado.
+  /// Returns the rational part and the radical part separately.
   static RationalizedBinomial rationalizeOverBinomial(
       Fraction a, Fraction c, BigInt d) {
     if (d.isNegative) {

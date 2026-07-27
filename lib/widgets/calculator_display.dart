@@ -41,11 +41,11 @@ class _CalculatorDisplayState extends State<CalculatorDisplay> {
             crossAxisAlignment: CrossAxisAlignment.end,
             mainAxisSize: MainAxisSize.min,
             children: [
-              // Última operación (historial)
+              // Last operation (history)
               _buildLastOperationDisplay(context, calculator),
               const SizedBox(height: 2),
 
-              // Indicador de operación pendiente (2 parámetros)
+              // Pending operation indicator (2 parameters)
               if (calculator.hasPendingOperation)
                 Align(
                   alignment: Alignment.centerRight,
@@ -69,7 +69,7 @@ class _CalculatorDisplayState extends State<CalculatorDisplay> {
                   ),
                 ),
 
-              // Expresión actual
+              // Current expression
               if (calculator.expression.isNotEmpty && !calculator.hasPendingOperation)
                 Align(
                   alignment: Alignment.centerRight,
@@ -85,11 +85,11 @@ class _CalculatorDisplayState extends State<CalculatorDisplay> {
                   ),
                 ),
 
-              // Botones de control
+              // Control buttons
               const SizedBox(height: 4),
               _buildControlsRow(context, calculator),
 
-              // Display principal (altura fija pequeña para evitar overflows en tests)
+              // Main display (small fixed height to avoid overflows in tests)
               const SizedBox(height: 4),
               GestureDetector(
                 onTap: () => _copyToClipboard(context, calculator.display),
@@ -179,7 +179,7 @@ class _CalculatorDisplayState extends State<CalculatorDisplay> {
   }
 
   Widget _buildDisplayContent(BuildContext context, CalculatorService calculator) {
-    // Obtener la configuración del usuario
+    // Get the user's settings
     bool useScientificNotation = SettingsService.getUseScientificNotation();
 
     String displayText = calculator.hasError
@@ -190,9 +190,9 @@ class _CalculatorDisplayState extends State<CalculatorDisplay> {
       displayText = _formatScientificNotation(calculator.display);
     }
 
-    // Los mensajes de error son prosa: deben ajustarse en varias líneas en vez
-    // de desbordarse en una sola línea con scroll horizontal (que recorta el
-    // inicio del texto).
+    // Error messages are prose: they should wrap across multiple lines instead
+    // of overflowing on a single line with horizontal scroll (which cuts off
+    // the start of the text).
     if (calculator.hasError) {
       return _buildErrorDisplay(context, displayText);
     }
@@ -354,8 +354,8 @@ class _CalculatorDisplayState extends State<CalculatorDisplay> {
         return value.toStringAsExponential(6);
       }
       if (number.contains('.')) return number;
-      // Separar el signo: si entra en la mantisa, el resultado sale
-      // malformado y con el exponente corrido ("-99…9" → "-.99e+20").
+      // Split off the sign: if it goes into the mantissa, the result comes out
+      // malformed and with the exponent shifted ("-99…9" → "-.99e+20").
       final bool negative = number.startsWith('-');
       final String digits = negative ? number.substring(1) : number;
       final length = digits.length;

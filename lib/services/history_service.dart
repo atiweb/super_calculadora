@@ -1,7 +1,7 @@
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/operation_entry.dart';
 
-/// Servicio para gestionar el historial de operaciones
+/// Service for managing the operation history
 class HistoryService {
   static const String _historyKey = 'operation_history';
   static const int _maxHistorySize = 100;
@@ -22,7 +22,7 @@ class HistoryService {
     }
   }
 
-  /// Obtiene el historial de operaciones
+  /// Gets the operation history
   static Future<List<OperationEntry>> getHistory() async {
     final prefs = await _getPrefsOrNull();
     final historyStrings = prefs?.getStringList(_historyKey) ?? _memoryHistory;
@@ -31,19 +31,19 @@ class HistoryService {
         .map((str) => OperationEntry.fromStorageString(str))
         .toList()
         .reversed
-        .toList(); // Mostrar los más recientes primero
+        .toList(); // Show the most recent first
   }
 
-  /// Agrega una nueva operación al historial
+  /// Adds a new operation to the history
   static Future<void> addOperation(OperationEntry operation) async {
     final prefs = await _getPrefsOrNull();
     final List<String> currentHistory = List<String>.from(
         prefs?.getStringList(_historyKey) ?? _memoryHistory);
 
-    // Agregar la nueva operación al final
+    // Append the new operation at the end
     currentHistory.add(operation.toStorageString());
 
-    // Mantener solo las últimas operaciones
+    // Keep only the most recent operations
     if (currentHistory.length > _maxHistorySize) {
       currentHistory.removeRange(0, currentHistory.length - _maxHistorySize);
     }
@@ -57,7 +57,7 @@ class HistoryService {
     }
   }
 
-  /// Limpia todo el historial
+  /// Clears the entire history
   static Future<void> clearHistory() async {
     final prefs = await _getPrefsOrNull();
     if (prefs != null) {
@@ -67,7 +67,7 @@ class HistoryService {
     }
   }
 
-  /// Elimina una operación específica del historial
+  /// Removes a specific operation from the history
   static Future<void> removeOperation(OperationEntry operation) async {
     final prefs = await _getPrefsOrNull();
     final List<String> currentHistory = List<String>.from(
@@ -84,7 +84,7 @@ class HistoryService {
     }
   }
 
-  /// Obtiene el número de operaciones en el historial
+  /// Gets the number of operations in the history
   static Future<int> getHistoryCount() async {
     final prefs = await _getPrefsOrNull();
     final historyStrings = prefs?.getStringList(_historyKey) ?? _memoryHistory;

@@ -1,11 +1,11 @@
 import '../models/calc_exception.dart';
 
-/// Combinatoria adicional: filas del triángulo de Pascal y coeficientes
-/// multinomiales.
+/// Additional combinatorics: Pascal's triangle rows and multinomial
+/// coefficients.
 class CombinatoricsExtraService {
   static final BigInt _one = BigInt.one;
 
-  /// Fila n del triángulo de Pascal: [C(n,0), C(n,1), …, C(n,n)].
+  /// Row n of Pascal's triangle: [C(n,0), C(n,1), …, C(n,n)].
   static List<BigInt> pascalRow(int n) {
     if (n < 0) throw CalcException(CalcError.nNonNegative);
     final List<BigInt> row = [_one];
@@ -18,13 +18,13 @@ class CombinatoricsExtraService {
     return row;
   }
 
-  /// Triángulo de Pascal completo hasta la fila n (inclusive).
+  /// Full Pascal's triangle up to row n (inclusive).
   static List<List<BigInt>> pascalTriangle(int n) =>
       List.generate(n + 1, (i) => pascalRow(i));
 
-  /// Triángulo de Pascal módulo m hasta la fila n (inclusive), construido
-  /// aditivamente (sin números grandes). Con m = 2 aparece el patrón de
-  /// Sierpiński.
+  /// Pascal's triangle modulo m up to row n (inclusive), built
+  /// additively (no big numbers). With m = 2 the pattern of
+  /// Sierpiński appears.
   static List<List<int>> pascalTriangleMod(int n, int m) {
     if (n < 0) throw CalcException(CalcError.nNonNegative);
     if (m < 2) throw CalcException(CalcError.nGreaterThanOne);
@@ -42,7 +42,7 @@ class CombinatoricsExtraService {
     return rows;
   }
 
-  /// Coeficiente multinomial (k₁+k₂+…)! / (k₁!·k₂!·…).
+  /// Multinomial coefficient (k₁+k₂+…)! / (k₁!·k₂!·…).
   static BigInt multinomial(List<int> parts) {
     if (parts.any((k) => k < 0)) {
       throw CalcException(CalcError.partsNonNegative);
@@ -52,8 +52,8 @@ class CombinatoricsExtraService {
     for (final k in parts) {
       for (int j = 1; j <= k; j++) {
         total++;
-        // Multiplicar por total y dividir por j mantiene el valor entero
-        // (es un coeficiente multinomial parcial).
+        // Multiplying by total and dividing by j keeps the value an integer
+        // (it is a partial multinomial coefficient).
         result = result * BigInt.from(total) ~/ BigInt.from(j);
       }
     }

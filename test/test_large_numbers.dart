@@ -42,7 +42,7 @@ class _TestScreenState extends State<TestScreen> {
           children: [
             ElevatedButton(
               onPressed: () {
-                // Probar con número de 17 dígitos
+                // Try with a 17-digit number
                 _calculator.loadNumber('42594539204192285');
               },
               child: Text('Probar número 17 dígitos'),
@@ -50,7 +50,7 @@ class _TestScreenState extends State<TestScreen> {
             SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
-                // Probar con número de 50 dígitos
+                // Try with a 50-digit number
                 _calculator.loadNumber('12345678901234567890123456789012345678901234567890');
               },
               child: Text('Probar número 50 dígitos'),
@@ -58,7 +58,7 @@ class _TestScreenState extends State<TestScreen> {
             SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
-                // Probar con número de 100 dígitos
+                // Try with a 100-digit number
                 _calculator.loadNumber('1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890');
               },
               child: Text('Probar número 100 dígitos'),
@@ -66,7 +66,7 @@ class _TestScreenState extends State<TestScreen> {
             SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
-                // Probar con número de 1000 dígitos
+                // Try with a 1000-digit number
                 String largeNumber = '1${'0' * 999}';
                 _calculator.loadNumber(largeNumber);
               },

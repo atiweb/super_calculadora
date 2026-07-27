@@ -2,10 +2,10 @@ import 'dart:math' as math;
 import '../utils/app_locale.dart';
 import 'package:super_calculadora/services/big_decimal.dart';
 
-/// Servicio para funciones matemáticas especiales
+/// Service for special mathematical functions
 class SpecialFunctionsService {
   
-  /// Función φ de Euler - cuenta enteros coprimos con n
+  /// Euler's φ function - counts integers coprime with n
   static BigInt eulerPhi(BigInt n) {
     if (n <= BigInt.zero) {
       throw ArgumentError(trLocale('φ(n) solo está definido para n > 0', 'φ(n) is only defined for n > 0'));
@@ -16,10 +16,10 @@ class SpecialFunctionsService {
     BigInt result = n;
     BigInt temp = n;
     
-    // Encontrar todos los factores primos y aplicar la fórmula
+    // Find all prime factors and apply the formula
     for (BigInt i = BigInt.two; i * i <= temp; i += BigInt.one) {
       if (temp % i == BigInt.zero) {
-        // i es un factor primo
+        // i is a prime factor
         while (temp % i == BigInt.zero) {
           temp ~/= i;
         }
@@ -27,7 +27,7 @@ class SpecialFunctionsService {
       }
     }
     
-    // Si temp > 1, entonces es un factor primo
+    // If temp > 1, then it is a prime factor
     if (temp > BigInt.one) {
       result = result - result ~/ temp;
     }
@@ -35,7 +35,7 @@ class SpecialFunctionsService {
     return result;
   }
   
-  /// Primorial - producto de todos los primos ≤ n
+  /// Primorial - product of all primes ≤ n
   static BigInt primorial(int n) {
     if (n < 2) return BigInt.one;
     
@@ -43,7 +43,7 @@ class SpecialFunctionsService {
     List<bool> isPrime = List.filled(n + 1, true);
     isPrime[0] = isPrime[1] = false;
     
-    // Criba de Eratóstenes
+    // Sieve of Eratosthenes
     for (int i = 2; i * i <= n; i++) {
       if (isPrime[i]) {
         for (int j = i * i; j <= n; j += i) {
@@ -52,7 +52,7 @@ class SpecialFunctionsService {
       }
     }
     
-    // Multiplicar todos los primos
+    // Multiply all the primes
     for (int i = 2; i <= n; i++) {
       if (isPrime[i]) {
         result *= BigInt.from(i);
@@ -62,7 +62,7 @@ class SpecialFunctionsService {
     return result;
   }
   
-  /// σ₀(n) - cantidad de divisores
+  /// σ₀(n) - number of divisors
   static BigInt divisorCount(BigInt n) {
     if (n <= BigInt.zero) {
       throw ArgumentError(trLocale('σ₀(n) solo está definido para n > 0', 'σ₀(n) is only defined for n > 0'));
@@ -83,13 +83,13 @@ class SpecialFunctionsService {
     }
     
     if (temp > BigInt.one) {
-      count *= BigInt.two; // temp es primo con exponente 1
+      count *= BigInt.two; // temp is prime with exponent 1
     }
     
     return count;
   }
   
-  /// σ(m,n) - suma de divisores elevados a la potencia m
+  /// σ(m,n) - sum of divisors raised to the power m
   static BigDecimal divisorSum(int m, BigInt n) {
     if (n <= BigInt.zero) {
       throw ArgumentError(trLocale('σ(m,n) solo está definido para n > 0', 'σ(m,n) is only defined for n > 0'));
@@ -112,7 +112,7 @@ class SpecialFunctionsService {
     return sum;
   }
   
-  /// Obtiene todos los divisores de n
+  /// Gets all the divisors of n
   static List<BigInt> _getDivisors(BigInt n) {
     List<BigInt> divisors = [];
     
@@ -129,7 +129,7 @@ class SpecialFunctionsService {
     return divisors;
   }
   
-  /// MCD de dos números usando algoritmo de Euclides
+  /// GCD of two numbers using the Euclidean algorithm
   static BigInt gcd(BigInt a, BigInt b) {
     a = a.abs();
     b = b.abs();
@@ -143,7 +143,7 @@ class SpecialFunctionsService {
     return a;
   }
   
-  /// MCD de múltiples números
+  /// GCD of multiple numbers
   static BigInt gcdMultiple(List<BigInt> numbers) {
     if (numbers.isEmpty) {
       throw ArgumentError(trLocale('La lista no puede estar vacía', 'The list cannot be empty'));
@@ -157,7 +157,7 @@ class SpecialFunctionsService {
     return result;
   }
   
-  /// MCM de dos números
+  /// LCM of two numbers
   static BigInt lcm(BigInt a, BigInt b) {
     if (a == BigInt.zero || b == BigInt.zero) {
       return BigInt.zero;
@@ -166,7 +166,7 @@ class SpecialFunctionsService {
     return (a.abs() * b.abs()) ~/ gcd(a, b);
   }
   
-  /// MCM de múltiples números
+  /// LCM of multiple numbers
   static BigInt lcmMultiple(List<BigInt> numbers) {
     if (numbers.isEmpty) {
       throw ArgumentError(trLocale('La lista no puede estar vacía', 'The list cannot be empty'));
@@ -180,7 +180,7 @@ class SpecialFunctionsService {
     return result;
   }
   
-  /// Función piso
+  /// Floor function
   static BigInt floor(BigDecimal x) {
     // For negative numbers with a fractional part, the floor is one less
     // than the integer part (e.g. floor(-2.3) = -3, not -2).
@@ -190,7 +190,7 @@ class SpecialFunctionsService {
     return x.integerPart;
   }
   
-  /// Función techo
+  /// Ceiling function
   static BigInt ceiling(BigDecimal x) {
     if (x.fractionalPart == BigInt.zero) {
       return x.integerPart;
@@ -201,7 +201,7 @@ class SpecialFunctionsService {
     }
   }
   
-  /// Función μ de Möbius
+  /// Möbius μ function
   static int moebiusMu(BigInt n) {
     if (n <= BigInt.zero) {
       throw ArgumentError(trLocale('μ(n) solo está definido para n > 0', 'μ(n) is only defined for n > 0'));
@@ -220,25 +220,25 @@ class SpecialFunctionsService {
       }
       
       if (exponent > 1) {
-        return 0; // n tiene un factor cuadrado
+        return 0; // n has a squared factor
       } else if (exponent == 1) {
         primeFactorCount++;
       }
     }
     
     if (temp > BigInt.one) {
-      primeFactorCount++; // temp es primo
+      primeFactorCount++; // temp is prime
     }
     
     return primeFactorCount % 2 == 0 ? 1 : -1;
   }
   
-  /// Resto de división (mod): menor residuo NO NEGATIVO en [0, |b|).
+  /// Division remainder (mod): least NON-NEGATIVE residue in [0, |b|).
   ///
-  /// El operador `%` de Dart ya devuelve un resto no negativo, pero con el
-  /// signo del divisor cuando este es negativo; usamos `|b|` para que el
-  /// resultado sea siempre no negativo con independencia del signo de `b`
-  /// (p. ej. mod(7, -3) = 1, no -2).
+  /// Dart's `%` operator already returns a non-negative remainder, but with
+  /// the divisor's sign when it is negative; we use `|b|` so that the
+  /// result is always non-negative regardless of the sign of `b`
+  /// (e.g. mod(7, -3) = 1, not -2).
   static BigInt mod(BigInt a, BigInt b) {
     if (b == BigInt.zero) {
       throw ArgumentError(trLocale('División por cero', 'Division by zero'));
@@ -246,7 +246,7 @@ class SpecialFunctionsService {
     return a % b.abs();
   }
   
-  /// Valuación p-ádica - máxima potencia de p que divide a n
+  /// p-adic valuation - highest power of p that divides n
   static int pAdicValuation(BigInt n, BigInt p) {
     if (n == BigInt.zero) {
       throw ArgumentError(trLocale('La valuación p-ádica de 0 es infinita', 'The p-adic valuation of 0 is infinite'));
@@ -271,7 +271,7 @@ class SpecialFunctionsService {
     if (k > n || k < 0) return BigInt.zero;
     if (k == 0 || k == n) return BigInt.one;
     
-    // Optimización: C(n,k) = C(n,n-k)
+    // Optimization: C(n,k) = C(n,n-k)
     if (k > n - k) k = n - k;
     
     BigInt result = BigInt.one;
@@ -282,7 +282,7 @@ class SpecialFunctionsService {
     return result;
   }
   
-  /// Variaciones V(n,k) = n!/(n-k)!
+  /// Variations V(n,k) = n!/(n-k)!
   static BigInt variations(int n, int k) {
     if (k > n || k < 0) return BigInt.zero;
     if (k == 0) return BigInt.one;
@@ -295,7 +295,7 @@ class SpecialFunctionsService {
     return result;
   }
   
-  /// Media aritmética
+  /// Arithmetic mean
   static BigDecimal arithmeticMean(List<BigDecimal> numbers) {
     if (numbers.isEmpty) {
       throw ArgumentError(trLocale('La lista no puede estar vacía', 'The list cannot be empty'));
@@ -309,20 +309,20 @@ class SpecialFunctionsService {
     return sum / BigDecimal.fromString(numbers.length.toString());
   }
   
-  /// Media geométrica
+  /// Geometric mean
   static BigDecimal geometricMean(List<BigDecimal> numbers) {
     if (numbers.isEmpty) {
       throw ArgumentError(trLocale('La lista no puede estar vacía', 'The list cannot be empty'));
     }
     
-    // Verificar que todos los números sean positivos
+    // Verify that all numbers are positive
     for (BigDecimal num in numbers) {
       if (num.isNegative || num.isZero) {
         throw ArgumentError(trLocale('Todos los números deben ser positivos para la media geométrica', 'All numbers must be positive for the geometric mean'));
       }
     }
     
-    // Calcular usando logaritmos para evitar overflow
+    // Compute using logarithms to avoid overflow
     double logSum = 0;
     for (BigDecimal num in numbers) {
       logSum += math.log(num.toDouble());
@@ -332,7 +332,7 @@ class SpecialFunctionsService {
     return BigDecimal.fromDouble(result);
   }
   
-  /// Media armónica
+  /// Harmonic mean
   static BigDecimal harmonicMean(List<BigDecimal> numbers) {
     if (numbers.isEmpty) {
       throw ArgumentError(trLocale('La lista no puede estar vacía', 'The list cannot be empty'));
@@ -349,7 +349,7 @@ class SpecialFunctionsService {
     return BigDecimal.fromString(numbers.length.toString()) / reciprocalSum;
   }
   
-  /// Media cuadrática (RMS)
+  /// Quadratic mean (RMS)
   static BigDecimal quadraticMean(List<BigDecimal> numbers) {
     if (numbers.isEmpty) {
       throw ArgumentError(trLocale('La lista no puede estar vacía', 'The list cannot be empty'));
@@ -364,7 +364,7 @@ class SpecialFunctionsService {
     return mean.sqrt();
   }
   
-  /// Inverso modular usando algoritmo extendido de Euclides
+  /// Modular inverse using the extended Euclidean algorithm
   static BigInt? modularInverse(BigInt a, BigInt n) {
     if (n <= BigInt.one) {
       throw ArgumentError(trLocale('n debe ser > 1', 'n must be > 1'));
@@ -372,10 +372,10 @@ class SpecialFunctionsService {
     
     a = mod(a, n);
     if (gcd(a, n) != BigInt.one) {
-      return null; // No existe inverso si gcd(a,n) ≠ 1
+      return null; // No inverse exists if gcd(a,n) ≠ 1
     }
     
-    // Algoritmo extendido de Euclides
+    // Extended Euclidean algorithm
     BigInt t = BigInt.zero, newT = BigInt.one;
     BigInt r = n, newR = a;
     
@@ -392,7 +392,7 @@ class SpecialFunctionsService {
     }
     
     if (r > BigInt.one) {
-      return null; // a no es invertible
+      return null; // a is not invertible
     }
     
     if (t.isNegative) {
@@ -402,7 +402,7 @@ class SpecialFunctionsService {
     return t;
   }
   
-  /// Radical (producto de factores primos distintos) - función ABC
+  /// Radical (product of distinct prime factors) - ABC function
   static BigInt radical(BigInt n) {
     if (n <= BigInt.zero) {
       throw ArgumentError(trLocale('rad(n) solo está definido para n > 0', 'rad(n) is only defined for n > 0'));
@@ -429,7 +429,7 @@ class SpecialFunctionsService {
     return result;
   }
   
-  /// Encuentra el mínimo en una lista de números
+  /// Finds the minimum in a list of numbers
   static BigDecimal minimum(List<BigDecimal> numbers) {
     if (numbers.isEmpty) {
       throw ArgumentError(trLocale('La lista no puede estar vacía', 'The list cannot be empty'));
@@ -445,7 +445,7 @@ class SpecialFunctionsService {
     return min;
   }
   
-  /// Encuentra el máximo en una lista de números
+  /// Finds the maximum in a list of numbers
   static BigDecimal maximum(List<BigDecimal> numbers) {
     if (numbers.isEmpty) {
       throw ArgumentError(trLocale('La lista no puede estar vacía', 'The list cannot be empty'));
@@ -461,8 +461,8 @@ class SpecialFunctionsService {
     return max;
   }
 
-  /// ω(n) - Número de factores primos distintos (small omega)
-  /// ω(12) = 2 porque 12 = 2² × 3 (factores primos distintos: 2, 3)
+  /// ω(n) - Number of distinct prime factors (small omega)
+  /// ω(12) = 2 because 12 = 2² × 3 (distinct prime factors: 2, 3)
   /// ω(1) = 0
   static int smallOmega(BigInt n) {
     if (n <= BigInt.zero) {
@@ -490,8 +490,8 @@ class SpecialFunctionsService {
     return count;
   }
 
-  /// Ω(n) - Número de factores primos con multiplicidad (big omega)
-  /// Ω(12) = 3 porque 12 = 2 × 2 × 3 (tres factores primos en total)
+  /// Ω(n) - Number of prime factors with multiplicity (big omega)
+  /// Ω(12) = 3 because 12 = 2 × 2 × 3 (three prime factors in total)
   /// Ω(1) = 0
   static int bigOmega(BigInt n) {
     if (n <= BigInt.zero) {
@@ -517,15 +517,15 @@ class SpecialFunctionsService {
     return count;
   }
 
-  /// λ(n) - Función de Carmichael (totiente reducido)
-  /// λ(n) es el menor entero positivo m tal que a^m ≡ 1 (mod n)
-  /// para todo a coprimo con n.
-  /// Definición:
+  /// λ(n) - Carmichael function (reduced totient)
+  /// λ(n) is the smallest positive integer m such that a^m ≡ 1 (mod n)
+  /// for every a coprime with n.
+  /// Definition:
   ///   λ(1) = 1
   ///   λ(2) = 1, λ(4) = 2
-  ///   λ(2^k) = 2^(k-2) para k ≥ 3
-  ///   λ(p^k) = φ(p^k) = p^(k-1)(p-1) para p primo impar
-  ///   λ(p₁^a₁ × p₂^a₂ × ... ) = mcm(λ(p₁^a₁), λ(p₂^a₂), ...)
+  ///   λ(2^k) = 2^(k-2) for k ≥ 3
+  ///   λ(p^k) = φ(p^k) = p^(k-1)(p-1) for odd prime p
+  ///   λ(p₁^a₁ × p₂^a₂ × ... ) = lcm(λ(p₁^a₁), λ(p₂^a₂), ...)
   static BigInt carmichaelLambda(BigInt n) {
     if (n <= BigInt.zero) {
       throw ArgumentError(trLocale('λ(n) solo está definido para n > 0', 'λ(n) is only defined for n > 0'));
@@ -533,9 +533,9 @@ class SpecialFunctionsService {
 
     if (n == BigInt.one) return BigInt.one;
 
-    // Factorizar n en potencias de primos
+    // Factor n into prime powers
     BigInt temp = n;
-    List<List<BigInt>> primeFactors = []; // pares [primo, exponente]
+    List<List<BigInt>> primeFactors = []; // [prime, exponent] pairs
 
     for (BigInt i = BigInt.two; i * i <= temp; i += BigInt.one) {
       if (temp % i == BigInt.zero) {
@@ -551,7 +551,7 @@ class SpecialFunctionsService {
       primeFactors.add([temp, BigInt.one]);
     }
 
-    // Calcular λ para cada potencia de primo y luego el mcm
+    // Compute λ for each prime power and then the lcm
     BigInt result = BigInt.one;
 
     for (List<BigInt> factor in primeFactors) {
@@ -565,11 +565,11 @@ class SpecialFunctionsService {
         } else if (k == BigInt.two) {
           lambdaPk = BigInt.two;
         } else {
-          // λ(2^k) = 2^(k-2) para k ≥ 3
+          // λ(2^k) = 2^(k-2) for k ≥ 3
           lambdaPk = BigInt.two.pow((k - BigInt.two).toInt());
         }
       } else {
-        // λ(p^k) = φ(p^k) = p^(k-1) * (p - 1) para p primo impar
+        // λ(p^k) = φ(p^k) = p^(k-1) * (p - 1) for odd prime p
         lambdaPk = p.pow((k - BigInt.one).toInt()) * (p - BigInt.one);
       }
 
@@ -579,8 +579,8 @@ class SpecialFunctionsService {
     return result;
   }
 
-  /// sopfr(n) - Suma de factores primos con repetición
-  /// sopfr(12) = 2 + 2 + 3 = 7 porque 12 = 2² × 3
+  /// sopfr(n) - Sum of prime factors with repetition
+  /// sopfr(12) = 2 + 2 + 3 = 7 because 12 = 2² × 3
   /// sopfr(1) = 0
   static BigInt sopfr(BigInt n) {
     if (n <= BigInt.zero) {
@@ -606,8 +606,8 @@ class SpecialFunctionsService {
     return sum;
   }
 
-  /// sopf(n) - Suma de factores primos distintos (sin repetición)
-  /// sopf(12) = 2 + 3 = 5 porque 12 = 2² × 3
+  /// sopf(n) - Sum of distinct prime factors (without repetition)
+  /// sopf(12) = 2 + 3 = 5 because 12 = 2² × 3
   /// sopf(1) = 0
   static BigInt sopf(BigInt n) {
     if (n <= BigInt.zero) {
@@ -636,11 +636,11 @@ class SpecialFunctionsService {
   }
 
   // ====================================================================
-  // FUNCIONES NUEVAS PARA OLIMPIADAS
+  // NEW FUNCTIONS FOR OLYMPIADS
   // ====================================================================
 
-  /// Exponenciación modular: a^b mod n usando cuadratura repetida
-  /// Eficiente incluso para exponentes enormes
+  /// Modular exponentiation: a^b mod n using repeated squaring
+  /// Efficient even for huge exponents
   static BigInt modPow(BigInt base, BigInt exponent, BigInt modulus) {
     if (modulus <= BigInt.zero) {
       throw ArgumentError(trLocale('El módulo debe ser > 0', 'The modulus must be > 0'));
@@ -671,8 +671,8 @@ class SpecialFunctionsService {
     return result;
   }
 
-  /// Orden multiplicativo: menor k > 0 tal que a^k ≡ 1 (mod n)
-  /// Requiere que gcd(a, n) = 1
+  /// Multiplicative order: smallest k > 0 such that a^k ≡ 1 (mod n)
+  /// Requires gcd(a, n) = 1
   static BigInt multiplicativeOrder(BigInt a, BigInt n) {
     if (n <= BigInt.one) {
       throw ArgumentError(trLocale('n debe ser > 1', 'n must be > 1'));
@@ -684,7 +684,7 @@ class SpecialFunctionsService {
     a = a % n;
     if (a < BigInt.zero) a += n;
 
-    // El orden divide a φ(n), así que buscamos divisores de φ(n)
+    // The order divides φ(n), so we search among the divisors of φ(n)
     BigInt phi = eulerPhi(n);
     List<BigInt> divisors = _getDivisors(phi);
     divisors.sort();
@@ -695,17 +695,17 @@ class SpecialFunctionsService {
       }
     }
 
-    return phi; // Siempre divide a φ(n)
+    return phi; // Always divides φ(n)
   }
 
-  /// Verifica si g es raíz primitiva mod n
-  /// g es raíz primitiva si ord_n(g) = φ(n)
+  /// Checks whether g is a primitive root mod n
+  /// g is a primitive root if ord_n(g) = φ(n)
   static bool isPrimitiveRoot(BigInt g, BigInt n) {
     if (n <= BigInt.one) return false;
     if (gcd(g, n) != BigInt.one) return false;
 
     BigInt phi = eulerPhi(n);
-    // Verificar que g^(φ(n)/p) ≢ 1 (mod n) para cada primo p que divide a φ(n)
+    // Verify that g^(φ(n)/p) ≢ 1 (mod n) for each prime p dividing φ(n)
     BigInt temp = phi;
     List<BigInt> primeFactorsOfPhi = [];
 
@@ -730,8 +730,8 @@ class SpecialFunctionsService {
     return true;
   }
 
-  /// Encuentra la menor raíz primitiva mod n (si existe)
-  /// Solo existe para n = 1, 2, 4, p^k, 2p^k (p primo impar)
+  /// Finds the smallest primitive root mod n (if it exists)
+  /// Only exists for n = 1, 2, 4, p^k, 2p^k (p odd prime)
   static BigInt? findPrimitiveRoot(BigInt n) {
     if (n <= BigInt.one) return null;
     if (n == BigInt.two) return BigInt.one;
@@ -741,15 +741,15 @@ class SpecialFunctionsService {
       if (isPrimitiveRoot(g, n)) {
         return g;
       }
-      // Limitar búsqueda para números muy grandes
+      // Limit the search for very large numbers
       if (g > BigInt.from(10000)) return null;
     }
 
     return null;
   }
 
-  /// Símbolo de Legendre (a/p) para p primo impar
-  /// Retorna 1 si a es residuo cuadrático mod p, -1 si no, 0 si p|a
+  /// Legendre symbol (a/p) for odd prime p
+  /// Returns 1 if a is a quadratic residue mod p, -1 if not, 0 if p|a
   static int legendreSymbol(BigInt a, BigInt p) {
     if (p <= BigInt.two) {
       throw ArgumentError(trLocale('p debe ser un primo impar > 2', 'p must be an odd prime > 2'));
@@ -759,15 +759,15 @@ class SpecialFunctionsService {
     if (a < BigInt.zero) a += p;
     if (a == BigInt.zero) return 0;
 
-    // Criterio de Euler: (a/p) ≡ a^((p-1)/2) (mod p)
+    // Euler's criterion: (a/p) ≡ a^((p-1)/2) (mod p)
     BigInt result = modPow(a, (p - BigInt.one) ~/ BigInt.two, p);
     if (result == BigInt.one) return 1;
     if (result == p - BigInt.one) return -1;
     return 0;
   }
 
-  /// Símbolo de Jacobi (a/n) generalización del de Legendre
-  /// n debe ser impar positivo
+  /// Jacobi symbol (a/n), generalization of the Legendre symbol
+  /// n must be a positive odd number
   static int jacobiSymbol(BigInt a, BigInt n) {
     if (n <= BigInt.zero || n.isEven) {
       throw ArgumentError(trLocale('n debe ser impar positivo', 'n must be a positive odd number'));
@@ -780,7 +780,7 @@ class SpecialFunctionsService {
     int result = 1;
 
     while (a != BigInt.zero) {
-      // Extraer factores de 2
+      // Extract factors of 2
       while (a.isEven) {
         a >>= 1;
         BigInt nMod8 = n % BigInt.from(8);
@@ -789,7 +789,7 @@ class SpecialFunctionsService {
         }
       }
 
-      // Reciprocidad cuadrática
+      // Quadratic reciprocity
       BigInt temp = a;
       a = n;
       n = temp;
@@ -805,16 +805,18 @@ class SpecialFunctionsService {
     return n == BigInt.one ? result : 0;
   }
 
-  /// Resuelve ecuación diofántica lineal ax + by = c
-  /// Retorna {solvable, x0, y0, dx, dy} donde la solución general es
-  /// x = x0 + dx*t, y = y0 + dy*t para todo entero t
+  /// Solves the linear Diophantine equation ax + by = c
+  /// Returns {solvable, x0, y0, dx, dy} where the general solution is
+  /// x = x0 + dx*t, y = y0 + dy*t for every integer t
   static Map<String, dynamic> solveDiophantine(BigInt a, BigInt b, BigInt c) {
     if (a == BigInt.zero && b == BigInt.zero) {
       return {
         'solvable': c == BigInt.zero,
         'note': c == BigInt.zero
-            ? 'Infinitas soluciones (0x + 0y = 0)'
-            : 'Sin solución (0x + 0y ≠ $c)',
+            ? trLocale('Infinitas soluciones (0x + 0y = 0)',
+                'Infinitely many solutions (0x + 0y = 0)')
+            : trLocale('Sin solución (0x + 0y ≠ $c)',
+                'No solution (0x + 0y ≠ $c)'),
       };
     }
 
@@ -822,21 +824,22 @@ class SpecialFunctionsService {
     if (c % g != BigInt.zero) {
       return {
         'solvable': false,
-        'note': 'Sin solución: gcd($a,$b) = $g no divide a $c',
+        'note': trLocale('Sin solución: gcd($a,$b) = $g no divide a $c',
+            'No solution: gcd($a,$b) = $g does not divide $c'),
       };
     }
 
-    // Reducir: (a/g)x + (b/g)y = c/g
+    // Reduce: (a/g)x + (b/g)y = c/g
     BigInt aReduced = a ~/ g;
     BigInt bReduced = b ~/ g;
     BigInt cReduced = c ~/ g;
 
-    // Resolver usando Euclides extendido para aReduced*x + bReduced*y = 1
+    // Solve using extended Euclid for aReduced*x + bReduced*y = 1
     List<BigInt> ext = _extendedGcd(aReduced.abs(), bReduced.abs());
     BigInt x0 = ext[1] * cReduced;
     BigInt y0 = ext[2] * cReduced;
 
-    // Ajustar signos
+    // Adjust signs
     if (aReduced < BigInt.zero) x0 = -x0;
     if (bReduced < BigInt.zero) y0 = -y0;
 
@@ -851,7 +854,7 @@ class SpecialFunctionsService {
     };
   }
 
-  /// Algoritmo extendido de Euclides: retorna [gcd, x, y] tal que ax + by = gcd
+  /// Extended Euclidean algorithm: returns [gcd, x, y] such that ax + by = gcd
   static List<BigInt> _extendedGcd(BigInt a, BigInt b) {
     if (b == BigInt.zero) {
       return [a, BigInt.one, BigInt.zero];
@@ -860,8 +863,8 @@ class SpecialFunctionsService {
     return [result[0], result[2], result[1] - (a ~/ b) * result[2]];
   }
 
-  /// Teorema Chino del Residuo
-  /// Resuelve sistema: x ≡ a₁ (mod m₁), x ≡ a₂ (mod m₂), ...
+  /// Chinese Remainder Theorem
+  /// Solves the system: x ≡ a₁ (mod m₁), x ≡ a₂ (mod m₂), ...
   /// remainders = [a₁, a₂, ...], moduli = [m₁, m₂, ...]
   static Map<String, dynamic> chineseRemainderTheorem(
       List<BigInt> remainders, List<BigInt> moduli) {
@@ -880,7 +883,8 @@ class SpecialFunctionsService {
       if ((a2 - currentA) % g != BigInt.zero) {
         return {
           'solvable': false,
-          'note': 'Sin solución: sistema incompatible',
+          'note': trLocale('Sin solución: sistema incompatible',
+              'No solution: incompatible system'),
         };
       }
 
@@ -918,7 +922,7 @@ class SpecialFunctionsService {
     return result;
   }
 
-  /// Doble factorial n!!
+  /// Double factorial n!!
   /// n!! = n × (n-2) × (n-4) × ... × (2 o 1)
   static BigInt doubleFactorial(int n) {
     if (n < 0) {
@@ -934,7 +938,7 @@ class SpecialFunctionsService {
     return result;
   }
 
-  /// n-ésimo número de Fibonacci usando exponenciación de matrices
+  /// n-th Fibonacci number using matrix exponentiation
   /// F(0)=0, F(1)=1, F(n)=F(n-1)+F(n-2)
   static BigInt fibonacci(int n) {
     if (n < 0) {
@@ -943,12 +947,12 @@ class SpecialFunctionsService {
     if (n == 0) return BigInt.zero;
     if (n <= 2) return BigInt.one;
 
-    // Método de duplicación rápida: O(log n)
+    // Fast doubling method: O(log n)
     return _fibFast(n)[0];
   }
 
-  /// Fibonacci rápido usando identidades de duplicación
-  /// Retorna [F(n), F(n+1)]
+  /// Fast Fibonacci using doubling identities
+  /// Returns [F(n), F(n+1)]
   static List<BigInt> _fibFast(int n) {
     if (n == 0) return [BigInt.zero, BigInt.one];
 
@@ -968,7 +972,7 @@ class SpecialFunctionsService {
     }
   }
 
-  /// n-ésimo número de Catalan: C_n = C(2n,n)/(n+1)
+  /// n-th Catalan number: C_n = C(2n,n)/(n+1)
   static BigInt catalanNumber(int n) {
     if (n < 0) {
       throw ArgumentError(trLocale('n debe ser ≥ 0', 'n must be ≥ 0'));
@@ -977,8 +981,8 @@ class SpecialFunctionsService {
     return combinations(2 * n, n) ~/ BigInt.from(n + 1);
   }
 
-  /// Derangements D(n): permutaciones sin puntos fijos
-  /// D(n) = n! × Σ(-1)^k/k! para k=0..n
+  /// Derangements D(n): permutations with no fixed points
+  /// D(n) = n! × Σ(-1)^k/k! for k=0..n
   /// D(n) = (n-1)(D(n-1) + D(n-2))
   static BigInt derangement(int n) {
     if (n < 0) {
@@ -999,13 +1003,13 @@ class SpecialFunctionsService {
     return prev1;
   }
 
-  /// Particiones p(n): número de formas de escribir n como suma de positivos
-  /// Usa programación dinámica
+  /// Partitions p(n): number of ways to write n as a sum of positive integers
+  /// Uses dynamic programming
   static BigInt partition(int n) {
     if (n < 0) return BigInt.zero;
     if (n == 0) return BigInt.one;
 
-    // Limitar para evitar problemas de memoria
+    // Limit to avoid memory issues
     if (n > 10000) {
       throw ArgumentError(trLocale('n demasiado grande para calcular particiones (máx 10000)', 'n too large to compute partitions (max 10000)'));
     }
@@ -1022,15 +1026,15 @@ class SpecialFunctionsService {
     return dp[n];
   }
 
-  /// Números de Stirling de segunda especie S(n,k)
-  /// Número de formas de particionar un conjunto de n elementos en k subconjuntos no vacíos
+  /// Stirling numbers of the second kind S(n,k)
+  /// Number of ways to partition a set of n elements into k non-empty subsets
   static BigInt stirlingSecond(int n, int k) {
     if (k < 0 || k > n) return BigInt.zero;
     if (k == 0 && n == 0) return BigInt.one;
     if (k == 0 || n == 0) return BigInt.zero;
     if (k == 1 || k == n) return BigInt.one;
 
-    // Fórmula: S(n,k) = (1/k!) × Σ (-1)^j × C(k,j) × (k-j)^n
+    // Formula: S(n,k) = (1/k!) × Σ (-1)^j × C(k,j) × (k-j)^n
     BigInt sum = BigInt.zero;
     for (int j = 0; j <= k; j++) {
       BigInt term = combinations(k, j) * BigInt.from(k - j).pow(n);
@@ -1044,15 +1048,15 @@ class SpecialFunctionsService {
     return sum ~/ factorial(k);
   }
 
-  /// Números de Stirling de primera especie (sin signo) |s(n,k)|
-  /// Número de permutaciones de n con exactamente k ciclos
+  /// Stirling numbers of the first kind (unsigned) |s(n,k)|
+  /// Number of permutations of n with exactly k cycles
   static BigInt stirlingFirst(int n, int k) {
     if (k < 0 || k > n) return BigInt.zero;
     if (k == 0 && n == 0) return BigInt.one;
     if (k == 0 || n == 0) return BigInt.zero;
 
-    // Usar recurrencia: |s(n,k)| = (n-1)|s(n-1,k)| + |s(n-1,k-1)|
-    // Tabla DP
+    // Use the recurrence: |s(n,k)| = (n-1)|s(n-1,k)| + |s(n-1,k-1)|
+    // DP table
     List<List<BigInt>> dp = List.generate(
       n + 1,
       (_) => List.filled(k + 1, BigInt.zero),
@@ -1068,14 +1072,14 @@ class SpecialFunctionsService {
     return dp[n][k];
   }
 
-  /// Números de Bell B(n): número total de particiones de un conjunto de n elementos
+  /// Bell numbers B(n): total number of partitions of a set of n elements
   static BigInt bellNumber(int n) {
     if (n < 0) {
       throw ArgumentError(trLocale('n debe ser ≥ 0', 'n must be ≥ 0'));
     }
     if (n == 0) return BigInt.one;
 
-    // B(n) = Σ S(n,k) para k=0..n
+    // B(n) = Σ S(n,k) for k=0..n
     BigInt sum = BigInt.zero;
     for (int k = 0; k <= n; k++) {
       sum += stirlingSecond(n, k);
@@ -1083,18 +1087,18 @@ class SpecialFunctionsService {
     return sum;
   }
 
-  /// Raíz digital: aplicar suma de dígitos iterativamente hasta obtener un solo dígito
+  /// Digital root: apply digit sum iteratively until a single digit remains
   static int digitalRoot(BigInt n) {
     n = n.abs();
     if (n == BigInt.zero) return 0;
 
-    // Fórmula directa: dr(n) = 1 + (n-1) mod 9
+    // Direct formula: dr(n) = 1 + (n-1) mod 9
     BigInt nine = BigInt.from(9);
     BigInt result = BigInt.one + ((n - BigInt.one) % nine);
     return result.toInt();
   }
 
-  /// Suma de dígitos en base b
+  /// Digit sum in base b
   static BigInt digitSumInBase(BigInt n, int base) {
     if (base < 2) {
       throw ArgumentError(trLocale('La base debe ser ≥ 2', 'The base must be ≥ 2'));
@@ -1114,7 +1118,7 @@ class SpecialFunctionsService {
     return sum;
   }
 
-  /// Verifica si n es número abundante: σ(1,n) > 2n
+  /// Checks whether n is an abundant number: σ(1,n) > 2n
   static bool isAbundant(BigInt n) {
     if (n <= BigInt.one) return false;
     BigInt sigma = BigInt.zero;
@@ -1124,7 +1128,7 @@ class SpecialFunctionsService {
     return sigma > BigInt.two * n;
   }
 
-  /// Verifica si n es número deficiente: σ(1,n) < 2n
+  /// Checks whether n is a deficient number: σ(1,n) < 2n
   static bool isDeficient(BigInt n) {
     if (n <= BigInt.one) return true;
     BigInt sigma = BigInt.zero;
@@ -1134,7 +1138,7 @@ class SpecialFunctionsService {
     return sigma < BigInt.two * n;
   }
 
-  /// Verifica si n es libre de cuadrados (squarefree): μ(n) ≠ 0
+  /// Checks whether n is squarefree: μ(n) ≠ 0
   static bool isSquareFree(BigInt n) {
     if (n <= BigInt.zero) return false;
     if (n == BigInt.one) return true;
@@ -1143,14 +1147,14 @@ class SpecialFunctionsService {
     for (BigInt i = BigInt.two; i * i <= temp; i += BigInt.one) {
       if (temp % i == BigInt.zero) {
         temp ~/= i;
-        if (temp % i == BigInt.zero) return false; // i² divide a n
-        // seguir buscando otros factores
+        if (temp % i == BigInt.zero) return false; // i² divides n
+        // keep looking for other factors
       }
     }
     return true;
   }
 
-  /// Verifica si n es número poderoso (powerful): p²|n para todo p primo que divide a n
+  /// Checks whether n is a powerful number: p²|n for every prime p dividing n
   static bool isPowerful(BigInt n) {
     if (n <= BigInt.one) return n == BigInt.one;
 
@@ -1165,11 +1169,11 @@ class SpecialFunctionsService {
         if (exp < 2) return false;
       }
     }
-    // Si queda un primo restante con exponente 1, no es poderoso
+    // If a remaining prime with exponent 1 is left, it is not powerful
     return temp == BigInt.one;
   }
 
-  /// Verifica si n es número de Harshad: n divisible por su suma de dígitos
+  /// Checks whether n is a Harshad number: n divisible by its digit sum
   static bool isHarshad(BigInt n) {
     if (n <= BigInt.zero) return false;
     String digits = n.toString();
@@ -1180,21 +1184,21 @@ class SpecialFunctionsService {
     return n % BigInt.from(digitSum) == BigInt.zero;
   }
 
-  /// Verifica si n es semiprimo: n = p × q (producto de exactamente dos primos)
+  /// Checks whether n is a semiprime: n = p × q (product of exactly two primes)
   static bool isSemiprime(BigInt n) {
     if (n < BigInt.from(4)) return false;
     return bigOmega(n) == 2;
   }
 
-  /// π(n) aproximado - función contadora de primos
-  /// Para n pequeño (≤ 1000000) calcula exacto con criba,
-  /// para n grande usa Li(x) como aproximación
+  /// Approximate π(n) - prime-counting function
+  /// For small n (≤ 1000000) computes exactly with a sieve,
+  /// for large n uses Li(x) as an approximation
   static Map<String, dynamic> primeCountingFunction(BigInt n) {
     if (n < BigInt.two) {
       return {'count': 0, 'exact': true};
     }
 
-    // Para números pequeños, usar criba
+    // For small numbers, use a sieve
     if (n <= BigInt.from(1000000)) {
       int nInt = n.toInt();
       List<bool> sieve = List.filled(nInt + 1, true);
@@ -1210,13 +1214,13 @@ class SpecialFunctionsService {
       return {'count': count, 'exact': true};
     }
 
-    // Para números grandes, aproximación con Li(x)
+    // For large numbers, approximation with Li(x)
     double x = double.parse(n.toString());
     double li = x / math.log(x) * (1 + 1 / math.log(x) + 2 / (math.log(x) * math.log(x)));
     return {'count': li.round(), 'exact': false, 'approx': true};
   }
 
-  /// Función de Liouville λ_L(n) (distinta de Carmichael)
+  /// Liouville function λ_L(n) (different from Carmichael's)
   /// λ_L(n) = (-1)^Ω(n)
   static int liouvilleFunction(BigInt n) {
     if (n <= BigInt.zero) {
@@ -1225,8 +1229,8 @@ class SpecialFunctionsService {
     return bigOmega(n) % 2 == 0 ? 1 : -1;
   }
 
-  /// Exponenciación modular para resolver congruencias: a^b mod n
-  /// Wrapper más amigable
+  /// Modular exponentiation for solving congruences: a^b mod n
+  /// Friendlier wrapper
   static BigInt powerMod(BigInt a, BigInt b, BigInt n) {
     return modPow(a, b, n);
   }

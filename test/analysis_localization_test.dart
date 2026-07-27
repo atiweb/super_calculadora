@@ -12,13 +12,13 @@ String _errText(void Function() fn) {
   }
 }
 
-/// Regresión del feedback de un tester: aparecían textos en español dentro de
-/// la versión en inglés. Los mensajes de reserva del análisis (números enormes)
-/// se generan en la capa de servicios (sin BuildContext); ahora siguen el
-/// idioma publicado por la UI vía [appIsSpanish].
+/// Regression from a tester's feedback: Spanish texts were showing up inside
+/// the English version. The analysis fallback messages (huge numbers)
+/// are generated in the service layer (no BuildContext); they now follow the
+/// language published by the UI via [appIsSpanish].
 void main() {
-  // 151 dígitos → fuerza los mensajes de "número muy grande / extremadamente
-  // grande" en binario/factores/divisores/raíces/cuadrado/cubo/primos.
+  // 151 digits → forces the "número muy grande / extremadamente
+  // grande" messages in binary/factors/divisors/roots/square/cube/primes.
   final huge = BigInt.parse('1${'0' * 150}');
 
   tearDown(() => appIsSpanish = false);

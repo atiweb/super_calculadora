@@ -29,10 +29,10 @@ class _LargeNumberTestWidgetState extends State<LargeNumberTestWidget> {
                 ),
                 const SizedBox(height: 20),
                 
-                // Botones de prueba
+                // Test buttons
                 ElevatedButton(
                   onPressed: () {
-                    // Número mediano (30 dígitos)
+                    // Medium number (30 digits)
                     calculator.setDisplay('123456789012345678901234567890');
                   },
                   child: const Text('Número Mediano (30 dígitos)'),
@@ -42,7 +42,7 @@ class _LargeNumberTestWidgetState extends State<LargeNumberTestWidget> {
                 
                 ElevatedButton(
                   onPressed: () {
-                    // Número grande (100 dígitos)
+                    // Large number (100 digits)
                     calculator.setDisplay('1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890');
                   },
                   child: const Text('Número Grande (100 dígitos)'),
@@ -52,7 +52,7 @@ class _LargeNumberTestWidgetState extends State<LargeNumberTestWidget> {
                 
                 ElevatedButton(
                   onPressed: () {
-                    // Número extremadamente grande (300 dígitos)
+                    // Extremely large number (300 digits)
                     calculator.setDisplay('123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890');
                   },
                   child: const Text('Número Extremadamente Grande (300 dígitos)'),
@@ -62,8 +62,8 @@ class _LargeNumberTestWidgetState extends State<LargeNumberTestWidget> {
                 
                 ElevatedButton(
                   onPressed: () {
-                    // Número con miles de dígitos
-                    String largeNumber = '1${'0' * 1000}'; // 1 seguido de 1000 ceros
+                    // Number with thousands of digits
+                    String largeNumber = '1${'0' * 1000}'; // 1 followed by 1000 zeros
                     calculator.setDisplay(largeNumber);
                   },
                   child: const Text('Número Gigante (1001 dígitos)'),

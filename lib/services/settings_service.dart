@@ -1,7 +1,7 @@
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/theme_mode.dart' as app_theme;
 
-/// Servicio para manejar las configuraciones de la aplicación
+/// Service for managing the application settings
 class SettingsService {
   static const String _useScientificNotationKey = 'use_scientific_notation';
   static const String _themeModeKey = 'theme_mode';
@@ -9,7 +9,7 @@ class SettingsService {
   static const String _highPrecisionKey = 'high_precision_mode';
   static const String _precisionDigitsKey = 'precision_digits';
 
-  /// Dígitos por defecto y límites para el modo de alta precisión.
+  /// Default digits and limits for high precision mode.
   static const int defaultPrecisionDigits = 30;
   static const int minPrecisionDigits = 5;
   static const int maxPrecisionDigits = 100;
@@ -18,19 +18,19 @@ class SettingsService {
   static bool _useMemoryStore = false;
   static final Map<String, Object> _memoryStore = <String, Object>{};
   
-  /// Inicializa el servicio de configuraciones
+  /// Initializes the settings service
   static Future<void> init() async {
     try {
       _prefs = await SharedPreferences.getInstance();
       _useMemoryStore = false;
     } catch (e) {
-      // En entorno de tests (sin plugins), usar un almacenamiento en memoria.
+      // In test environments (no plugins), use in-memory storage.
       _prefs = null;
       _useMemoryStore = true;
     }
   }
   
-  /// Obtiene si se debe usar notación científica
+  /// Gets whether scientific notation should be used
   static bool getUseScientificNotation() {
     if (_useMemoryStore) {
       return (_memoryStore[_useScientificNotationKey] as bool?) ?? false;
@@ -38,7 +38,7 @@ class SettingsService {
     return _prefs?.getBool(_useScientificNotationKey) ?? false;
   }
   
-  /// Establece si se debe usar notación científica
+  /// Sets whether scientific notation should be used
   static Future<void> setUseScientificNotation(bool value) async {
     if (_useMemoryStore) {
       _memoryStore[_useScientificNotationKey] = value;
@@ -47,7 +47,7 @@ class SettingsService {
     await _prefs?.setBool(_useScientificNotationKey, value);
   }
   
-  /// Obtiene el modo de tema actual
+  /// Gets the current theme mode
   static app_theme.ThemeMode getThemeMode() {
     final themeString = _useMemoryStore
         ? (_memoryStore[_themeModeKey] as String? ?? 'system')
@@ -55,7 +55,7 @@ class SettingsService {
     return app_theme.ThemeModeExtension.fromString(themeString);
   }
   
-  /// Establece el modo de tema
+  /// Sets the theme mode
   static Future<void> setThemeMode(app_theme.ThemeMode mode) async {
     if (_useMemoryStore) {
       _memoryStore[_themeModeKey] = mode.name;
@@ -64,7 +64,7 @@ class SettingsService {
     await _prefs?.setString(_themeModeKey, mode.name);
   }
 
-  /// Obtiene si el modo de alta precisión (reales constructivos) está activo.
+  /// Gets whether high precision mode (constructive reals) is active.
   static bool getHighPrecisionMode() {
     if (_useMemoryStore) {
       return (_memoryStore[_highPrecisionKey] as bool?) ?? false;
@@ -72,7 +72,7 @@ class SettingsService {
     return _prefs?.getBool(_highPrecisionKey) ?? false;
   }
 
-  /// Activa/desactiva el modo de alta precisión.
+  /// Enables/disables high precision mode.
   static Future<void> setHighPrecisionMode(bool value) async {
     if (_useMemoryStore) {
       _memoryStore[_highPrecisionKey] = value;
@@ -81,7 +81,7 @@ class SettingsService {
     await _prefs?.setBool(_highPrecisionKey, value);
   }
 
-  /// Dígitos de precisión a mostrar en modo alta precisión (acotado a límites).
+  /// Precision digits to display in high precision mode (clamped to limits).
   static int getPrecisionDigits() {
     final raw = _useMemoryStore
         ? (_memoryStore[_precisionDigitsKey] as int?)
@@ -90,7 +90,7 @@ class SettingsService {
     return value.clamp(minPrecisionDigits, maxPrecisionDigits);
   }
 
-  /// Establece los dígitos de precisión (se acota a [minPrecisionDigits, maxPrecisionDigits]).
+  /// Sets the precision digits (clamped to [minPrecisionDigits, maxPrecisionDigits]).
   static Future<void> setPrecisionDigits(int value) async {
     final clamped = value.clamp(minPrecisionDigits, maxPrecisionDigits);
     if (_useMemoryStore) {
@@ -100,7 +100,7 @@ class SettingsService {
     await _prefs?.setInt(_precisionDigitsKey, clamped);
   }
 
-  /// Obtiene el código de idioma guardado (cadena vacía = automático del sistema)
+  /// Gets the saved language code (empty string = system default)
   static String getLocale() {
     if (_useMemoryStore) {
       return (_memoryStore[_localeKey] as String?) ?? '';
@@ -108,7 +108,7 @@ class SettingsService {
     return _prefs?.getString(_localeKey) ?? '';
   }
 
-  /// Establece el código de idioma (cadena vacía = automático del sistema)
+  /// Sets the language code (empty string = system default)
   static Future<void> setLocale(String localeCode) async {
     if (_useMemoryStore) {
       _memoryStore[_localeKey] = localeCode;

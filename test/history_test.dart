@@ -7,9 +7,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 void main() {
   group('Historia de Operaciones', () {
     setUp(() async {
-      // Inicializar binding para tests
+      // Initialize binding for tests
       TestWidgetsFlutterBinding.ensureInitialized();
-      // Limpiar SharedPreferences antes de cada test
+      // Clear SharedPreferences before each test
       SharedPreferences.setMockInitialValues({});
     });
 
@@ -28,7 +28,7 @@ void main() {
     });
 
     test('Limpiar historial', () async {
-      // Agregar algunas operaciones
+      // Add some operations
       await HistoryService.addOperation(
         OperationEntry(expression: '1 + 1', result: '2'),
       );
@@ -36,11 +36,11 @@ void main() {
         OperationEntry(expression: '2 * 3', result: '6'),
       );
 
-      // Verificar que se agregaron
+      // Verify they were added
       var history = await HistoryService.getHistory();
       expect(history.length, 2);
 
-      // Limpiar historial
+      // Clear history
       await HistoryService.clearHistory();
       history = await HistoryService.getHistory();
       expect(history.length, 0);
@@ -53,11 +53,11 @@ void main() {
       await HistoryService.addOperation(operation1);
       await HistoryService.addOperation(operation2);
 
-      // Verificar que ambas se agregaron
+      // Verify both were added
       var history = await HistoryService.getHistory();
       expect(history.length, 2);
 
-      // Eliminar la primera operación
+      // Remove the first operation
       await HistoryService.removeOperation(operation1);
       history = await HistoryService.getHistory();
       
@@ -83,13 +83,13 @@ void main() {
     test('Integración con CalculatorService', () async {
       final calculator = CalculatorService();
       
-      // Simular algunas operaciones
+      // Simulate some operations
       calculator.addDigit('2');
       calculator.addOperator('+');
       calculator.addDigit('3');
       calculator.calculate();
 
-      // Verificar que se guardó en el historial
+      // Verify it was saved to the history
       final history = await HistoryService.getHistory();
       expect(history.length, 1);
       expect(history[0].expression, '2 + 3');
@@ -110,7 +110,7 @@ void main() {
       final history = await HistoryService.getHistory();
       expect(history.length, 3);
       
-      // La operación más reciente debe estar primero
+      // The most recent operation must come first
       expect(history[0].expression, '5 - 2');
       expect(history[1].expression, '2 * 3');
       expect(history[2].expression, '1 + 1');
@@ -126,8 +126,8 @@ void main() {
       final deserialized = OperationEntry.fromStorageString(serialized);
       expect(deserialized.expression, '2 ^ 3');
       expect(deserialized.result, '8');
-      // La marca de tiempo sobrevive al guardado (precisión de milisegundos);
-      // el formato antiguo la perdía y todo aparecía como "Ahora" al reiniciar.
+      // The timestamp survives saving (millisecond precision);
+      // the old format lost it and everything showed as "Ahora" after a restart.
       expect(deserialized.timestampKnown, isTrue);
       expect(deserialized.timestamp.millisecondsSinceEpoch,
           operation.timestamp.millisecondsSinceEpoch);
@@ -149,25 +149,25 @@ void main() {
       final deserialized = OperationEntry.fromStorageString('2 + 3=5 = 5.0');
       expect(deserialized.expression, '2 + 3');
       expect(deserialized.result, '5 = 5.0');
-      // Sin marca de tiempo conocida: la UI no debe fingir "Ahora"
+      // No known timestamp: the UI must not pretend "Ahora"
       expect(deserialized.timestampKnown, isFalse);
-      // Devuelve la cadena original para que el borrado exacto siga funcionando
+      // Returns the original string so exact-match deletion keeps working
       expect(deserialized.toStorageString(), '2 + 3=5 = 5.0');
     });
 
     test('Límite de historial', () async {
-      // Agregar más operaciones que el límite
+      // Add more operations than the limit
       for (int i = 0; i < 105; i++) {
         await HistoryService.addOperation(
           OperationEntry(expression: '$i + 1', result: '${i + 1}'),
         );
       }
 
-      // Verificar que el historial se mantiene dentro del límite
+      // Verify the history stays within the limit
       final history = await HistoryService.getHistory();
       expect(history.length, 100);
       
-      // Las operaciones más recientes deben mantenerse
+      // The most recent operations must be kept
       expect(history[0].expression, '104 + 1');
       expect(history[99].expression, '5 + 1');
     });

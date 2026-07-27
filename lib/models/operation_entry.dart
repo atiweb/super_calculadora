@@ -1,19 +1,19 @@
 import 'dart:convert';
 
-/// Modelo para representar una entrada en el historial de operaciones
+/// Model representing an entry in the operation history
 class OperationEntry {
   final String expression;
   final String result;
   final DateTime timestamp;
 
-  /// `false` para entradas del formato de almacenamiento antiguo, que no
-  /// guardaba la marca de tiempo: la UI muestra «—» en vez de fingir que la
-  /// operación acaba de ocurrir.
+  /// `false` for entries from the old storage format, which did not
+  /// save the timestamp: the UI shows «—» instead of pretending the
+  /// operation just happened.
   final bool timestampKnown;
 
-  /// Cadena original de almacenamiento (si la entrada viene de disco). La
-  /// devuelve [toStorageString] tal cual para que borrar una entrada antigua
-  /// siga encontrando su línea exacta en el almacenamiento.
+  /// Original storage string (if the entry comes from disk). It is
+  /// returned as-is by [toStorageString] so that deleting an old entry
+  /// still finds its exact line in storage.
   final String? _rawStorage;
 
   OperationEntry({
@@ -32,7 +32,7 @@ class OperationEntry {
     required String rawStorage,
   }) : _rawStorage = rawStorage;
 
-  /// Convierte a Map para serialización
+  /// Converts to a Map for serialization
   Map<String, dynamic> toMap() {
     return {
       'expression': expression,
@@ -41,7 +41,7 @@ class OperationEntry {
     };
   }
 
-  /// Crea desde Map para deserialización
+  /// Creates from a Map for deserialization
   factory OperationEntry.fromMap(Map<String, dynamic> map) {
     return OperationEntry(
       expression: map['expression'] ?? '',
@@ -50,10 +50,10 @@ class OperationEntry {
     );
   }
 
-  /// Convierte a string para almacenamiento. Formato JSON con marca de tiempo
-  /// (el formato antiguo `expresión=resultado` la perdía y cada reinicio
-  /// mostraba todo como «Ahora»). Las entradas leídas de disco devuelven su
-  /// cadena original para que la eliminación por coincidencia exacta funcione.
+  /// Converts to a string for storage. JSON format with a timestamp
+  /// (the old `expression=result` format lost it and every restart
+  /// showed everything as «Now»). Entries read from disk return their
+  /// original string so that exact-match deletion works.
   String toStorageString() {
     if (_rawStorage != null) return _rawStorage;
     return jsonEncode({
@@ -63,8 +63,8 @@ class OperationEntry {
     });
   }
 
-  /// Crea desde string de almacenamiento. Acepta el formato JSON actual y el
-  /// antiguo `expresión=resultado` (sin marca de tiempo).
+  /// Creates from a storage string. Accepts the current JSON format and the
+  /// old `expression=result` one (no timestamp).
   factory OperationEntry.fromStorageString(String str) {
     try {
       final dynamic decoded = jsonDecode(str);
@@ -83,13 +83,13 @@ class OperationEntry {
         );
       }
     } catch (_) {
-      // No es JSON: formato antiguo
+      // Not JSON: old format
     }
 
     final parts = str.split('=');
     final String expression = parts.length >= 2 ? parts[0] : str;
     final String result = parts.length >= 2
-        ? parts.sublist(1).join('=') // En caso de que el resultado tenga '='
+        ? parts.sublist(1).join('=') // In case the result contains '='
         : '';
     return OperationEntry._stored(
       expression: expression,
@@ -108,8 +108,8 @@ class OperationEntry {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-    // La marca de tiempo forma parte de la identidad: sin ella, borrar una de
-    // dos entradas repetidas eliminaba siempre la primera coincidencia.
+    // The timestamp is part of the identity: without it, deleting one of
+    // two duplicate entries always removed the first match.
     return other is OperationEntry &&
         other.expression == expression &&
         other.result == result &&

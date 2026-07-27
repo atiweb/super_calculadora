@@ -1,12 +1,12 @@
 import 'package:math_expressions/math_expressions.dart';
 
-/// Cálculo **numérico** sobre funciones de una variable `x`, parseadas con
-/// `math_expressions` (p. ej. `x^2 + sin(x)`, `1/x`, `exp(x)`).
+/// **Numerical** calculus on functions of one variable `x`, parsed with
+/// `math_expressions` (e.g. `x^2 + sin(x)`, `1/x`, `exp(x)`).
 ///
-/// Trigonometría en radianes (convención de cálculo). Métodos rápidos (no
-/// requieren isolate). Lanzan [FormatException] si la expresión no parsea.
+/// Trigonometry in radians (calculus convention). Fast methods (no
+/// isolate needed). They throw [FormatException] if the expression does not parse.
 class CalculusService {
-  /// Compila la expresión a una función double→double (evalúa enlazando `x`).
+  /// Compiles the expression to a double→double function (evaluates by binding `x`).
   static double Function(double) _compile(String expr) {
     final parsed = ShuntingYardParser().parse(expr);
     final x = Variable('x');
@@ -16,24 +16,24 @@ class CalculusService {
     };
   }
 
-  /// Derivada f'(x₀) por diferencias centrales con extrapolación de Richardson.
+  /// Derivative f'(x₀) via central differences with Richardson extrapolation.
   static double derivative(String expr, double at) {
     final f = _compile(expr);
     final h = (at.abs() > 1 ? at.abs() : 1.0) * 1e-5;
     double central(double step) => (f(at + step) - f(at - step)) / (2 * step);
-    // Richardson: combina h y h/2 para cancelar el término O(h²).
+    // Richardson: combines h and h/2 to cancel the O(h²) term.
     final d1 = central(h);
     final d2 = central(h / 2);
     return (4 * d2 - d1) / 3;
   }
 
-  /// Integral definida ∫ₐᵇ f(x) dx por la regla de Simpson compuesta.
+  /// Definite integral ∫ₐᵇ f(x) dx via the composite Simpson's rule.
   static double integral(String expr, double a, double b, {int n = 1000}) {
     final f = _compile(expr);
-    // n < 2 producía NaN (n=0) o un valor finito incorrecto (n negativo:
-    // el bucle no corre y se divide por un paso negativo).
+    // n < 2 used to produce NaN (n=0) or an incorrect finite value (negative n:
+    // the loop never runs and a negative step is divided by).
     if (n < 2) n = 2;
-    if (n.isOdd) n++; // Simpson requiere n par
+    if (n.isOdd) n++; // Simpson requires even n
     final h = (b - a) / n;
     double sum = f(a) + f(b);
     for (int i = 1; i < n; i++) {
@@ -42,8 +42,8 @@ class CalculusService {
     return sum * h / 3;
   }
 
-  /// Límite numérico de f en x₀ (aproximación bilateral). Devuelve `null` si
-  /// los límites laterales no concuerdan (posible discontinuidad de salto).
+  /// Numerical limit of f at x₀ (two-sided approximation). Returns `null` if
+  /// the one-sided limits do not agree (possible jump discontinuity).
   static double? limit(String expr, double at, {double tol = 1e-6}) {
     final f = _compile(expr);
     final deltas = [1e-3, 1e-4, 1e-5, 1e-6];
@@ -58,9 +58,9 @@ class CalculusService {
     return (left + right) / 2;
   }
 
-  /// Evalúa f(x₀) directamente.
+  /// Evaluates f(x₀) directly.
   static double evaluateAt(String expr, double at) => _compile(expr)(at);
 
-  /// ¿Es un resultado utilizable (finito)?
+  /// Is the result usable (finite)?
   static bool isUsable(double v) => v.isFinite;
 }

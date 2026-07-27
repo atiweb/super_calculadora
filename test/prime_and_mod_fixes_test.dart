@@ -5,13 +5,13 @@ import 'package:super_calculadora/services/special_functions_service.dart';
 
 BigInt bi(int v) => BigInt.from(v);
 
-/// Regresión de dos bugs de teoría de números:
-///  1. `isProbablyPrime` usaba bases Miller–Rabin fijas {2,3,5,7}. 3215031751
-///     (= 151·751·28351) es pseudoprimo fuerte a todas ellas → se reportaba
-///     como primo.
-///  2. `SpecialFunctionsService.mod` devolvía un residuo NEGATIVO cuando el
-///     módulo era negativo (mod(7,-3) → -2), en contra de la intención de la
-///     propia función (residuo no negativo).
+/// Regression for two number-theory bugs:
+///  1. `isProbablyPrime` used fixed Miller–Rabin bases {2,3,5,7}. 3215031751
+///     (= 151·751·28351) is a strong pseudoprime to all of them → it was
+///     reported as prime.
+///  2. `SpecialFunctionsService.mod` returned a NEGATIVE residue when the
+///     modulus was negative (mod(7,-3) → -2), against the intent of the
+///     function itself (non-negative residue).
 void main() {
   group('isProbablyPrime — pseudoprimos fuertes', () {
     test('3215031751 (spsp a bases 2,3,5,7) es COMPUESTO', () {
@@ -29,7 +29,7 @@ void main() {
         expect(isProbablyPrime(bi(p)), isTrue, reason: '$p es primo');
       }
       expect(isProbablyPrime(BigInt.parse('2147483647')), isTrue); // 2^31−1
-      expect(isProbablyPrime(BigInt.parse('67280421310721')), isTrue); // primo
+      expect(isProbablyPrime(BigInt.parse('67280421310721')), isTrue); // prime
     });
 
     test('compuestos comunes son compuestos', () {
@@ -46,7 +46,7 @@ void main() {
     test('mod(-7, -3) = 2', () {
       expect(SpecialFunctionsService.mod(bi(-7), bi(-3)), bi(2));
     });
-    // Casos con módulo positivo no cambian de comportamiento.
+    // Cases with a positive modulus keep the same behavior.
     test('mod(17, 5) = 2', () {
       expect(SpecialFunctionsService.mod(bi(17), bi(5)), bi(2));
     });

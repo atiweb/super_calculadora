@@ -3,35 +3,35 @@ import '../utils/app_locale.dart';
 import '../models/fraction.dart';
 import 'special_functions_service.dart';
 
-/// Funciones de teoría de números avanzadas para entrenamiento de olimpiada:
-/// raíces modulares, congruencias, fracciones continuas, ecuación de Pell,
-/// sumas de cuadrados, número de Frobenius, etc.
+/// Advanced number theory functions for olympiad training:
+/// modular roots, congruences, continued fractions, Pell's equation,
+/// sums of squares, Frobenius number, etc.
 class NumberTheoryAdvancedService {
   static final BigInt _zero = BigInt.zero;
   static final BigInt _one = BigInt.one;
   static final BigInt _two = BigInt.two;
 
-  // ── Raíz cuadrada modular (Tonelli-Shanks) ───────────────────────────────
+  // ── Modular square root (Tonelli-Shanks) ─────────────────────────────────
 
-  /// Devuelve r tal que r² ≡ a (mod p), o `null` si a no es residuo cuadrático.
-  /// Requiere que p sea primo. La otra raíz es p − r.
+  /// Returns r such that r² ≡ a (mod p), or `null` if a is not a quadratic residue.
+  /// Requires p to be prime. The other root is p − r.
   static BigInt? sqrtMod(BigInt a, BigInt p) {
     a = a % p;
     if (a.isNegative) a += p;
     if (a == _zero) return _zero;
     if (p == _two) return a;
 
-    // Criterio de Euler: a debe ser residuo cuadrático.
+    // Euler's criterion: a must be a quadratic residue.
     if (SpecialFunctionsService.modPow(a, (p - _one) ~/ _two, p) != _one) {
       return null;
     }
 
-    // Atajo para p ≡ 3 (mod 4).
+    // Shortcut for p ≡ 3 (mod 4).
     if (p % BigInt.from(4) == BigInt.from(3)) {
       return SpecialFunctionsService.modPow(a, (p + _one) ~/ BigInt.from(4), p);
     }
 
-    // Tonelli-Shanks general.
+    // General Tonelli-Shanks.
     BigInt q = p - _one;
     int s = 0;
     while (q.isEven) {
@@ -39,7 +39,7 @@ class NumberTheoryAdvancedService {
       s++;
     }
 
-    // Buscar un no-residuo z.
+    // Find a non-residue z.
     BigInt z = _two;
     while (SpecialFunctionsService.modPow(z, (p - _one) ~/ _two, p) != p - _one) {
       z += _one;
@@ -56,7 +56,7 @@ class NumberTheoryAdvancedService {
       while (tt != _one) {
         tt = (tt * tt) % p;
         i++;
-        if (BigInt.from(i) == m) return null; // no debería ocurrir si es QR
+        if (BigInt.from(i) == m) return null; // should not happen if it is a QR
       }
       final BigInt b =
           SpecialFunctionsService.modPow(c, _two.pow((m - BigInt.from(i) - _one).toInt()), p);
@@ -68,10 +68,10 @@ class NumberTheoryAdvancedService {
     return r;
   }
 
-  // ── Congruencia lineal ───────────────────────────────────────────────────
+  // ── Linear congruence ────────────────────────────────────────────────────
 
-  /// Resuelve a·x ≡ b (mod n). Devuelve todas las soluciones en [0, n),
-  /// o lista vacía si no hay solución.
+  /// Solves a·x ≡ b (mod n). Returns all solutions in [0, n),
+  /// or an empty list if there is no solution.
   static List<BigInt> solveLinearCongruence(BigInt a, BigInt b, BigInt n) {
     if (n <= _zero) throw CalcException(CalcError.modulusPositive);
     a = a % n;
@@ -80,15 +80,15 @@ class NumberTheoryAdvancedService {
     if (b.isNegative) b += n;
 
     final BigInt g = _gcd(a, n);
-    if (b % g != _zero) return []; // sin solución
+    if (b % g != _zero) return []; // no solution
 
     final BigInt aR = a ~/ g;
     final BigInt bR = b ~/ g;
     final BigInt nR = n ~/ g;
     BigInt x0;
     if (nR == _one) {
-      // a ≡ 0 y b ≡ 0 (mod n): toda x es solución. Pedir el inverso mod 1
-      // lanzaba ArgumentError (n debe ser > 1) en vez de resolver.
+      // a ≡ 0 and b ≡ 0 (mod n): every x is a solution. Asking for the inverse
+      // mod 1 threw ArgumentError (n must be > 1) instead of solving.
       x0 = _zero;
     } else {
       final BigInt? inv = SpecialFunctionsService.modularInverse(aR % nR, nR);
@@ -105,9 +105,9 @@ class NumberTheoryAdvancedService {
     return solutions;
   }
 
-  // ── Teorema de Lucas ─────────────────────────────────────────────────────
+  // ── Lucas' theorem ───────────────────────────────────────────────────────
 
-  /// C(n, k) mod p para p primo, usando el teorema de Lucas.
+  /// C(n, k) mod p for prime p, using Lucas' theorem.
   static BigInt lucasTheorem(BigInt n, BigInt k, BigInt p) {
     if (k.isNegative || k > n) return _zero;
     BigInt result = _one;
@@ -136,9 +136,9 @@ class NumberTheoryAdvancedService {
     return (num * inv) % p;
   }
 
-  // ── Fracciones continuas ─────────────────────────────────────────────────
+  // ── Continued fractions ──────────────────────────────────────────────────
 
-  /// Fracción continua de un racional p/q → [a0; a1, a2, ...].
+  /// Continued fraction of a rational p/q → [a0; a1, a2, ...].
   static List<BigInt> continuedFraction(BigInt p, BigInt q) {
     if (q == _zero) throw CalcException(CalcError.zeroDenominator);
     final List<BigInt> result = [];
@@ -152,8 +152,8 @@ class NumberTheoryAdvancedService {
     return result;
   }
 
-  /// Fracción continua (periódica) de √n: devuelve (a0, periodo).
-  /// Si n es cuadrado perfecto, el periodo es vacío.
+  /// (Periodic) continued fraction of √n: returns (a0, period).
+  /// If n is a perfect square, the period is empty.
   static ({BigInt a0, List<BigInt> period}) continuedFractionSqrt(BigInt n) {
     if (n < _zero) throw CalcException(CalcError.nNonNegative);
     final BigInt a0 = _isqrt(n);
@@ -170,7 +170,7 @@ class NumberTheoryAdvancedService {
     return (a0: a0, period: period);
   }
 
-  /// Convergentes de una fracción continua [a0; a1, ...] como fracciones.
+  /// Convergents of a continued fraction [a0; a1, ...] as fractions.
   static List<Fraction> convergents(List<BigInt> cf) {
     final List<Fraction> result = [];
     BigInt hPrev = _one, h = cf.isEmpty ? _zero : cf[0];
@@ -188,9 +188,9 @@ class NumberTheoryAdvancedService {
     return result;
   }
 
-  // ── Ecuación de Pell ─────────────────────────────────────────────────────
+  // ── Pell's equation ──────────────────────────────────────────────────────
 
-  /// Solución fundamental (mínima, x>0) de x² − D·y² = 1, para D no cuadrado.
+  /// Fundamental (minimal, x>0) solution of x² − D·y² = 1, for non-square D.
   static ({BigInt x, BigInt y}) solvePell(BigInt D) {
     if (D <= _zero) throw CalcException(CalcError.positiveDRequired);
     final BigInt a0 = _isqrt(D);
@@ -218,9 +218,9 @@ class NumberTheoryAdvancedService {
     }
   }
 
-  // ── Sumas de cuadrados ───────────────────────────────────────────────────
+  // ── Sums of squares ──────────────────────────────────────────────────────
 
-  /// Representación n = a² + b² con 0 ≤ a ≤ b, o `null` si no existe.
+  /// Representation n = a² + b² with 0 ≤ a ≤ b, or `null` if none exists.
   static ({BigInt a, BigInt b})? sumOfTwoSquares(BigInt n) {
     if (n < _zero) return null;
     if (n == _zero) return (a: _zero, b: _zero);
@@ -234,8 +234,8 @@ class NumberTheoryAdvancedService {
     return null;
   }
 
-  /// Representación n = a² + b² + c² + d² (teorema de Lagrange, siempre existe).
-  /// Limitado a n ≤ 10^8 para evitar cuelgues en dispositivos móviles.
+  /// Representation n = a² + b² + c² + d² (Lagrange's theorem, always exists).
+  /// Limited to n ≤ 10^8 to avoid hangs on mobile devices.
   static ({BigInt a, BigInt b, BigInt c, BigInt d}) sumOfFourSquares(BigInt n) {
     if (n < _zero) throw CalcException(CalcError.nNonNegative);
     if (n > BigInt.from(100000000)) {
@@ -254,33 +254,33 @@ class NumberTheoryAdvancedService {
       }
       a += _one;
     }
-    // Inalcanzable por el teorema de Lagrange.
+    // Unreachable by Lagrange's theorem.
     throw StateError(trLocale('No se encontró representación (no debería ocurrir)', 'No representation found (should not happen)'));
   }
 
-  // ── Número de Frobenius ──────────────────────────────────────────────────
+  // ── Frobenius number ─────────────────────────────────────────────────────
 
-  /// Número de Frobenius (mayor entero no representable como combinación
-  /// no negativa de las denominaciones). Requiere mcd = 1 y valores ≥ 1.
-  /// Devuelve `null` si mcd ≠ 1 (infinitos no representables).
+  /// Frobenius number (largest integer not representable as a non-negative
+  /// combination of the denominations). Requires gcd = 1 and values ≥ 1.
+  /// Returns `null` if gcd ≠ 1 (infinitely many non-representable).
   static BigInt? frobeniusNumber(List<int> coins) {
     final filtered = coins.where((c) => c > 0).toSet().toList()..sort();
     if (filtered.isEmpty) throw CalcException(CalcError.needPositiveValue);
-    if (filtered.contains(1)) return BigInt.from(-1); // todo es representable
+    if (filtered.contains(1)) return BigInt.from(-1); // everything is representable
 
-    // mcd de todos debe ser 1.
+    // gcd of all of them must be 1.
     int g = filtered.first;
     for (final c in filtered) {
       g = _gcdInt(g, c);
     }
     if (g != 1) return null;
 
-    // Algoritmo del "Round-Robin" / Dijkstra sobre residuos mod a1.
+    // "Round-Robin" / Dijkstra algorithm over residues mod a1.
     final int a1 = filtered.first;
     const int inf = -1;
     final List<int> dist = List.filled(a1, inf);
     dist[0] = 0;
-    // Relajación tipo Bellman-Ford hasta estabilizar.
+    // Bellman-Ford-style relaxation until it stabilizes.
     bool changed = true;
     while (changed) {
       changed = false;
@@ -304,9 +304,9 @@ class NumberTheoryAdvancedService {
     return BigInt.from(maxDist - a1);
   }
 
-  // ── Números de Lucas ─────────────────────────────────────────────────────
+  // ── Lucas numbers ────────────────────────────────────────────────────────
 
-  /// n-ésimo número de Lucas: L(0)=2, L(1)=1, L(n)=L(n-1)+L(n-2).
+  /// n-th Lucas number: L(0)=2, L(1)=1, L(n)=L(n-1)+L(n-2).
   static BigInt lucasNumber(int n) {
     if (n < 0) throw CalcException(CalcError.nNonNegative);
     if (n == 0) return _two;
@@ -320,9 +320,9 @@ class NumberTheoryAdvancedService {
     return cur;
   }
 
-  // ── Logaritmo discreto ───────────────────────────────────────────────────
+  // ── Discrete logarithm ───────────────────────────────────────────────────
 
-  /// Menor x ≥ 0 con g^x ≡ h (mod n), por baby-step giant-step, o `null`.
+  /// Smallest x ≥ 0 with g^x ≡ h (mod n), via baby-step giant-step, or `null`.
   static BigInt? discreteLog(BigInt g, BigInt h, BigInt n) {
     if (n <= _one) throw CalcException(CalcError.nGreaterThanOne);
     g = g % n;
@@ -332,7 +332,7 @@ class NumberTheoryAdvancedService {
 
     final BigInt m = _isqrt(n) + _one;
 
-    // Baby steps: g^j para j en [0, m).
+    // Baby steps: g^j for j in [0, m).
     final Map<BigInt, BigInt> table = {};
     BigInt e = _one;
     for (BigInt j = _zero; j < m; j += _one) {
@@ -340,9 +340,9 @@ class NumberTheoryAdvancedService {
       e = (e * g) % n;
     }
 
-    // Consultar primero la tabla: cubre todas las soluciones x < m incluso
-    // cuando g no es invertible mod n (p. ej. 2^x ≡ 4 (mod 8), x = 2), caso
-    // en que antes se devolvía null con solución existente.
+    // Check the table first: covers all solutions x < m even
+    // when g is not invertible mod n (e.g. 2^x ≡ 4 (mod 8), x = 2), a case
+    // where null used to be returned despite an existing solution.
     final BigInt? direct = table[h];
     if (direct != null) return direct;
 
@@ -363,9 +363,9 @@ class NumberTheoryAdvancedService {
     return null;
   }
 
-  // ── Criba de Eratóstenes ─────────────────────────────────────────────────
+  // ── Sieve of Eratosthenes ────────────────────────────────────────────────
 
-  /// Criba de Eratóstenes: `flags[i]` indica si i es primo, para i en [0, n].
+  /// Sieve of Eratosthenes: `flags[i]` indicates whether i is prime, for i in [0, n].
   static List<bool> sieveOfEratosthenes(int n) {
     if (n < 0) throw CalcException(CalcError.nNonNegative);
     final flags = List<bool>.filled(n + 1, true);

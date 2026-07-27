@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../l10n/app_localizations.dart';
 
-/// Diálogo "Acerca de" unificado para la aplicación
+/// Unified "About" dialog for the application
 class AppAboutDialog {
   static void show(BuildContext context) {
     final l = AppLocalizations.of(context)!;

@@ -56,9 +56,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
       body: Consumer<ThemeProvider>(
         builder: (context, themeProvider, child) {
           return ListView(
-            padding: const EdgeInsets.all(16.0),
+            // Extra bottom padding: in edge-to-edge (Android 15) the content ends
+            // up behind the system navigation bar without this inset.
+            padding: EdgeInsets.fromLTRB(
+                16, 16, 16, 16 + MediaQuery.paddingOf(context).bottom),
             children: [
-              // Tema Section
+              // Theme Section
               Card(
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
@@ -108,7 +111,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
               const SizedBox(height: 16),
 
-              // Idioma / Language Section
+              // Language Section
               Card(
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
@@ -164,7 +167,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
               const SizedBox(height: 16),
 
-              // Formato de números Section
+              // Number Format Section
               Card(
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
@@ -267,7 +270,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
               const SizedBox(height: 16),
 
-              // Alta precisión (reales constructivos)
+              // High precision (constructive reals)
               Card(
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
@@ -297,7 +300,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         value: _highPrecision,
                         onChanged: (bool value) async {
                           await SettingsService.setHighPrecisionMode(value);
-                          if (!mounted) return; // salir durante el await disponía el estado
+                          if (!mounted) return; // leaving during the await disposed the state
                           setState(() => _highPrecision = value);
                         },
                         secondary: Icon(_highPrecision
@@ -328,7 +331,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
               const SizedBox(height: 16),
 
-              // Informações do App
+              // App Information
               Card(
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),

@@ -1,22 +1,22 @@
-/// Tipos de calculadora disponibles
+/// Available calculator types
 enum CalculatorType {
   standard,
   scientific,
   special,
 }
 
-/// Configuración de la calculadora
+/// Calculator configuration
 class CalculatorConfig {
   static const String calculatorTypeKey = 'calculator_type';
   
-  /// Obtiene el tipo de calculadora guardado
+  /// Gets the saved calculator type
   static CalculatorType getCalculatorType() {
-    // Por defecto, calculadora estándar
+    // Standard calculator by default
     return CalculatorType.standard;
   }
   
-  /// Guarda el tipo de calculadora
+  /// Saves the calculator type
   static void setCalculatorType(CalculatorType type) {
-    // Implementación futura con SharedPreferences si es necesario
+    // Future implementation with SharedPreferences if needed
   }
 }

@@ -3,48 +3,48 @@ import '../models/calc_exception.dart';
 import '../models/fraction.dart';
 import '../models/polynomial.dart';
 
-/// Relaciones de Vieta de un polinomio.
+/// Vieta's relations for a polynomial.
 class VietaRelations {
-  /// Suma de las raíces (e₁).
+  /// Sum of the roots (e₁).
   final Fraction sumOfRoots;
 
-  /// Producto de las raíces (eₙ).
+  /// Product of the roots (eₙ).
   final Fraction productOfRoots;
 
-  /// Funciones simétricas elementales e₁..eₙ (índice 0 = e₁).
+  /// Elementary symmetric functions e₁..eₙ (index 0 = e₁).
   final List<Fraction> elementarySymmetric;
 
   const VietaRelations(
       this.sumOfRoots, this.productOfRoots, this.elementarySymmetric);
 }
 
-/// Naturaleza de las raíces de una cuadrática (neutral al idioma).
+/// Nature of the roots of a quadratic (language-neutral).
 enum QuadraticNature { twoRealDistinct, doubleRoot, complexConjugate }
 
-/// Solución exacta de una ecuación cuadrática.
+/// Exact solution of a quadratic equation.
 class QuadraticSolution {
   final Fraction discriminant;
 
   final QuadraticNature nature;
 
-  /// Raíces racionales exactas (vacío si las raíces son irracionales/complejas).
+  /// Exact rational roots (empty if the roots are irrational/complex).
   final List<Fraction> rationalRoots;
 
-  /// Raíces reales aproximadas (vacío si son complejas).
+  /// Approximate real roots (empty if they are complex).
   final List<double> realRoots;
 
   const QuadraticSolution(
       this.discriminant, this.nature, this.rationalRoots, this.realRoots);
 }
 
-/// Operaciones sobre polinomios con coeficientes racionales.
+/// Operations on polynomials with rational coefficients.
 class PolynomialService {
-  /// Parsea expresiones como "x^2-5x+6", "2x^3 - x + 1", "3/2 x - 1".
+  /// Parses expressions like "x^2-5x+6", "2x^3 - x + 1", "3/2 x - 1".
   static Polynomial parse(String input) {
     String s = input.replaceAll(' ', '').replaceAll('*', '');
     if (s.isEmpty) throw CalcException(CalcError.emptyExpression);
 
-    // Separar en términos preservando el signo.
+    // Split into terms, preserving the sign.
     s = s.replaceAll('-', '+-');
     final List<String> rawTerms =
         s.split('+').where((t) => t.isNotEmpty).toList();
@@ -71,8 +71,8 @@ class PolynomialService {
       } else {
         coeff = Fraction.parse(coeffStr);
       }
-      // Un signo suelto solo es coeficiente implícito (±1) junto a una x;
-      // como término constante ("5-", "3--2") es entrada inválida.
+      // A lone sign is only an implicit coefficient (±1) next to an x;
+      // as a constant term ("5-", "3--2") it is invalid input.
       if (!hasX && (coeffStr.isEmpty || coeffStr == '+' || coeffStr == '-')) {
         throw CalcException(CalcError.invalidTerm, {'value': term});
       }
@@ -88,7 +88,7 @@ class PolynomialService {
     return Polynomial(coeffs);
   }
 
-  /// MCD de dos polinomios (mónico).
+  /// GCD of two polynomials (monic).
   static Polynomial gcd(Polynomial a, Polynomial b) {
     Polynomial x = a;
     Polynomial y = b;
@@ -100,7 +100,7 @@ class PolynomialService {
     return x.isZero ? x : x.toMonic();
   }
 
-  /// Relaciones de Vieta: eₖ = (−1)ᵏ · a_{n−k} / aₙ.
+  /// Vieta's relations: eₖ = (−1)ᵏ · a_{n−k} / aₙ.
   static VietaRelations vieta(Polynomial p) {
     if (p.degree < 1) {
       throw CalcException(CalcError.degreeAtLeastOne);
@@ -116,7 +116,7 @@ class PolynomialService {
     return VietaRelations(e.first, e.last, e);
   }
 
-  /// Discriminante (grados 2 y 3).
+  /// Discriminant (degrees 2 and 3).
   static Fraction discriminant(Polynomial p) {
     if (p.degree == 2) {
       final a = p.coefficient(2), b = p.coefficient(1), c = p.coefficient(0);
@@ -137,15 +137,15 @@ class PolynomialService {
     throw CalcException(CalcError.discriminantDegree);
   }
 
-  /// Candidatos a raíz racional (teorema de la raíz racional).
+  /// Rational root candidates (rational root theorem).
   static List<Fraction> rationalRootCandidates(Polynomial p) {
     if (p.isZero) {
       throw CalcException(CalcError.zeroPolynomialRoots);
     }
-    // Escalar a coeficientes enteros.
+    // Scale to integer coefficients.
     final List<BigInt> intCoeffs = _toIntegerCoefficients(p);
 
-    // Factorizar potencias de x (raíz 0) por la cola.
+    // Factor out trailing powers of x (root 0).
     int lowZeros = 0;
     while (lowZeros < intCoeffs.length && intCoeffs[lowZeros] == BigInt.zero) {
       lowZeros++;
@@ -170,7 +170,7 @@ class PolynomialService {
     return sorted;
   }
 
-  /// Raíces racionales reales del polinomio.
+  /// Real rational roots of the polynomial.
   static List<Fraction> rationalRoots(Polynomial p) {
     final List<Fraction> roots = [];
     for (final cand in rationalRootCandidates(p)) {
@@ -179,7 +179,7 @@ class PolynomialService {
     return roots;
   }
 
-  /// Resuelve ax² + bx + c = 0 de forma exacta donde es posible.
+  /// Solves ax² + bx + c = 0 exactly where possible.
   static QuadraticSolution solveQuadratic(Fraction a, Fraction b, Fraction c) {
     if (a.isZero) {
       throw CalcException(CalcError.notQuadratic);
@@ -201,7 +201,7 @@ class PolynomialService {
     final Fraction? sqrtD = _fractionSqrt(d);
     final Fraction twoA = Fraction.fromInt(2) * a;
     if (sqrtD != null) {
-      // Raíces racionales exactas.
+      // Exact rational roots.
       final r1 = (-b + sqrtD) / twoA;
       final r2 = (-b - sqrtD) / twoA;
       if (r1 == r2) {
@@ -231,12 +231,12 @@ class PolynomialService {
     return QuadraticSolution(d, nature, rationalRoots, realRoots);
   }
 
-  /// Raíces reales (aproximadas) de ax³+bx²+cx+d = 0.
+  /// (Approximate) real roots of ax³+bx²+cx+d = 0.
   static List<double> solveCubicReal(double a, double b, double c, double d) {
     if (a == 0) {
       throw CalcException(CalcError.notCubic);
     }
-    // Normalizar y deprimir: x = t − b/(3a) ⇒ t³ + pt + q = 0
+    // Normalize and depress: x = t − b/(3a) ⇒ t³ + pt + q = 0
     final double bn = b / a, cn = c / a, dn = d / a;
     final double p = cn - bn * bn / 3;
     final double q = 2 * bn * bn * bn / 27 - bn * cn / 3 + dn;
@@ -246,18 +246,18 @@ class PolynomialService {
     final double disc = q * q / 4 + p * p * p / 27;
 
     if (disc > 1e-12) {
-      // Una raíz real.
+      // One real root.
       final double sqrtDisc = math.sqrt(disc);
       final double u = _cbrt(-q / 2 + sqrtDisc);
       final double v = _cbrt(-q / 2 - sqrtDisc);
       roots.add(u + v - shift);
     } else if (disc.abs() <= 1e-12) {
-      // Raíz múltiple, todas reales.
+      // Repeated root, all roots real.
       final double u = _cbrt(-q / 2);
       roots.add(2 * u - shift);
       roots.add(-u - shift);
     } else {
-      // Tres raíces reales distintas (caso trigonométrico).
+      // Three distinct real roots (trigonometric case).
       final double m = 2 * math.sqrt(-p / 3);
       final double theta =
           math.acos(((3 * q) / (p * m)).clamp(-1.0, 1.0)) / 3;
@@ -272,7 +272,7 @@ class PolynomialService {
   // ── Helpers ──────────────────────────────────────────────────────────────
 
   static List<BigInt> _toIntegerCoefficients(Polynomial p) {
-    // Multiplicar por el mcm de los denominadores.
+    // Multiply by the lcm of the denominators.
     BigInt l = BigInt.one;
     for (final c in p.coefficients) {
       l = _lcm(l, c.denominator);
@@ -311,7 +311,7 @@ class PolynomialService {
     return (a * b).abs() ~/ _gcd(a, b);
   }
 
-  /// Raíz cuadrada exacta de una fracción si es un cuadrado perfecto racional.
+  /// Exact square root of a fraction if it is a rational perfect square.
   static Fraction? _fractionSqrt(Fraction f) {
     if (f.isNegative) return null;
     if (f.isZero) return Fraction.zero;

@@ -1,7 +1,7 @@
-/// Códigos de error neutrales al idioma para las herramientas de cálculo.
+/// Language-neutral error codes for the calculation tools.
 ///
-/// Los servicios lanzan estos códigos (no texto) y la capa de UI los traduce
-/// al idioma activo. Así no hay mensajes "hardcodeados" en un solo idioma.
+/// Services throw these codes (not text) and the UI layer translates them
+/// into the active language. This way no messages are hardcoded in a single language.
 enum CalcError {
   zeroDenominator,
   divisionByZero,
@@ -45,18 +45,18 @@ enum CalcError {
   invalidSystem,
 }
 
-/// Excepción de cálculo con un código localizable y argumentos opcionales.
+/// Calculation exception with a localizable code and optional arguments.
 ///
-/// Extiende [ArgumentError] para mantener compatibilidad con código y pruebas
-/// existentes que esperan `throwsArgumentError`. El `message` heredado es solo
-/// el nombre del código (neutral); el texto mostrado al usuario lo produce la
-/// UI a partir de [code] y [args].
+/// Extends [ArgumentError] to keep compatibility with existing code and
+/// tests that expect `throwsArgumentError`. The inherited `message` is just
+/// the code name (neutral); the text shown to the user is produced by the
+/// UI from [code] and [args].
 class CalcException extends ArgumentError {
   final CalcError code;
   final Map<String, String> args;
 
   CalcException(this.code, [this.args = const {}]) : super(code.name);
 
-  /// Valor de un argumento (cadena vacía si no existe).
+  /// Value of an argument (empty string if it does not exist).
   String arg(String key) => args[key] ?? '';
 }

@@ -1,9 +1,9 @@
 import 'calc_exception.dart';
 import 'fraction.dart';
 
-/// Matriz de racionales **exactos** ([Fraction]). Las operaciones (determinante,
-/// inversa, resolución de sistemas) usan eliminación gaussiana con fracciones,
-/// por lo que el resultado es exacto (sin error de punto flotante).
+/// Matrix of **exact** rationals ([Fraction]). Operations (determinant,
+/// inverse, system solving) use Gaussian elimination with fractions,
+/// so the result is exact (no floating-point error).
 class Matrix {
   final List<List<Fraction>> rows;
   final int rowCount;
@@ -48,7 +48,7 @@ class Matrix {
         (i) => List.generate(colCount, (j) => rows[i][j] + o.rows[i][j])));
   }
 
-  /// Producto matricial (colCount de este = rowCount del otro).
+  /// Matrix product (this matrix's colCount = the other's rowCount).
   Matrix operator *(Matrix o) {
     if (colCount != o.rowCount) {
       throw CalcException(CalcError.invalidSystem);
@@ -67,7 +67,7 @@ class Matrix {
   Matrix scale(Fraction k) => Matrix(
       rows.map((r) => r.map((v) => v * k).toList()).toList());
 
-  /// Determinante por eliminación gaussiana (solo matrices cuadradas).
+  /// Determinant via Gaussian elimination (square matrices only).
   Fraction determinant() {
     if (!isSquare) throw CalcException(CalcError.invalidSystem);
     final n = rowCount;
@@ -101,7 +101,7 @@ class Matrix {
     return det;
   }
 
-  /// Inversa por Gauss-Jordan; `null` si es singular o no cuadrada.
+  /// Inverse via Gauss-Jordan; `null` if singular or not square.
   Matrix? inverse() {
     if (!isSquare) return null;
     final n = rowCount;
@@ -141,7 +141,7 @@ class Matrix {
     return Matrix(inv);
   }
 
-  /// Resuelve A·x = b (A cuadrada). Devuelve x o `null` si no hay solución única.
+  /// Solves A·x = b (A square). Returns x or `null` if there is no unique solution.
   List<Fraction>? solve(List<Fraction> b) {
     if (!isSquare || b.length != rowCount) {
       throw CalcException(CalcError.invalidSystem);
@@ -180,7 +180,7 @@ class Matrix {
     return x;
   }
 
-  /// Rango por eliminación gaussiana (cuenta filas no nulas tras reducir).
+  /// Rank via Gaussian elimination (counts nonzero rows after reducing).
   int rank() {
     final m = _copy();
     final n = rowCount;

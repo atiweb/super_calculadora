@@ -1,10 +1,10 @@
 import 'dart:math' as math;
 import 'calc_exception.dart';
 
-/// Número complejo en coordenadas cartesianas (parte real e imaginaria).
+/// Complex number in Cartesian coordinates (real and imaginary parts).
 ///
-/// Incluye De Moivre (potencias), raíces n-ésimas y raíces de la unidad,
-/// herramientas habituales en problemas de olimpiada.
+/// Includes De Moivre (powers), nth roots and roots of unity,
+/// common tools in olympiad problems.
 class Complex {
   final double re;
   final double im;
@@ -36,11 +36,11 @@ class Complex {
   double get modulus => math.sqrt(re * re + im * im);
   double get argument => math.atan2(im, re);
 
-  /// Potencia entera mediante De Moivre.
+  /// Integer power via De Moivre.
   Complex pow(int n) {
     if (n == 0) return one;
-    // 0^negativo es 1/0: sin este chequeo math.pow(0, n) devuelve Infinity y
-    // fromPolar produce (Infinity, NaN) en silencio.
+    // 0^negative is 1/0: without this check math.pow(0, n) returns Infinity
+    // and fromPolar silently produces (Infinity, NaN).
     if (n < 0 && re == 0 && im == 0) {
       throw CalcException(CalcError.divisionByZero);
     }
@@ -49,7 +49,7 @@ class Complex {
     return Complex.fromPolar(r, theta);
   }
 
-  /// Las n raíces n-ésimas de este número complejo.
+  /// The n nth roots of this complex number.
   List<Complex> nthRoots(int n) {
     if (n < 1) throw CalcException(CalcError.nPositive);
     final double r = math.pow(modulus, 1 / n).toDouble();
@@ -60,7 +60,7 @@ class Complex {
     });
   }
 
-  /// Las n raíces n-ésimas de la unidad: e^(2πik/n).
+  /// The n nth roots of unity: e^(2πik/n).
   static List<Complex> rootsOfUnity(int n) {
     if (n < 1) throw CalcException(CalcError.nPositive);
     return List.generate(n, (k) {
@@ -69,7 +69,7 @@ class Complex {
     });
   }
 
-  /// Comparación aproximada (para tolerar el redondeo de punto flotante).
+  /// Approximate comparison (to tolerate floating-point rounding).
   bool approxEquals(Complex o, [double tol = 1e-9]) =>
       (re - o.re).abs() <= tol && (im - o.im).abs() <= tol;
 
@@ -83,7 +83,7 @@ class Complex {
   @override
   String toString() {
     String fmt(double v) {
-      final r = (v * 1e9).roundToDouble() / 1e9; // limpiar ruido
+      final r = (v * 1e9).roundToDouble() / 1e9; // clean up noise
       if (r == r.roundToDouble()) return r.toInt().toString();
       return r.toString();
     }

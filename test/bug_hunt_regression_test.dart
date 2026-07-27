@@ -12,8 +12,8 @@ import 'package:super_calculadora/services/number_analysis_service.dart';
 import 'package:super_calculadora/services/number_theory_advanced_service.dart';
 import 'package:super_calculadora/services/polynomial_service.dart';
 
-/// Regresiones de la cacería de bugs (2026-07): cada grupo cubre un defecto
-/// que producía resultados silenciosamente incorrectos o crashes.
+/// Regressions from the bug hunt (2026-07): each group covers a defect
+/// that produced silently incorrect results or crashes.
 void main() {
   group('BigDecimal.fromString', () {
     test('expande notación científica en vez de degradar a 0', () {
@@ -69,8 +69,8 @@ void main() {
     });
 
     test('la e científica no se sustituye por la constante de Euler', () {
-      // 2e3 ya no debe convertirse en 2·2.718…·3 (≈22.72); si el parser no
-      // soporta la notación, debe dar error, nunca un valor incorrecto.
+      // 2e3 must no longer turn into 2·2.718…·3 (≈22.72); if the parser doesn't
+      // support the notation, it must error out, never yield a wrong value.
       final String r = calc.evaluateCompleteExpression('2e3+1');
       expect(r == '2001' || r.startsWith('err:'), isTrue, reason: r);
     });
@@ -128,7 +128,7 @@ void main() {
           throwsA(isA<CalcException>()));
       expect(() => PolynomialService.parse('5-'),
           throwsA(isA<CalcException>()));
-      // Los signos pegados a x siguen funcionando
+      // Signs attached to x keep working
       expect(PolynomialService.parse('-x+1').toString(), isNotEmpty);
     });
 
@@ -154,7 +154,7 @@ void main() {
           throwsA(isA<CalcException>()));
       expect(() => BigComplex.one / BigComplex.parse('0', '0.00'),
           throwsA(isA<CalcException>()));
-      // El worker devuelve la excepción localizable, no 'precision overflow'
+      // The worker returns the localizable exception, not 'precision overflow'
       expect(
           () => bigComplexPowWorker(
               {'re': '0', 'im': '0', 'n': -2, 'digits': 20}),

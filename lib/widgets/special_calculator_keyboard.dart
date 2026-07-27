@@ -12,17 +12,20 @@ class SpecialCalculatorKeyboard extends StatelessWidget {
     return Consumer<CalculatorService>(
       builder: (context, calculator, child) {
         final l = AppLocalizations.of(context)!;
+        // Acronyms that differ per language; the English help documents the
+        // buttons as GCD/LCM/Dioph/CRT/ΣdigB, so they must match.
+        final es = Localizations.localeOf(context).languageCode == 'es';
         return Container(
           padding: const EdgeInsets.all(4.0),
           child: Column(
             children: [
-              // Zona de funciones especiales (scrollable)
+              // Special functions area (scrollable)
               Expanded(
                 flex: 6,
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      // === TEORÍA DE NÚMEROS ===
+                      // === NUMBER THEORY ===
                       _buildSectionLabel(context, l.kbdNumberTheory),
                       Row(children: [
                         _buildButton(context, 'φ', () => calculator.eulerPhi(), ButtonType.function),
@@ -49,7 +52,7 @@ class SpecialCalculatorKeyboard extends StatelessWidget {
                         _buildButton(context, 'Vₚ', () => calculator.pAdicValuation(), ButtonType.function),
                       ]),
 
-                      // === ARITMÉTICA MODULAR ===
+                      // === MODULAR ARITHMETIC ===
                       _buildSectionLabel(context, l.kbdModularArith),
                       Row(children: [
                         _buildButton(context, 'mod', () => calculator.modFunction(), ButtonType.function),
@@ -61,16 +64,16 @@ class SpecialCalculatorKeyboard extends StatelessWidget {
                         _buildButton(context, '(a/p)', () => calculator.legendreSymbol(), ButtonType.function),
                         _buildButton(context, '(a/n)ⱼ', () => calculator.jacobiSymbol(), ButtonType.function),
                         _buildButton(context, 'g', () => calculator.primitiveRoot(), ButtonType.function),
-                        _buildButton(context, 'MCD', () => calculator.gcdFunction(), ButtonType.function),
+                        _buildButton(context, es ? 'MCD' : 'GCD', () => calculator.gcdFunction(), ButtonType.function),
                       ]),
                       Row(children: [
-                        _buildButton(context, 'MCM', () => calculator.lcmFunction(), ButtonType.function),
-                        _buildButton(context, 'Diof', () => calculator.diophantineFunction(), ButtonType.function),
-                        _buildButton(context, 'TCR', () => calculator.crtFunction(), ButtonType.function),
+                        _buildButton(context, es ? 'MCM' : 'LCM', () => calculator.lcmFunction(), ButtonType.function),
+                        _buildButton(context, es ? 'Diof' : 'Dioph', () => calculator.diophantineFunction(), ButtonType.function),
+                        _buildButton(context, es ? 'TCR' : 'CRT', () => calculator.crtFunction(), ButtonType.function),
                         _buildButton(context, '', () {}, ButtonType.function),
                       ]),
 
-                      // === COMBINATORIA ===
+                      // === COMBINATORICS ===
                       _buildSectionLabel(context, l.kbdCombinatorics),
                       Row(children: [
                         _buildButton(context, 'n!', () => calculator.factorialFunction(), ButtonType.function),
@@ -88,10 +91,10 @@ class SpecialCalculatorKeyboard extends StatelessWidget {
                         _buildButton(context, 'S₂(n,k)', () => calculator.stirlingSecond(), ButtonType.function),
                         _buildButton(context, 's₁(n,k)', () => calculator.stirlingFirst(), ButtonType.function),
                         _buildButton(context, 'F(n)', () => calculator.fibonacciN(), ButtonType.function),
-                        _buildButton(context, 'ΣdígB', () => calculator.digitSumBase(), ButtonType.function),
+                        _buildButton(context, es ? 'ΣdígB' : 'ΣdigB', () => calculator.digitSumBase(), ButtonType.function),
                       ]),
 
-                      // === ESTADÍSTICA ===
+                      // === STATISTICS ===
                       _buildSectionLabel(context, l.kbdStatistics),
                       Row(children: [
                         _buildButton(context, 'Med\nA', () => calculator.arithmeticMeanN(), ButtonType.function),
@@ -110,7 +113,7 @@ class SpecialCalculatorKeyboard extends StatelessWidget {
                 ),
               ),
 
-              // === TECLADO NUMÉRICO (siempre visible) ===
+              // === NUMERIC KEYPAD (always visible) ===
               Expanded(
                 flex: 5,
                 child: Column(
@@ -184,7 +187,7 @@ class SpecialCalculatorKeyboard extends StatelessWidget {
   }
 
   Widget _buildButton(BuildContext context, String text, VoidCallback onPressed, ButtonType type) {
-    // Botones vacíos (spacers)
+    // Empty buttons (spacers)
     if (text.isEmpty) {
       return Expanded(child: Container(margin: const EdgeInsets.all(1.5)));
     }

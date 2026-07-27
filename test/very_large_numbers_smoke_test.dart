@@ -44,18 +44,18 @@ void main() {
 
     test('Special functions handle big integers (gcd/lcm, radical)', () async {
       final calc = CalculatorService();
-      // gcdFunction usa sistema pendiente variable: presionar función otra vez ejecuta
+      // gcdFunction uses the variable pending system: pressing the function again executes
       calc.loadNumber('1000000000');
-      calc.gcdFunction(); // inicia pendiente
+      calc.gcdFunction(); // starts pending
       calc.addDigit('500');
-      calc.gcdFunction(); // agrega param y ejecuta MCD(1000000000, 500)
+      calc.gcdFunction(); // adds param and executes GCD(1000000000, 500)
       expect(calc.display, isNotEmpty);
 
-      // lcmFunction usa sistema pendiente variable
+      // lcmFunction uses the variable pending system
       calc.loadNumber('1000000000');
       calc.lcmFunction();
       calc.addDigit('7');
-      calc.lcmFunction(); // agrega param y ejecuta
+      calc.lcmFunction(); // adds param and executes
       expect(calc.display, isNotEmpty);
 
       calc.loadNumber('1234567891011121314151617');
