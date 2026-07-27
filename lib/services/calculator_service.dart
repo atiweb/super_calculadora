@@ -206,6 +206,22 @@ class CalculatorService extends ChangeNotifier {
   /// Current display number as int, with the same range validation.
   int _getCurrentAsInt() => _parseStringAsInt(_getCurrentNumber());
 
+  /// Replaces the trailing [operand] on the display with [result], preserving
+  /// whatever expression precedes it.
+  ///
+  /// Functions that read only the last operand used to assign the result to
+  /// the whole display, silently discarding the rest: "50 + 10" followed by %
+  /// showed "0.1" with the "50 + " gone. Mirrors what factorial already did.
+  String _spliceResult(String result, String operand) {
+    if (operand.isEmpty || _display.length <= operand.length) return result;
+    final int i = _display.lastIndexOf(operand);
+    return i >= 0 ? _display.substring(0, i) + result : result;
+  }
+
+  /// Whether [s] is a single literal number rather than an expression.
+  bool _isBareNumber(String s) =>
+      RegExp(r'^-?\d*\.?\d+([eE][+-]?\d+)?$').hasMatch(s.trim());
+
   /// Checks whether the display ends with an operator
   bool _endsWithOperator() {
     if (_display.isEmpty) return false;
@@ -235,6 +251,12 @@ class CalculatorService extends ChangeNotifier {
     // If the display is '0' and it's not a decimal point, replace it
     if (_display == '0' && digit != '.') {
       _display = digit;
+    } else if (digit == '.' &&
+        (RegExp(r'[\d.]*$').stringMatch(_display) ?? '').contains('.')) {
+      // The number being typed already has a point. Checking the display via
+      // _getCurrentNumber missed a trailing one ("0." matches no number), so
+      // a second press produced "0..", which then failed to evaluate.
+      return;
     } else if (digit == '.' && _display.contains('.')) {
       // Check whether the current number already has a decimal point
       String currentNumber = _getCurrentNumber();
@@ -255,7 +277,12 @@ class CalculatorService extends ChangeNotifier {
     if (_hasError) {
       clear();
     }
-    
+
+    // Callers may pass the symbol already padded (the special keyboard sends
+    // ' ÷ '), which produced "5  ÷  " and left a stray space behind after
+    // backspace, so the next digit juxtaposed: "5 3" evaluated as 53.
+    operator = operator.trim();
+
     // Empty display: only '-' can start one (negative number); ignore the rest.
     if (_display.isEmpty) {
       if (operator == '-') {
@@ -272,26 +299,43 @@ class CalculatorService extends ChangeNotifier {
       return;
     }
     
+    // After an open parenthesis only a unary minus makes sense. Treating '('
+    // as a replaceable operator deleted it instead: "2 × (" followed by '-'
+    // became "2 × - ", losing the bracket and unbalancing the expression.
+    if (_display.trimRight().endsWith('(')) {
+      if (operator == '-') {
+        _display = '${_display.trimRight()}-';
+        notifyListeners();
+      }
+      return;
+    }
+
     // If it already ends with an operator, replace the last operator
     if (_endsWithOperator()) {
       String trimmed = _display.trim();
-      // Remove the last operator and spaces
-      int lastOperatorIndex = -1;
-      for (int i = trimmed.length - 1; i >= 0; i--) {
-        if (trimmed[i] == '+' || trimmed[i] == '-' || 
-            trimmed[i] == '×' || trimmed[i] == '÷' || 
-            trimmed[i] == '^' || trimmed[i] == '(') {
-          lastOperatorIndex = i;
-          break;
-        }
-      }
-      
-      if (lastOperatorIndex > 0) {
-        // Keep everything up to before the operator (excluding the preceding space)
-        _display = trimmed.substring(0, lastOperatorIndex - 1);
+
+      if (trimmed.endsWith('mod')) {
+        // Word operator: strip the whole word, not one character.
+        _display = trimmed.substring(0, trimmed.length - 3).trimRight();
       } else {
-        // If the operator is at the start, keep everything except the operator
-        _display = trimmed.substring(0, trimmed.length - 1);
+        // Remove the last operator and spaces
+        int lastOperatorIndex = -1;
+        for (int i = trimmed.length - 1; i >= 0; i--) {
+          if (trimmed[i] == '+' || trimmed[i] == '-' ||
+              trimmed[i] == '×' || trimmed[i] == '÷' ||
+              trimmed[i] == '^') {
+            lastOperatorIndex = i;
+            break;
+          }
+        }
+
+        if (lastOperatorIndex > 0) {
+          // Keep everything up to before the operator (excluding the preceding space)
+          _display = trimmed.substring(0, lastOperatorIndex - 1);
+        } else {
+          // If the operator is at the start, keep everything except the operator
+          _display = trimmed.substring(0, trimmed.length - 1);
+        }
       }
     }
     
@@ -310,6 +354,20 @@ class CalculatorService extends ChangeNotifier {
     }
 
     if (_display.isEmpty || _display == '0') return;
+
+    // Nothing to compute if the display is already a bare result: pressing '='
+    // again used to re-evaluate it and append an "8 = 8" entry to persistent
+    // history on every press.
+    if (_display == _lastResult && _isBareNumber(_display)) return;
+
+    // A dangling operator is an incomplete expression, not an internal fault:
+    // "17 + =" used to surface the parser's raw RangeError to the user.
+    if (_endsWithOperator()) {
+      _setError('errExprMalformed');
+      _display = 'Error';
+      notifyListeners();
+      return;
+    }
 
     try {
       // Use the new method that correctly handles parentheses and functions
@@ -687,13 +745,30 @@ class CalculatorService extends ChangeNotifier {
   /// Toggles the sign of the number
   void toggleSign() {
     if (_hasError) return;
-    
+
+    // Negate the operand being entered, not the whole expression: "5 + 3" then
+    // ± used to become "-5 + 3" (= −2) instead of "5 + -3" (= 2).
+    final String currentNumber = _getCurrentNumber();
+    if (!_isBareNumber(_display) && currentNumber != '0') {
+      final int i = _display.lastIndexOf(currentNumber);
+      if (i > 0) {
+        final String head = _display.substring(0, i);
+        final String negated = currentNumber.startsWith('-')
+            ? currentNumber.substring(1)
+            : '-$currentNumber';
+        _display = head + negated;
+        _updateAnalysis();
+        notifyListeners();
+        return;
+      }
+    }
+
     if (_display.startsWith('-')) {
       _display = _display.substring(1);
     } else if (_display != '0') {
       _display = '-$_display';
     }
-    
+
     _updateAnalysis();
     notifyListeners();
   }
@@ -1243,7 +1318,7 @@ class CalculatorService extends ChangeNotifier {
       double result = math.sin(angleInRadians);
 
       String resultStr = _formatScientificResult(result);
-      _display = resultStr;
+      _display = _spliceResult(resultStr, currentNumber);
       _lastResult = resultStr;
       _updateAnalysis();
 
@@ -1285,7 +1360,7 @@ class CalculatorService extends ChangeNotifier {
       double result = math.cos(angleInRadians);
 
       String resultStr = _formatScientificResult(result);
-      _display = resultStr;
+      _display = _spliceResult(resultStr, currentNumber);
       _lastResult = resultStr;
       _updateAnalysis();
 
@@ -1348,7 +1423,7 @@ class CalculatorService extends ChangeNotifier {
         _display = 'Error';
       } else {
         String resultStr = _formatScientificResult(result);
-        _display = resultStr;
+        _display = _spliceResult(resultStr, currentNumber);
         _lastResult = resultStr;
         _updateAnalysis();
 
@@ -1395,7 +1470,7 @@ class CalculatorService extends ChangeNotifier {
         }
 
         String resultStr = _formatScientificResult(result);
-        _display = resultStr;
+        _display = _spliceResult(resultStr, currentNumber);
         _lastResult = resultStr;
         _updateAnalysis();
 
@@ -1442,7 +1517,7 @@ class CalculatorService extends ChangeNotifier {
         }
 
         String resultStr = _formatScientificResult(result);
-        _display = resultStr;
+        _display = _spliceResult(resultStr, currentNumber);
         _lastResult = resultStr;
         _updateAnalysis();
 
@@ -1487,7 +1562,7 @@ class CalculatorService extends ChangeNotifier {
       }
 
       String resultStr = _formatScientificResult(result);
-      _display = resultStr;
+      _display = _spliceResult(resultStr, currentNumber);
       _lastResult = resultStr;
       _updateAnalysis();
 
@@ -1531,7 +1606,7 @@ class CalculatorService extends ChangeNotifier {
         double value = double.parse(currentNumber);
         double result = math.log(value);
         String resultStr = _formatScientificResult(result);
-        _display = resultStr;
+        _display = _spliceResult(resultStr, currentNumber);
         _lastResult = resultStr;
         _updateAnalysis();
 
@@ -1576,7 +1651,7 @@ class CalculatorService extends ChangeNotifier {
         double value = double.parse(currentNumber);
         double result = math.log(value) / math.log(10);
         String resultStr = _formatScientificResult(result);
-        _display = resultStr;
+        _display = _spliceResult(resultStr, currentNumber);
         _lastResult = resultStr;
         _updateAnalysis();
 
@@ -1618,7 +1693,7 @@ class CalculatorService extends ChangeNotifier {
       } else {
         double result = math.exp(value);
         String resultStr = _formatScientificResult(result);
-        _display = resultStr;
+        _display = _spliceResult(resultStr, currentNumber);
         _lastResult = resultStr;
         _updateAnalysis();
 
@@ -1657,7 +1732,7 @@ class CalculatorService extends ChangeNotifier {
       } else {
         double result = math.pow(10, value).toDouble();
         String resultStr = _formatScientificResult(result);
-        _display = resultStr;
+        _display = _spliceResult(resultStr, currentNumber);
         _lastResult = resultStr;
         _updateAnalysis();
         
@@ -2159,8 +2234,14 @@ class CalculatorService extends ChangeNotifier {
       
       double result = exp.evaluate(EvaluationType.REAL, context);
       
-      // Check whether the result is valid
-      if (result.isNaN || result.isInfinite) {
+      // Check whether the result is valid. An infinite result from a finite
+      // expression is a division by zero; reporting it as "invalid result"
+      // gave two different messages for the same mistake, since only a
+      // literal-zero divisor was matched earlier.
+      if (result.isInfinite) {
+        return 'err:errDivisionByZero';
+      }
+      if (result.isNaN) {
         return 'err:errResultInvalid';
       }
       
@@ -2600,7 +2681,7 @@ class CalculatorService extends ChangeNotifier {
         _lastResult = resultStr;
         _updateAnalysis();
         
-        await _addDirectOperationToHistory('φ', originalValue, resultStr);
+        await _addDirectOperationToHistory('φ($number)', originalValue, resultStr);
       }
     } catch (e) {
       _setError('errPhi', {'error': e.toString()});
@@ -2624,7 +2705,7 @@ class CalculatorService extends ChangeNotifier {
         _lastResult = resultStr;
         _updateAnalysis();
         
-        await _addDirectOperationToHistory('#', originalValue, resultStr);
+        await _addDirectOperationToHistory('$number#', originalValue, resultStr);
       }
     } catch (e) {
       _setError('errPrimorial', {'error': e.toString()});
@@ -2648,7 +2729,7 @@ class CalculatorService extends ChangeNotifier {
         _lastResult = resultStr;
         _updateAnalysis();
         
-        await _addDirectOperationToHistory('σ₀', originalValue, resultStr);
+        await _addDirectOperationToHistory('σ₀($number)', originalValue, resultStr);
       }
     } catch (e) {
       _setError('errSigma0', {'error': e.toString()});
@@ -2674,7 +2755,7 @@ class CalculatorService extends ChangeNotifier {
         _lastResult = resultStr;
         _updateAnalysis();
         
-        await _addDirectOperationToHistory('σ(1,n)', originalValue, resultStr);
+        await _addDirectOperationToHistory('σ($number)', originalValue, resultStr);
       }
     } catch (e) {
       _setError('errSigma', {'error': e.toString()});
@@ -2839,7 +2920,7 @@ class CalculatorService extends ChangeNotifier {
         _lastResult = resultStr;
         _updateAnalysis();
         
-        await _addDirectOperationToHistory('μ', originalValue, resultStr);
+        await _addDirectOperationToHistory('μ($number)', originalValue, resultStr);
       }
     } catch (e) {
       _setError('errMobius', {'error': e.toString()});
@@ -3218,7 +3299,7 @@ class CalculatorService extends ChangeNotifier {
         _display = resultStr;
         _lastResult = resultStr;
         _updateAnalysis();
-        await _addDirectOperationToHistory('!', originalValue, resultStr);
+        await _addDirectOperationToHistory('$n!', originalValue, resultStr);
       }
     } catch (e) {
       _setError('errFactorialN', {'error': e.toString()});
@@ -3241,7 +3322,7 @@ class CalculatorService extends ChangeNotifier {
         _display = resultStr;
         _lastResult = resultStr;
         _updateAnalysis();
-        await _addDirectOperationToHistory('!!', originalValue, resultStr);
+        await _addDirectOperationToHistory('$n!!', originalValue, resultStr);
       }
     } catch (e) {
       _setError('errDoubleFactorial', {'error': e.toString()});
@@ -3264,7 +3345,7 @@ class CalculatorService extends ChangeNotifier {
         _display = resultStr;
         _lastResult = resultStr;
         _updateAnalysis();
-        await _addDirectOperationToHistory('F', originalValue, resultStr);
+        await _addDirectOperationToHistory('F($n)', originalValue, resultStr);
       }
     } catch (e) {
       _setError('errFibonacci', {'error': e.toString()});
@@ -3287,7 +3368,7 @@ class CalculatorService extends ChangeNotifier {
         _display = resultStr;
         _lastResult = resultStr;
         _updateAnalysis();
-        await _addDirectOperationToHistory('Cat', originalValue, resultStr);
+        await _addDirectOperationToHistory('Cat($n)', originalValue, resultStr);
       }
     } catch (e) {
       _setError('errCatalan', {'error': e.toString()});
@@ -3310,7 +3391,7 @@ class CalculatorService extends ChangeNotifier {
         _display = resultStr;
         _lastResult = resultStr;
         _updateAnalysis();
-        await _addDirectOperationToHistory('D', originalValue, resultStr);
+        await _addDirectOperationToHistory('D($n)', originalValue, resultStr);
       }
     } catch (e) {
       _setError('errDerangement', {'error': e.toString()});
@@ -3333,7 +3414,7 @@ class CalculatorService extends ChangeNotifier {
         _display = resultStr;
         _lastResult = resultStr;
         _updateAnalysis();
-        await _addDirectOperationToHistory('p', originalValue, resultStr);
+        await _addDirectOperationToHistory('p($n)', originalValue, resultStr);
       }
     } catch (e) {
       _setError('errPartition', {'error': e.toString()});
@@ -3356,7 +3437,7 @@ class CalculatorService extends ChangeNotifier {
         _display = resultStr;
         _lastResult = resultStr;
         _updateAnalysis();
-        await _addDirectOperationToHistory('Bell', originalValue, resultStr);
+        await _addDirectOperationToHistory('Bell($n)', originalValue, resultStr);
       }
     } catch (e) {
       _setError('errBell', {'error': e.toString()});
@@ -3375,7 +3456,7 @@ class CalculatorService extends ChangeNotifier {
       _display = resultStr;
       _lastResult = resultStr;
       _updateAnalysis();
-      await _addDirectOperationToHistory('dr', originalValue, resultStr);
+      await _addDirectOperationToHistory('dr($number)', originalValue, resultStr);
     } catch (e) {
       _setError('errDigitalRoot', {'error': e.toString()});
       _display = 'Error';
@@ -3401,7 +3482,7 @@ class CalculatorService extends ChangeNotifier {
           _display = resultStr;
           _lastResult = resultStr;
           _updateAnalysis();
-          await _addDirectOperationToHistory('g mod', originalValue, resultStr);
+          await _addDirectOperationToHistory('g mod $number', originalValue, resultStr);
         }
       }
     } catch (e) {
@@ -3425,7 +3506,7 @@ class CalculatorService extends ChangeNotifier {
         _display = resultStr;
         _lastResult = resultStr;
         _updateAnalysis();
-        await _addDirectOperationToHistory('λL', originalValue, resultStr);
+        await _addDirectOperationToHistory('λL($number)', originalValue, resultStr);
       }
     } catch (e) {
       _setError('errLiouville', {'error': e.toString()});
@@ -3481,7 +3562,7 @@ class CalculatorService extends ChangeNotifier {
         _lastResult = resultStr;
         _updateAnalysis();
         
-        await _addDirectOperationToHistory('rad', originalValue, resultStr);
+        await _addDirectOperationToHistory('rad($number)', originalValue, resultStr);
       }
     } catch (e) {
       _setError('errRad', {'error': e.toString()});
@@ -3505,7 +3586,7 @@ class CalculatorService extends ChangeNotifier {
         _lastResult = resultStr;
         _updateAnalysis();
 
-        await _addDirectOperationToHistory('ω', originalValue, resultStr);
+        await _addDirectOperationToHistory('ω($number)', originalValue, resultStr);
       }
     } catch (e) {
       _setError('errOmega', {'error': e.toString()});
@@ -3529,7 +3610,7 @@ class CalculatorService extends ChangeNotifier {
         _lastResult = resultStr;
         _updateAnalysis();
 
-        await _addDirectOperationToHistory('Ω', originalValue, resultStr);
+        await _addDirectOperationToHistory('Ω($number)', originalValue, resultStr);
       }
     } catch (e) {
       _setError('errBigOmega', {'error': e.toString()});
@@ -3553,7 +3634,7 @@ class CalculatorService extends ChangeNotifier {
         _lastResult = resultStr;
         _updateAnalysis();
 
-        await _addDirectOperationToHistory('λ', originalValue, resultStr);
+        await _addDirectOperationToHistory('λ($number)', originalValue, resultStr);
       }
     } catch (e) {
       _setError('errCarmichael', {'error': e.toString()});
@@ -3577,7 +3658,7 @@ class CalculatorService extends ChangeNotifier {
         _lastResult = resultStr;
         _updateAnalysis();
 
-        await _addDirectOperationToHistory('sopfr', originalValue, resultStr);
+        await _addDirectOperationToHistory('sopfr($number)', originalValue, resultStr);
       }
     } catch (e) {
       _setError('errSopfr', {'error': e.toString()});
@@ -3601,7 +3682,7 @@ class CalculatorService extends ChangeNotifier {
         _lastResult = resultStr;
         _updateAnalysis();
 
-        await _addDirectOperationToHistory('sopf', originalValue, resultStr);
+        await _addDirectOperationToHistory('sopf($number)', originalValue, resultStr);
       }
     } catch (e) {
       _setError('errSopf', {'error': e.toString()});
@@ -3620,7 +3701,11 @@ class CalculatorService extends ChangeNotifier {
       String currentNumber = _getCurrentNumber();
       
       if (currentNumber.isEmpty || currentNumber == '0') {
-        _display = '0';
+        // 0% is 0. Returning without notifying left the screen showing the old
+        // expression while the internal display had already been reset.
+        _display = _spliceResult('0', currentNumber);
+        _lastResult = '0';
+        notifyListeners();
         return;
       }
       
@@ -3628,11 +3713,11 @@ class CalculatorService extends ChangeNotifier {
       BigDecimal result = value / BigDecimal.fromString('100');
       String resultStr = _formatNumber(result.toString());
       
-      _display = resultStr;
+      _display = _spliceResult(resultStr, currentNumber);
       _lastResult = resultStr;
       _updateAnalysis();
       
-      await _addDirectOperationToHistory('%', originalValue, resultStr);
+      await _addDirectOperationToHistory('$currentNumber%', originalValue, resultStr);
     } catch (e) {
       _setError('errPercentage', {'error': e.toString()});
       _display = 'Error';
@@ -3664,11 +3749,11 @@ class CalculatorService extends ChangeNotifier {
       BigDecimal result = BigDecimal.one / value;
       String resultStr = _formatNumber(result.toString());
       
-      _display = resultStr;
+      _display = _spliceResult(resultStr, currentNumber);
       _lastResult = resultStr;
       _updateAnalysis();
       
-      await _addDirectOperationToHistory('1/x', originalValue, resultStr);
+      await _addDirectOperationToHistory('1/$currentNumber', originalValue, resultStr);
     } catch (e) {
       _setError('errReciprocal', {'error': e.toString()});
       _display = 'Error';

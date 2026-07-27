@@ -42,8 +42,13 @@ class PrecisionService {
   }
 
   /// CReal.parse does not accept scientific notation; normalizes unicode signs.
-  static String _normalize(String value) =>
-      value.trim().replaceAll('−', '-').replaceAll('+', '');
+  ///
+  /// Only a leading '+' is dropped: stripping every one turned malformed input
+  /// into a different valid number ("1+2" → 12) rather than failing.
+  static String _normalize(String value) {
+    final t = value.trim().replaceAll('−', '-');
+    return t.startsWith('+') ? t.substring(1) : t;
+  }
 
   static CReal _toRadians(CReal degrees) => degrees * _pi / CReal.from(180);
   static CReal _toDegrees(CReal radians) => radians * CReal.from(180) / _pi;
