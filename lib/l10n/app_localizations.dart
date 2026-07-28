@@ -107,7 +107,7 @@ abstract class AppLocalizations {
   /// App version string
   ///
   /// In es, this message translates to:
-  /// **'Versión 1.0.0'**
+  /// **'Versión 1.2.0'**
   String get appVersion;
 
   /// Framework credit shown in about section

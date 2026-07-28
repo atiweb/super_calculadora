@@ -12,7 +12,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get appTitle => 'Super Calculadora';
 
   @override
-  String get appVersion => 'Versión 1.0.0';
+  String get appVersion => 'Versión 1.2.0';
 
   @override
   String get appDeveloped => 'Desarrollado en Flutter';
