@@ -194,6 +194,12 @@ class OlympiadStrings {
       case CalcError.moduliPositive:
         return pick('Los módulos deben ser positivos',
             'The moduli must be positive');
+      case CalcError.invalidAngle:
+        return pick('Cada ángulo debe estar entre 0° y 180° (exclusive)',
+            'Each angle must be between 0° and 180° (exclusive)');
+      case CalcError.angleSumTooLarge:
+        return pick('Los dos ángulos suman 180° o más: no forman un triángulo',
+            'The two angles add up to 180° or more: they cannot form a triangle');
     }
   }
 }

@@ -42,6 +42,14 @@ int _int(String s) {
   return v;
 }
 
+double _dbl(String s) {
+  final v = double.tryParse(s.trim());
+  if (v == null || !v.isFinite) {
+    throw CalcException(CalcError.invalidNumber, {'value': s});
+  }
+  return v;
+}
+
 List<BigInt> _biList(String s) => s
     .split(RegExp(r'[,;\s]+'))
     .where((e) => e.isNotEmpty)
@@ -428,12 +436,117 @@ class GeometryToolScreen extends StatelessWidget {
           },
         ),
         CalcTool(
+          title: s.pick('Ángulos del triángulo (ley del coseno)',
+              'Triangle angles (law of cosines)'),
+          description: s.pick(
+              'Coseno exacto de cada ángulo y su valor en grados.',
+              'Exact cosine of each angle and its value in degrees.'),
+          fields: [
+            ToolField('a', initial: '13'),
+            ToolField('b', initial: '14'),
+            ToolField('c', initial: '15'),
+          ],
+          compute: (i) {
+            final a = _bi(i[0]), b = _bi(i[1]), c = _bi(i[2]);
+            final sb = StringBuffer();
+            // Each angle is named after the side it faces.
+            const names = ['A', 'B', 'C'];
+            final opposite = [a, b, c];
+            final others = [
+              [b, c],
+              [a, c],
+              [a, b],
+            ];
+            for (int k = 0; k < 3; k++) {
+              final cos = GeometryService.cosineOfAngle(
+                  opposite[k], others[k][0], others[k][1]);
+              final deg = GeometryService.angleDegrees(
+                  opposite[k], others[k][0], others[k][1]);
+              sb.write('${k > 0 ? '\n' : ''}${names[k]}: cos = $cos'
+                  '  ≈ ${deg.toStringAsFixed(4)}°');
+            }
+            return sb.toString();
+          },
+          visualize: (ctx, i) {
+            final a = double.tryParse(i[0]);
+            final b = double.tryParse(i[1]);
+            final c = double.tryParse(i[2]);
+            if (a == null || b == null || c == null) return null;
+            if (a <= 0 || b <= 0 || c <= 0) return null;
+            if (a + b <= c || a + c <= b || b + c <= a) return null;
+            final scheme = Theme.of(ctx).colorScheme;
+            return CustomPaint(
+              painter: TrianglePainter(
+                a: a,
+                b: b,
+                c: c,
+                strokeColor: scheme.primary,
+                textColor: scheme.onSurface,
+              ),
+              child: const SizedBox.expand(),
+            );
+          },
+        ),
+        CalcTool(
+          title: s.pick('Ley de los senos', 'Law of sines'),
+          description: s.pick(
+              'Dado un lado y su ángulo opuesto, halla el lado opuesto a otro ángulo.',
+              'Given a side and its opposite angle, find the side opposite another angle.'),
+          fields: [
+            ToolField(s.pick('Lado conocido', 'Known side'), initial: '10'),
+            ToolField(s.pick('Su ángulo opuesto (°)', 'Its opposite angle (°)'),
+                initial: '30'),
+            ToolField(s.pick('Ángulo buscado (°)', 'Wanted angle (°)'),
+                initial: '45'),
+          ],
+          compute: (i) {
+            final known = _dbl(i[0]);
+            final knownAngle = _dbl(i[1]);
+            final wantedAngle = _dbl(i[2]);
+            final side = GeometryService.sideFromLawOfSines(
+                known, knownAngle, wantedAngle);
+            final third = 180 - knownAngle - wantedAngle;
+            return '${s.pick('Lado buscado', 'Wanted side')} ≈ '
+                '${side.toStringAsFixed(6)}\n'
+                '${s.pick('Tercer ángulo', 'Third angle')} = '
+                '${third.toStringAsFixed(4)}°';
+          },
+        ),
+        CalcTool(
           title: s.pick('Ternas pitagóricas primitivas', 'Primitive Pythagorean triples'),
           fields: [ToolField(s.pick('Hipotenusa máx', 'Max hypotenuse'), initial: '50')],
           compute: (i) {
             final list = GeometryService.primitivePythagoreanTriples(_int(i[0]));
             if (list.isEmpty) return s.pick('Ninguna', 'None');
             return list.map((t) => '${t[0]}, ${t[1]}, ${t[2]}').join('\n');
+          },
+        ),
+        CalcTool(
+          title: s.pick('Todas las ternas pitagóricas',
+              'All Pythagorean triples'),
+          description: s.pick(
+              'Primitivas y sus múltiplos, ordenadas por hipotenusa.',
+              'Primitives and their multiples, ordered by hypotenuse.'),
+          fields: [ToolField(s.pick('Hipotenusa máx', 'Max hypotenuse'), initial: '50')],
+          compute: (i) {
+            final list = GeometryService.allPythagoreanTriples(_int(i[0]));
+            if (list.isEmpty) return s.pick('Ninguna', 'None');
+            return '${s.pick('Total', 'Total')}: ${list.length}\n'
+                '${list.map((t) => '${t[0]}, ${t[1]}, ${t[2]}').join('\n')}';
+          },
+        ),
+        CalcTool(
+          title: s.pick('Triángulos heronianos', 'Heronian triangles'),
+          description: s.pick(
+              'Lados enteros y área entera, con todos los lados ≤ n.',
+              'Integer sides and integer area, with every side ≤ n.'),
+          fields: [ToolField(s.pick('Lado máx', 'Max side'), initial: '20')],
+          compute: (i) {
+            final list = GeometryService.heronianTriangles(_int(i[0]));
+            if (list.isEmpty) return s.pick('Ninguno', 'None');
+            final areaLabel = s.pick('área', 'area');
+            return '${s.pick('Total', 'Total')}: ${list.length}\n'
+                '${list.map((t) => '$t  $areaLabel=${t.area}').join('\n')}';
           },
         ),
         CalcTool(

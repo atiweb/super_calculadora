@@ -42,8 +42,9 @@ class HeronianTriangle {
 
   const HeronianTriangle(this.a, this.b, this.c, this.area);
 
+  /// Language-neutral: the UI layer adds its own localized label.
   @override
-  String toString() => '($a, $b, $c) área=$area';
+  String toString() => '($a, $b, $c)';
 }
 
 /// Geometry tools for olympiad training.
@@ -154,7 +155,14 @@ class GeometryService {
 
   /// (Exact) cosine of the angle opposite side [opposite], between sides
   /// [side1] and [side2]:  cos = (s1² + s2² − op²) / (2·s1·s2).
+  ///
+  /// Requires the three lengths to form a triangle. Without that check a zero
+  /// side divided by zero, and any other invalid triple returned a "cosine"
+  /// outside [−1, 1] — a number that looks like an answer but is not one.
   static Fraction cosineOfAngle(BigInt opposite, BigInt side1, BigInt side2) {
+    if (!isValidTriangle(opposite, side1, side2)) {
+      throw CalcException(CalcError.invalidTriangle);
+    }
     final BigInt num = side1 * side1 + side2 * side2 - opposite * opposite;
     final BigInt den = BigInt.two * side1 * side2;
     return Fraction(num, den);
@@ -168,8 +176,24 @@ class GeometryService {
 
   /// Law of sines: given a side and its opposite angle, find the side opposite
   /// another known angle.  wantedSide = knownSide · sin(ang) / sin(knownAng).
+  ///
+  /// Both angles must lie strictly between 0° and 180° and add to less than
+  /// 180°, or no triangle exists. sin(0°) and sin(180°) are zero, so the
+  /// unguarded division returned Infinity or NaN dressed up as a length.
   static double sideFromLawOfSines(
       double knownSide, double knownAngleDeg, double wantedAngleDeg) {
+    if (knownSide <= 0) {
+      throw CalcException(CalcError.needPositiveValue);
+    }
+    if (knownAngleDeg <= 0 ||
+        knownAngleDeg >= 180 ||
+        wantedAngleDeg <= 0 ||
+        wantedAngleDeg >= 180) {
+      throw CalcException(CalcError.invalidAngle);
+    }
+    if (knownAngleDeg + wantedAngleDeg >= 180) {
+      throw CalcException(CalcError.angleSumTooLarge);
+    }
     final double k = knownSide / math.sin(knownAngleDeg * math.pi / 180);
     return k * math.sin(wantedAngleDeg * math.pi / 180);
   }
@@ -318,6 +342,11 @@ class GeometryService {
   /// All Pythagorean triples (primitives and their multiples) with
   /// hypotenuse ≤ [maxHypotenuse].
   static List<List<BigInt>> allPythagoreanTriples(int maxHypotenuse) {
+    // Bounded because this runs synchronously on the UI thread and the result
+    // grows with the limit.
+    if (maxHypotenuse > 2000) {
+      throw CalcException(CalcError.inputTooLarge, {'max': '2000'});
+    }
     final List<List<BigInt>> result = [];
     for (final prim in primitivePythagoreanTriples(maxHypotenuse)) {
       int k = 1;
@@ -336,7 +365,13 @@ class GeometryService {
   }
 
   /// Heronian triangles with all sides ≤ [maxSide] (a ≤ b ≤ c).
+  ///
+  /// The search is a triple loop, so the cost grows with maxSide³: 1000 would
+  /// be 10⁹ iterations on the UI thread. Bounded to keep it interactive.
   static List<HeronianTriangle> heronianTriangles(int maxSide) {
+    if (maxSide > 200) {
+      throw CalcException(CalcError.inputTooLarge, {'max': '200'});
+    }
     final List<HeronianTriangle> result = [];
     for (int a = 1; a <= maxSide; a++) {
       for (int b = a; b <= maxSide; b++) {
