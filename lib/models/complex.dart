@@ -83,7 +83,12 @@ class Complex {
   @override
   String toString() {
     String fmt(double v) {
-      final r = (v * 1e9).roundToDouble() / 1e9; // clean up noise
+      if (!v.isFinite) return v.toString();
+      // Noise cleanup only where it is meaningful. Scaling by 1e9 overflows to
+      // Infinity past ~1.8e299 and toInt() saturates at 2^63, so 1e20 printed
+      // as 9223372036854775807 and 1e301 threw on toInt().
+      if (v.abs() >= 1e15) return v.toString();
+      final r = (v * 1e9).roundToDouble() / 1e9;
       if (r == r.roundToDouble()) return r.toInt().toString();
       return r.toString();
     }

@@ -123,7 +123,7 @@ class SpecialCalculatorKeyboard extends StatelessWidget {
                         _buildButton(context, '7', () => calculator.addDigit('7'), ButtonType.number),
                         _buildButton(context, '8', () => calculator.addDigit('8'), ButtonType.number),
                         _buildButton(context, '9', () => calculator.addDigit('9'), ButtonType.number),
-                        _buildButton(context, '÷', () => calculator.addOperator(' ÷ '), ButtonType.operator),
+                        _buildButton(context, '÷', () => calculator.addOperator('÷'), ButtonType.operator),
                       ]),
                     ),
                     Expanded(
@@ -131,7 +131,7 @@ class SpecialCalculatorKeyboard extends StatelessWidget {
                         _buildButton(context, '4', () => calculator.addDigit('4'), ButtonType.number),
                         _buildButton(context, '5', () => calculator.addDigit('5'), ButtonType.number),
                         _buildButton(context, '6', () => calculator.addDigit('6'), ButtonType.number),
-                        _buildButton(context, '×', () => calculator.addOperator(' × '), ButtonType.operator),
+                        _buildButton(context, '×', () => calculator.addOperator('×'), ButtonType.operator),
                       ]),
                     ),
                     Expanded(
@@ -139,7 +139,7 @@ class SpecialCalculatorKeyboard extends StatelessWidget {
                         _buildButton(context, '1', () => calculator.addDigit('1'), ButtonType.number),
                         _buildButton(context, '2', () => calculator.addDigit('2'), ButtonType.number),
                         _buildButton(context, '3', () => calculator.addDigit('3'), ButtonType.number),
-                        _buildButton(context, '-', () => calculator.addOperator(' - '), ButtonType.operator),
+                        _buildButton(context, '-', () => calculator.addOperator('-'), ButtonType.operator),
                       ]),
                     ),
                     Expanded(
@@ -147,7 +147,7 @@ class SpecialCalculatorKeyboard extends StatelessWidget {
                         _buildButton(context, '±', () => calculator.toggleSign(), ButtonType.function),
                         _buildButton(context, '0', () => calculator.addDigit('0'), ButtonType.number),
                         _buildButton(context, '.', () => calculator.addDigit('.'), ButtonType.number),
-                        _buildButton(context, '+', () => calculator.addOperator(' + '), ButtonType.operator),
+                        _buildButton(context, '+', () => calculator.addOperator('+'), ButtonType.operator),
                       ]),
                     ),
                     Expanded(

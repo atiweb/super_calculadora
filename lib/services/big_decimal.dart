@@ -218,6 +218,15 @@ class BigDecimal {
   // The final scale is based on the numerator's scale + extra precision
   int newScale = p + sa;
 
+    // Never exceed the precision the class can represent. Chained divisions
+    // reached scale 40 while fromString clips at 20, so toString showed 40
+    // decimals that vanished the moment the display was re-parsed for the next
+    // operation — digits presented as exact that the type cannot round-trip.
+    if (newScale > maxDecimalPlaces) {
+      result ~/= BigInt.from(10).pow(newScale - maxDecimalPlaces);
+      newScale = maxDecimalPlaces;
+    }
+
     // _fromTotal handles re-canonicalization (consistent signs) and the
     // negative-scale case.
     return BigDecimal._fromTotal(result, newScale);
@@ -347,8 +356,24 @@ class BigDecimal {
   bool operator <=(BigDecimal other) => compareTo(other) <= 0;
   bool operator >=(BigDecimal other) => compareTo(other) >= 0;
 
+  /// Must agree with [==], which compares by VALUE across scales. Hashing the
+  /// raw representation broke the contract: 1.5 and 1.50 are equal yet hashed
+  /// differently, so a Set or Map key would have silently duplicated them.
   @override
-  int get hashCode => _integerPart.hashCode ^ _fractionalPart.hashCode ^ _scale.hashCode;
+  int get hashCode {
+    // Strip trailing zeros so equal values hash equally: 1.5 and 1.50 compare
+    // equal but hashed differently, breaking the ==/hashCode contract and
+    // silently duplicating entries in any Set or Map keyed by BigDecimal.
+    final BigInt ten = BigInt.from(10);
+    BigInt fraction = _fractionalPart;
+    int scale = _scale;
+    while (scale > 0 && fraction != BigInt.zero && fraction % ten == BigInt.zero) {
+      fraction ~/= ten;
+      scale--;
+    }
+    if (fraction == BigInt.zero) scale = 0;
+    return Object.hash(_integerPart, fraction, scale);
+  }
 
   /// Convert to string without scientific notation
   @override

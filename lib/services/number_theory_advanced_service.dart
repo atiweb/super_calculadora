@@ -1,6 +1,7 @@
 import '../models/calc_exception.dart';
 import '../utils/app_locale.dart';
 import '../models/fraction.dart';
+import 'prime_utils.dart';
 import 'special_functions_service.dart';
 
 /// Advanced number theory functions for olympiad training:
@@ -15,7 +16,16 @@ class NumberTheoryAdvancedService {
 
   /// Returns r such that r² ≡ a (mod p), or `null` if a is not a quadratic residue.
   /// Requires p to be prime. The other root is p − r.
+  ///
+  /// Primality is enforced rather than assumed: with a composite modulus the
+  /// non-residue search below may never terminate (mod 9, for instance, no z
+  /// satisfies z^((p−1)/2) ≡ p−1), which froze the app permanently on a typo
+  /// such as 9 instead of 7.
   static BigInt? sqrtMod(BigInt a, BigInt p) {
+    if (p < _two || !isProbablyPrime(p)) {
+      throw CalcException(CalcError.primeRequired, {'value': p.toString()});
+    }
+
     a = a % p;
     if (a.isNegative) a += p;
     if (a == _zero) return _zero;
@@ -81,6 +91,13 @@ class NumberTheoryAdvancedService {
 
     final BigInt g = _gcd(a, n);
     if (b % g != _zero) return []; // no solution
+
+    // The solution count is exactly g. Materializing it unbounded meant that
+    // a·x ≡ b (mod 10⁹) with a = 0 built a billion-element list (freeze/OOM),
+    // and no one reads that many residues anyway.
+    if (g > BigInt.from(10000)) {
+      throw CalcException(CalcError.inputTooLarge, {'max': '10000'});
+    }
 
     final BigInt aR = a ~/ g;
     final BigInt bR = b ~/ g;
@@ -221,8 +238,15 @@ class NumberTheoryAdvancedService {
   // ── Sums of squares ──────────────────────────────────────────────────────
 
   /// Representation n = a² + b² with 0 ≤ a ≤ b, or `null` if none exists.
+  ///
+  /// Capped at 10^8 like [sumOfFourSquares]: the scan below is O(√n) and runs
+  /// on the UI thread, so an unbounded n (this is called before the four-square
+  /// guard could fire) meant hours or years of freeze.
   static ({BigInt a, BigInt b})? sumOfTwoSquares(BigInt n) {
     if (n < _zero) return null;
+    if (n > BigInt.from(100000000)) {
+      throw CalcException(CalcError.inputTooLarge, {'max': '100000000'});
+    }
     if (n == _zero) return (a: _zero, b: _zero);
     BigInt a = _zero;
     while (a * a * _two <= n) {
@@ -349,7 +373,20 @@ class NumberTheoryAdvancedService {
     // factor = g^(-m) mod n
     final BigInt? gm = SpecialFunctionsService.modularInverse(
         SpecialFunctionsService.modPow(g, m, n), n);
-    if (gm == null) return null;
+    if (gm == null) {
+      // Giant steps need g to be invertible. When it is not, walk the powers
+      // directly: they are eventually periodic, so stop as soon as a value
+      // repeats — nothing new can appear afterwards. Giving up here missed
+      // real solutions beyond the table, e.g. 2^50 ≡ 100 (mod 202).
+      final Set<BigInt> seen = {};
+      BigInt value = _one;
+      for (BigInt x = _zero; x < n; x += _one) {
+        if (value == h) return x;
+        if (!seen.add(value)) return null;
+        value = (value * g) % n;
+      }
+      return null;
+    }
 
     BigInt gamma = h;
     for (BigInt i = _zero; i < m; i += _one) {

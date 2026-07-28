@@ -87,8 +87,15 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                 top: false,
                 child: Column(
                   children: [
-                  // Show ExpressionInput only on the expressions tab
-                  if (_currentPage == 2) const ExpressionInput(),
+                  // Show ExpressionInput only on the expressions tab.
+                  // Flexible + scroll so it yields instead of overflowing: on
+                  // a short screen the soft keyboard shrinks the body below
+                  // what this block plus the tab row need, and with an error
+                  // banner showing the column overflowed.
+                  if (_currentPage == 2)
+                    const Flexible(
+                      child: SingleChildScrollView(child: ExpressionInput()),
+                    ),
 
                   // Calculator display (only on pages 0 and 1)
                   if (_currentPage != 2)
@@ -246,11 +253,10 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
     return Expanded(
       child: GestureDetector(
         onTap: () {
-          _pageController.animateToPage(
-            index,
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeInOut,
-          );
+          // jumpToPage, not animateToPage: animating across a non-adjacent tab
+          // fires onPageChanged for the page it passes through, so the title
+          // and the highlighted tab flashed the middle page on the way.
+          _pageController.jumpToPage(index);
         },
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 12),

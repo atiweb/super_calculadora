@@ -35,8 +35,15 @@ class BigComplex {
         _decimalSign(re) == 0 && _decimalSign(im) == 0,
       );
 
-  static CReal _parseReal(String s) =>
-      CReal.parse(s.trim().replaceAll('−', '-').replaceAll('+', ''));
+  /// Only a LEADING '+' is a sign to drop. Removing every '+' silently
+  /// concatenated malformed input instead of rejecting it: "1+2" parsed as 12,
+  /// so a stray key in the De Moivre / nth-roots fields produced a confident
+  /// answer for the wrong number.
+  static CReal _parseReal(String s) {
+    var t = s.trim().replaceAll('−', '-');
+    if (t.startsWith('+')) t = t.substring(1);
+    return CReal.parse(t);
+  }
 
   static final BigComplex zero =
       BigComplex._(CReal.from(0), CReal.from(0), true);

@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+import '../services/prime_utils.dart';
 import 'calc_exception.dart';
 import 'fraction.dart';
 
@@ -26,17 +27,16 @@ class Surd {
       return Surd._(Fraction.zero, BigInt.one);
     }
 
+    // Each prime pᵉ contributes p^(e~/2) outside and p^(e%2) inside.
+    // Derived from the factorization rather than scanning d² ≤ radicand:
+    // that scan is O(√n), so √(20-digit prime) took ~25 minutes on the UI
+    // thread; factoring answers the same question in milliseconds.
     BigInt outside = BigInt.one;
-    BigInt inside = radicand;
-    // Extract every d² factor from the radicand. Does not require d to be
-    // prime: squares of composite factors are already removed earlier.
-    for (BigInt d = BigInt.two; d * d <= inside; d += BigInt.one) {
-      final BigInt dd = d * d;
-      while (inside % dd == BigInt.zero) {
-        outside *= d;
-        inside ~/= dd;
-      }
-    }
+    BigInt inside = BigInt.one;
+    factorize(radicand).forEach((p, e) {
+      outside *= p.pow(e ~/ 2);
+      if (e.isOdd) inside *= p;
+    });
 
     final Fraction newCoeff = coefficient * Fraction.fromBigInt(outside);
     return Surd._(newCoeff, inside);

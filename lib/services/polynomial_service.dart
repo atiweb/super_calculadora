@@ -61,7 +61,22 @@ class PolynomialService {
       final bool hasX = m.group(2) != null;
       final String? powStr = m.group(4);
 
-      final int power = hasX ? (powStr != null ? int.parse(powStr) : 1) : 0;
+      // Bounded and reported as a domain error. int.parse threw a raw
+      // FormatException (shown verbatim, in English, whatever the UI language)
+      // on a huge exponent, and an accepted one like x^1000000 allocated a
+      // million-entry coefficient list on the UI thread.
+      int power = 0;
+      if (hasX) {
+        if (powStr == null) {
+          power = 1;
+        } else {
+          final int? parsed = int.tryParse(powStr);
+          if (parsed == null || parsed > 1000) {
+            throw CalcException(CalcError.inputTooLarge, {'max': '1000'});
+          }
+          power = parsed;
+        }
+      }
 
       Fraction coeff;
       if (coeffStr.isEmpty || coeffStr == '+') {
@@ -231,42 +246,114 @@ class PolynomialService {
     return QuadraticSolution(d, nature, rationalRoots, realRoots);
   }
 
-  /// (Approximate) real roots of ax³+bx²+cx+d = 0.
+  /// (Approximate) real roots of ax³+bx²+cx+d = 0, without repetitions.
+  ///
+  /// Rather than classifying the cubic by the sign of its discriminant — a
+  /// test so ill-conditioned that (x−1)²(x−14) was reported as having only
+  /// x = 14, losing the double root in 1076 of 3540 sampled cases — this finds
+  /// one real root (every cubic has one), polishes it, deflates to a quadratic
+  /// and solves that. The quadratic's discriminant is far better conditioned,
+  /// so repeated roots survive.
   static List<double> solveCubicReal(double a, double b, double c, double d) {
     if (a == 0) {
       throw CalcException(CalcError.notCubic);
     }
-    // Normalize and depress: x = t − b/(3a) ⇒ t³ + pt + q = 0
     final double bn = b / a, cn = c / a, dn = d / a;
+
+    // A repeated root is also a root of f' = 3x² + 2·bn·x + cn, a quadratic
+    // that is well conditioned even when the cubic's own discriminant is not.
+    // Identifying it this way keeps double roots exact; deflating from an
+    // approximate simple root instead split them into two neighbours
+    // (14.99947 and 15.00053 in place of a single 15).
+    final double discPrime = 4 * bn * bn - 12 * cn;
+    if (discPrime >= 0) {
+      final double sp = math.sqrt(discPrime);
+      for (final double r in [(-2 * bn - sp) / 6, (-2 * bn + sp) / 6]) {
+        if (_isCubicRoot(r, bn, cn, dn)) {
+          // f = (x − r)²(x − t), and the roots sum to −bn.
+          final double t = -bn - 2 * r;
+          if ((r - t).abs() <= 1e-6 * math.max(1.0, r.abs())) return [r];
+          return r < t ? [r, t] : [t, r];
+        }
+      }
+    }
+
+    final double r1 = _polishCubicRoot(_oneRealCubicRoot(bn, cn, dn), bn, cn, dn);
+
+    // Deflate: x³ + bn·x² + cn·x + dn = (x − r1)(x² + B·x + C)
+    final double bq = bn + r1;
+    final double cq = cn + r1 * bq;
+
+    final List<double> roots = [r1];
+    final double disc = bq * bq - 4 * cq;
+    final double discTolerance =
+        1e-9 * math.max(1.0, math.max(bq * bq, (4 * cq).abs()));
+
+    if (disc > discTolerance) {
+      final double s = math.sqrt(disc);
+      roots.add((-bq - s) / 2);
+      roots.add((-bq + s) / 2);
+    } else if (disc.abs() <= discTolerance) {
+      roots.add(-bq / 2); // double root of the deflated quadratic
+    }
+
+    roots.sort();
+
+    // Collapse values that coincide to within double precision, so a repeated
+    // root is reported once no matter which one deflation happened to find.
+    final List<double> distinct = [];
+    for (final r in roots) {
+      if (distinct.isEmpty ||
+          (r - distinct.last).abs() > 1e-6 * math.max(1.0, r.abs())) {
+        distinct.add(r);
+      }
+    }
+    return distinct;
+  }
+
+  /// Whether [r] nulls x³ + bn·x² + cn·x + dn, judged against the size of the
+  /// terms that had to cancel (an absolute threshold is meaningless here).
+  static bool _isCubicRoot(double r, double bn, double cn, double dn) {
+    final double x3 = r * r * r;
+    final double x2 = bn * r * r;
+    final double x1 = cn * r;
+    final double value = x3 + x2 + x1 + dn;
+    final double scale = math.max(
+        1.0,
+        math.max(x3.abs(),
+            math.max(x2.abs(), math.max(x1.abs(), dn.abs()))));
+    return value.abs() <= 1e-10 * scale;
+  }
+
+  /// One real root of the monic depressed cubic (Cardano, or the
+  /// trigonometric form when three real roots exist).
+  static double _oneRealCubicRoot(double bn, double cn, double dn) {
     final double p = cn - bn * bn / 3;
     final double q = 2 * bn * bn * bn / 27 - bn * cn / 3 + dn;
     final double shift = bn / 3;
-
-    final List<double> roots = [];
     final double disc = q * q / 4 + p * p * p / 27;
 
-    if (disc > 1e-12) {
-      // One real root.
-      final double sqrtDisc = math.sqrt(disc);
-      final double u = _cbrt(-q / 2 + sqrtDisc);
-      final double v = _cbrt(-q / 2 - sqrtDisc);
-      roots.add(u + v - shift);
-    } else if (disc.abs() <= 1e-12) {
-      // Repeated root, all roots real.
-      final double u = _cbrt(-q / 2);
-      roots.add(2 * u - shift);
-      roots.add(-u - shift);
-    } else {
-      // Three distinct real roots (trigonometric case).
-      final double m = 2 * math.sqrt(-p / 3);
-      final double theta =
-          math.acos(((3 * q) / (p * m)).clamp(-1.0, 1.0)) / 3;
-      for (int k = 0; k < 3; k++) {
-        roots.add(m * math.cos(theta - 2 * math.pi * k / 3) - shift);
-      }
+    if (disc >= 0) {
+      final double s = math.sqrt(disc);
+      return _cbrt(-q / 2 + s) + _cbrt(-q / 2 - s) - shift;
     }
-    roots.sort();
-    return roots;
+
+    final double m = 2 * math.sqrt(-p / 3);
+    final double theta = math.acos(((3 * q) / (p * m)).clamp(-1.0, 1.0)) / 3;
+    return m * math.cos(theta) - shift;
+  }
+
+  /// Newton refinement of a root of x³ + bn·x² + cn·x + dn.
+  static double _polishCubicRoot(double x, double bn, double cn, double dn) {
+    for (int i = 0; i < 12; i++) {
+      final double f = ((x + bn) * x + cn) * x + dn;
+      final double df = (3 * x + 2 * bn) * x + cn;
+      if (df == 0 || !f.isFinite || !df.isFinite) break;
+      final double step = f / df;
+      x -= step;
+      if (step.abs() <= 1e-15 * math.max(1.0, x.abs())) break;
+    }
+    return x;
   }
 
   // ── Helpers ──────────────────────────────────────────────────────────────

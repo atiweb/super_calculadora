@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 import '../utils/app_locale.dart';
 import 'package:super_calculadora/services/big_decimal.dart';
+import 'prime_utils.dart';
 
 /// Service for special mathematical functions
 class SpecialFunctionsService {
@@ -12,33 +13,26 @@ class SpecialFunctionsService {
     }
     
     if (n == BigInt.one) return BigInt.one;
-    
+
+    // φ(n) = n · ∏(1 − 1/p) over the distinct primes of n.
     BigInt result = n;
-    BigInt temp = n;
-    
-    // Find all prime factors and apply the formula
-    for (BigInt i = BigInt.two; i * i <= temp; i += BigInt.one) {
-      if (temp % i == BigInt.zero) {
-        // i is a prime factor
-        while (temp % i == BigInt.zero) {
-          temp ~/= i;
-        }
-        result = result - result ~/ i;
-      }
+    for (final p in factorize(n).keys) {
+      result = result - result ~/ p;
     }
-    
-    // If temp > 1, then it is a prime factor
-    if (temp > BigInt.one) {
-      result = result - result ~/ temp;
-    }
-    
+
     return result;
   }
   
   /// Primorial - product of all primes ≤ n
   static BigInt primorial(int n) {
     if (n < 2) return BigInt.one;
-    
+
+    // The sieve allocates n+1 booleans, so an unbounded n exhausted memory.
+    if (n > 10000000) {
+      throw ArgumentError(trLocale('n demasiado grande para el primorial (máx 10000000)',
+          'n too large for the primorial (max 10000000)'));
+    }
+
     BigInt result = BigInt.one;
     List<bool> isPrime = List.filled(n + 1, true);
     isPrime[0] = isPrime[1] = false;
@@ -68,24 +62,12 @@ class SpecialFunctionsService {
       throw ArgumentError(trLocale('σ₀(n) solo está definido para n > 0', 'σ₀(n) is only defined for n > 0'));
     }
     
+    // σ₀(n) = ∏(eᵢ + 1) over the exponents of the factorization.
     BigInt count = BigInt.one;
-    BigInt temp = n;
-    
-    for (BigInt i = BigInt.two; i * i <= temp; i += BigInt.one) {
-      BigInt exponent = BigInt.zero;
-      while (temp % i == BigInt.zero) {
-        temp ~/= i;
-        exponent += BigInt.one;
-      }
-      if (exponent > BigInt.zero) {
-        count *= (exponent + BigInt.one);
-      }
+    for (final e in factorize(n).values) {
+      count *= BigInt.from(e + 1);
     }
-    
-    if (temp > BigInt.one) {
-      count *= BigInt.two; // temp is prime with exponent 1
-    }
-    
+
     return count;
   }
   
@@ -112,20 +94,18 @@ class SpecialFunctionsService {
     return sum;
   }
   
-  /// Gets all the divisors of n
+  /// Gets all the divisors of n.
+  ///
+  /// Built from the factorization instead of scanning up to √n, so a large
+  /// prime resolves instantly. Throws when the divisor count is too large to
+  /// materialize, which would otherwise exhaust memory.
   static List<BigInt> _getDivisors(BigInt n) {
-    List<BigInt> divisors = [];
-    
-    for (BigInt i = BigInt.one; i * i <= n; i += BigInt.one) {
-      if (n % i == BigInt.zero) {
-        divisors.add(i);
-        if (i != n ~/ i) {
-          divisors.add(n ~/ i);
-        }
-      }
+    final List<BigInt>? divisors = divisorsOf(n);
+    if (divisors == null) {
+      throw ArgumentError(trLocale(
+          'n tiene demasiados divisores para enumerarlos',
+          'n has too many divisors to enumerate'));
     }
-    
-    divisors.sort();
     return divisors;
   }
   
@@ -208,29 +188,14 @@ class SpecialFunctionsService {
     }
     
     if (n == BigInt.one) return 1;
-    
-    int primeFactorCount = 0;
-    BigInt temp = n;
-    
-    for (BigInt i = BigInt.two; i * i <= temp; i += BigInt.one) {
-      int exponent = 0;
-      while (temp % i == BigInt.zero) {
-        temp ~/= i;
-        exponent++;
-      }
-      
-      if (exponent > 1) {
-        return 0; // n has a squared factor
-      } else if (exponent == 1) {
-        primeFactorCount++;
-      }
+
+    final Map<BigInt, int> f = factorize(n);
+    // μ(n) = 0 if any prime is repeated; otherwise (−1)^(number of primes).
+    for (final e in f.values) {
+      if (e > 1) return 0;
     }
-    
-    if (temp > BigInt.one) {
-      primeFactorCount++; // temp is prime
-    }
-    
-    return primeFactorCount % 2 == 0 ? 1 : -1;
+
+    return f.length % 2 == 0 ? 1 : -1;
   }
   
   /// Division remainder (mod): least NON-NEGATIVE residue in [0, |b|).
@@ -409,26 +374,16 @@ class SpecialFunctionsService {
     }
     
     if (n == BigInt.one) return BigInt.one;
-    
+
+    // rad(n) = product of the distinct primes dividing n.
     BigInt result = BigInt.one;
-    BigInt temp = n;
-    
-    for (BigInt i = BigInt.two; i * i <= temp; i += BigInt.one) {
-      if (temp % i == BigInt.zero) {
-        result *= i;
-        while (temp % i == BigInt.zero) {
-          temp ~/= i;
-        }
-      }
+    for (final p in factorize(n).keys) {
+      result *= p;
     }
-    
-    if (temp > BigInt.one) {
-      result *= temp;
-    }
-    
+
     return result;
   }
-  
+
   /// Finds the minimum in a list of numbers
   static BigDecimal minimum(List<BigDecimal> numbers) {
     if (numbers.isEmpty) {
@@ -471,23 +426,8 @@ class SpecialFunctionsService {
 
     if (n == BigInt.one) return 0;
 
-    int count = 0;
-    BigInt temp = n;
-
-    for (BigInt i = BigInt.two; i * i <= temp; i += BigInt.one) {
-      if (temp % i == BigInt.zero) {
-        count++;
-        while (temp % i == BigInt.zero) {
-          temp ~/= i;
-        }
-      }
-    }
-
-    if (temp > BigInt.one) {
-      count++;
-    }
-
-    return count;
+    // ω(n) = how many distinct primes divide n.
+    return factorize(n).length;
   }
 
   /// Ω(n) - Number of prime factors with multiplicity (big omega)
@@ -500,18 +440,10 @@ class SpecialFunctionsService {
 
     if (n == BigInt.one) return 0;
 
+    // Ω(n) = primes counted with multiplicity = sum of the exponents.
     int count = 0;
-    BigInt temp = n;
-
-    for (BigInt i = BigInt.two; i * i <= temp; i += BigInt.one) {
-      while (temp % i == BigInt.zero) {
-        count++;
-        temp ~/= i;
-      }
-    }
-
-    if (temp > BigInt.one) {
-      count++;
+    for (final e in factorize(n).values) {
+      count += e;
     }
 
     return count;
@@ -534,47 +466,30 @@ class SpecialFunctionsService {
     if (n == BigInt.one) return BigInt.one;
 
     // Factor n into prime powers
-    BigInt temp = n;
-    List<List<BigInt>> primeFactors = []; // [prime, exponent] pairs
-
-    for (BigInt i = BigInt.two; i * i <= temp; i += BigInt.one) {
-      if (temp % i == BigInt.zero) {
-        BigInt exp = BigInt.zero;
-        while (temp % i == BigInt.zero) {
-          exp += BigInt.one;
-          temp ~/= i;
-        }
-        primeFactors.add([i, exp]);
-      }
-    }
-    if (temp > BigInt.one) {
-      primeFactors.add([temp, BigInt.one]);
-    }
+    final Map<BigInt, int> primeFactors = factorize(n);
 
     // Compute λ for each prime power and then the lcm
     BigInt result = BigInt.one;
 
-    for (List<BigInt> factor in primeFactors) {
-      BigInt p = factor[0];
-      BigInt k = factor[1];
+    primeFactors.forEach((p, k) {
       BigInt lambdaPk;
 
       if (p == BigInt.two) {
-        if (k == BigInt.one) {
+        if (k == 1) {
           lambdaPk = BigInt.one;
-        } else if (k == BigInt.two) {
+        } else if (k == 2) {
           lambdaPk = BigInt.two;
         } else {
           // λ(2^k) = 2^(k-2) for k ≥ 3
-          lambdaPk = BigInt.two.pow((k - BigInt.two).toInt());
+          lambdaPk = BigInt.two.pow(k - 2);
         }
       } else {
         // λ(p^k) = φ(p^k) = p^(k-1) * (p - 1) for odd prime p
-        lambdaPk = p.pow((k - BigInt.one).toInt()) * (p - BigInt.one);
+        lambdaPk = p.pow(k - 1) * (p - BigInt.one);
       }
 
       result = lcm(result, lambdaPk);
-    }
+    });
 
     return result;
   }
@@ -589,19 +504,9 @@ class SpecialFunctionsService {
 
     if (n == BigInt.one) return BigInt.zero;
 
+    // sopfr counts each prime as many times as it appears.
     BigInt sum = BigInt.zero;
-    BigInt temp = n;
-
-    for (BigInt i = BigInt.two; i * i <= temp; i += BigInt.one) {
-      while (temp % i == BigInt.zero) {
-        sum += i;
-        temp ~/= i;
-      }
-    }
-
-    if (temp > BigInt.one) {
-      sum += temp;
-    }
+    factorize(n).forEach((p, e) => sum += p * BigInt.from(e));
 
     return sum;
   }
@@ -616,20 +521,10 @@ class SpecialFunctionsService {
 
     if (n == BigInt.one) return BigInt.zero;
 
+    // sopf counts each distinct prime once.
     BigInt sum = BigInt.zero;
-    BigInt temp = n;
-
-    for (BigInt i = BigInt.two; i * i <= temp; i += BigInt.one) {
-      if (temp % i == BigInt.zero) {
-        sum += i;
-        while (temp % i == BigInt.zero) {
-          temp ~/= i;
-        }
-      }
-    }
-
-    if (temp > BigInt.one) {
-      sum += temp;
+    for (final p in factorize(n).keys) {
+      sum += p;
     }
 
     return sum;
@@ -706,20 +601,7 @@ class SpecialFunctionsService {
 
     BigInt phi = eulerPhi(n);
     // Verify that g^(φ(n)/p) ≢ 1 (mod n) for each prime p dividing φ(n)
-    BigInt temp = phi;
-    List<BigInt> primeFactorsOfPhi = [];
-
-    for (BigInt i = BigInt.two; i * i <= temp; i += BigInt.one) {
-      if (temp % i == BigInt.zero) {
-        primeFactorsOfPhi.add(i);
-        while (temp % i == BigInt.zero) {
-          temp ~/= i;
-        }
-      }
-    }
-    if (temp > BigInt.one) {
-      primeFactorsOfPhi.add(temp);
-    }
+    final Iterable<BigInt> primeFactorsOfPhi = factorize(phi).keys;
 
     for (BigInt p in primeFactorsOfPhi) {
       if (modPow(g, phi ~/ p, n) == BigInt.one) {
@@ -870,6 +752,13 @@ class SpecialFunctionsService {
       List<BigInt> remainders, List<BigInt> moduli) {
     if (remainders.length != moduli.length || remainders.isEmpty) {
       throw ArgumentError(trLocale('Las listas deben tener el mismo tamaño y no estar vacías', 'The lists must have the same size and not be empty'));
+    }
+    // A zero modulus made lcm and (m2 ~/ g) zero further down, surfacing as a
+    // raw IntegerDivisionByZeroException in the UI; a negative one silently
+    // produced a wrong congruence.
+    if (moduli.any((m) => m <= BigInt.zero)) {
+      throw ArgumentError(trLocale('Los módulos deben ser positivos',
+          'The moduli must be positive'));
     }
 
     BigInt currentA = remainders[0];
@@ -1143,34 +1032,16 @@ class SpecialFunctionsService {
     if (n <= BigInt.zero) return false;
     if (n == BigInt.one) return true;
 
-    BigInt temp = n;
-    for (BigInt i = BigInt.two; i * i <= temp; i += BigInt.one) {
-      if (temp % i == BigInt.zero) {
-        temp ~/= i;
-        if (temp % i == BigInt.zero) return false; // i² divides n
-        // keep looking for other factors
-      }
-    }
-    return true;
+    // Squarefree ⟺ no prime appears with exponent ≥ 2.
+    return factorize(n).values.every((e) => e == 1);
   }
 
   /// Checks whether n is a powerful number: p²|n for every prime p dividing n
   static bool isPowerful(BigInt n) {
     if (n <= BigInt.one) return n == BigInt.one;
 
-    BigInt temp = n;
-    for (BigInt i = BigInt.two; i * i <= temp; i += BigInt.one) {
-      if (temp % i == BigInt.zero) {
-        int exp = 0;
-        while (temp % i == BigInt.zero) {
-          temp ~/= i;
-          exp++;
-        }
-        if (exp < 2) return false;
-      }
-    }
-    // If a remaining prime with exponent 1 is left, it is not powerful
-    return temp == BigInt.one;
+    // Powerful ⟺ every prime appears with exponent ≥ 2.
+    return factorize(n).values.every((e) => e >= 2);
   }
 
   /// Checks whether n is a Harshad number: n divisible by its digit sum
@@ -1214,10 +1085,27 @@ class SpecialFunctionsService {
       return {'count': count, 'exact': true};
     }
 
-    // For large numbers, approximation with Li(x)
-    double x = double.parse(n.toString());
-    double li = x / math.log(x) * (1 + 1 / math.log(x) + 2 / (math.log(x) * math.log(x)));
-    return {'count': li.round(), 'exact': false, 'approx': true};
+    // For large numbers, approximation with Li(x).
+    //
+    // ln(n) is derived from the digit count instead of double.parse(n), which
+    // overflows to Infinity beyond ~1.8e308 and made li.round() throw for any
+    // 309-digit input — precisely the sizes this app is built for.
+    final double lnX = _naturalLog(n);
+    final double liOverX = 1 / lnX * (1 + 1 / lnX + 2 / (lnX * lnX));
+
+    // count ≈ n · liOverX, kept in BigInt so the magnitude never overflows.
+    final BigInt count = (BigInt.from((liOverX * 1e18).round()) * n) ~/
+        BigInt.from(10).pow(18);
+    return {'count': count, 'exact': false, 'approx': true};
+  }
+
+  /// ln(n) for arbitrarily large [n], via its decimal digits:
+  /// ln(n) = ln(mantissa) + (digits − 1)·ln(10).
+  static double _naturalLog(BigInt n) {
+    final String digits = n.toString();
+    final double mantissa = double.parse(
+        '${digits[0]}.${digits.length > 1 ? digits.substring(1, math.min(17, digits.length)) : '0'}');
+    return math.log(mantissa) + (digits.length - 1) * math.ln10;
   }
 
   /// Liouville function λ_L(n) (different from Carmichael's)

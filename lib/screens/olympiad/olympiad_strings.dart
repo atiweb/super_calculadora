@@ -23,6 +23,7 @@ class OlympiadStrings {
 
   // Chrome
   String get compute => pick('Calcular', 'Compute');
+  String get copy => pick('Copiar', 'Copy');
   String get result => pick('Resultado', 'Result');
   String get errorPrefix => pick('Error', 'Error');
 
@@ -154,8 +155,10 @@ class OlympiadStrings {
         return pick('D no debe ser un cuadrado perfecto',
             'D must not be a perfect square');
       case CalcError.needPositiveValue:
-        return pick('Se requiere al menos un valor positivo',
-            'At least one positive value is required');
+        // The rule is that EVERY value must be positive; the old wording said
+        // "at least one", contradicting the check that actually runs.
+        return pick('Todos los valores deben ser positivos',
+            'All values must be positive');
       case CalcError.nGreaterThanOne:
         return pick('n debe ser > 1', 'n must be > 1');
       case CalcError.needKInitialTerms:
@@ -185,6 +188,18 @@ class OlympiadStrings {
         return pick(
             'Sistema inválido: 2 o 3 filas "a,b,…,k" separadas por ";"',
             'Invalid system: 2 or 3 rows "a,b,…,k" separated by ";"');
+      case CalcError.primeRequired:
+        return pick('p debe ser primo (${e.arg('value')} no lo es)',
+            'p must be prime (${e.arg('value')} is not)');
+      case CalcError.moduliPositive:
+        return pick('Los módulos deben ser positivos',
+            'The moduli must be positive');
+      case CalcError.invalidAngle:
+        return pick('Cada ángulo debe estar entre 0° y 180° (exclusive)',
+            'Each angle must be between 0° and 180° (exclusive)');
+      case CalcError.angleSumTooLarge:
+        return pick('Los dos ángulos suman 180° o más: no forman un triángulo',
+            'The two angles add up to 180° or more: they cannot form a triangle');
     }
   }
 }

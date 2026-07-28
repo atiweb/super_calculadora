@@ -866,6 +866,17 @@ class NumberAnalysisPanel extends StatelessWidget {
     return result;
   }
 
+  /// Values of the arithmetic block for the number they were computed from.
+  ///
+  /// The analysis pipeline notifies several times per number (basic data, then
+  /// primes, then powers), and each notification rebuilds this panel. Caching
+  /// keeps the dozen factorization-based calls from being repeated for a value
+  /// that has not changed. Language-neutral: only raw values and classification
+  /// keys are stored, so switching language still relabels correctly.
+  static String? _arithmeticCacheKey;
+  static Map<String, String>? _arithmeticValues;
+  static List<String>? _arithmeticClasses;
+
   /// Builds the arithmetic function rows for the analysis panel
   List<Widget> _buildArithmeticFunctions(Map<String, dynamic> analysis, AppLocalizations l) {
     List<Widget> rows = [];
@@ -880,27 +891,52 @@ class NumberAnalysisPanel extends StatelessWidget {
       int digits = n.toString().length;
       if (digits > 15) return rows;
 
-      rows.add(_buildInfoRow(l.analysisEulerPhi, SpecialFunctionsService.eulerPhi(n).toString()));
-      rows.add(_buildInfoRow(l.analysisCarmichael, SpecialFunctionsService.carmichaelLambda(n).toString()));
-      rows.add(_buildInfoRow(l.analysisMobius, SpecialFunctionsService.moebiusMu(n).toString()));
-      rows.add(_buildInfoRow(l.analysisSmallOmega, SpecialFunctionsService.smallOmega(n).toString()));
-      rows.add(_buildInfoRow(l.analysisBigOmega, SpecialFunctionsService.bigOmega(n).toString()));
-      rows.add(_buildInfoRow(l.analysisSopfr, SpecialFunctionsService.sopfr(n).toString()));
-      rows.add(_buildInfoRow(l.analysisSopf, SpecialFunctionsService.sopf(n).toString()));
-      rows.add(_buildInfoRow(l.analysisRadical, SpecialFunctionsService.radical(n).toString()));
-      rows.add(_buildInfoRow(l.analysisDigitalRoot, SpecialFunctionsService.digitalRoot(n).toString()));
-
-      // Classifications
-      List<String> classifications = [];
-      if (SpecialFunctionsService.isSquareFree(n)) classifications.add(l.analysisSquareFree);
-      if (SpecialFunctionsService.isPowerful(n) && n > BigInt.one) classifications.add(l.analysisPowerful);
-      if (SpecialFunctionsService.isHarshad(n)) classifications.add(l.analysisHarshad);
-      if (SpecialFunctionsService.isSemiprime(n)) classifications.add(l.analysisSemiprime);
-      if (SpecialFunctionsService.isAbundant(n)) {
-        classifications.add(l.analysisAbundant);
-      } else if (SpecialFunctionsService.isDeficient(n)) {
-        classifications.add(l.analysisDeficient);
+      if (_arithmeticCacheKey != valueStr) {
+        _arithmeticValues = {
+          'phi': SpecialFunctionsService.eulerPhi(n).toString(),
+          'carmichael': SpecialFunctionsService.carmichaelLambda(n).toString(),
+          'mobius': SpecialFunctionsService.moebiusMu(n).toString(),
+          'smallOmega': SpecialFunctionsService.smallOmega(n).toString(),
+          'bigOmega': SpecialFunctionsService.bigOmega(n).toString(),
+          'sopfr': SpecialFunctionsService.sopfr(n).toString(),
+          'sopf': SpecialFunctionsService.sopf(n).toString(),
+          'radical': SpecialFunctionsService.radical(n).toString(),
+          'digitalRoot': SpecialFunctionsService.digitalRoot(n).toString(),
+        };
+        _arithmeticClasses = [
+          if (SpecialFunctionsService.isSquareFree(n)) 'squareFree',
+          if (SpecialFunctionsService.isPowerful(n) && n > BigInt.one) 'powerful',
+          if (SpecialFunctionsService.isHarshad(n)) 'harshad',
+          if (SpecialFunctionsService.isSemiprime(n)) 'semiprime',
+          if (SpecialFunctionsService.isAbundant(n))
+            'abundant'
+          else if (SpecialFunctionsService.isDeficient(n))
+            'deficient',
+        ];
+        _arithmeticCacheKey = valueStr;
       }
+
+      final Map<String, String> v = _arithmeticValues!;
+      rows.add(_buildInfoRow(l.analysisEulerPhi, v['phi']!));
+      rows.add(_buildInfoRow(l.analysisCarmichael, v['carmichael']!));
+      rows.add(_buildInfoRow(l.analysisMobius, v['mobius']!));
+      rows.add(_buildInfoRow(l.analysisSmallOmega, v['smallOmega']!));
+      rows.add(_buildInfoRow(l.analysisBigOmega, v['bigOmega']!));
+      rows.add(_buildInfoRow(l.analysisSopfr, v['sopfr']!));
+      rows.add(_buildInfoRow(l.analysisSopf, v['sopf']!));
+      rows.add(_buildInfoRow(l.analysisRadical, v['radical']!));
+      rows.add(_buildInfoRow(l.analysisDigitalRoot, v['digitalRoot']!));
+
+      final Map<String, String> classLabels = {
+        'squareFree': l.analysisSquareFree,
+        'powerful': l.analysisPowerful,
+        'harshad': l.analysisHarshad,
+        'semiprime': l.analysisSemiprime,
+        'abundant': l.analysisAbundant,
+        'deficient': l.analysisDeficient,
+      };
+      final List<String> classifications =
+          _arithmeticClasses!.map((k) => classLabels[k]!).toList();
 
       if (classifications.isNotEmpty) {
         rows.add(_buildInfoRow(l.analysisClassification, classifications.join(', '), maxLines: 3));

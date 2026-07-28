@@ -16,6 +16,10 @@ class CalculatorDisplay extends StatefulWidget {
 class _CalculatorDisplayState extends State<CalculatorDisplay> {
   final ScrollController _scrollController = ScrollController();
 
+  /// Text the display was last auto-scrolled for, so an unrelated rebuild does
+  /// not yank the view back to the end while the user is reading.
+  String? _autoScrolledFor;
+
   @override
   void dispose() {
     _scrollController.dispose();
@@ -240,15 +244,21 @@ class _CalculatorDisplayState extends State<CalculatorDisplay> {
   }
 
   Widget _buildScrollableDisplay(BuildContext context, String displayText, CalculatorService calculator) {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (_scrollController.hasClients) {
-        _scrollController.animateTo(
-          _scrollController.position.maxScrollExtent,
-          duration: const Duration(milliseconds: 200),
-          curve: Curves.easeOut,
-        );
-      }
-    });
+    // Only follow the text when it actually changed. Doing it on every build
+    // meant that scrolling up to read the leading digits of a long result and
+    // then pressing any state-changing key (MS, DEG/RAD) snapped it back.
+    if (_autoScrolledFor != displayText) {
+      _autoScrolledFor = displayText;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (_scrollController.hasClients) {
+          _scrollController.animateTo(
+            _scrollController.position.maxScrollExtent,
+            duration: const Duration(milliseconds: 200),
+            curve: Curves.easeOut,
+          );
+        }
+      });
+    }
 
     return Container(
       width: double.infinity,
@@ -386,7 +396,11 @@ class _CalculatorDisplayState extends State<CalculatorDisplay> {
     final l = AppLocalizations.of(context)!;
     showModalBottomSheet(
       context: context,
-      builder: (BuildContext context) {
+      // The actions run against the OUTER context on purpose. Using the
+      // sheet's own context meant that once its exit animation finished the
+      // element unmounted, so the mounted guard inside the paste aborted it —
+      // nothing pasted and no message explaining why.
+      builder: (BuildContext sheetContext) {
         return Container(
           padding: const EdgeInsets.all(16),
           child: Column(
@@ -396,7 +410,7 @@ class _CalculatorDisplayState extends State<CalculatorDisplay> {
                 leading: const Icon(Icons.copy),
                 title: Text(l.displayCopyResult),
                 onTap: () {
-                  Navigator.pop(context);
+                  Navigator.pop(sheetContext);
                   _copyToClipboard(context, calculator.display);
                 },
               ),
@@ -404,7 +418,7 @@ class _CalculatorDisplayState extends State<CalculatorDisplay> {
                 leading: const Icon(Icons.paste),
                 title: Text(l.displayPasteNumber),
                 onTap: () {
-                  Navigator.pop(context);
+                  Navigator.pop(sheetContext);
                   _pasteFromClipboard(context, calculator);
                 },
               ),
@@ -412,7 +426,7 @@ class _CalculatorDisplayState extends State<CalculatorDisplay> {
                 leading: const Icon(Icons.clear),
                 title: Text(l.displayClearDisplay),
                 onTap: () {
-                  Navigator.pop(context);
+                  Navigator.pop(sheetContext);
                   calculator.clear();
                 },
               ),

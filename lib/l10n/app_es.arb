@@ -4,7 +4,7 @@
   "@appTitle": {
     "description": "App title shown in the title bar and about screen"
   },
-  "appVersion": "Versión 1.0.0",
+  "appVersion": "Versión 1.1.2",
   "@appVersion": {
     "description": "App version string"
   },
