@@ -93,19 +93,26 @@ jobs:
           fi
           "$BT/aapt" dump badging build/app/outputs/flutter-apk/app-release.apk | grep "^package:"
 
-      - name: Publish the release
+      # Only the APK goes on the release: that is what people can actually
+      # install, and it matches how earlier releases were published.
+      - name: Publish the release with the APK
         env:
           GH_TOKEN: ${{ github.token }}
           TAG: ${{ github.event.inputs.tag || github.ref_name }}
         run: |
-          gh release create "$TAG" \
-            --title "$TAG" \
-            --generate-notes \
+          gh release create "$TAG" --title "$TAG" --generate-notes \
             build/app/outputs/flutter-apk/app-release.apk \
-            build/app/outputs/bundle/release/app-release.aab \
             || gh release upload "$TAG" \
-                 build/app/outputs/flutter-apk/app-release.apk \
-                 build/app/outputs/bundle/release/app-release.aab --clobber
+                 build/app/outputs/flutter-apk/app-release.apk --clobber
+
+      # The bundle is for Play, not for end users, so it stays a build
+      # artifact: download it from this run and upload it to the Play Console.
+      - name: Upload the App Bundle for Play
+        uses: actions/upload-artifact@v4
+        with:
+          name: play-appbundle-${{ github.event.inputs.tag || github.ref_name }}
+          path: build/app/outputs/bundle/release/app-release.aab
+          retention-days: 90
 
       # Never leave the signing material behind on the runner.
       - name: Scrub signing material
