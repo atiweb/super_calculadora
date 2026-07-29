@@ -18,9 +18,9 @@
 </p>
 
 <p align="center">
-  <b><a href="https://atiweb.github.io/super_calculadora/">📖 Online User Guide &amp; Function Reference</a></b> (bilingual EN/ES)
+  <b><a href="https://play.google.com/store/apps/details?id=br.dev.ati.supercalculadora">📲 Get it on Google Play</a></b> (free, no ads)
   &nbsp;·&nbsp;
-  🧪 <b><a href="https://atiweb.github.io/super_calculadora/#beta">Help test the app</a></b> (closed beta)
+  <b><a href="https://atiweb.github.io/super_calculadora/">📖 Online User Guide &amp; Function Reference</a></b> (bilingual EN/ES)
 </p>
 
 ---
