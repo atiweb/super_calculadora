@@ -1,0 +1,14 @@
+version: 2
+
+updates:
+  # Keeps the SHA-pinned actions in release.yml from going stale: pinning
+  # trades a supply-chain risk for a maintenance one, and this covers the
+  # maintenance half. Dependabot rewrites the SHA and the trailing tag comment.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    commit-message:
+      prefix: 'ci'
+    labels:
+      - dependencies
