@@ -1,0 +1,128 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+# A new push to the same branch supersedes the previous run.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  FLUTTER_VERSION: '3.35.3'
+  # Gradle 8.12 + AGP 8.7.3 require JDK 17-21. A newer JDK fails with
+  # "Unsupported Java Runtime", which is the recurring cause of Android build
+  # breakage on this project.
+  JAVA_VERSION: '21'
+
+jobs:
+  analyze-and-test:
+    name: Analyze and test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Check generated localizations are up to date
+        run: |
+          flutter gen-l10n
+          if ! git diff --quiet -- lib/l10n; then
+            echo "::error::lib/l10n is out of date. Run 'flutter gen-l10n' and commit the result."
+            git --no-pager diff --stat -- lib/l10n
+            exit 1
+          fi
+
+      - name: Analyze
+        run: flutter analyze --no-fatal-infos
+
+      - name: Test
+        run: flutter test --reporter expanded
+
+  build-android:
+    name: Build Android
+    runs-on: ubuntu-latest
+    needs: analyze-and-test
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: ${{ env.JAVA_VERSION }}
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+
+      - run: flutter pub get
+
+      # Unsigned: this only proves the app still builds. Signed artifacts are
+      # produced by release.yml, which has access to the keystore secrets.
+      - name: Build APK (unsigned)
+        run: flutter build apk --release
+
+      - name: Build App Bundle (unsigned)
+        run: flutter build appbundle --release
+
+      - name: Upload build outputs
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-unsigned-${{ github.sha }}
+          path: |
+            build/app/outputs/flutter-apk/app-release.apk
+            build/app/outputs/bundle/release/app-release.aab
+          retention-days: 14
+
+  integration-test:
+    name: Integration tests on emulator
+    runs-on: ubuntu-latest
+    needs: analyze-and-test
+    # Emulator runs are slow and occasionally flaky, so keep them off pull
+    # requests: they run on main and on demand.
+    if: github.event_name != 'pull_request'
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: ${{ env.JAVA_VERSION }}
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+
+      - run: flutter pub get
+
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' \
+            | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      - name: Run integration tests
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          target: google_apis
+          arch: x86_64
+          profile: pixel_6
+          disable-animations: true
+          script: flutter test integration_test/app_flows_test.dart
