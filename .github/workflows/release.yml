@@ -25,8 +25,12 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: 'Existing tag to build and release'
-        required: true
+        description: 'Existing tag to build and release. Leave empty for a dry run on the selected branch.'
+        required: false
+      dry_run:
+        description: 'Build and verify signing without publishing anything'
+        type: boolean
+        default: false
 
 env:
   FLUTTER_VERSION: '3.35.3'
@@ -50,6 +54,18 @@ jobs:
         run: |
           if [ -z "$KEYSTORE_BASE64" ]; then
             echo "::error::KEYSTORE_BASE64 is not set. Artifacts would be signed with the debug key and Play would reject them."
+            exit 1
+          fi
+
+      # A real release must name a tag. Without this, running the workflow by
+      # hand on a branch would publish a release called "main".
+      - name: Require a tag unless this is a dry run
+        if: ${{ github.event.inputs.dry_run != 'true' }}
+        run: |
+          REF="${{ github.ref }}"
+          TAG_INPUT="${{ github.event.inputs.tag }}"
+          if [ -z "$TAG_INPUT" ] && [[ "$REF" != refs/tags/* ]]; then
+            echo "::error::No tag given and this is not a tag push. Pass a tag, or tick dry_run to only build and verify."
             exit 1
           fi
 
@@ -101,6 +117,7 @@ jobs:
       # Only the APK goes on the release: that is what people can actually
       # install, and it matches how earlier releases were published.
       - name: Publish the release with the APK
+        if: ${{ github.event.inputs.dry_run != 'true' }}
         env:
           GH_TOKEN: ${{ github.token }}
           TAG: ${{ github.event.inputs.tag || github.ref_name }}
@@ -110,14 +127,28 @@ jobs:
             || gh release upload "$TAG" \
                  build/app/outputs/flutter-apk/app-release.apk --clobber
 
+      # Branch names contain slashes, which are not allowed in artifact names.
+      - name: Name the bundle artifact
+        id: names
+        run: |
+          RAW="${{ github.event.inputs.tag || github.ref_name }}"
+          echo "artifact=play-appbundle-${RAW//\//-}" >> "$GITHUB_OUTPUT"
+
       # The bundle is for Play, not for end users, so it stays a build
       # artifact: download it from this run and upload it to the Play Console.
+      # Kept on dry runs too, so the build can be inspected.
       - name: Upload the App Bundle for Play
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
-          name: play-appbundle-${{ github.event.inputs.tag || github.ref_name }}
+          name: ${{ steps.names.outputs.artifact }}
           path: build/app/outputs/bundle/release/app-release.aab
           retention-days: 90
+
+      - name: Dry run summary
+        if: ${{ github.event.inputs.dry_run == 'true' }}
+        run: |
+          echo "### Dry run: built and signature-verified, nothing published" >> "$GITHUB_STEP_SUMMARY"
+          echo "Use this to check a change to this workflow before merging it." >> "$GITHUB_STEP_SUMMARY"
 
       # Never leave the signing material behind on the runner.
       - name: Scrub signing material
