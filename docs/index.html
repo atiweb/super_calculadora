@@ -236,6 +236,7 @@
   <a href="#tools-radicals"><span class="en">Radicals</span><span class="es">Radicales</span></a>
   <a href="#tools-geometry"><span class="en">Geometry</span><span class="es">Geometría</span></a>
   <a href="#tools-polynomials"><span class="en">Polynomials</span><span class="es">Polinomios</span></a>
+  <a href="#tools-algebra"><span class="en">Algebra</span><span class="es">Álgebra</span></a>
   <a href="#tools-numtheory"><span class="en">Adv. Number Theory</span><span class="es">T.N. Avanzada</span></a>
   <a href="#tools-steps"><span class="en">Step by step</span><span class="es">Procedimientos</span></a>
   <a href="#tools-complex"><span class="en">Complex &amp; Sequences</span><span class="es">Complejos y Sucesiones</span></a>
@@ -261,7 +262,7 @@
     <span class="badge">Android</span>
     <span class="badge">Flutter</span>
     <span class="badge">Offline</span>
-    <span class="badge">v1.2.0</span>
+    <span class="badge">v1.2.1</span>
   </div>
 </div>
 
@@ -876,8 +877,39 @@ Esta desigualdad es fundamental en olimpiadas.</pre></div>
   <div class="tool-row" style="margin-top:10px"><span class="tool-name"><span class="en">Linear system 2×2 / 3×3</span><span class="es">Sistema lineal 2×2 / 3×3</span></span><span><span class="en">Cramer's rule with exact fractions. Rows "a,b,…,k" (coefficients + constant) separated by ";". Shows the determinant.</span><span class="es">Regla de Cramer con fracciones exactas. Filas "a,b,…,k" (coeficientes + término independiente) separadas por ";". Muestra el determinante.</span></span></div>
   <div class="tool-ex">"2,1,5; 1,-1,1" → x=2, y=1 (det=−3)</div>
 </div>
-<p class="en-blk" style="margin-top:8px"><em>Analyze polynomial</em> also plots y = p(x) marking rational roots and extrema.</p>
-<p class="es-blk" style="margin-top:8px"><em>Analizar polinomio</em> además grafica y = p(x) marcando raíces racionales y extremos.</p>
+<p class="en-blk" style="margin-top:8px"><em>Analyze polynomial</em> also plots y = p(x) marking rational roots and extrema. It works on a single variable x, already expanded — for several variables or parentheses use <a href="#tools-algebra">Algebra</a>.</p>
+<p class="es-blk" style="margin-top:8px"><em>Analizar polinomio</em> además grafica y = p(x) marcando raíces racionales y extremos. Trabaja sobre una sola variable x, ya desarrollada — para varias variables o paréntesis usa <a href="#tools-algebra">Álgebra</a>.</p>
+
+<!-- Algebra -->
+<h3 id="tools-algebra"><span class="en">Algebra — Polynomials in Several Variables</span><span class="es">Álgebra — Polinomios en Varias Variables</span></h3>
+<p class="en-blk" style="margin-bottom:10px">Symbolic algebra with exact rational coefficients: expanding a product, collecting like terms and comparing two expressions are all the same operation here, so an identity is checked by expanding both sides.</p>
+<p class="es-blk" style="margin-bottom:10px">Álgebra simbólica con coeficientes racionales exactos: desarrollar un producto, agrupar términos semejantes y comparar dos expresiones son la misma operación, así que una identidad se verifica desarrollando ambos lados.</p>
+<p class="en-blk" style="margin-bottom:10px"><strong>Notation:</strong> variables are a letter with an optional subscript (<code>a</code>, <code>x</code>, <code>x1</code>); multiplication may be implicit (<code>2ab</code>, <code>(a+b)(a−b)</code>, <code>3(x+1)</code>); exponents accept <code>^</code> or superscripts (<code>(a+b+c)²</code>). Terms are printed in graded lexicographic order, the usual convention.</p>
+<p class="es-blk" style="margin-bottom:10px"><strong>Notación:</strong> las variables son una letra con subíndice opcional (<code>a</code>, <code>x</code>, <code>x1</code>); la multiplicación puede ser implícita (<code>2ab</code>, <code>(a+b)(a−b)</code>, <code>3(x+1)</code>); los exponentes admiten <code>^</code> o superíndices (<code>(a+b+c)²</code>). Los términos se imprimen en orden lexicográfico graduado, la convención habitual.</p>
+<div class="tool-card">
+  <div class="tool-row"><span class="tool-name"><span class="en">Expand and simplify</span><span class="es">Expandir y simplificar</span></span><span><span class="en">Expands the expression and collects like terms. Also reports the degree, the number of terms, the variables, and whether the result is homogeneous or symmetric.</span><span class="es">Desarrolla la expresión y agrupa términos semejantes. Además informa el grado, la cantidad de términos, las variables, y si el resultado es homogéneo o simétrico.</span></span></div>
+  <div class="tool-ex">(a+b+c)² → a² + 2ab + 2ac + b² + 2bc + c²  (<span class="en">degree</span><span class="es">grado</span> 2, 6 <span class="en">terms, homogeneous, symmetric</span><span class="es">términos, homogéneo, simétrico</span>)
+(a+b)⁵ → a⁵ + 5a⁴b + 10a³b² + 10a²b³ + 5ab⁴ + b⁵</div>
+  <div class="tool-row" style="margin-top:10px"><span class="tool-name"><span class="en">Check identity</span><span class="es">Verificar identidad</span></span><span><span class="en">Expands both sides and compares them exactly. If they differ, it shows the difference, which is where the error is.</span><span class="es">Desarrolla ambos lados y los compara exactamente. Si difieren, muestra la diferencia, que es donde está el error.</span></span></div>
+  <div class="tool-ex">(a+b)³  <span class="en">vs</span><span class="es">vs</span>  a³+3a²b+3ab²+b³ → ✓
+(a+b)²  <span class="en">vs</span><span class="es">vs</span>  a²+b² → <span class="en">difference</span><span class="es">diferencia</span> = 2ab</div>
+  <div class="tool-row" style="margin-top:10px"><span class="tool-name"><span class="en">Common factor</span><span class="es">Factor común</span></span><span><span class="en">Pulls out the greatest common monomial together with the rational content, so the factor inside the parentheses has integer coefficients.</span><span class="es">Extrae el mayor monomio común junto con el contenido racional, de modo que el factor entre paréntesis quede con coeficientes enteros.</span></span></div>
+  <div class="tool-ex">2a²b + 4ab² → 2ab(a + 2b)
+x/2 + y/3 → (1/6)(3x + 2y)</div>
+  <div class="tool-row" style="margin-top:10px"><span class="tool-name"><span class="en">Substitute / evaluate</span><span class="es">Sustituir / evaluar</span></span><span><span class="en">Values may be numbers or expressions, and substitution is simultaneous. Any variable left unassigned stays in the result.</span><span class="es">Los valores pueden ser números o expresiones, y la sustitución es simultánea. Toda variable sin asignar permanece en el resultado.</span></span></div>
+  <div class="tool-ex">(a+b+c)²  <span class="en">with</span><span class="es">con</span> a=1, b=2, c=3 → 36
+(a+b+c)²  <span class="en">with</span><span class="es">con</span> a=1, b=2 → c² + 6c + 9</div>
+  <div class="tool-row" style="margin-top:10px"><span class="tool-name"><span class="en">Coefficient of a monomial</span><span class="es">Coeficiente de un monomio</span></span><span><span class="en">The coefficient of one monomial in the expansion, without reading the whole result.</span><span class="es">El coeficiente de un monomio en el desarrollo, sin tener que leer el resultado completo.</span></span></div>
+  <div class="tool-ex">a²b <span class="en">in</span><span class="es">en</span> (a+b+c)³ → 3    x⁵ <span class="en">in</span><span class="es">en</span> (1+x)¹⁰ → 252</div>
+  <div class="tool-row" style="margin-top:10px"><span class="tool-name"><span class="en">Partial derivative</span><span class="es">Derivada parcial</span></span><span><span class="en">∂/∂x of the expansion, exact (no numerical approximation).</span><span class="es">∂/∂x del desarrollo, exacta (sin aproximación numérica).</span></span></div>
+  <div class="tool-ex">∂/∂a (a+b)³ → 3a² + 6ab + 3b²</div>
+  <div class="tool-row" style="margin-top:10px"><span class="tool-name"><span class="en">Notable products</span><span class="es">Productos notables</span></span><span><span class="en">The classic identities for your own A and B, which may themselves be expressions: (A±B)², (A+B)(A−B), (A±B)³ and the sum/difference of cubes.</span><span class="es">Las identidades clásicas con A y B a tu elección, que pueden ser expresiones: (A±B)², (A+B)(A−B), (A±B)³ y la suma/diferencia de cubos.</span></span></div>
+  <div class="tool-ex">A=x, B=2y → (A+B)² = x² + 4xy + 4y²  |  (A+B)(A²−AB+B²) = x³ + 8y³</div>
+  <div class="tool-row" style="margin-top:10px"><span class="tool-name">(a+b)ⁿ</span><span><span class="en">Symbolic binomial expansion term by term, with its list of coefficients.</span><span class="es">Desarrollo binomial simbólico término a término, con su lista de coeficientes.</span></span></div>
+  <div class="tool-ex">n=5 → a⁵ + 5a⁴b + 10a³b² + 10a²b³ + 5ab⁴ + b⁵  (1, 5, 10, 10, 5, 1)</div>
+</div>
+<p class="en-blk" style="margin-top:8px">Division is allowed by a number or by a monomial that divides every term: <code>(a²b+ab²)/(ab)</code> → <code>a + b</code>. An expansion that would be too large to read (or to compute quickly) is refused with a message instead of freezing the app.</p>
+<p class="es-blk" style="margin-top:8px">Se puede dividir entre un número o entre un monomio que divida a todos los términos: <code>(a²b+ab²)/(ab)</code> → <code>a + b</code>. Un desarrollo demasiado grande para leerse (o para calcularse rápido) se rechaza con un mensaje en lugar de congelar la app.</p>
 
 <!-- Advanced Number Theory -->
 <h3 id="tools-numtheory"><span class="en">Advanced Number Theory</span><span class="es">Teoría de Números Avanzada</span></h3>
@@ -1065,7 +1097,7 @@ Nota: presionar CE limpia el panel de análisis de inmediato.</pre></div>
 </div>
 
 <footer>
-  <span><span class="en">Super Calculator</span><span class="es">Super Calculadora</span> v1.2.0 — Adalberto Garcia Garces</span>
+  <span><span class="en">Super Calculator</span><span class="es">Super Calculadora</span> v1.2.1 — Adalberto Garcia Garces</span>
   <span>
     <a href="https://play.google.com/store/apps/details?id=br.dev.ati.supercalculadora"><span class="en">Google Play</span><span class="es">Google Play</span></a> ·
     <a href="privacy.html"><span class="en">Privacy Policy</span><span class="es">Política de Privacidad</span></a> ·

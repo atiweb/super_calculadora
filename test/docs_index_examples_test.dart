@@ -5,6 +5,7 @@
 // Run with: flutter test test/docs_index_examples_test.dart
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:super_calculadora/services/algebra_service.dart';
 import 'package:super_calculadora/services/special_functions_service.dart';
 import 'package:super_calculadora/services/number_analysis_service.dart';
 import 'package:super_calculadora/services/big_decimal.dart';
@@ -523,6 +524,110 @@ void main() {
       final phi = SpecialFunctionsService.eulerPhi(bi(12));
       final result = SpecialFunctionsService.modPow(bi(5), phi, bi(12));
       expect(result, bi(1));
+    });
+  });
+
+  // ══════════════════════════════════════════════════════════════════════════
+  // ALGEBRA (Olympiad Tools → Algebra)
+  // ══════════════════════════════════════════════════════════════════════════
+
+  group('Algebra — expand and simplify', () {
+    test('(a+b+c)² = a² + 2ab + 2ac + b² + 2bc + c², degree 2, 6 terms', () {
+      final p = AlgebraService.parse('(a+b+c)^2');
+      expect(p.toString(), 'a² + 2ab + 2ac + b² + 2bc + c²');
+      expect(p.degree, 2);
+      expect(p.termCount, 6);
+      expect(p.isHomogeneous, true);
+      expect(AlgebraService.isSymmetric(p), true);
+    });
+    test('(a+b)⁵ = a⁵ + 5a⁴b + 10a³b² + 10a²b³ + 5ab⁴ + b⁵', () {
+      expect(AlgebraService.parse('(a+b)^5').toString(),
+          'a⁵ + 5a⁴b + 10a³b² + 10a²b³ + 5ab⁴ + b⁵');
+    });
+    test('the notation of the help page parses', () {
+      expect(AlgebraService.parse('2ab').toString(), '2ab');
+      expect(AlgebraService.parse('(a+b)(a-b)').toString(), 'a² - b²');
+      expect(AlgebraService.parse('3(x+1)').toString(), '3x + 3');
+      expect(AlgebraService.parse('(a+b+c)²'), AlgebraService.parse('(a+b+c)^2'));
+      expect(AlgebraService.parse('x1').variables, ['x1']);
+    });
+  });
+
+  group('Algebra — check identity', () {
+    test('(a+b)³ vs a³+3a²b+3ab²+b³ → identical', () {
+      expect(AlgebraService.areEquivalent('(a+b)^3', 'a^3+3a^2b+3ab^2+b^3'),
+          true);
+    });
+    test('(a+b)² vs a²+b² → difference 2ab', () {
+      expect(AlgebraService.difference('(a+b)^2', 'a^2+b^2').toString(), '2ab');
+    });
+  });
+
+  group('Algebra — common factor', () {
+    test('2a²b + 4ab² = 2ab(a + 2b)', () {
+      expect(
+          AlgebraService.commonFactor(AlgebraService.parse('2a^2b+4ab^2'))
+              .toString(),
+          '2ab(a + 2b)');
+    });
+    test('x/2 + y/3 = (1/6)(3x + 2y)', () {
+      expect(
+          AlgebraService.commonFactor(AlgebraService.parse('x/2 + y/3'))
+              .toString(),
+          '(1/6)(3x + 2y)');
+    });
+  });
+
+  group('Algebra — substitute / evaluate', () {
+    test('(a+b+c)² with a=1, b=2, c=3 → 36', () {
+      final p = AlgebraService.parse('(a+b+c)^2');
+      final result =
+          AlgebraService.substitute(p, AlgebraService.parseAssignments('a=1, b=2, c=3'));
+      expect(result.toString(), '36');
+    });
+    test('(a+b+c)² with a=1, b=2 → c² + 6c + 9', () {
+      final p = AlgebraService.parse('(a+b+c)^2');
+      final result =
+          AlgebraService.substitute(p, AlgebraService.parseAssignments('a=1, b=2'));
+      expect(result.toString(), 'c² + 6c + 9');
+    });
+  });
+
+  group('Algebra — coefficient of a monomial', () {
+    test('a²b in (a+b+c)³ → 3', () {
+      expect(
+          AlgebraService.coefficientOf(AlgebraService.parse('(a+b+c)^3'), 'a^2b')
+              .toString(),
+          '3');
+    });
+    test('x⁵ in (1+x)¹⁰ → 252', () {
+      expect(
+          AlgebraService.coefficientOf(AlgebraService.parse('(1+x)^10'), 'x^5')
+              .toString(),
+          '252');
+    });
+  });
+
+  group('Algebra — derivative, notable products, division', () {
+    test('∂/∂a (a+b)³ = 3a² + 6ab + 3b²', () {
+      expect(AlgebraService.parse('(a+b)^3').derivative('a').toString(),
+          '3a² + 6ab + 3b²');
+    });
+    test('A=x, B=2y: (A+B)² = x² + 4xy + 4y² and (A+B)(A²−AB+B²) = x³ + 8y³',
+        () {
+      final list = AlgebraService.notableProducts(
+          AlgebraService.parse('x'), AlgebraService.parse('2y'));
+      final byFormula = {for (final n in list) n.formula: n.value.toString()};
+      expect(byFormula['(A+B)²'], 'x² + 4xy + 4y²');
+      expect(byFormula['(A+B)(A²−AB+B²)'], 'x³ + 8y³');
+    });
+    test('(a²b+ab²)/(ab) = a + b', () {
+      expect(AlgebraService.parse('(a^2b + ab^2)/(ab)').toString(), 'a + b');
+    });
+    test('(a+b)⁵ coefficients are 1, 5, 10, 10, 5, 1', () {
+      final p = AlgebraService.parse('(a+b)^5');
+      expect(p.sortedMonomials.map((m) => p.coefficient(m).toString()).join(', '),
+          '1, 5, 10, 10, 5, 1');
     });
   });
 }

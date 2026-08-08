@@ -88,12 +88,13 @@ Every number you enter is automatically analyzed:
 
 ### Olympiad Tools *(training toolkit for IMO-style problems)*
 A dedicated section (from the navigation drawer) with **exact** tools, many with
-**visual diagrams**, across 10 categories plus a practice quiz:
+**visual diagrams**, across 11 categories plus a practice quiz:
 
 - **Fractions** — exact rational arithmetic, simplify/convert
 - **Radicals** — √n and ⁿ√n simplification, denominator rationalization
 - **Geometry** — triangle classification + diagram, Heron area, circumradius/inradius, shoelace area (drawn), **Pick's theorem** (with lattice points), **triangle centers** (centroid/circumcenter/orthocenter + **Euler line**), Pythagorean & Heronian triples
 - **Polynomials** — rational roots, Vieta's relations, discriminant, **function plot** (roots + extrema), **Ruffini** synthetic division (steps), **n×n linear systems** (Cramer), quadratic/cubic solving
+- **Algebra** — polynomials in **several variables** with exact rational coefficients: expand and collect like terms (`(a+b+c)² = a² + 2ab + 2ac + b² + 2bc + c²`), check an identity, pull out the common factor, substitute/evaluate (numeric or symbolic), coefficient of a monomial, partial derivative, notable products, binomial theorem
 - **Number Theory** — modular square root (Tonelli-Shanks), linear congruences (with a **modular clock**), Pell equation, continued fractions, sums of squares, Frobenius number, **Sieve of Eratosthenes** (grid), quadratic residues, φ/τ/σ/μ table
 - **Step by step** — Euclid, CRT and factorization shown with worked steps
 - **Complex & Sequences** — roots of unity (drawn on the **unit circle**), De Moivre power, n-th roots, linear recurrences, Pascal triangle, **Pascal mod m** (Sierpiński fractal), binomial expansion — *complex tools compute in high precision*

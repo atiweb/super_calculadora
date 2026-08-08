@@ -123,7 +123,7 @@ function coverPage() {
     new Paragraph({
       alignment: AlignmentType.CENTER,
       spacing: { after: 200 },
-      children: [new TextRun({ text: "Guía Completa de Funciónes y Uso", font: FONT, size: 30, color: "555555" })],
+      children: [new TextRun({ text: "Guía Completa de Funciones y Uso", font: FONT, size: 30, color: "555555" })],
     }),
     blankLine(),
     new Paragraph({
@@ -134,7 +134,7 @@ function coverPage() {
     ...Array(6).fill(null).map(() => blankLine()),
     new Paragraph({
       alignment: AlignmentType.CENTER,
-      children: [new TextRun({ text: "Abril 2026", font: FONT, size: 24, color: "888888" })],
+      children: [new TextRun({ text: "Agosto 2026", font: FONT, size: 24, color: "888888" })],
     }),
     new Paragraph({ children: [new PageBreak()] }),
   ];
@@ -144,13 +144,13 @@ function coverPage() {
 function secIntroducción() {
   return [
     h1("1. Introducción"),
-    p("Super Calculadora es una aplicación Flutter multi-plataforma diseñada específicamente para la preparación de olimpiadas matemáticas internacionales (IMO). Combina las funciónes de una calculadora cientifica con herramientas especializadas de teoría de números, aritmética modular, combinatoria y estadística."),
+    p("Super Calculadora es una aplicación Flutter multi-plataforma diseñada específicamente para la preparación de olimpiadas matemáticas internacionales (IMO). Combina las funciones de una calculadora cientifica con herramientas especializadas de teoría de números, aritmética modular, combinatoria y estadística."),
     blankLine(),
     h2("Características Principales"),
-    bullet([bold("Aritmética de precisión arbitraria: "), normal("útiliza BigInt y BigDecimal para manejar números de cualquier tamaño sin pérdida de precisión.")]),
+    bullet([bold("Aritmética de precisión arbitraria: "), normal("utiliza BigInt y BigDecimal para manejar números de cualquier tamaño sin pérdida de precisión.")]),
     bullet([bold("Test de primalidad Miller-Rabin: "), normal("determina de manera eficiente si un número es primo, incluso para números muy grandes.")]),
-    bullet([bold("Panel de análisis numérico automático: "), normal("al ingresar un número, se muestra automáticamente información detallada: factorización, divisores, propiedades especiales y funciónes aritméticas.")]),
-    bullet([bold("+40 funciónes especiales: "), normal("organizadas en 4 categorías: Teoría de Números, Aritmética Modular, Combinatoria y Estadística.")]),
+    bullet([bold("Panel de análisis numérico automático: "), normal("al ingresar un número, se muestra automáticamente información detallada: factorización, divisores, propiedades especiales y funciones aritméticas.")]),
+    bullet([bold("+40 funciones especiales: "), normal("organizadas en 4 categorías: Teoría de Números, Aritmética Modular, Combinatoria y Estadística.")]),
     new Paragraph({ children: [new PageBreak()] }),
   ];
 }
@@ -159,11 +159,11 @@ function secIntroducción() {
 function secNavegar() {
   return [
     h1("2. Cómo Navegar la App"),
-    p("La interfaz de Super Calculadora esta diseñada para ser intuitiva y eficiente:"),
+    p("La interfaz de Super Calculadora está diseñada para ser intuitiva y eficiente:"),
     blankLine(),
-    bullet([bold("Menú lateral (drawer): "), normal("accede a \"Funciónes Especiales\" para activar el teclado especial con todas las funciónes avanzadas.")]),
-    bullet([bold("Teclado scrollable superior: "), normal("muestra las funciónes organizadas por secciones (Teoría de Números, Aritmética Modular, Combinatoria, Estadística). Se puede desplazar horizontalmente.")]),
-    bullet([bold("Teclado numérico fijo inferior: "), normal("siempre visible, contiene los dígitos 0-9, operaciónes básicas (+, -, x, /), punto decimal y la tecla de igual (=).")]),
+    bullet([bold("Menú lateral (drawer): "), normal("accede a \"Funciones Especiales\" para activar el teclado especial con todas las funciones avanzadas, y a \"Herramientas de Olimpiada\", la sección de entrenamiento descrita en el capítulo 9. Desde ahí también se llega al historial y a los ajustes (tema, idioma y notación científica).")]),
+    bullet([bold("Teclado scrollable superior: "), normal("muestra las funciones organizadas por secciones (Teoría de Números, Aritmética Modular, Combinatoria, Estadística). Se puede desplazar horizontalmente.")]),
+    bullet([bold("Teclado numérico fijo inferior: "), normal("siempre visible, contiene los dígitos 0-9, operaciones básicas (+, -, x, /), punto decimal y la tecla de igual (=).")]),
     bullet([bold("Panel de análisis: "), normal("se muestra a la derecha en tabletas o debajo del teclado en dispositivos móviles. Se actualiza automáticamente al ingresar un número.")]),
     bullet([bold("Indicador de operación pendiente: "), normal("cuando una función multi-parámetro está activa, aparece un indicador con color terciario mostrando la función y los parámetros acumulados.")]),
     new Paragraph({ children: [new PageBreak()] }),
@@ -176,19 +176,19 @@ function secParámetros() {
   const col3 = [3120, 6240];
   return [
     h1("3. Sistema de Parámetros"),
-    p("Este es el concepto más importante para usar la calculadora correctamente. Existen tres tipos de funciónes segun la cantidad de parámetros que aceptan:"),
+    p("Este es el concepto más importante para usar la calculadora correctamente. Existen tres tipos de funciones segun la cantidad de parámetros que aceptan:"),
     blankLine(),
 
     // --- 1 param ---
-    h2("3.1 Funciónes de 1 Parámetro (inmediatas)"),
+    h2("3.1 Funciones de 1 Parámetro (inmediatas)"),
     p("Se ingresa un número y se presiona el botón de la función. El resultado aparece inmediatamente."),
     pRuns([bold("Flujo: "), normal("número -> botón de función -> resultado")]),
     pRuns([bold("Ejemplos: "), normal("phi, mu, omega, Omega, lambda, n!, F(n), Cat, Bell, D(n), p(n), dr, sigma0, sigma, sopfr, sopf, rad, n#, pi(n), piso, techo, n!!, g")]),
     blankLine(),
 
     // --- Fixed params ---
-    h2("3.2 Funciónes de Parámetros Fijos (2-3-4)"),
-    p("Se ingresa el primer valor, se presiona la función, aparece el indicador de operación pendiente, se ingresa el segundo valor y se presiona =. Para funciónes de 3 parámetros se repite el proceso."),
+    h2("3.2 Funciones de Parámetros Fijos (2-3-4)"),
+    p("Se ingresa el primer valor, se presiona la función, aparece el indicador de operación pendiente, se ingresa el segundo valor y se presiona =. Para funciones de 3 parámetros se repite el proceso."),
     pRuns([bold("Flujo (2 params): "), normal("a -> función -> b -> =")]),
     pRuns([bold("Flujo (3 params): "), normal("a -> función -> b -> = -> c -> =")]),
     blankLine(),
@@ -214,16 +214,16 @@ function secParámetros() {
     blankLine(),
 
     // --- Variable params ---
-    h2("3.3 Funciónes de Parámetros Variables (N params)"),
+    h2("3.3 Funciones de Parámetros Variables (N params)"),
     p("Se ingresa el primer valor, se presiona la función, se ingresa el siguiente valor. Para agregar mas valores se presiona = (agrega parámetro). Para ejecutar la función se presiona el MISMO botón de la función nuevamente."),
     blankLine(),
-    pRuns([bold("IMPORTANTE: "), normal("Para funciónes de parámetros variables:")]),
+    pRuns([bold("IMPORTANTE: "), normal("Para funciones de parámetros variables:")]),
     bullet([normal("Presionar "), bold("="), normal(" agrega otro parámetro a la lista.")]),
     bullet([normal("Presionar el "), bold("botón de la función"), normal(" nuevamente EJECUTA el cálculo con todos los parámetros acumulados.")]),
     blankLine(),
 
     makeTable(col3,
-      ["Función", "Descripcion"],
+      ["Función", "Descripción"],
       [
         ["MCD", "Máximo común divisor de N números"],
         ["MCM", "Mínimo común múltiplo de N números"],
@@ -257,8 +257,8 @@ function funcRef(botón, nombre, definicion, fórmula, ejemplo) {
 // ── Section 4: Teoría de Números ───────────────────────────────────────
 function secTeoríaNúmeros() {
   return [
-    h1("4. Referencia de Funciónes - Teoría de Números"),
-    p("Funciónes clásicas de teoría de números, esenciales para olimpiadas matemáticas."),
+    h1("4. Referencia de Funciones - Teoría de Números"),
+    p("Funciones clásicas de teoría de números, esenciales para olimpiadas matemáticas."),
     blankLine(),
     ...funcRef("phi(n)", "Función Totiente de Euler",
       "Cuenta los enteros positivos menores o iguales a n que son coprimos con n.",
@@ -316,7 +316,7 @@ function secTeoríaNúmeros() {
       "Resultado de sumar repetidamente los dígitos hasta obtener un solo digito.",
       "dr(n) = 1 + ((n - 1) mod 9) para n > 0",
       "dr(493) = 4 + 9 + 3 = 16 -> 1 + 6 = 7"),
-    ...funcRef("piso(x) / techo(x)", "Funciónes piso y techo",
+    ...funcRef("piso(x) / techo(x)", "Funciones piso y techo",
       "piso(x) es el mayor entero <= x. techo(x) es el menor entero >= x.",
       "",
       "piso(3.7) = 3, techo(3.2) = 4"),
@@ -331,8 +331,8 @@ function secTeoríaNúmeros() {
 // ── Section 5: Aritmética Modular ──────────────────────────────────────
 function secAritméticaModular() {
   return [
-    h1("5. Referencia de Funciónes - Aritmética Modular"),
-    p("Funciónes para trabajar con congruencias y aritmética modular."),
+    h1("5. Referencia de Funciones - Aritmética Modular"),
+    p("Funciones para trabajar con congruencias y aritmética modular."),
     blankLine(),
     ...funcRef("mod", "Módulo",
       "Calcula el residuo de la división de a entre b.", "", "17 mod 5 = 2"),
@@ -356,7 +356,7 @@ function secAritméticaModular() {
       "Encuentra el menor generador del grupo multiplicativo modulo n.",
       "", "g(7) = 3 (porque las potencias de 3 mod 7 generan {1,2,3,4,5,6})"),
     ...funcRef("MCD", "Máximo Comun Divisor (N params)",
-      "Calcula el MCD de N números útilizando el algoritmo de Euclides.",
+      "Calcula el MCD de N números utilizando el algoritmo de Euclides.",
       "", "MCD(12, 18, 24) = 6"),
     ...funcRef("MCM", "Mínimo Comun Múltiplo (N params)",
       "Calcula el MCM de N números.", "MCM(a,b) = |a*b| / MCD(a,b)",
@@ -374,8 +374,8 @@ function secAritméticaModular() {
 // ── Section 6: Combinatoria ────────────────────────────────────────────
 function secCombinatoria() {
   return [
-    h1("6. Referencia de Funciónes - Combinatoria"),
-    p("Funciónes de conteo y combinatoria, fundamentales para problemas de olimpiadas."),
+    h1("6. Referencia de Funciones - Combinatoria"),
+    p("Funciones de conteo y combinatoria, fundamentales para problemas de olimpiadas."),
     blankLine(),
     ...funcRef("n!", "Factorial",
       "Producto de todos los enteros positivos desde 1 hasta n.",
@@ -428,8 +428,8 @@ function secCombinatoria() {
 // ── Section 7: Estadística ─────────────────────────────────────────────
 function secEstadística() {
   return [
-    h1("7. Referencia de Funciónes - Estadística"),
-    p("Funciónes estadísticas básicas que aceptan N parámetros."),
+    h1("7. Referencia de Funciones - Estadística"),
+    p("Funciones estadísticas básicas que aceptan N parámetros."),
     blankLine(),
     ...funcRef("Med A", "Media Aritmética (N params)",
       "Promedio de N números.",
@@ -488,7 +488,7 @@ function secAnálisis() {
         ["Fibonacci", "Si n es un número de Fibonacci"],
         ["Triangular", "Si n es un número triangular"],
         ["Palindromo", "Si n es palíndromo en base 10"],
-        ["Funciónes aritméticas", "phi, lambda, mu, omega, Omega, sopfr, sopf, rad, dr"],
+        ["Funciones aritméticas", "phi, lambda, mu, omega, Omega, sopfr, sopf, rad, dr"],
         ["Libre de cuadrados", "Si ningún primo al cuadrado divide a n"],
         ["Número poderoso", "Si para cada primo p | n, también p^2 | n"],
         ["Número de Harshad", "Si n es divisible por la suma de sus dígitos"],
@@ -500,27 +500,84 @@ function secAnálisis() {
   ];
 }
 
-// ── Section 9: Mejoras y Correcciónes ──────────────────────────────────
+// ── Section 9: Herramientas de Olimpiada ───────────────────────────────
+function secHerramientas() {
+  const catW = [2200, 7160];
+  const toolW = [2600, 6760];
+  return [
+    h1("9. Herramientas de Olimpiada"),
+    p("Además del teclado de funciones especiales, la app incluye una sección de entrenamiento independiente, pensada para la preparación de olimpiadas. Se abre desde el menú lateral, en \"Herramientas de Olimpiada\"."),
+    p("Cada herramienta es un formulario simple: se completan los campos, se presiona Calcular y se lee la respuesta. Los resultados son exactos siempre que sea posible — fracciones p/q y radicales simplificados en lugar de decimales — y varias herramientas acompañan el resultado con un diagrama (triángulos, círculo unitario, criba, triángulo de Pascal, gráfica del polinomio)."),
+    blankLine(),
+
+    h2("Las once categorías y la práctica"),
+    makeTable(catW,
+      ["Categoría", "Contenido"],
+      [
+        ["Fracciones", "Aritmética racional exacta (+ − × ÷) y simplificar / convertir entre fracción, número mixto y decimal."],
+        ["Radicales", "Simplificar √n y la raíz n-ésima; racionalizar denominadores de la forma a/√b y a/(c+√d)."],
+        ["Geometría", "Triángulo por lados (área de Herón exacta), ángulos por ley del coseno, ley de los senos, ternas pitagóricas (primitivas y todas), triángulos heronianos, área por coordenadas (shoelace), teorema de Pick y centros del triángulo con la recta de Euler."],
+        ["Polinomios", "En una variable x: analizar (grado, raíces racionales, Vieta, discriminante, derivada y gráfica), Ruffini paso a paso, sistema lineal 2×2 / 3×3, ecuación cuadrática y raíces reales de la cúbica."],
+        ["Álgebra", "En varias variables: expandir y simplificar, verificar identidades, factor común, sustituir / evaluar, coeficiente de un monomio, derivada parcial, productos notables y binomio de Newton. Se detalla más abajo."],
+        ["Teoría de Números", "Raíz cuadrada modular (Tonelli-Shanks), congruencia lineal, ecuación de Pell, fracción continua de √n, sumas de cuadrados, número de Frobenius, criba de Eratóstenes, residuos cuadráticos y tabla de φ, τ, σ, μ."],
+        ["Procedimientos", "El algoritmo mostrado paso a paso, no solo la respuesta: Euclides (con Bézout), factorización en primos y Teorema Chino del Residuo."],
+        ["Complejos y Sucesiones", "Raíces de la unidad sobre el círculo unitario, potencia de De Moivre, raíces n-ésimas, recurrencias lineales, fila n de Pascal, Pascal mod m (fractal de Sierpiński) y expansión binomial."],
+        ["Estadística", "Descriptiva exacta (media, mediana, moda y varianza como fracciones) y la cadena de desigualdades QM ≥ AM ≥ GM ≥ HM."],
+        ["Matrices", "Con fracciones exactas, sin error de punto flotante: determinante, inversa, producto A × B, resolver A·x = b de tamaño n×n, rango y transpuesta."],
+        ["Cálculo", "Derivada f'(x₀), integral definida y límite, calculados numéricamente para cualquier f(x)."],
+        ["Práctica", "Cuestionario de problemas con verificación automática y puntaje."],
+      ]
+    ),
+    new Paragraph({ children: [new PageBreak()] }),
+
+    h2("Álgebra: polinomios en varias variables"),
+    p("Esta categoría trabaja con polinomios en cualquier cantidad de variables y coeficientes racionales exactos. Internamente el polinomio se mantiene siempre desarrollado y con los términos semejantes agrupados, de modo que desarrollar un producto, simplificar y comparar dos expresiones son la misma operación: una identidad se verifica desarrollando ambos lados."),
+    pRuns([
+      bold("Notación: "),
+      normal("las variables son una letra con subíndice opcional (a, x, x1); la multiplicación puede escribirse implícita (2ab, (a+b)(a−b), 3(x+1)); los exponentes admiten ^ o superíndices, de manera que (a+b+c)² y (a+b+c)^2 son lo mismo. Los términos se imprimen en orden lexicográfico graduado, la convención habitual: primero el grado más alto y, dentro de un mismo grado, el mayor exponente de la variable que va antes en el alfabeto."),
+    ]),
+    blankLine(),
+    makeTable(toolW,
+      ["Herramienta", "Qué hace y ejemplo"],
+      [
+        ["Expandir y simplificar", "Desarrolla la expresión y agrupa términos semejantes; informa además el grado, la cantidad de términos, las variables y si el resultado es homogéneo o simétrico.\n(a+b+c)² → a² + 2ab + 2ac + b² + 2bc + c²"],
+        ["Verificar identidad", "Desarrolla ambos lados y los compara exactamente. Si no coinciden muestra la diferencia, que es donde está el error.\n(a+b)² vs a²+b² → diferencia = 2ab"],
+        ["Factor común", "Extrae el mayor monomio común junto con el contenido racional, de modo que lo que queda dentro del paréntesis tenga coeficientes enteros.\n2a²b + 4ab² → 2ab(a + 2b)     x/2 + y/3 → (1/6)(3x + 2y)"],
+        ["Sustituir / evaluar", "Los valores pueden ser números o expresiones, y la sustitución es simultánea. Las variables sin asignar permanecen en el resultado.\n(a+b+c)² con a=1, b=2, c=3 → 36     con a=1, b=2 → c² + 6c + 9"],
+        ["Coeficiente de un monomio", "El coeficiente de un monomio dentro del desarrollo, sin tener que leer el resultado completo.\na²b en (a+b+c)³ → 3     x⁵ en (1+x)¹⁰ → 252"],
+        ["Derivada parcial", "∂/∂x del desarrollo, de forma exacta (no numérica).\n∂/∂a (a+b)³ → 3a² + 6ab + 3b²"],
+        ["Productos notables", "Las identidades clásicas con A y B a elección, que pueden ser expresiones: (A±B)², (A+B)(A−B), (A±B)³ y la suma y diferencia de cubos.\nA=x, B=2y → (A+B)(A²−AB+B²) = x³ + 8y³"],
+        ["Binomio de Newton", "Desarrollo simbólico de (a+b)ⁿ término a término, con la lista de coeficientes.\nn=5 → a⁵ + 5a⁴b + 10a³b² + 10a²b³ + 5ab⁴ + b⁵  (1, 5, 10, 10, 5, 1)"],
+      ]
+    ),
+    blankLine(),
+    p("También se puede dividir entre un número o entre un monomio que divida a todos los términos: (a²b+ab²)/(ab) da a + b. Una división que no sea exacta, un exponente negativo o cualquier otra cosa que deje de ser un polinomio se rechaza con un mensaje explicativo, igual que un desarrollo demasiado grande para leerse o para calcularse con rapidez."),
+    p("Las categorías Polinomios y Álgebra se complementan: la primera trabaja sobre una sola variable ya desarrollada, porque es lo que necesitan las raíces racionales, Vieta y la gráfica; la segunda acepta paréntesis y varias variables."),
+    new Paragraph({ children: [new PageBreak()] }),
+  ];
+}
+
+// ── Section 10: Mejoras y Correcciones ─────────────────────────────────
 function secMejoras() {
   const cw = [2500, 6860];
   return [
-    h1("9. Mejoras y Correcciónes Implementadas"),
-    p("Resumen de todas las mejoras, correcciones de errores y nuevas funciónalidades implementadas:"),
+    h1("10. Mejoras y Correcciones Implementadas"),
+    p("Resumen de todas las mejoras, correcciones de errores y nuevas funcionalidades implementadas:"),
     blankLine(),
     makeTable(cw,
-      ["Categoría", "Descripcion"],
+      ["Categoría", "Descripción"],
       [
         ["Corrección de bugs", "Eliminación de bytes nulos en archivos fuente que causaban errores de compilación"],
         ["Corrección de bugs", "Corrección de anclajes en expresiones regulares (regex) para validación correcta"],
         ["Corrección de bugs", "Eliminación de métodos duplicados que causaban conflictos"],
         ["Corrección de bugs", "Corrección del manejo de overflow en display de números grandes"],
-        ["Nuevas funciónes", "Implementación de +30 funciónes especiales nuevas (Stirling, Bell, Catalan, etc.)"],
-        ["Nuevas funciónes", "Símbolos de Legendre y Jacobi"],
-        ["Nuevas funciónes", "Raíz primitiva, orden multiplicativo"],
-        ["Nuevas funciónes", "Ecuaciónes diofánticas lineales"],
-        ["Nuevas funciónes", "Teorema Chino del Residuo"],
-        ["Nuevas funciónes", "Doble factorial, desarreglos, particiones"],
-        ["Nuevas funciónes", "Medias aritmética, geométrica, armónica y cuadrática"],
+        ["Nuevas funciones", "Implementación de +30 funciones especiales nuevas (Stirling, Bell, Catalan, etc.)"],
+        ["Nuevas funciones", "Símbolos de Legendre y Jacobi"],
+        ["Nuevas funciones", "Raíz primitiva, orden multiplicativo"],
+        ["Nuevas funciones", "Ecuaciones diofánticas lineales"],
+        ["Nuevas funciones", "Teorema Chino del Residuo"],
+        ["Nuevas funciones", "Doble factorial, desarreglos, particiones"],
+        ["Nuevas funciones", "Medias aritmética, geométrica, armónica y cuadrática"],
         ["Sistema de entrada", "Sistema genérico de entrada multi-parámetro (modelo PendingOperation de N params)"],
         ["Sistema de entrada", "Indicador visual de operación pendiente con parámetros acumulados"],
         ["Interfaz", "Teclado scrollable categorizado con secciones para cada tipo de función"],
@@ -528,16 +585,23 @@ function secMejoras() {
         ["Interfaz", "Pantalla de ayuda con documentación completa integrada"],
         ["Rendimiento", "Optimizaciones para números grandes con BigInt"],
         ["Rendimiento", "Prevención de ANR (Application Not Responding) en cálculos pesados"],
+        ["Herramientas de Olimpiada", "Sección de entrenamiento con once categorías de herramientas exactas y diagramas (ver capítulo 9)"],
+        ["Herramientas de Olimpiada", "Nueva categoría Álgebra: polinomios en varias variables con coeficientes racionales exactos, con ocho herramientas (expandir, verificar identidades, factor común, sustituir, coeficiente de un monomio, derivada parcial, productos notables y binomio de Newton)"],
+        ["Corrección de bugs", "Un decimal mal escrito se partía en dos números que la multiplicación implícita volvía a juntar, devolviendo un resultado incorrecto en silencio: \"1.000.000\" daba 0. Ahora es un error explícito"],
+        ["Corrección de bugs", "Los superíndices ⁰ y ⁵ a ⁹ no existen en la fuente monoespaciada de Android y se veían como recuadros vacíos (a¹⁰ aparecía como a¹▯). Se añadió una fuente de reserva para esos glifos"],
+        ["Corrección de bugs", "Escribir una expresión con paréntesis o varias variables en la herramienta de polinomios univariante producía un mensaje incomprensible; ahora indica qué acepta y remite a la categoría Álgebra"],
+        ["Rendimiento", "Los desarrollos algebraicos tienen un presupuesto de cálculo: una expresión desmedida se rechaza en milisegundos en lugar de bloquear la interfaz"],
+        ["Rendimiento", "Reglas de R8 corregidas: conservaban el motor completo y la biblioteca de Kotlin, impidiendo cualquier optimización. El código compilado se redujo un 70%"],
       ]
     ),
     new Paragraph({ children: [new PageBreak()] }),
   ];
 }
 
-// ── Section 10: Fórmulas Clave ─────────────────────────────────────────
+// ── Section 11: Fórmulas Clave ─────────────────────────────────────────
 function secFórmulas() {
   return [
-    h1("10. Fórmulas Clave para Olimpiadas"),
+    h1("11. Fórmulas Clave para Olimpiadas"),
     p("Referencia rápida de las fórmulas más importantes que puedes verificar con la calculadora."),
     blankLine(),
 
@@ -659,6 +723,7 @@ async function main() {
           ...secCombinatoria(),
           ...secEstadística(),
           ...secAnálisis(),
+          ...secHerramientas(),
           ...secMejoras(),
           ...secFórmulas(),
         ],

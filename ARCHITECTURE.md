@@ -36,6 +36,7 @@ lib/
 │   ├── surd.dart                    # Simplified radical coefficient·√radicand
 │   ├── point.dart                   # 2D point with rational coordinates
 │   ├── polynomial.dart              # Polynomial with rational coefficients
+│   ├── multi_polynomial.dart        # Multivariate polynomial (Monomial → Fraction)
 │   ├── complex.dart                 # Complex number (De Moivre, roots of unity)
 │   └── step_result.dart            # Result + human-readable steps
 ├── services/                        # Business logic, all static or ChangeNotifier
@@ -49,6 +50,7 @@ lib/
 │   ├── surd_service.dart            # Radical simplification / rationalization
 │   ├── geometry_service.dart        # Heron, triangle classification, triples, shoelace
 │   ├── polynomial_service.dart      # Parse, gcd, Vieta, discriminant, roots
+│   ├── algebra_service.dart         # Multivariate parser/expander, identities, factoring
 │   ├── number_theory_advanced_service.dart # Tonelli-Shanks, Pell, CF, sums of squares…
 │   ├── combinatorics_extra_service.dart # Pascal rows, multinomials
 │   ├── sequence_service.dart        # Linear recurrence generator
@@ -130,6 +132,8 @@ Olympiad math is exact, never decimal. Two value types underpin the feature:
 
 `Polynomial` (rational coefficients) and `Point` (rational coordinates) build on `Fraction` so polynomial roots and shoelace areas stay exact. `Complex` uses `double` because roots of unity / De Moivre are inherently transcendental.
 
+`MultiPolynomial` extends the same idea to several variables: a map from `Monomial` (variable → exponent, in canonical form) to `Fraction`. Because monomials are map keys, a polynomial is permanently expanded and collected — building `(a+b+c)²` through `*` *is* the expansion, and comparing two expressions for equality *is* the identity check. Expansions are bounded on two levels, because the tools run synchronously on the UI isolate. `maxTerms` / `maxProducts` bound a single operation, so an explosive input like `(a+b+c+d+e+f)^30` is refused in milliseconds. `maxWork` bounds a whole computation: `(a+b)^1000` fits under the per-operation limits (its result is a mere 1001 terms) yet takes seconds, and a sum of several of those takes minutes, so `AlgebraService` opens one work budget around everything it exposes.
+
 ### Service map
 
 | Service | Provides |
@@ -137,6 +141,7 @@ Olympiad math is exact, never decimal. Two value types underpin the feature:
 | `SurdService` | √n and ⁿ√n simplification, denominator rationalization |
 | `GeometryService` | Heron area (as a `Surd`), triangle classification, circumradius/inradius, law of cosines (exact), shoelace, Pythagorean/Heronian triples |
 | `PolynomialService` | parse, gcd, Vieta, discriminant, rational-root theorem, quadratic/cubic solving |
+| `AlgebraService` | multivariate expression parser (implicit products, Unicode superscripts), expansion, identity checking, common-factor extraction, substitution, notable products |
 | `NumberTheoryAdvancedService` | Tonelli-Shanks, linear congruences, Lucas' theorem, continued fractions, Pell, sums of two/four squares, Frobenius, discrete log |
 | `CombinatoricsExtraService` | Pascal triangle rows, multinomial coefficients |
 | `SequenceService` | linear-recurrence term generation (exact rationals) |
