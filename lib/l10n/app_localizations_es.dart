@@ -1051,6 +1051,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get settingsLangEn => 'English';
 
   @override
+  String get settingsLangPt => 'Português';
+
+  @override
   String get hlpTitle => 'Guía de Funciones Especiales';
 
   @override
@@ -2208,7 +2211,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get hlpNewToolsContent =>
-      'Desde el menú lateral → Herramientas de Olimpiada: Fracciones, Radicales, Geometría (con dibujos: triángulo, Pick, centros y recta de Euler), Polinomios (gráfica, Ruffini, sistemas n×n), Teoría de Números (criba, reloj modular, residuos), Procedimientos paso a paso, Complejos (círculo unitario, Sierpiński — en alta precisión), Estadística, Matrices (exactas), Cálculo (derivada/integral/límite) y Práctica con verificación.';
+      'Desde el menú lateral → Herramientas de Olimpiada: Fracciones, Radicales, Geometría (con dibujos: triángulo, Pick, centros y recta de Euler), Polinomios (gráfica, Ruffini, sistemas n×n), Álgebra (desarrollo e identidades con varias variables), Teoría de Números (criba, reloj modular, residuos), Procedimientos paso a paso, Complejos (círculo unitario, Sierpiński — en alta precisión), Estadística, Matrices (exactas), Cálculo (derivada/integral/límite) y Práctica con verificación.';
 
   @override
   String get hlpOlympiadHeader => 'Fórmulas Clave para Olimpiadas';

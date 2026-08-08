@@ -33,7 +33,7 @@ class _QuizScreenState extends State<QuizScreen> {
       // Regenerating mid-answer would be worse than a stale statement, so keep
       // the problem once it has been answered until the user moves on.
       if (_problem == null || !_answered) {
-        _problem = QuizService.generate(spanish: language == 'es');
+        _problem = QuizService.generate(lang: language);
         _problemLanguage = language;
       }
     }
@@ -59,7 +59,7 @@ class _QuizScreenState extends State<QuizScreen> {
   void _next() {
     setState(() {
       _problemLanguage = Localizations.localeOf(context).languageCode;
-      _problem = QuizService.generate(spanish: _problemLanguage == 'es');
+      _problem = QuizService.generate(lang: _problemLanguage ?? 'en');
       _controller.clear();
       _answered = false;
       _lastCorrect = null;

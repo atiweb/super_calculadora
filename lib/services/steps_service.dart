@@ -1,4 +1,5 @@
 import '../models/calc_exception.dart';
+import '../utils/app_locale.dart';
 import '../models/fraction.dart';
 import '../models/polynomial.dart';
 import '../models/step_result.dart';
@@ -11,25 +12,26 @@ class StepsService {
   static final BigInt _zero = BigInt.zero;
   static final BigInt _one = BigInt.one;
 
-  static String _t(bool es, String spanish, String english) =>
-      es ? spanish : english;
+  static String _t(String lang, String spanish, String english,
+          {String? pt}) =>
+      trLang(lang, spanish, english, pt: pt);
 
   /// Euclidean algorithm with steps, including the Bézout identity
   /// g = x·a + y·b. The result is the gcd.
-  static StepResult euclidSteps(BigInt a, BigInt b, {bool spanish = false}) {
+  static StepResult euclidSteps(BigInt a, BigInt b, {String lang = 'en'}) {
     final BigInt origA = a, origB = b;
     final List<String> steps = [];
 
     BigInt x = a.abs();
     BigInt y = b.abs();
     if (y == _zero) {
-      steps.add(_t(spanish, 'mcd($origA, $origB) = $x (el segundo término es 0)',
-          'gcd($origA, $origB) = $x (second term is 0)'));
+      steps.add(_t(lang, 'mcd($origA, $origB) = $x (el segundo término es 0)',
+          'gcd($origA, $origB) = $x (second term is 0)', pt: 'mdc($origA, $origB) = $x (o segundo termo é 0)'));
       return StepResult(x.toString(), steps);
     }
 
-    steps.add(_t(spanish, 'Algoritmo de Euclides para mcd($x, $y):',
-        'Euclidean algorithm for gcd($x, $y):'));
+    steps.add(_t(lang, 'Algoritmo de Euclides para mcd($x, $y):',
+        'Euclidean algorithm for gcd($x, $y):', pt: 'Algoritmo de Euclides para mdc($x, $y):'));
     while (y != _zero) {
       final BigInt q = x ~/ y;
       final BigInt r = x - q * y;
@@ -38,31 +40,31 @@ class StepsService {
       y = r;
     }
     final BigInt g = x;
-    steps.add(_t(spanish, 'Último resto no nulo ⇒ mcd = $g',
-        'Last nonzero remainder ⇒ gcd = $g'));
+    steps.add(_t(lang, 'Último resto no nulo ⇒ mcd = $g',
+        'Last nonzero remainder ⇒ gcd = $g', pt: 'Último resto não nulo ⇒ mdc = $g'));
 
     // Bézout via extended Euclid.
     final ext = _extendedGcd(origA.abs(), origB.abs());
     BigInt bx = ext[1], by = ext[2];
     if (origA.isNegative) bx = -bx;
     if (origB.isNegative) by = -by;
-    steps.add(_t(spanish, 'Identidad de Bézout: $g = ($bx)·$origA + ($by)·$origB',
-        'Bézout identity: $g = ($bx)·$origA + ($by)·$origB'));
+    steps.add(_t(lang, 'Identidad de Bézout: $g = ($bx)·$origA + ($by)·$origB',
+        'Bézout identity: $g = ($bx)·$origA + ($by)·$origB', pt: 'Identidade de Bézout: $g = ($bx)·$origA + ($by)·$origB'));
 
     return StepResult(g.toString(), steps);
   }
 
   /// Prime factorization with the successive-division steps.
-  static StepResult factorizationSteps(BigInt n, {bool spanish = false}) {
+  static StepResult factorizationSteps(BigInt n, {String lang = 'en'}) {
     final List<String> steps = [];
     if (n < BigInt.from(2)) {
-      steps.add(_t(spanish, '$n no tiene factorización en primos (n < 2)',
-          '$n has no prime factorization (n < 2)'));
+      steps.add(_t(lang, '$n no tiene factorización en primos (n < 2)',
+          '$n has no prime factorization (n < 2)', pt: '$n não tem fatoração em primos (n < 2)'));
       return StepResult(n.toString(), steps);
     }
 
-    steps.add(_t(spanish, 'Factorización de $n por divisiones sucesivas:',
-        'Factorization of $n by successive division:'));
+    steps.add(_t(lang, 'Factorización de $n por divisiones sucesivas:',
+        'Factorization of $n by successive division:', pt: 'Fatoração de $n por divisões sucessivas:'));
     BigInt remaining = n;
     final Map<BigInt, int> factors = {};
 
@@ -77,7 +79,7 @@ class StepsService {
     }
     if (remaining > _one) {
       if (factors.isNotEmpty || remaining != n) {
-        steps.add(_t(spanish, '$remaining es primo', '$remaining is prime'));
+        steps.add(_t(lang, '$remaining es primo', '$remaining is prime', pt: '$remaining é primo'));
       }
       factors[remaining] = (factors[remaining] ?? 0) + 1;
     }
@@ -92,7 +94,7 @@ class StepsService {
   /// Chinese Remainder Theorem with steps, combining the congruences pairwise.
   /// Returns the solution as "x ≡ r (mod m)" or reports incompatibility.
   static StepResult crtSteps(List<BigInt> remainders, List<BigInt> moduli,
-      {bool spanish = false}) {
+      {String lang = 'en'}) {
     if (remainders.length != moduli.length || remainders.isEmpty) {
       throw CalcException(CalcError.listsSameSize);
     }
@@ -103,7 +105,7 @@ class StepsService {
       throw CalcException(CalcError.moduliPositive);
     }
     final List<String> steps = [];
-    steps.add(_t(spanish, 'Sistema de congruencias:', 'System of congruences:'));
+    steps.add(_t(lang, 'Sistema de congruencias:', 'System of congruences:', pt: 'Sistema de congruências:'));
     for (int i = 0; i < remainders.length; i++) {
       steps.add('  x ≡ ${remainders[i]} (mod ${moduli[i]})');
     }
@@ -119,12 +121,12 @@ class StepsService {
 
       if ((a2 - curR) % g != _zero) {
         steps.add(_t(
-            spanish,
+            lang,
             'Combinar con x ≡ $a2 (mod $m2): mcd($curM, $m2) = $g no divide '
                 'a ${a2 - curR} ⇒ sistema incompatible',
             'Combine with x ≡ $a2 (mod $m2): gcd($curM, $m2) = $g does not '
-                'divide ${a2 - curR} ⇒ incompatible system'));
-        return StepResult(_t(spanish, 'sin solución', 'no solution'), steps);
+                'divide ${a2 - curR} ⇒ incompatible system', pt: 'Combinar com x ≡ $a2 (mod $m2): mdc($curM, $m2) = $g não divide ${a2 - curR} ⇒ sistema incompatível'));
+        return StepResult(_t(lang, 'sin solución', 'no solution', pt: 'sem solução'), steps);
       }
 
       final BigInt lcm = curM ~/ g * m2;
@@ -135,40 +137,40 @@ class StepsService {
       newR %= lcm;
       if (newR.isNegative) newR += lcm;
 
-      steps.add(_t(spanish, 'Combinar con x ≡ $a2 (mod $m2) ⇒ x ≡ $newR (mod $lcm)',
-          'Combine with x ≡ $a2 (mod $m2) ⇒ x ≡ $newR (mod $lcm)'));
+      steps.add(_t(lang, 'Combinar con x ≡ $a2 (mod $m2) ⇒ x ≡ $newR (mod $lcm)',
+          'Combine with x ≡ $a2 (mod $m2) ⇒ x ≡ $newR (mod $lcm)', pt: 'Combinar com x ≡ $a2 (mod $m2) ⇒ x ≡ $newR (mod $lcm)'));
       curR = newR;
       curM = lcm;
     }
 
     final String result = 'x ≡ $curR (mod $curM)';
-    steps.add(_t(spanish, 'Solución: $result', 'Solution: $result'));
+    steps.add(_t(lang, 'Solución: $result', 'Solution: $result', pt: 'Solução: $result'));
     return StepResult(result, steps);
   }
 
   /// Synthetic division (Ruffini's rule) of p(x) by (x − c), with steps.
   /// The result is "quotient; remainder"; if the remainder is 0, c is a root.
   static StepResult ruffiniSteps(Polynomial p, Fraction c,
-      {bool spanish = false}) {
+      {String lang = 'en'}) {
     if (p.isZero || p.degree < 1) {
       throw CalcException(CalcError.degreeAtLeastOne);
     }
     final List<String> steps = [];
-    steps.add(_t(spanish, 'Ruffini: dividir p(x) = $p entre (x − ${_paren(c)})',
-        'Ruffini: divide p(x) = $p by (x − ${_paren(c)})'));
+    steps.add(_t(lang, 'Ruffini: dividir p(x) = $p entre (x − ${_paren(c)})',
+        'Ruffini: divide p(x) = $p by (x − ${_paren(c)})', pt: 'Ruffini: dividir p(x) = $p por (x − ${_paren(c)})'));
 
     // Coefficients from highest to lowest degree.
     final List<Fraction> desc =
         p.coefficients.reversed.toList(growable: false);
-    steps.add(_t(spanish,
+    steps.add(_t(lang,
         'Coeficientes (grado ${p.degree} → 0): ${desc.join(', ')}',
-        'Coefficients (degree ${p.degree} → 0): ${desc.join(', ')}'));
+        'Coefficients (degree ${p.degree} → 0): ${desc.join(', ')}', pt: "Coeficientes (grau ${p.degree} → 0): ${desc.join(', ')}"));
 
     // r[k] accumulates the result of each column.
     final List<Fraction> r = List.filled(desc.length, Fraction.zero);
     r[0] = desc[0];
-    steps.add(_t(spanish, 'Bajar el primer coeficiente: ${r[0]}',
-        'Bring down the first coefficient: ${r[0]}'));
+    steps.add(_t(lang, 'Bajar el primer coeficiente: ${r[0]}',
+        'Bring down the first coefficient: ${r[0]}', pt: 'Baixar o primeiro coeficiente: ${r[0]}'));
     for (int k = 1; k < desc.length; k++) {
       final Fraction prod = c * r[k - 1];
       r[k] = desc[k] + prod;
@@ -179,19 +181,18 @@ class StepsService {
     final Fraction remainder = r.last;
     final Polynomial quotient =
         Polynomial(r.sublist(0, r.length - 1).reversed.toList());
-    steps.add(_t(spanish, 'Cociente: $quotient', 'Quotient: $quotient'));
-    steps.add(_t(spanish, 'Resto: $remainder', 'Remainder: $remainder'));
+    steps.add(_t(lang, 'Cociente: $quotient', 'Quotient: $quotient', pt: 'Quociente: $quotient'));
+    steps.add(_t(lang, 'Resto: $remainder', 'Remainder: $remainder', pt: 'Resto: $remainder'));
     if (remainder.isZero) {
-      steps.add(_t(spanish, '⇒ ${_paren(c)} es raíz de p(x)',
-          '⇒ ${_paren(c)} is a root of p(x)'));
+      steps.add(_t(lang, '⇒ ${_paren(c)} es raíz de p(x)',
+          '⇒ ${_paren(c)} is a root of p(x)', pt: '⇒ ${_paren(c)} é raiz de p(x)'));
     } else {
-      steps.add(_t(spanish, '⇒ p(${_paren(c)}) = $remainder (teorema del resto)',
-          '⇒ p(${_paren(c)}) = $remainder (remainder theorem)'));
+      steps.add(_t(lang, '⇒ p(${_paren(c)}) = $remainder (teorema del resto)',
+          '⇒ p(${_paren(c)}) = $remainder (remainder theorem)', pt: '⇒ p(${_paren(c)}) = $remainder (teorema do resto)'));
     }
 
-    final String result = spanish
-        ? 'cociente $quotient, resto $remainder'
-        : 'quotient $quotient, remainder $remainder';
+    final String result = _t(lang, 'cociente $quotient, resto $remainder',
+        'quotient $quotient, remainder $remainder', pt: 'quociente $quotient, resto $remainder');
     return StepResult(result, steps);
   }
 

@@ -209,7 +209,7 @@ void main() {
 
     test('spanish output', () {
       final p = PolynomialService.parse('x^2-1');
-      final r = StepsService.ruffiniSteps(p, f(1), spanish: true);
+      final r = StepsService.ruffiniSteps(p, f(1), lang: 'es');
       expect(r.result, contains('resto 0'));
       expect(r.steps.last, contains('es raíz'));
     });

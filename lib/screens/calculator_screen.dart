@@ -37,7 +37,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
     // Publish the current UI language to the context-free service layer so its
     // analysis fallback strings (very-large-number / error messages) match the
     // app language instead of being hardcoded in Spanish.
-    appIsSpanish = Localizations.localeOf(context).languageCode == 'es';
+    appLanguage = Localizations.localeOf(context).languageCode;
     return Consumer<CalculatorService>(
       builder: (context, calculator, child) {
         return Scaffold(

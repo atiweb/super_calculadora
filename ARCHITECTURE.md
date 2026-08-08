@@ -67,7 +67,7 @@ lib/
 │       ├── olympiad_tools_screen.dart   # Hub: a card per category
 │       ├── olympiad_tool_screens.dart   # The 7 category screens
 │       ├── calc_tool.dart               # Reusable input-form/result widget
-│       └── olympiad_strings.dart        # Co-located ES/EN strings
+│       └── olympiad_strings.dart        # Co-located ES/EN/PT strings
 ├── widgets/                         # Stateless/stateful UI components
 │   ├── calculator_display.dart      # Display with copy/paste and large-number handling
 │   ├── calculator_keyboard.dart     # Standard keypad
@@ -78,11 +78,14 @@ lib/
 │   ├── history_panel.dart           # Inline history widget
 │   └── calculator_drawer.dart       # Navigation drawer
 ├── utils/
+│   ├── app_locale.dart              # trLang: language code + English fallback
 │   └── error_localizer.dart         # Maps error keys to localized strings
-└── l10n/                            # Localizations (English + Spanish)
+└── l10n/                            # Localizations (English, Spanish, Portuguese)
+    ├── app_es.arb / app_en.arb / app_pt.arb   # sources (app_es.arb is the template)
     ├── app_localizations.dart
     ├── app_localizations_en.dart
-    └── app_localizations_es.dart
+    ├── app_localizations_es.dart
+    └── app_localizations_pt.dart
 ```
 
 ---
@@ -151,7 +154,7 @@ Olympiad math is exact, never decimal. Two value types underpin the feature:
 
 The hub (`OlympiadToolsScreen`) lists one card per category; each opens a category screen (`olympiad_tool_screens.dart`) that is just a `ListView` of `CalcTool` widgets. `CalcTool` is a reusable form: a title, text fields, a Compute button, and a result/error box. Each tool supplies a `compute(List<String>) → String` callback that calls into the services; thrown exceptions are caught and shown as errors. Adding a tool is a few lines of configuration — no new widget code.
 
-Strings for this subsystem live in `olympiad_strings.dart` (a small ES/EN helper keyed off the active locale) rather than the shared `.arb` files, keeping the feature self-contained.
+Strings for this subsystem live in `olympiad_strings.dart` (a small helper keyed off the active locale) rather than the shared `.arb` files, keeping the feature self-contained.
 
 ---
 
@@ -172,7 +175,11 @@ Data is scoped to the app sandbox and deleted on uninstall.
 
 ## Localization
 
-The app ships with English and Spanish translations in `lib/l10n/`. The locale is resolved at startup: device locale is matched against supported locales (`en`, `es`), defaulting to `en`. The user can override the locale from Settings, in which case `ThemeProvider.locale` is set to a non-null value and passed to `MaterialApp`.
+The app ships with English, Spanish and Portuguese translations in `lib/l10n/`. The locale is resolved at startup: the device locale is matched against the supported locales (`en`, `es`, `pt`), defaulting to `en`. The user can override it from Settings, in which case `ThemeProvider.locale` is set to a non-null value and passed to `MaterialApp`.
+
+Two areas cannot use the generated `AppLocalizations`, because they run without a `BuildContext` (services, some of them inside an `Isolate`) or deliberately keep their strings next to the feature (the Olympiad Tools). Both funnel through `trLang(lang, es, en, {pt})` in `utils/app_locale.dart`, which is the single place that decides the fallback: **a language with no translation for a given string reads in English rather than showing nothing.** That is what allows a new language to be filled in gradually instead of landing in one atomic change.
+
+Adding a language is therefore: a new `lib/l10n/app_xx.arb` (the `.arb` layer, ~685 messages), an optional parameter on `trLang` plus its two call-site helpers, and then the `xx:` argument at the call sites that use them (~470). Anything not yet filled in falls back on its own. Note that the `.arb` template is `app_es.arb`, so a *missing* `.arb` key falls back to Spanish, not English — keep new `.arb` files complete.
 
 ---
 
@@ -197,5 +204,5 @@ Shorter operations (factorization, divisor lists, analysis panel updates) run on
 
 1. Implement the logic as a static method in the relevant service (or add a new service) using `Fraction`/`Surd` for exact results.
 2. Add a `CalcTool(...)` entry to the appropriate category screen in `olympiad_tool_screens.dart`, whose `compute` callback parses the input strings and calls your method.
-3. Add any new ES/EN labels to `olympiad_strings.dart` (or pass `s.pick('es', 'en')` inline).
+3. Add any new labels to `olympiad_strings.dart` (or pass `s.pick('es', 'en', pt: 'pt')` inline).
 4. Add tests for the logic; widget tests for the tool are optional.

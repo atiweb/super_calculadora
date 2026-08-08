@@ -198,7 +198,7 @@ class CalculatorService extends ChangeNotifier {
   static int _parseStringAsInt(String numStr) {
     final BigInt value = _parseStringAsBigInt(numStr);
     if (!value.isValidInt) {
-      throw ArgumentError(trLocale('Número demasiado grande', 'Number too large'));
+      throw ArgumentError(trLocale('Número demasiado grande', 'Number too large', pt: 'Número grande demais'));
     }
     return value.toInt();
   }
@@ -428,7 +428,7 @@ class CalculatorService extends ChangeNotifier {
       
       if (isHeavyOperation) {
         _isCalculatingOperation = true;
-        _operationProgress = trLocale('Calculando potencia...', 'Calculating power...');
+        _operationProgress = trLocale('Calculando potencia...', 'Calculating power...', pt: 'Calculando a potência...');
         _canCancelOperation = true;
         notifyListeners();
         
@@ -437,7 +437,7 @@ class CalculatorService extends ChangeNotifier {
           Map<String, dynamic> result = await compute(_calculatePowerInIsolate, {
             'base': base.toString(),
             'exponent': exp,
-            'isSpanish': appIsSpanish,
+            'lang': appLanguage,
           });
 
           if (token != _operationToken) return; // cancelled or reset meanwhile
@@ -504,14 +504,14 @@ class CalculatorService extends ChangeNotifier {
       
       if (isHeavyOperation) {
         _isCalculatingOperation = true;
-        _operationProgress = trLocale('Calculando raíz cuadrada...', 'Calculating square root...');
+        _operationProgress = trLocale('Calculando raíz cuadrada...', 'Calculating square root...', pt: 'Calculando a raiz quadrada...');
         _canCancelOperation = true;
         notifyListeners();
         
         final int token = _operationToken;
         try {
           Map<String, dynamic> result = await compute(_calculateSqrtInIsolate,
-              {'value': _display, 'isSpanish': appIsSpanish});
+              {'value': _display, 'lang': appLanguage});
 
           if (token != _operationToken) return; // cancelled or reset meanwhile
 
@@ -572,14 +572,14 @@ class CalculatorService extends ChangeNotifier {
       
       if (isHeavyOperation) {
         _isCalculatingOperation = true;
-        _operationProgress = trLocale('Calculando raíz cúbica...', 'Calculating cube root...');
+        _operationProgress = trLocale('Calculando raíz cúbica...', 'Calculating cube root...', pt: 'Calculando a raiz cúbica...');
         _canCancelOperation = true;
         notifyListeners();
         
         final int token = _operationToken;
         try {
           Map<String, dynamic> result = await compute(_calculateCubeRootInIsolate,
-              {'value': _display, 'isSpanish': appIsSpanish});
+              {'value': _display, 'lang': appLanguage});
 
           if (token != _operationToken) return; // cancelled or reset meanwhile
 
@@ -860,13 +860,13 @@ class CalculatorService extends ChangeNotifier {
           number = BigInt.parse(integerPart);
           analysisNote = trLocale(
               'Análisis basado en la parte entera del valor absoluto ($integerPart)',
-              'Analysis based on the integer part of the absolute value ($integerPart)');
+              'Analysis based on the integer part of the absolute value ($integerPart)', pt: 'Análise baseada na parte inteira do valor absoluto ($integerPart)');
         } else {
           integerPart = numStr.split('.')[0];
           if (integerPart.isEmpty) integerPart = '0';
           number = BigInt.parse(integerPart);
           analysisNote = trLocale('Análisis basado en la parte entera ($integerPart)',
-              'Analysis based on the integer part ($integerPart)');
+              'Analysis based on the integer part ($integerPart)', pt: 'Análise baseada na parte inteira ($integerPart)');
         }
       } else {
         // For integers, take the absolute value if negative
@@ -874,7 +874,7 @@ class CalculatorService extends ChangeNotifier {
           number = BigInt.parse(numStr.substring(1));
           analysisNote = trLocale(
               'Análisis basado en el valor absoluto (${number.toString()})',
-              'Analysis based on the absolute value (${number.toString()})');
+              'Analysis based on the absolute value (${number.toString()})', pt: 'Análise baseada no valor absoluto (${number.toString()})');
         } else {
           number = BigInt.parse(numStr);
         }
@@ -900,11 +900,11 @@ class CalculatorService extends ChangeNotifier {
 
       if (number.toString().length > 10) {
         // The language travels in the payload: the isolate doesn't share the
-        // main isolate's globals and `appIsSpanish` would fall back to its
+        // main isolate's globals and `appLanguage` would fall back to its
         // default value (English).
         analysis = await compute(_analyzeNumberInIsolate, {
           'number': number,
-          'isSpanish': appIsSpanish,
+          'lang': appLanguage,
         });
       } else {
         analysis = NumberAnalysisService.completeAnalysis(number);
@@ -951,8 +951,8 @@ class CalculatorService extends ChangeNotifier {
         } catch (e) {
           debugPrint('Error calculando primos: $e');
           if (token != _analysisToken) return;
-          _currentAnalysis['nextPrime'] = trLocale('Error en cálculo', 'Calculation error');
-          _currentAnalysis['previousPrime'] = trLocale('Error en cálculo', 'Calculation error');
+          _currentAnalysis['nextPrime'] = trLocale('Error en cálculo', 'Calculation error', pt: 'Erro no cálculo');
+          _currentAnalysis['previousPrime'] = trLocale('Error en cálculo', 'Calculation error', pt: 'Erro no cálculo');
           _isCalculatingPrimes = false;
           _currentAnalysis.remove('calculatingPrimes');
         }
@@ -1007,13 +1007,13 @@ class CalculatorService extends ChangeNotifier {
   /// Receives `{number, isSpanish}`: the language must travel in the payload
   /// because globals don't cross isolates.
   static Map<String, dynamic> _analyzeNumberInIsolate(Map<String, dynamic> args) {
-    appIsSpanish = args['isSpanish'] as bool;
+    appLanguage = args['lang'] as String;
     final BigInt number = args['number'] as BigInt;
     try {
       return NumberAnalysisService.completeAnalysis(number);
     } catch (e) {
       return {
-        'error': trLocale('Error en análisis: ${e.toString()}', 'Analysis error: ${e.toString()}'),
+        'error': trLocale('Error en análisis: ${e.toString()}', 'Analysis error: ${e.toString()}', pt: 'Erro na análise: ${e.toString()}'),
         'originalNumber': number.toString()
       };
     }
@@ -1021,7 +1021,7 @@ class CalculatorService extends ChangeNotifier {
 
   /// Static function to compute powers in an isolate
   static Map<String, dynamic> _calculatePowerInIsolate(Map<String, dynamic> args) {
-    appIsSpanish = args['isSpanish'] as bool? ?? appIsSpanish;
+    appLanguage = args['lang'] as String? ?? appLanguage;
     try {
       BigDecimal base = BigDecimal.fromString(args['base']);
       int exponent = args['exponent'];
@@ -1044,7 +1044,7 @@ class CalculatorService extends ChangeNotifier {
   /// Static function to compute square root in an isolate.
   /// Receives `{value, isSpanish}` (the language doesn't cross isolates as a global).
   static Map<String, dynamic> _calculateSqrtInIsolate(Map<String, dynamic> args) {
-    appIsSpanish = args['isSpanish'] as bool? ?? appIsSpanish;
+    appLanguage = args['lang'] as String? ?? appLanguage;
     try {
       BigDecimal number = BigDecimal.fromString(args['value'] as String);
       BigDecimal result = number.sqrt();
@@ -1064,7 +1064,7 @@ class CalculatorService extends ChangeNotifier {
   /// Static function to compute cube root in an isolate.
   /// Receives `{value, isSpanish}` (the language doesn't cross isolates as a global).
   static Map<String, dynamic> _calculateCubeRootInIsolate(Map<String, dynamic> args) {
-    appIsSpanish = args['isSpanish'] as bool? ?? appIsSpanish;
+    appLanguage = args['lang'] as String? ?? appLanguage;
     try {
       BigDecimal number = BigDecimal.fromString(args['value'] as String);
       // Exact over integers: the previous double-based path returned garbage
@@ -1086,11 +1086,11 @@ class CalculatorService extends ChangeNotifier {
   /// Helper function to compute factorial in an isolate.
   /// Receives `{n, isSpanish}`.
   static Map<String, dynamic> _calculateFactorialInIsolate(Map<String, dynamic> args) {
-    appIsSpanish = args['isSpanish'] as bool? ?? appIsSpanish;
+    appLanguage = args['lang'] as String? ?? appLanguage;
     final int n = args['n'] as int;
     try {
       if (n < 0) {
-        return {'success': false, 'error': trLocale('Factorial no definido para números negativos', 'Factorial is not defined for negative numbers')};
+        return {'success': false, 'error': trLocale('Factorial no definido para números negativos', 'Factorial is not defined for negative numbers', pt: 'O fatorial não está definido para números negativos')};
       }
       
       if (n == 0 || n == 1) {
@@ -1781,14 +1781,14 @@ class CalculatorService extends ChangeNotifier {
           _display = 'Error';
         } else {
           _isCalculatingOperation = true;
-          _operationProgress = trLocale('Calculando factorial...', 'Calculating factorial...');
+          _operationProgress = trLocale('Calculando factorial...', 'Calculating factorial...', pt: 'Calculando o fatorial...');
           _canCancelOperation = false;
           notifyListeners();
           
           final int token = _operationToken;
           try {
             Map<String, dynamic> result = await compute(_calculateFactorialInIsolate,
-                {'n': intValue.toInt(), 'isSpanish': appIsSpanish});
+                {'n': intValue.toInt(), 'lang': appLanguage});
 
             if (token != _operationToken) return; // cancelled or reset meanwhile
 
@@ -2249,7 +2249,7 @@ class CalculatorService extends ChangeNotifier {
       return _formatNumber(result.toString());
       
     } catch (e) {
-      throw Exception(trLocale('Error en evaluación: ${e.toString()}', 'Evaluation error: ${e.toString()}'));
+      throw Exception(trLocale('Error en evaluación: ${e.toString()}', 'Evaluation error: ${e.toString()}', pt: 'Erro na avaliação: ${e.toString()}'));
     }
   }
   
@@ -2572,13 +2572,13 @@ class CalculatorService extends ChangeNotifier {
     try {
       expression = expression.replaceAll(' ', '');
       if (expression.isEmpty) {
-        throw ArgumentError(trLocale('Expresión inválida: operandos vacíos', 'Invalid expression: empty operands'));
+        throw ArgumentError(trLocale('Expresión inválida: operandos vacíos', 'Invalid expression: empty operands', pt: 'Expressão inválida: operandos vazios'));
       }
       return _evalBigAdditive(expression).toString();
     } on _ResultTooLargeException {
       return 'err:errResultTooLarge';
     } catch (e) {
-      throw ArgumentError(trLocale('Error evaluando expresión: $e', 'Error evaluating expression: $e'));
+      throw ArgumentError(trLocale('Error evaluando expresión: $e', 'Error evaluating expression: $e', pt: 'Erro ao avaliar a expressão: $e'));
     }
   }
 
@@ -2611,7 +2611,7 @@ class CalculatorService extends ChangeNotifier {
         final BigDecimal right = _evalBigPower(s.substring(i + 1));
         if (c == '*') return left * right;
         if (right == BigDecimal.zero) {
-          throw ArgumentError(trLocale('División por cero', 'Division by zero'));
+          throw ArgumentError(trLocale('División por cero', 'Division by zero', pt: 'Divisão por zero'));
         }
         return left / right;
       }
@@ -2638,10 +2638,10 @@ class CalculatorService extends ChangeNotifier {
     if (exp.fractionalPart != BigInt.zero) {
       // Previously it was silently truncated (x^2.5 computed x^2).
       throw ArgumentError(trLocale('Exponente no entero no soportado en modo de números grandes',
-          'Non-integer exponent not supported in big-number mode'));
+          'Non-integer exponent not supported in big-number mode', pt: 'Expoente não inteiro não suportado no modo de números grandes'));
     }
     if (exp.isNegative) {
-      throw ArgumentError(trLocale('Exponente negativo no soportado', 'Negative exponent not supported'));
+      throw ArgumentError(trLocale('Exponente negativo no soportado', 'Negative exponent not supported', pt: 'Expoente negativo não suportado'));
     }
     final BigInt expInt = exp.integerPart;
     if (!expInt.isValidInt) {
@@ -2790,29 +2790,29 @@ class CalculatorService extends ChangeNotifier {
   /// GCD of N numbers (variable, minimum 2)
   void gcdFunction() {
     _startPending(PendingOperation(
-      name: 'gcd', symbol: trLocale('MCD', 'GCD'), minParams: 2,
+      name: 'gcd', symbol: trLocale('MCD', 'GCD', pt: 'MDC'), minParams: 2,
       displayBuilder: (p) => trLocale(
           'MCD(${p.join(", ")}, _) [= agregar, MCD resolver]',
-          'GCD(${p.join(", ")}, _) [= add, GCD solve]'),
+          'GCD(${p.join(", ")}, _) [= add, GCD solve]', pt: 'MDC(${p.join(", ")}, _) [= acrescentar, MDC resolver]'),
     ));
   }
 
   /// LCM of N numbers (variable, minimum 2)
   void lcmFunction() {
     _startPending(PendingOperation(
-      name: 'lcm', symbol: trLocale('MCM', 'LCM'), minParams: 2,
+      name: 'lcm', symbol: trLocale('MCM', 'LCM', pt: 'MMC'), minParams: 2,
       displayBuilder: (p) => trLocale(
           'MCM(${p.join(", ")}, _) [= agregar, MCM resolver]',
-          'LCM(${p.join(", ")}, _) [= add, LCM solve]'),
+          'LCM(${p.join(", ")}, _) [= add, LCM solve]', pt: 'MMC(${p.join(", ")}, _) [= acrescentar, MMC resolver]'),
     ));
   }
 
   /// Diophantine equation ax + by = c (3 fixed parameters)
   void diophantineFunction() {
     _startPending(PendingOperation(
-      name: 'dioph', symbol: trLocale('Diof', 'Dioph'), requiredParams: 3,
+      name: 'dioph', symbol: trLocale('Diof', 'Dioph', pt: 'Diof'), requiredParams: 3,
       displayBuilder: (p) {
-        if (p.isEmpty) return trLocale('Diof: a=_', 'Dioph: a=_');
+        if (p.isEmpty) return trLocale('Diof: a=_', 'Dioph: a=_', pt: 'Diof: a=_');
         if (p.length == 1) return '${p[0]}x + _y = ?';
         if (p.length == 2) return '${p[0]}x + ${p[1]}y = _';
         return '${p[0]}x + ${p[1]}y = ${p[2]}';
@@ -2823,7 +2823,7 @@ class CalculatorService extends ChangeNotifier {
   /// CRT of N congruences (variable, aᵢ,mᵢ pairs, minimum 4 = 2 pairs)
   void crtFunction() {
     _startPending(PendingOperation(
-      name: 'crt', symbol: trLocale('TCR', 'CRT'), minParams: 4,
+      name: 'crt', symbol: trLocale('TCR', 'CRT', pt: 'TCR'), minParams: 4,
       displayBuilder: (p) {
         List<String> pairs = [];
         for (int i = 0; i + 1 < p.length; i += 2) {
@@ -2832,7 +2832,7 @@ class CalculatorService extends ChangeNotifier {
         String collected = pairs.join(', ');
         if (p.length.isEven) {
           return trLocale('$collected, x≡_(mod ?) [= agregar, TCR resolver]',
-              '$collected, x≡_(mod ?) [= add, CRT solve]');
+              '$collected, x≡_(mod ?) [= add, CRT solve]', pt: '$collected, x≡_(mod ?) [= acrescentar, TCR resolver]');
         } else {
           return '$collected, x≡${p.last}(mod _)';
         }
@@ -2846,7 +2846,7 @@ class CalculatorService extends ChangeNotifier {
       name: 'meanA', symbol: 'MedA', minParams: 2,
       displayBuilder: (p) => trLocale(
           'MedA(${p.join(", ")}, _) [= agregar, MedA resolver]',
-          'MedA(${p.join(", ")}, _) [= add, MedA solve]'),
+          'MedA(${p.join(", ")}, _) [= add, MedA solve]', pt: 'MedA(${p.join(", ")}, _) [= acrescentar, MedA resolver]'),
     ));
   }
   void geometricMeanN() {
@@ -2854,7 +2854,7 @@ class CalculatorService extends ChangeNotifier {
       name: 'meanG', symbol: 'MedG', minParams: 2,
       displayBuilder: (p) => trLocale(
           'MedG(${p.join(", ")}, _) [= agregar, MedG resolver]',
-          'MedG(${p.join(", ")}, _) [= add, MedG solve]'),
+          'MedG(${p.join(", ")}, _) [= add, MedG solve]', pt: 'MedG(${p.join(", ")}, _) [= acrescentar, MedG resolver]'),
     ));
   }
   void harmonicMeanN() {
@@ -2862,7 +2862,7 @@ class CalculatorService extends ChangeNotifier {
       name: 'meanH', symbol: 'MedH', minParams: 2,
       displayBuilder: (p) => trLocale(
           'MedH(${p.join(", ")}, _) [= agregar, MedH resolver]',
-          'MedH(${p.join(", ")}, _) [= add, MedH solve]'),
+          'MedH(${p.join(", ")}, _) [= add, MedH solve]', pt: 'MedH(${p.join(", ")}, _) [= acrescentar, MedH resolver]'),
     ));
   }
   void quadraticMeanN() {
@@ -2870,7 +2870,7 @@ class CalculatorService extends ChangeNotifier {
       name: 'meanQ', symbol: 'MedQ', minParams: 2,
       displayBuilder: (p) => trLocale(
           'MedQ(${p.join(", ")}, _) [= agregar, MedQ resolver]',
-          'MedQ(${p.join(", ")}, _) [= add, MedQ solve]'),
+          'MedQ(${p.join(", ")}, _) [= add, MedQ solve]', pt: 'MedQ(${p.join(", ")}, _) [= acrescentar, MedQ resolver]'),
     ));
   }
   void minimumN() {
@@ -2878,7 +2878,7 @@ class CalculatorService extends ChangeNotifier {
       name: 'minN', symbol: 'min', minParams: 2,
       displayBuilder: (p) => trLocale(
           'min(${p.join(", ")}, _) [= agregar, min resolver]',
-          'min(${p.join(", ")}, _) [= add, min solve]'),
+          'min(${p.join(", ")}, _) [= add, min solve]', pt: 'min(${p.join(", ")}, _) [= acrescentar, min resolver]'),
     ));
   }
   void maximumN() {
@@ -2886,7 +2886,7 @@ class CalculatorService extends ChangeNotifier {
       name: 'maxN', symbol: 'max', minParams: 2,
       displayBuilder: (p) => trLocale(
           'max(${p.join(", ")}, _) [= agregar, max resolver]',
-          'max(${p.join(", ")}, _) [= add, max solve]'),
+          'max(${p.join(", ")}, _) [= add, max solve]', pt: 'max(${p.join(", ")}, _) [= acrescentar, max resolver]'),
     ));
   }
 
@@ -3009,10 +3009,10 @@ class CalculatorService extends ChangeNotifier {
   }
   /// Digit sum in base b (2 fixed params)
   void digitSumBase() {
-    _startPending(PendingOperation(name: 'digsum', symbol: trLocale('ΣdígB', 'ΣdigB'), requiredParams: 2,
+    _startPending(PendingOperation(name: 'digsum', symbol: trLocale('ΣdígB', 'ΣdigB', pt: 'ΣdígB'), requiredParams: 2,
       displayBuilder: (p) => p.isEmpty
-          ? trLocale('ΣdígB: n=_', 'ΣdigB: n=_')
-          : trLocale('Σdíg_b(${p[0]}) b=_', 'Σdig_b(${p[0]}) b=_')));
+          ? trLocale('ΣdígB: n=_', 'ΣdigB: n=_', pt: 'ΣdígB: n=_')
+          : trLocale('Σdíg_b(${p[0]}) b=_', 'Σdig_b(${p[0]}) b=_', pt: 'Σdíg_b(${p[0]}) b=_')));
   }
 
   // ====================================================================
@@ -3132,7 +3132,7 @@ class CalculatorService extends ChangeNotifier {
           break;
         case 'digsum':
           resultStr = _fmt(SpecialFunctionsService.digitSumInBase(_parseStringAsBigInt(p[0]), _parseStringAsInt(p[1])));
-          historyLabel = trLocale('Σdíg_${p[1]}(${p[0]})', 'Σdig_${p[1]}(${p[0]})');
+          historyLabel = trLocale('Σdíg_${p[1]}(${p[0]})', 'Σdig_${p[1]}(${p[0]})', pt: 'Σdíg_${p[1]}(${p[0]})');
           break;
 
         // --- 3 fixed params ---
@@ -3143,7 +3143,7 @@ class CalculatorService extends ChangeNotifier {
         case 'dioph':
           Map<String, dynamic> dr = SpecialFunctionsService.solveDiophantine(_parseStringAsBigInt(p[0]), _parseStringAsBigInt(p[1]), _parseStringAsBigInt(p[2]));
           if (dr['solvable'] != true) { _showError('errNoSolution'); return; }
-          resultStr = dr['note'] ?? trLocale('Solución encontrada', 'Solution found');
+          resultStr = dr['note'] ?? trLocale('Solución encontrada', 'Solution found', pt: 'Solução encontrada');
           historyLabel = '${p[0]}x+${p[1]}y=${p[2]}';
           break;
 
@@ -3151,12 +3151,12 @@ class CalculatorService extends ChangeNotifier {
         case 'gcd':
           BigInt r = p.map(_parseStringAsBigInt).reduce(SpecialFunctionsService.gcd);
           resultStr = _fmt(r);
-          historyLabel = '${trLocale('MCD', 'GCD')}(${p.join(",")})';
+          historyLabel = '${trLocale('MCD', 'GCD', pt: 'MDC')}(${p.join(",")})';
           break;
         case 'lcm':
           BigInt r = p.map(_parseStringAsBigInt).reduce(SpecialFunctionsService.lcm);
           resultStr = _fmt(r);
-          historyLabel = '${trLocale('MCM', 'LCM')}(${p.join(",")})';
+          historyLabel = '${trLocale('MCM', 'LCM', pt: 'MMC')}(${p.join(",")})';
           break;
 
         // --- Variable: CRT with N pairs ---
@@ -3172,7 +3172,7 @@ class CalculatorService extends ChangeNotifier {
           if (cr['solvable'] != true) { _showError('errIncompatibleSystem'); return; }
           resultStr = cr['note'] ?? cr['solution'].toString();
           historyLabel = trLocale('TCR(${remainders.length} congruencias)',
-              'CRT(${remainders.length} congruences)');
+              'CRT(${remainders.length} congruences)', pt: 'TCR(${remainders.length} congruências)');
           _display = resultStr;
           _lastResult = cr['solution'].toString();
           _updateAnalysis();
@@ -3545,7 +3545,7 @@ class CalculatorService extends ChangeNotifier {
         var result = SpecialFunctionsService.primeCountingFunction(number);
         String resultStr = result['count'].toString();
         String suffix =
-            result['exact'] == true ? '' : trLocale(' (aprox)', ' (approx)');
+            result['exact'] == true ? '' : trLocale(' (aprox)', ' (approx)', pt: ' (aprox.)');
         _display = _formatNumber(resultStr);
         _lastResult = resultStr;
         _updateAnalysis();

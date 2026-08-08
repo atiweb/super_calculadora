@@ -1,14 +1,43 @@
-/// UI-language flag for the service layer, which has no [BuildContext].
+/// UI-language plumbing for code that has no [BuildContext].
 ///
-/// Services (e.g. `NumberAnalysisService`, `CalculatorService`) compute
-/// fallback/status strings (for very large numbers or errors) at input time,
-/// before any widget rebuilds. They cannot reach `AppLocalizations`, so the
-/// widget tree publishes the current UI language here — see
-/// `CalculatorScreen.build`, which sets it from `Localizations.localeOf`.
+/// Most of the app is translated through the generated `AppLocalizations`
+/// (see `lib/l10n/*.arb`). Two areas cannot use it:
 ///
-/// Defaults to English (Spanish off) so headless/unit contexts are language-
-/// stable.
-bool appIsSpanish = false;
+///  * services (`NumberAnalysisService`, `CalculatorService`, …) compute
+///    fallback and status strings at input time, before any widget rebuilds,
+///    and some of them run inside an `Isolate`;
+///  * the Olympiad Tools keep their strings co-located with the tools.
+///
+/// Both go through [trLang], so there is a single place that decides what
+/// happens when a language is missing: it falls back to English rather than
+/// showing an empty string. That is what lets a new language ship one piece
+/// at a time — an untranslated tool reads in English instead of breaking.
+library;
 
-/// Returns [es] when the UI language is Spanish, otherwise [en].
-String trLocale(String es, String en) => appIsSpanish ? es : en;
+/// Text for [lang], falling back to English when that language has no
+/// translation yet.
+///
+/// To add a language: give it an optional parameter here and at the two
+/// call-site helpers (`OlympiadStrings.pick`, `StepsService`/`QuizService`),
+/// then fill it in at the call sites, gradually if needed.
+String trLang(String lang, String spanish, String english, {String? pt}) {
+  switch (lang) {
+    case 'es':
+      return spanish;
+    case 'pt':
+      return pt ?? english;
+    default:
+      return english;
+  }
+}
+
+/// Active UI language code ('en', 'es', 'pt', …), published by the widget
+/// tree — see `CalculatorScreen.build`, which sets it from
+/// `Localizations.localeOf`.
+///
+/// Defaults to English so headless and unit contexts are language-stable.
+String appLanguage = 'en';
+
+/// [trLang] for the active UI language.
+String trLocale(String es, String en, {String? pt}) =>
+    trLang(appLanguage, es, en, pt: pt);

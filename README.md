@@ -105,7 +105,7 @@ A dedicated section (from the navigation drawer) with **exact** tools, many with
 
 ### Other
 - **Persistent history** — last 100 operations saved on device
-- **Bilingual** — English and Spanish (auto-detected from device locale)
+- **Trilingual** — English, Spanish and Portuguese (auto-detected from the device locale, or chosen in Settings)
 - **Light / Dark / System** theme
 - **Copy & Paste** support for large numbers
 - Fully **offline** — no internet required, no data collected

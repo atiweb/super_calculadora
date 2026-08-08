@@ -1500,6 +1500,10 @@
   "@settingsLangEn": {
     "description": "English language option"
   },
+  "settingsLangPt": "Português",
+  "@settingsLangPt": {
+    "description": "Portuguese language option"
+  },
   "hlpTitle": "Guía de Funciones Especiales",
   "@hlpTitle": {
     "description": "Help screen title"
@@ -2944,7 +2948,7 @@
   "@hlpHighPrecContent": { "description": "High precision help card content" },
   "hlpNewToolsTitle": "Herramientas de Olimpiada",
   "@hlpNewToolsTitle": { "description": "Olympiad tools overview card title" },
-  "hlpNewToolsContent": "Desde el menú lateral → Herramientas de Olimpiada: Fracciones, Radicales, Geometría (con dibujos: triángulo, Pick, centros y recta de Euler), Polinomios (gráfica, Ruffini, sistemas n×n), Teoría de Números (criba, reloj modular, residuos), Procedimientos paso a paso, Complejos (círculo unitario, Sierpiński — en alta precisión), Estadística, Matrices (exactas), Cálculo (derivada/integral/límite) y Práctica con verificación.",
+  "hlpNewToolsContent": "Desde el menú lateral → Herramientas de Olimpiada: Fracciones, Radicales, Geometría (con dibujos: triángulo, Pick, centros y recta de Euler), Polinomios (gráfica, Ruffini, sistemas n×n), Álgebra (desarrollo e identidades con varias variables), Teoría de Números (criba, reloj modular, residuos), Procedimientos paso a paso, Complejos (círculo unitario, Sierpiński — en alta precisión), Estadística, Matrices (exactas), Cálculo (derivada/integral/límite) y Práctica con verificación.",
   "@hlpNewToolsContent": { "description": "Olympiad tools overview card content" },
   "hlpOlympiadHeader": "Fórmulas Clave para Olimpiadas",
   "@hlpOlympiadHeader": {

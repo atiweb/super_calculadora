@@ -7,6 +7,7 @@ import 'package:intl/intl.dart' as intl;
 
 import 'app_localizations_en.dart';
 import 'app_localizations_es.dart';
+import 'app_localizations_pt.dart';
 
 // ignore_for_file: type=lint
 
@@ -96,6 +97,7 @@ abstract class AppLocalizations {
   static const List<Locale> supportedLocales = <Locale>[
     Locale('en'),
     Locale('es'),
+    Locale('pt'),
   ];
 
   /// App title shown in the title bar and about screen
@@ -1909,6 +1911,12 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'English'**
   String get settingsLangEn;
+
+  /// Portuguese language option
+  ///
+  /// In es, this message translates to:
+  /// **'Português'**
+  String get settingsLangPt;
 
   /// Help screen title
   ///
@@ -4091,7 +4099,7 @@ abstract class AppLocalizations {
   /// Olympiad tools overview card content
   ///
   /// In es, this message translates to:
-  /// **'Desde el menú lateral → Herramientas de Olimpiada: Fracciones, Radicales, Geometría (con dibujos: triángulo, Pick, centros y recta de Euler), Polinomios (gráfica, Ruffini, sistemas n×n), Teoría de Números (criba, reloj modular, residuos), Procedimientos paso a paso, Complejos (círculo unitario, Sierpiński — en alta precisión), Estadística, Matrices (exactas), Cálculo (derivada/integral/límite) y Práctica con verificación.'**
+  /// **'Desde el menú lateral → Herramientas de Olimpiada: Fracciones, Radicales, Geometría (con dibujos: triángulo, Pick, centros y recta de Euler), Polinomios (gráfica, Ruffini, sistemas n×n), Álgebra (desarrollo e identidades con varias variables), Teoría de Números (criba, reloj modular, residuos), Procedimientos paso a paso, Complejos (círculo unitario, Sierpiński — en alta precisión), Estadística, Matrices (exactas), Cálculo (derivada/integral/límite) y Práctica con verificación.'**
   String get hlpNewToolsContent;
 
   /// Olympiad formulas section header
@@ -4214,7 +4222,7 @@ class _AppLocalizationsDelegate
 
   @override
   bool isSupported(Locale locale) =>
-      <String>['en', 'es'].contains(locale.languageCode);
+      <String>['en', 'es', 'pt'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
@@ -4227,6 +4235,8 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
       return AppLocalizationsEn();
     case 'es':
       return AppLocalizationsEs();
+    case 'pt':
+      return AppLocalizationsPt();
   }
 
   throw FlutterError(

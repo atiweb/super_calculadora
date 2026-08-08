@@ -40,8 +40,8 @@ void main() {
 
     test('Spanish prompts differ from English', () {
       // Same seed → same generator/values, only the language differs.
-      final es = QuizService.generate(rng: Random(99), spanish: true);
-      final en = QuizService.generate(rng: Random(99), spanish: false);
+      final es = QuizService.generate(rng: Random(99), lang: 'es');
+      final en = QuizService.generate(rng: Random(99), lang: 'en');
       expect(es.answer, en.answer);
       expect(es.topic, en.topic);
       // At least the prompt wording should differ for localized generators.

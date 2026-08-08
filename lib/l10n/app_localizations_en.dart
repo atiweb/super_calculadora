@@ -1047,6 +1047,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsLangEn => 'English';
 
   @override
+  String get settingsLangPt => 'Português';
+
+  @override
   String get hlpTitle => 'Special Functions Guide';
 
   @override
@@ -2195,7 +2198,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get hlpNewToolsContent =>
-      'From the side menu → Olympiad Tools: Fractions, Radicals, Geometry (with diagrams: triangle, Pick, centers and the Euler line), Polynomials (plot, Ruffini, n×n systems), Number Theory (sieve, modular clock, residues), Step-by-step procedures, Complex (unit circle, Sierpiński — in high precision), Statistics, Matrices (exact), Calculus (derivative/integral/limit) and a self-checking Practice quiz.';
+      'From the side menu → Olympiad Tools: Fractions, Radicals, Geometry (with diagrams: triangle, Pick, centers and the Euler line), Polynomials (plot, Ruffini, n×n systems), Algebra (expansion and identities in several variables), Number Theory (sieve, modular clock, residues), Step-by-step procedures, Complex (unit circle, Sierpiński — in high precision), Statistics, Matrices (exact), Calculus (derivative/integral/limit) and a self-checking Practice quiz.';
 
   @override
   String get hlpOlympiadHeader => 'Key Olympiad Formulas';
