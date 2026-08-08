@@ -190,8 +190,14 @@ class _CalcToolState extends State<CalcTool> {
                     Expanded(
                       child: SelectableText(
                         _result!,
-                        style: theme.textTheme.bodyMedium
-                            ?.copyWith(fontFamily: 'monospace'),
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          fontFamily: 'monospace',
+                          // Android's monospace family is missing the
+                          // superscripts ⁰⁵⁶⁷⁸⁹ and does not fall back on its
+                          // own, so exponents came out as tofu boxes
+                          // (a⁵ → a□, a¹⁰ → a¹□). The default family has them.
+                          fontFamilyFallback: const ['Roboto', 'sans-serif'],
+                        ),
                       ),
                     ),
                     IconButton(
