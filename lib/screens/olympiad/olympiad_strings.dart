@@ -40,6 +40,10 @@ class OlympiadStrings {
   String get catPolynomials => pick('Polinomios', 'Polynomials');
   String get catPolynomialsSub =>
       pick('Raíces, Vieta, discriminante', 'Roots, Vieta, discriminant');
+  String get catAlgebra => pick('Álgebra', 'Algebra');
+  String get catAlgebraSub => pick(
+      'Expandir, identidades, factor común',
+      'Expand, identities, common factor');
   String get catNumberTheory => pick('Teoría de Números', 'Number Theory');
   String get catNumberTheorySub =>
       pick('Congruencias, Pell, cuadrados', 'Congruences, Pell, squares');
@@ -200,6 +204,43 @@ class OlympiadStrings {
       case CalcError.angleSumTooLarge:
         return pick('Los dos ángulos suman 180° o más: no forman un triángulo',
             'The two angles add up to 180° or more: they cannot form a triangle');
+      case CalcError.invalidExponent:
+        return pick('El exponente debe ser un entero ≥ 0 (recibido: "$v")',
+            'The exponent must be an integer ≥ 0 (got: "$v")');
+      case CalcError.unbalancedParentheses:
+        return pick('Paréntesis desbalanceados', 'Unbalanced parentheses');
+      case CalcError.unexpectedToken:
+        // The parser reports the end of the input as an empty token: there is
+        // no symbol to quote, the expression simply stops too early ("2a +").
+        return v.isEmpty
+            ? pick('Expresión incompleta', 'Incomplete expression')
+            : pick('Símbolo inesperado: "$v"', 'Unexpected symbol: "$v"');
+      case CalcError.divisionNotExact:
+        return pick(
+            'Solo se puede dividir entre un número o un monomio que divida a '
+            'todos los términos',
+            'Division is only allowed by a number or by a monomial that '
+            'divides every term');
+      case CalcError.variableNotAssigned:
+        return pick('Falta el valor de "$v"', 'Missing value for "$v"');
+      case CalcError.invalidAssignment:
+        return pick('Asignación inválida: "$v" (use "a=1, b=2")',
+            'Invalid assignment: "$v" (use "a=1, b=2")');
+      case CalcError.expansionTooLarge:
+        return pick(
+            'El desarrollo tiene demasiados términos (máx ${e.arg('max')})',
+            'The expansion has too many terms (max ${e.arg('max')})');
+      case CalcError.computationTooLong:
+        return pick('El cálculo es demasiado costoso: simplifica la expresión',
+            'The computation is too expensive: simplify the expression');
+      case CalcError.singleVariableOnly:
+        return pick(
+            'Esta herramienta solo admite polinomios en x (p. ej. x^2-5x+6). '
+            'Para varias variables o paréntesis usa Álgebra → '
+            'Expandir y simplificar',
+            'This tool only takes polynomials in x (e.g. x^2-5x+6). For '
+            'several variables or parentheses use Algebra → '
+            'Expand and simplify');
     }
   }
 }

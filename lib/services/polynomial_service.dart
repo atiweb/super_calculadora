@@ -44,6 +44,15 @@ class PolynomialService {
     String s = input.replaceAll(' ', '').replaceAll('*', '');
     if (s.isEmpty) throw CalcException(CalcError.emptyExpression);
 
+    // Several variables or parentheses belong to the Algebra tools, not here.
+    // Splitting such an input on '+' produced fragments like "(a" and an
+    // "invalid term" message that told the user nothing about what was wrong.
+    if (s.contains('(') ||
+        s.contains(')') ||
+        RegExp(r'[A-Za-z]').hasMatch(s.replaceAll('x', ''))) {
+      throw CalcException(CalcError.singleVariableOnly);
+    }
+
     // Split into terms, preserving the sign.
     s = s.replaceAll('-', '+-');
     final List<String> rawTerms =

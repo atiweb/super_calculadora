@@ -22,6 +22,8 @@ class OlympiadToolsScreen extends StatelessWidget {
           () => const GeometryToolScreen()),
       _Category(Icons.functions, s.catPolynomials, s.catPolynomialsSub,
           () => const PolynomialsToolScreen()),
+      _Category(Icons.superscript, s.catAlgebra, s.catAlgebraSub,
+          () => const AlgebraToolScreen()),
       _Category(Icons.calculate, s.catNumberTheory, s.catNumberTheorySub,
           () => const NumberTheoryToolScreen()),
       _Category(Icons.list_alt, s.catSteps, s.catStepsSub,

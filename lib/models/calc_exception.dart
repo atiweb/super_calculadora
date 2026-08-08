@@ -47,6 +47,15 @@ enum CalcError {
   moduliPositive,
   invalidAngle,
   angleSumTooLarge,
+  invalidExponent,
+  unbalancedParentheses,
+  unexpectedToken,
+  divisionNotExact,
+  variableNotAssigned,
+  invalidAssignment,
+  expansionTooLarge,
+  computationTooLong,
+  singleVariableOnly,
 }
 
 /// Calculation exception with a localizable code and optional arguments.

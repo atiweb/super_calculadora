@@ -11,6 +11,7 @@ import '../../models/matrix.dart';
 import '../../models/point.dart';
 import '../../models/surd.dart';
 import '../../models/polynomial.dart';
+import '../../services/algebra_service.dart';
 import '../../services/calculus_service.dart';
 import '../../services/combinatorics_extra_service.dart';
 import '../../services/geometry_service.dart';
@@ -679,9 +680,15 @@ class PolynomialsToolScreen extends StatelessWidget {
       tools: [
         CalcTool(
           title: s.pick('Analizar polinomio', 'Analyze polynomial'),
-          description: s.pick('Grado, raíces racionales, Vieta, discriminante, derivada.',
-              'Degree, rational roots, Vieta, discriminant, derivative.'),
-          fields: [ToolField(s.pick('Polinomio', 'Polynomial'), initial: 'x^2-5x+6')],
+          description: s.pick(
+              'Grado, raíces racionales, Vieta, discriminante, derivada. '
+              'Solo en x, ya desarrollado (para varias variables o paréntesis: Álgebra).',
+              'Degree, rational roots, Vieta, discriminant, derivative. '
+              'In x only, already expanded (for several variables or parentheses: Algebra).'),
+          fields: [
+            ToolField(s.pick('Polinomio', 'Polynomial'),
+                hint: 'x^2-5x+6', initial: 'x^2-5x+6')
+          ],
           compute: (i) {
             final p = PolynomialService.parse(i[0]);
             final sb = StringBuffer();
@@ -824,6 +831,216 @@ class PolynomialsToolScreen extends StatelessWidget {
                 double.parse(i[2]), double.parse(i[3]));
             return '${s.pick('Raíces reales', 'Real roots')} ≈\n'
                 '${roots.map((r) => r.toStringAsFixed(6)).join('\n')}';
+          },
+        ),
+      ],
+    );
+  }
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// ALGEBRA (polynomials in several variables)
+// ════════════════════════════════════════════════════════════════════════════
+
+/// Syntax reminder, shown once at the top of the category since every tool
+/// here reads expressions in the same notation.
+String _algebraSyntax(OlympiadStrings s) => s.pick(
+    'Variables: una letra con subíndice opcional (a, x, x1). Se admite '
+        'multiplicación implícita (2ab, (a+b)(a−b)) y exponentes con ^ o '
+        'superíndices ((a+b+c)²).',
+    'Variables: a letter with an optional subscript (a, x, x1). Implicit '
+        'multiplication (2ab, (a+b)(a−b)) and exponents with ^ or '
+        'superscripts ((a+b+c)²) are supported.');
+
+class AlgebraToolScreen extends StatelessWidget {
+  const AlgebraToolScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final s = OlympiadStrings.of(context);
+    return _ToolScaffold(
+      title: s.catAlgebra,
+      tools: [
+        CalcTool(
+          title: s.pick('Expandir y simplificar', 'Expand and simplify'),
+          description: '${s.pick('Desarrolla el producto y agrupa términos '
+              'semejantes, en exacto.', 'Expands the product and collects like '
+              'terms, exactly.')} ${_algebraSyntax(s)}',
+          fields: [
+            ToolField(s.pick('Expresión', 'Expression'), initial: '(a+b+c)^2'),
+          ],
+          compute: (i) {
+            final p = AlgebraService.parse(i[0]);
+            final sb = StringBuffer('= $p\n');
+            sb.writeln('${s.pick('Grado', 'Degree')}: ${p.degree}'
+                '   ${s.pick('Términos', 'Terms')}: ${p.termCount}');
+            if (p.variables.isNotEmpty) {
+              sb.writeln('${s.pick('Variables', 'Variables')}: '
+                  '${p.variables.join(', ')}');
+              final marks = <String>[
+                if (p.isHomogeneous)
+                  s.pick('homogéneo', 'homogeneous'),
+                if (AlgebraService.isSymmetric(p) && p.variables.length > 1)
+                  s.pick('simétrico', 'symmetric'),
+              ];
+              if (marks.isNotEmpty) sb.writeln(marks.join(', '));
+            }
+            final cf = AlgebraService.commonFactor(p);
+            if (!cf.isTrivial && p.termCount > 1) {
+              sb.writeln('${s.pick('Factor común', 'Common factor')}: $cf');
+            }
+            return sb.toString().trimRight();
+          },
+        ),
+        CalcTool(
+          title: s.pick('Verificar identidad', 'Check identity'),
+          description: s.pick(
+              'Desarrolla ambos lados y compara. Si no coinciden, muestra la '
+              'diferencia.',
+              'Expands both sides and compares. If they differ, shows the '
+              'difference.'),
+          fields: [
+            ToolField(s.pick('Lado izquierdo', 'Left side'), initial: '(a+b)^3'),
+            ToolField(s.pick('Lado derecho', 'Right side'),
+                initial: 'a^3+3a^2b+3ab^2+b^3'),
+          ],
+          compute: (i) {
+            final left = AlgebraService.parse(i[0]);
+            final right = AlgebraService.parse(i[1]);
+            final diff = left - right;
+            if (diff.isZero) {
+              return '${s.pick('✓ Son idénticas', '✓ They are identical')}\n'
+                  '= $left';
+            }
+            return '${s.pick('✗ No son iguales', '✗ Not equal')}\n'
+                '${s.pick('Izquierda', 'Left')} = $left\n'
+                '${s.pick('Derecha', 'Right')} = $right\n'
+                '${s.pick('Diferencia', 'Difference')} = $diff';
+          },
+        ),
+        CalcTool(
+          title: s.pick('Factor común', 'Common factor'),
+          description: s.pick(
+              'Extrae el mayor monomio y el contenido racional: '
+              '2a²b + 4ab² = 2ab(a + 2b).',
+              'Pulls out the greatest monomial and the rational content: '
+              '2a²b + 4ab² = 2ab(a + 2b).'),
+          fields: [
+            ToolField(s.pick('Expresión', 'Expression'), initial: '2a^2b+4ab^2'),
+          ],
+          compute: (i) {
+            final p = AlgebraService.parse(i[0]);
+            final cf = AlgebraService.commonFactor(p);
+            if (cf.isTrivial) {
+              return '${s.pick('No hay factor común (aparte de 1)',
+                  'No common factor (other than 1)')}\n= $p';
+            }
+            return '= $cf\n'
+                '${s.pick('Factor', 'Factor')}: ${cf.factor}\n'
+                '${s.pick('Resto', 'Cofactor')}: ${cf.cofactor}';
+          },
+        ),
+        CalcTool(
+          title: s.pick('Sustituir / evaluar', 'Substitute / evaluate'),
+          description: s.pick(
+              'Los valores pueden ser números o expresiones ("a=1, b=x+1"). '
+              'Si faltan variables, el resultado queda en función de ellas.',
+              'Values may be numbers or expressions ("a=1, b=x+1"). Any '
+              'variable left unassigned stays in the result.'),
+          fields: [
+            ToolField(s.pick('Expresión', 'Expression'), initial: '(a+b+c)^2'),
+            ToolField(s.pick('Valores', 'Values'), initial: 'a=1, b=2, c=3'),
+          ],
+          compute: (i) {
+            final p = AlgebraService.parse(i[0]);
+            final values = AlgebraService.parseAssignments(i[1]);
+            final result = AlgebraService.substitute(p, values);
+            final sb = StringBuffer('= $result');
+            if (result.isConstant) {
+              final v = result.constantValue;
+              final double approx = v.toDouble();
+              // Only worth showing for a fraction that a decimal can express:
+              // a ratio of 300-digit integers overflows to "Infinity".
+              if (!v.isInteger && approx.isFinite && approx.abs() < 1e15) {
+                sb.write('\n≈ ${approx.toStringAsFixed(6)}');
+              }
+            }
+            return sb.toString();
+          },
+        ),
+        CalcTool(
+          title: s.pick('Coeficiente de un monomio', 'Coefficient of a monomial'),
+          description: s.pick(
+              'Coeficiente del monomio indicado en el desarrollo: el de a²b en '
+              '(a+b+c)³ es 3.',
+              'Coefficient of the given monomial in the expansion: that of a²b '
+              'in (a+b+c)³ is 3.'),
+          fields: [
+            ToolField(s.pick('Expresión', 'Expression'), initial: '(a+b+c)^3'),
+            ToolField(s.pick('Monomio', 'Monomial'), initial: 'a^2b'),
+          ],
+          compute: (i) {
+            final p = AlgebraService.parse(i[0]);
+            final m = AlgebraService.parseMonomial(i[1]);
+            return '${s.pick('Coeficiente de', 'Coefficient of')} '
+                '$m: ${p.coefficient(m)}';
+          },
+        ),
+        CalcTool(
+          title: s.pick('Derivada parcial', 'Partial derivative'),
+          description: s.pick('∂/∂x del desarrollo, en exacto.',
+              '∂/∂x of the expansion, exactly.'),
+          fields: [
+            ToolField(s.pick('Expresión', 'Expression'), initial: '(a+b)^3'),
+            ToolField(s.pick('Variable', 'Variable'), initial: 'a'),
+          ],
+          compute: (i) {
+            final p = AlgebraService.parse(i[0]);
+            final v = i[1].trim();
+            if (!RegExp(r'^[A-Za-z][0-9]*$').hasMatch(v)) {
+              throw CalcException(CalcError.unexpectedToken, {'value': v});
+            }
+            return '∂/∂$v = ${p.derivative(v)}';
+          },
+        ),
+        CalcTool(
+          title: s.pick('Productos notables', 'Notable products'),
+          description: s.pick(
+              'Las identidades clásicas con A y B a tu elección (pueden ser '
+              'expresiones).',
+              'The classic identities for your own A and B (they may be '
+              'expressions).'),
+          fields: [
+            ToolField('A', initial: 'x'),
+            ToolField('B', initial: '2y'),
+          ],
+          compute: (i) {
+            final a = AlgebraService.parse(i[0]);
+            final b = AlgebraService.parse(i[1]);
+            final sb = StringBuffer('A = $a,  B = $b\n');
+            for (final n in AlgebraService.notableProducts(a, b)) {
+              sb.writeln('${n.formula} = ${n.value}');
+            }
+            return sb.toString().trimRight();
+          },
+        ),
+        CalcTool(
+          title: s.pick('Binomio de Newton (a+b)ⁿ', 'Binomial theorem (a+b)ⁿ'),
+          description: s.pick(
+              'Desarrollo simbólico término a término.',
+              'Symbolic expansion, term by term.'),
+          fields: [ToolField('n', initial: '5')],
+          compute: (i) {
+            final n = _int(i[0]);
+            if (n < 0) throw CalcException(CalcError.nNonNegative);
+            if (n > 60) {
+              throw CalcException(CalcError.inputTooLarge, {'max': '60'});
+            }
+            final p = AlgebraService.parse('(a+b)^$n');
+            final sb = StringBuffer('(a+b)${_superscript(n)} = $p\n');
+            sb.write('${s.pick('Coeficientes', 'Coefficients')}: '
+                '${p.sortedMonomials.map((m) => p.coefficient(m)).join(', ')}');
+            return sb.toString();
           },
         ),
       ],
