@@ -12,7 +12,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get appTitle => 'Super Calculator';
 
   @override
-  String get appVersion => 'Version 1.2.0';
+  String get appVersion => 'Version 1.2.1';
 
   @override
   String get appDeveloped => 'Developed in Flutter';
@@ -378,6 +378,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get aboutFeature18 => 'Domain and size error handling';
+
+  @override
+  String get aboutFeature19 =>
+      'Olympiad Tools: 11 exact categories (fractions, radicals, geometry, polynomials, algebra, number theory, matrices…)';
+
+  @override
+  String get aboutFeature20 =>
+      'Symbolic algebra: expansion and identities in several variables';
 
   @override
   String get exprMathExpression => 'Mathematical expression';

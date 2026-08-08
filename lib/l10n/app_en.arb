@@ -1,7 +1,7 @@
 {
   "@@locale": "en",
   "appTitle": "Super Calculator",
-  "appVersion": "Version 1.2.0",
+  "appVersion": "Version 1.2.1",
   "appDeveloped": "Developed in Flutter",
   "appDynamicThemes": "With dynamic theme support",
   "navStandard": "Standard",
@@ -181,6 +181,8 @@
   "aboutFeature16": "Operations with extremely large numbers",
   "aboutFeature17": "Heavy calculations on separate threads (isolates)",
   "aboutFeature18": "Domain and size error handling",
+  "aboutFeature19": "Olympiad Tools: 11 exact categories (fractions, radicals, geometry, polynomials, algebra, number theory, matrices…)",
+  "aboutFeature20": "Symbolic algebra: expansion and identities in several variables",
   "exprMathExpression": "Mathematical expression",
   "exprHideHistory": "Hide history",
   "exprShowHistory": "Show history",

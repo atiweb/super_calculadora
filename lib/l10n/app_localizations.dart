@@ -107,7 +107,7 @@ abstract class AppLocalizations {
   /// App version string
   ///
   /// In es, this message translates to:
-  /// **'Versión 1.2.0'**
+  /// **'Versión 1.2.1'**
   String get appVersion;
 
   /// Framework credit shown in about section
@@ -787,6 +787,18 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Manejo de errores de dominio y tamaño'**
   String get aboutFeature18;
+
+  /// About feature: Olympiad Tools categories
+  ///
+  /// In es, this message translates to:
+  /// **'Herramientas de Olimpiada: 11 categorías exactas (fracciones, radicales, geometría, polinomios, álgebra, teoría de números, matrices…)'**
+  String get aboutFeature19;
+
+  /// About feature: multivariate symbolic algebra
+  ///
+  /// In es, this message translates to:
+  /// **'Álgebra simbólica: desarrollo e identidades con varias variables'**
+  String get aboutFeature20;
 
   /// Label for math expression input field
   ///

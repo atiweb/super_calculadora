@@ -84,6 +84,8 @@ class AppAboutDialog {
       '• ${l.aboutFeature16}',
       '• ${l.aboutFeature17}',
       '• ${l.aboutFeature18}',
+      '• ${l.aboutFeature19}',
+      '• ${l.aboutFeature20}',
     ];
 
     return features.map((feature) => Padding(

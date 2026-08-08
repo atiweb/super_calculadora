@@ -4,7 +4,7 @@
   "@appTitle": {
     "description": "App title shown in the title bar and about screen"
   },
-  "appVersion": "Versión 1.2.0",
+  "appVersion": "Versión 1.2.1",
   "@appVersion": {
     "description": "App version string"
   },
@@ -505,6 +505,14 @@
   "aboutFeature18": "Manejo de errores de dominio y tamaño",
   "@aboutFeature18": {
     "description": "About feature: domain and size error handling"
+  },
+  "aboutFeature19": "Herramientas de Olimpiada: 11 categorías exactas (fracciones, radicales, geometría, polinomios, álgebra, teoría de números, matrices…)",
+  "@aboutFeature19": {
+    "description": "About feature: Olympiad Tools categories"
+  },
+  "aboutFeature20": "Álgebra simbólica: desarrollo e identidades con varias variables",
+  "@aboutFeature20": {
+    "description": "About feature: multivariate symbolic algebra"
   },
   "exprMathExpression": "Expresión matemática",
   "@exprMathExpression": {
