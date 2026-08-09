@@ -72,3 +72,13 @@ String get symDioph => trLocale('Diof', 'Dioph', pt: 'Diof', fr: 'Dioph', it: 'D
 String get symCrt => trLocale('TCR', 'CRT', pt: 'TCR', fr: 'TRC', it: 'TCR');
 String get symDigitSumBase =>
     trLocale('ΣdígB', 'ΣdigB', pt: 'ΣdígB', fr: 'ΣchifB', it: 'ΣcifB');
+
+/// The four mean keys, for the same reason. They were hard-coded as
+/// `Med A … Med C` for every language while the guide already called them
+/// `Moy A … Moy Q` in French and `Méd A … Méd Q` in Portuguese, so the key
+/// and the instructions for pressing it disagreed. The spelling below is the
+/// one each guide already uses; the keypad splits the space into a line break.
+String get symMeanA => trLocale('Med A', 'Med A', pt: 'Méd A', fr: 'Moy A', it: 'Med A');
+String get symMeanG => trLocale('Med G', 'Med G', pt: 'Méd G', fr: 'Moy G', it: 'Med G');
+String get symMeanH => trLocale('Med H', 'Med H', pt: 'Méd H', fr: 'Moy H', it: 'Med H');
+String get symMeanQ => trLocale('Med C', 'Med C', pt: 'Méd Q', fr: 'Moy Q', it: 'Med Q');

@@ -465,7 +465,7 @@ class SpecialFunctionsHelpScreen extends StatelessWidget {
           _SectionHeader(title: l.hlpStatisticsHeader, icon: Icons.bar_chart),
           _CollapsibleSection(
             title: l.hlpArithMeanTitle,
-            symbol: 'Med A',
+            symbol: symMeanA,
             params: l.hlpArithMeanParams,
             description: l.hlpArithMeanDesc,
             formula: l.hlpArithMeanFormula,
@@ -476,7 +476,7 @@ class SpecialFunctionsHelpScreen extends StatelessWidget {
           ),
           _CollapsibleSection(
             title: l.hlpGeoMeanTitle,
-            symbol: 'Med G',
+            symbol: symMeanG,
             params: l.hlpGeoMeanParams,
             description: l.hlpGeoMeanDesc,
             formula: l.hlpGeoMeanFormula,
@@ -486,7 +486,7 @@ class SpecialFunctionsHelpScreen extends StatelessWidget {
           ),
           _CollapsibleSection(
             title: l.hlpHarmMeanTitle,
-            symbol: 'Med H',
+            symbol: symMeanH,
             params: l.hlpHarmMeanParams,
             description: l.hlpHarmMeanDesc,
             formula: l.hlpHarmMeanFormula,
@@ -496,7 +496,7 @@ class SpecialFunctionsHelpScreen extends StatelessWidget {
           ),
           _CollapsibleSection(
             title: l.hlpQuadMeanTitle,
-            symbol: 'Med C',
+            symbol: symMeanQ,
             params: l.hlpQuadMeanParams,
             description: l.hlpQuadMeanDesc,
             formula: l.hlpQuadMeanFormula,

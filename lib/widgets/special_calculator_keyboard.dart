@@ -97,10 +97,10 @@ class SpecialCalculatorKeyboard extends StatelessWidget {
                       // === STATISTICS ===
                       _buildSectionLabel(context, l.kbdStatistics),
                       Row(children: [
-                        _buildButton(context, 'Med\nA', () => calculator.arithmeticMeanN(), ButtonType.function),
-                        _buildButton(context, 'Med\nG', () => calculator.geometricMeanN(), ButtonType.function),
-                        _buildButton(context, 'Med\nH', () => calculator.harmonicMeanN(), ButtonType.function),
-                        _buildButton(context, 'Med\nC', () => calculator.quadraticMeanN(), ButtonType.function),
+                        _buildButton(context, symMeanA.replaceAll(' ', '\n'), () => calculator.arithmeticMeanN(), ButtonType.function),
+                        _buildButton(context, symMeanG.replaceAll(' ', '\n'), () => calculator.geometricMeanN(), ButtonType.function),
+                        _buildButton(context, symMeanH.replaceAll(' ', '\n'), () => calculator.harmonicMeanN(), ButtonType.function),
+                        _buildButton(context, symMeanQ.replaceAll(' ', '\n'), () => calculator.quadraticMeanN(), ButtonType.function),
                       ]),
                       Row(children: [
                         _buildButton(context, 'min', () => calculator.minimumN(), ButtonType.function),

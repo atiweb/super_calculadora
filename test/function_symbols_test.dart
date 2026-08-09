@@ -28,6 +28,37 @@ void main() {
     });
   });
 
+  test('the mean keys match the wording each guide already uses', () {
+    // The guide tells the reader to "press Moy A"; if the key still said
+    // Med A there would be nothing on screen by that name. The .arb files
+    // are the reference here — these are the spellings they contain.
+    const expected = {
+      'es': ['Med A', 'Med G', 'Med H', 'Med C'],
+      'en': ['Med A', 'Med G', 'Med H', 'Med C'],
+      'pt': ['Méd A', 'Méd G', 'Méd H', 'Méd Q'],
+      'fr': ['Moy A', 'Moy G', 'Moy H', 'Moy Q'],
+      'it': ['Med A', 'Med G', 'Med H', 'Med Q'],
+    };
+    expected.forEach((lang, means) {
+      appLanguage = lang;
+      expect([symMeanA, symMeanG, symMeanH, symMeanQ], means,
+          reason: 'wrong mean keys for $lang');
+    });
+  });
+
+  test('every mean key is named in its own help text', () {
+    // Catches the drift directly: the key label must appear verbatim in the
+    // .arb of the same language.
+    for (final lang in ['es', 'en', 'pt', 'fr', 'it']) {
+      appLanguage = lang;
+      final arb = File('lib/l10n/app_$lang.arb').readAsStringSync();
+      for (final key in [symMeanA, symMeanG, symMeanH, symMeanQ]) {
+        expect(arb.contains(key), true,
+            reason: '$lang: the guide never mentions the key "$key"');
+      }
+    }
+  });
+
   test('an unknown language falls back to the English symbols', () {
     appLanguage = 'zz';
     expect([symGcd, symLcm, symCrt], ['GCD', 'LCM', 'CRT']);
