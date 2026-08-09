@@ -1507,6 +1507,7 @@
   "settingsLangFr": "Français",
   "settingsLangIt": "Italiano",
   "settingsLangRu": "Русский",
+  "settingsLangVi": "Tiếng Việt",
   "@settingsLangFr": {
     "description": "French language option"
   },

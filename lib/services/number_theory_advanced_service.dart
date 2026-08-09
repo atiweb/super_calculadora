@@ -279,7 +279,7 @@ class NumberTheoryAdvancedService {
       a += _one;
     }
     // Unreachable by Lagrange's theorem.
-    throw StateError(trLocale('No se encontró representación (no debería ocurrir)', 'No representation found (should not happen)', pt: 'Nenhuma representação encontrada (não deveria ocorrer)', fr: 'Aucune représentation trouvée (ne devrait pas arriver)', ru: 'Представление не найдено (такого быть не должно)', it: 'Nessuna rappresentazione trovata (non dovrebbe accadere)'));
+    throw StateError(trLocale('No se encontró representación (no debería ocurrir)', 'No representation found (should not happen)', pt: 'Nenhuma representação encontrada (não deveria ocorrer)', fr: 'Aucune représentation trouvée (ne devrait pas arriver)', vi: 'Không tìm được biểu diễn (lẽ ra không xảy ra)', ru: 'Представление не найдено (такого быть не должно)', it: 'Nessuna rappresentazione trovata (non dovrebbe accadere)'));
   }
 
   // ── Frobenius number ─────────────────────────────────────────────────────
@@ -452,7 +452,7 @@ class NumberTheoryAdvancedService {
   }
 
   static BigInt _isqrt(BigInt n) {
-    if (n < _zero) throw ArgumentError(trLocale('Raíz de número negativo', 'Root of a negative number', pt: 'Raiz de número negativo', fr: "Racine d'un nombre négatif", ru: 'Корень из отрицательного числа', it: 'Radice di un numero negativo'));
+    if (n < _zero) throw ArgumentError(trLocale('Raíz de número negativo', 'Root of a negative number', pt: 'Raiz de número negativo', fr: "Racine d'un nombre négatif", vi: 'Căn của số âm', ru: 'Корень из отрицательного числа', it: 'Radice di un numero negativo'));
     if (n < _two) return n;
     BigInt x = n;
     BigInt y = (x + _one) >> 1;

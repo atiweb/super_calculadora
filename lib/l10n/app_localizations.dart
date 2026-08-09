@@ -11,6 +11,7 @@ import 'app_localizations_fr.dart';
 import 'app_localizations_it.dart';
 import 'app_localizations_pt.dart';
 import 'app_localizations_ru.dart';
+import 'app_localizations_vi.dart';
 
 // ignore_for_file: type=lint
 
@@ -104,6 +105,7 @@ abstract class AppLocalizations {
     Locale('it'),
     Locale('pt'),
     Locale('ru'),
+    Locale('vi'),
   ];
 
   /// App title shown in the title bar and about screen
@@ -1941,6 +1943,12 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Русский'**
   String get settingsLangRu;
+
+  /// No description provided for @settingsLangVi.
+  ///
+  /// In es, this message translates to:
+  /// **'Tiếng Việt'**
+  String get settingsLangVi;
 
   /// Help screen title
   ///
@@ -4252,6 +4260,7 @@ class _AppLocalizationsDelegate
     'it',
     'pt',
     'ru',
+    'vi',
   ].contains(locale.languageCode);
 
   @override
@@ -4273,6 +4282,8 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
       return AppLocalizationsPt();
     case 'ru':
       return AppLocalizationsRu();
+    case 'vi':
+      return AppLocalizationsVi();
   }
 
   throw FlutterError(

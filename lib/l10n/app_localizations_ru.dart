@@ -1065,6 +1065,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get settingsLangRu => 'Русский';
 
   @override
+  String get settingsLangVi => 'Tiếng Việt';
+
+  @override
   String get hlpTitle => 'Руководство по специальным функциям';
 
   @override
