@@ -1053,6 +1053,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsLangFr => 'Français';
 
   @override
+  String get settingsLangIt => 'Italiano';
+
+  @override
   String get hlpTitle => 'Special Functions Guide';
 
   @override

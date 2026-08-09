@@ -33,7 +33,7 @@ class QuizService {
     return QuizProblem(
       topic: 'φ(n)',
       prompt: _t(lang, 'Calcula φ($n) (función totiente de Euler)',
-          'Compute φ($n) (Euler\'s totient)', pt: 'Calcule φ($n) (função totiente de Euler)', fr: "Calculez φ($n) (indicatrice d'Euler)"),
+          'Compute φ($n) (Euler\'s totient)', pt: 'Calcule φ($n) (função totiente de Euler)', fr: "Calculez φ($n) (indicatrice d'Euler)", it: 'Calcola φ($n) (funzione toziente di Eulero)'),
       answer: SpecialFunctionsService.eulerPhi(BigInt.from(n)).toString(),
     );
   }
@@ -42,8 +42,8 @@ class QuizService {
     final a = 2 + r.nextInt(98);
     final b = 2 + r.nextInt(98);
     return QuizProblem(
-      topic: _t(lang, 'mcd', 'gcd', pt: 'mdc', fr: 'pgcd'),
-      prompt: _t(lang, 'Calcula mcd($a, $b)', 'Compute gcd($a, $b)', pt: 'Calcule mdc($a, $b)', fr: 'Calculez pgcd($a, $b)'),
+      topic: _t(lang, 'mcd', 'gcd', pt: 'mdc', fr: 'pgcd', it: 'MCD'),
+      prompt: _t(lang, 'Calcula mcd($a, $b)', 'Compute gcd($a, $b)', pt: 'Calcule mdc($a, $b)', fr: 'Calculez pgcd($a, $b)', it: 'Calcola MCD($a, $b)'),
       answer:
           SpecialFunctionsService.gcd(BigInt.from(a), BigInt.from(b)).toString(),
     );
@@ -53,7 +53,7 @@ class QuizService {
     final n = 2 + r.nextInt(7); // 2..8
     return QuizProblem(
       topic: 'n!',
-      prompt: _t(lang, 'Calcula $n!', 'Compute $n!', pt: 'Calcule $n!', fr: 'Calculez $n!'),
+      prompt: _t(lang, 'Calcula $n!', 'Compute $n!', pt: 'Calcule $n!', fr: 'Calculez $n!', it: 'Calcola $n!'),
       answer: SpecialFunctionsService.factorial(n).toString(),
     );
   }
@@ -64,7 +64,7 @@ class QuizService {
     return QuizProblem(
       topic: 'C(n,k)',
       prompt: _t(lang, 'Calcula C($n, $k) (combinaciones)',
-          'Compute C($n, $k) (combinations)', pt: 'Calcule C($n, $k) (combinações)', fr: 'Calculez C($n, $k) (combinaisons)'),
+          'Compute C($n, $k) (combinations)', pt: 'Calcule C($n, $k) (combinações)', fr: 'Calculez C($n, $k) (combinaisons)', it: 'Calcola C($n, $k) (combinazioni)'),
       answer: SpecialFunctionsService.combinations(n, k).toString(),
     );
   }
@@ -74,7 +74,7 @@ class QuizService {
     return QuizProblem(
       topic: 'σ₀(n)',
       prompt: _t(lang, '¿Cuántos divisores positivos tiene $n?',
-          'How many positive divisors does $n have?', pt: 'Quantos divisores positivos $n tem?', fr: 'Combien de diviseurs positifs $n possède-t-il ?'),
+          'How many positive divisors does $n have?', pt: 'Quantos divisores positivos $n tem?', fr: 'Combien de diviseurs positifs $n possède-t-il ?', it: 'Quanti divisori positivi ha $n?'),
       answer:
           SpecialFunctionsService.divisorCount(BigInt.from(n)).toString(),
     );
@@ -87,8 +87,8 @@ class QuizService {
       s += int.parse(ch);
     }
     return QuizProblem(
-      topic: _t(lang, 'Σ díg', 'Σ dig', pt: 'Σ díg', fr: 'Σ chif'),
-      prompt: _t(lang, 'Suma de los dígitos de $n', 'Digit sum of $n', pt: 'Soma dos dígitos de $n', fr: 'Somme des chiffres de $n'),
+      topic: _t(lang, 'Σ díg', 'Σ dig', pt: 'Σ díg', fr: 'Σ chif', it: 'Σ cif'),
+      prompt: _t(lang, 'Suma de los dígitos de $n', 'Digit sum of $n', pt: 'Soma dos dígitos de $n', fr: 'Somme des chiffres de $n', it: 'Somma delle cifre di $n'),
       answer: s.toString(),
     );
   }
@@ -98,7 +98,7 @@ class QuizService {
     final b = 2 + r.nextInt(48);
     return QuizProblem(
       topic: 'mod',
-      prompt: _t(lang, 'Calcula $a mod $b', 'Compute $a mod $b', pt: 'Calcule $a mod $b', fr: 'Calculez $a mod $b'),
+      prompt: _t(lang, 'Calcula $a mod $b', 'Compute $a mod $b', pt: 'Calcule $a mod $b', fr: 'Calculez $a mod $b', it: 'Calcola $a mod $b'),
       answer: (a % b).toString(),
     );
   }
@@ -108,7 +108,7 @@ class QuizService {
     return QuizProblem(
       topic: 'F(n)',
       prompt: _t(lang, 'Calcula el $n-ésimo número de Fibonacci F($n)',
-          'Compute the $n-th Fibonacci number F($n)', pt: 'Calcule o $n-ésimo número de Fibonacci F($n)', fr: 'Calculez le $n-ième nombre de Fibonacci F($n)'),
+          'Compute the $n-th Fibonacci number F($n)', pt: 'Calcule o $n-ésimo número de Fibonacci F($n)', fr: 'Calculez le $n-ième nombre de Fibonacci F($n)', it: "Calcola l'$n-esimo numero di Fibonacci F($n)"),
       answer: SpecialFunctionsService.fibonacci(n).toString(),
     );
   }

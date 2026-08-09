@@ -212,33 +212,33 @@ String _superscript(int n) {
 String _sidesLabel(OlympiadStrings s, TriangleSides v) {
   switch (v) {
     case TriangleSides.equilateral:
-      return s.pick('equilátero', 'equilateral', pt: 'equilátero', fr: 'équilatéral');
+      return s.pick('equilátero', 'equilateral', pt: 'equilátero', fr: 'équilatéral', it: 'equilatero');
     case TriangleSides.isosceles:
-      return s.pick('isósceles', 'isosceles', pt: 'isósceles', fr: 'isocèle');
+      return s.pick('isósceles', 'isosceles', pt: 'isósceles', fr: 'isocèle', it: 'isoscele');
     case TriangleSides.scalene:
-      return s.pick('escaleno', 'scalene', pt: 'escaleno', fr: 'scalène');
+      return s.pick('escaleno', 'scalene', pt: 'escaleno', fr: 'scalène', it: 'scaleno');
   }
 }
 
 String _anglesLabel(OlympiadStrings s, TriangleAngles v) {
   switch (v) {
     case TriangleAngles.right:
-      return s.pick('rectángulo', 'right', pt: 'retângulo', fr: 'rectangle');
+      return s.pick('rectángulo', 'right', pt: 'retângulo', fr: 'rectangle', it: 'rettangolo');
     case TriangleAngles.acute:
-      return s.pick('acutángulo', 'acute', pt: 'acutângulo', fr: 'acutangle');
+      return s.pick('acutángulo', 'acute', pt: 'acutângulo', fr: 'acutangle', it: 'acutangolo');
     case TriangleAngles.obtuse:
-      return s.pick('obtusángulo', 'obtuse', pt: 'obtusângulo', fr: 'obtusangle');
+      return s.pick('obtusángulo', 'obtuse', pt: 'obtusângulo', fr: 'obtusangle', it: 'ottusangolo');
   }
 }
 
 String _natureLabel(OlympiadStrings s, QuadraticNature v) {
   switch (v) {
     case QuadraticNature.twoRealDistinct:
-      return s.pick('dos reales distintas', 'two distinct real', pt: 'duas reais distintas', fr: 'deux réelles distinctes');
+      return s.pick('dos reales distintas', 'two distinct real', pt: 'duas reais distintas', fr: 'deux réelles distinctes', it: 'due reali distinte');
     case QuadraticNature.doubleRoot:
-      return s.pick('una raíz doble', 'one double root', pt: 'uma raiz dupla', fr: 'une racine double');
+      return s.pick('una raíz doble', 'one double root', pt: 'uma raiz dupla', fr: 'une racine double', it: 'una radice doppia');
     case QuadraticNature.complexConjugate:
-      return s.pick('complejas conjugadas', 'complex conjugate', pt: 'complexas conjugadas', fr: 'complexes conjuguées');
+      return s.pick('complejas conjugadas', 'complex conjugate', pt: 'complexas conjugadas', fr: 'complexes conjuguées', it: 'complesse coniugate');
   }
 }
 
@@ -276,14 +276,14 @@ class FractionsToolScreen extends StatelessWidget {
       title: s.catFractions,
       tools: [
         CalcTool(
-          title: s.pick('Aritmética de fracciones', 'Fraction arithmetic', pt: 'Aritmética de frações', fr: 'Arithmétique des fractions'),
+          title: s.pick('Aritmética de fracciones', 'Fraction arithmetic', pt: 'Aritmética de frações', fr: 'Arithmétique des fractions', it: 'Aritmetica delle frazioni'),
           description: s.pick(
               'Operación exacta entre dos fracciones (p/q).',
-              'Exact operation between two fractions (p/q).', pt: 'Operação exata entre duas frações (p/q).', fr: 'Opération exacte entre deux fractions (p/q).'),
+              'Exact operation between two fractions (p/q).', pt: 'Operação exata entre duas frações (p/q).', fr: 'Opération exacte entre deux fractions (p/q).', it: 'Operazione esatta tra due frazioni (p/q).'),
           fields: [
-            ToolField(s.pick('Fracción 1', 'Fraction 1', pt: 'Fração 1', fr: 'Fraction 1'), hint: '1/2', initial: '1/2'),
-            ToolField(s.pick('Operación (+ - * /)', 'Operation (+ - * /)', pt: 'Operação (+ - * /)', fr: 'Opération (+ - * /)'), initial: '+'),
-            ToolField(s.pick('Fracción 2', 'Fraction 2', pt: 'Fração 2', fr: 'Fraction 2'), hint: '1/3', initial: '1/3'),
+            ToolField(s.pick('Fracción 1', 'Fraction 1', pt: 'Fração 1', fr: 'Fraction 1', it: 'Frazione 1'), hint: '1/2', initial: '1/2'),
+            ToolField(s.pick('Operación (+ - * /)', 'Operation (+ - * /)', pt: 'Operação (+ - * /)', fr: 'Opération (+ - * /)', it: 'Operazione (+ - * /)'), initial: '+'),
+            ToolField(s.pick('Fracción 2', 'Fraction 2', pt: 'Fração 2', fr: 'Fraction 2', it: 'Frazione 2'), hint: '1/3', initial: '1/3'),
           ],
           compute: (i) {
             final a = Fraction.parse(i[0]);
@@ -297,22 +297,22 @@ class FractionsToolScreen extends StatelessWidget {
               default: throw CalcException(CalcError.invalidOperation);
             }
             return '${r.toString()}\n'
-                '${s.pick('Mixto', 'Mixed', pt: 'Misto', fr: 'Mixte')}${s.colon} ${r.toMixedString()}\n'
-                '${s.pick('Decimal', 'Decimal', pt: 'Decimal', fr: 'Décimal')}${s.colon} ${r.toDouble()}';
+                '${s.pick('Mixto', 'Mixed', pt: 'Misto', fr: 'Mixte', it: 'Misto')}${s.colon} ${r.toMixedString()}\n'
+                '${s.pick('Decimal', 'Decimal', pt: 'Decimal', fr: 'Décimal', it: 'Decimale')}${s.colon} ${r.toDouble()}';
           },
         ),
         CalcTool(
-          title: s.pick('Simplificar / convertir', 'Simplify / convert', pt: 'Simplificar / converter', fr: 'Simplifier / convertir'),
+          title: s.pick('Simplificar / convertir', 'Simplify / convert', pt: 'Simplificar / converter', fr: 'Simplifier / convertir', it: 'Semplifica / converti'),
           description: s.pick('Reduce una fracción o un decimal a su forma exacta.',
-              'Reduce a fraction or decimal to exact form.', pt: 'Reduz uma fração ou um decimal à sua forma exata.', fr: 'Réduit une fraction ou un décimal à sa forme exacte.'),
+              'Reduce a fraction or decimal to exact form.', pt: 'Reduz uma fração ou um decimal à sua forma exata.', fr: 'Réduit une fraction ou un décimal à sa forme exacte.', it: 'Riduce una frazione o un decimale alla sua forma esatta.'),
           fields: [
-            ToolField(s.pick('Valor (p/q o decimal)', 'Value (p/q or decimal)', pt: 'Valor (p/q ou decimal)', fr: 'Valeur (p/q ou décimal)'), initial: '18/12'),
+            ToolField(s.pick('Valor (p/q o decimal)', 'Value (p/q or decimal)', pt: 'Valor (p/q ou decimal)', fr: 'Valeur (p/q ou décimal)', it: 'Valore (p/q o decimale)'), initial: '18/12'),
           ],
           compute: (i) {
             final r = Fraction.parse(i[0]);
-            return '${s.pick('Reducida', 'Reduced', pt: 'Reduzida', fr: 'Réduite')}${s.colon} $r\n'
-                '${s.pick('Mixto', 'Mixed', pt: 'Misto', fr: 'Mixte')}${s.colon} ${r.toMixedString()}\n'
-                '${s.pick('Decimal', 'Decimal', pt: 'Decimal', fr: 'Décimal')}${s.colon} ${r.toDouble()}';
+            return '${s.pick('Reducida', 'Reduced', pt: 'Reduzida', fr: 'Réduite', it: 'Ridotta')}${s.colon} $r\n'
+                '${s.pick('Mixto', 'Mixed', pt: 'Misto', fr: 'Mixte', it: 'Misto')}${s.colon} ${r.toMixedString()}\n'
+                '${s.pick('Decimal', 'Decimal', pt: 'Decimal', fr: 'Décimal', it: 'Decimale')}${s.colon} ${r.toDouble()}';
           },
         ),
       ],
@@ -334,17 +334,17 @@ class SurdsToolScreen extends StatelessWidget {
       title: s.catSurds,
       tools: [
         CalcTool(
-          title: s.pick('Simplificar √n', 'Simplify √n', pt: 'Simplificar √n', fr: 'Simplifier √n'),
+          title: s.pick('Simplificar √n', 'Simplify √n', pt: 'Simplificar √n', fr: 'Simplifier √n', it: 'Semplifica √n'),
           fields: [ToolField('n', initial: '72')],
           compute: (i) => Surd.sqrt(_bi(i[0])).toString(),
         ),
         CalcTool(
-          title: s.pick('Raíz n-ésima', 'n-th root', pt: 'Raiz n-ésima', fr: 'Racine n-ième'),
+          title: s.pick('Raíz n-ésima', 'n-th root', pt: 'Raiz n-ésima', fr: 'Racine n-ième', it: 'Radice n-esima'),
           description: s.pick('Extrae factores de la raíz de índice k.',
-              'Extracts factors from the k-th root.', pt: 'Extrai fatores da raiz de índice k.', fr: "Extrait des facteurs de la racine d'indice k."),
+              'Extracts factors from the k-th root.', pt: 'Extrai fatores da raiz de índice k.', fr: "Extrait des facteurs de la racine d'indice k.", it: 'Estrae fattori dalla radice di indice k.'),
           fields: [
-            ToolField(s.pick('Radicando', 'Radicand', pt: 'Radicando', fr: 'Radicande'), initial: '54'),
-            ToolField(s.pick('Índice k', 'Index k', pt: 'Índice k', fr: 'Indice k'), initial: '3'),
+            ToolField(s.pick('Radicando', 'Radicand', pt: 'Radicando', fr: 'Radicande', it: 'Radicando'), initial: '54'),
+            ToolField(s.pick('Índice k', 'Index k', pt: 'Índice k', fr: 'Indice k', it: 'Indice k'), initial: '3'),
           ],
           compute: (i) {
             final r = SurdService.simplifyNthRoot(_bi(i[0]), _int(i[1]));
@@ -355,7 +355,7 @@ class SurdsToolScreen extends StatelessWidget {
           },
         ),
         CalcTool(
-          title: s.pick('Racionalizar a/√b', 'Rationalize a/√b', pt: 'Racionalizar a/√b', fr: 'Rationaliser a/√b'),
+          title: s.pick('Racionalizar a/√b', 'Rationalize a/√b', pt: 'Racionalizar a/√b', fr: 'Rationaliser a/√b', it: 'Razionalizza a/√b'),
           fields: [
             ToolField('a (p/q)', initial: '1'),
             ToolField('b', initial: '2'),
@@ -364,7 +364,7 @@ class SurdsToolScreen extends StatelessWidget {
               SurdService.rationalizeOverSqrt(Fraction.parse(i[0]), _bi(i[1])).toString(),
         ),
         CalcTool(
-          title: s.pick('Racionalizar a/(c+√d)', 'Rationalize a/(c+√d)', pt: 'Racionalizar a/(c+√d)', fr: 'Rationaliser a/(c+√d)'),
+          title: s.pick('Racionalizar a/(c+√d)', 'Rationalize a/(c+√d)', pt: 'Racionalizar a/(c+√d)', fr: 'Rationaliser a/(c+√d)', it: 'Razionalizza a/(c+√d)'),
           fields: [
             ToolField('a (p/q)', initial: '1'),
             ToolField('c (p/q)', initial: '1'),
@@ -393,9 +393,9 @@ class GeometryToolScreen extends StatelessWidget {
       title: s.catGeometry,
       tools: [
         CalcTool(
-          title: s.pick('Triángulo por lados', 'Triangle from sides', pt: 'Triângulo pelos lados', fr: 'Triangle par les côtés'),
+          title: s.pick('Triángulo por lados', 'Triangle from sides', pt: 'Triângulo pelos lados', fr: 'Triangle par les côtés', it: 'Triangolo dai lati'),
           description: s.pick('Tipo, área (Herón), R, r y perímetro.',
-              'Type, area (Heron), R, r and perimeter.', pt: 'Tipo, área (Heron), R, r e perímetro.', fr: 'Type, aire (Héron), R, r et périmètre.'),
+              'Type, area (Heron), R, r and perimeter.', pt: 'Tipo, área (Heron), R, r e perímetro.', fr: 'Type, aire (Héron), R, r et périmètre.', it: 'Tipo, area (Erone), R, r e perimetro.'),
           fields: [
             ToolField('a', initial: '13'),
             ToolField('b', initial: '14'),
@@ -410,9 +410,9 @@ class GeometryToolScreen extends StatelessWidget {
             final area = GeometryService.heronArea(a, b, c);
             final r = GeometryService.inradius(a, b, c);
             final big = GeometryService.circumradius(a, b, c);
-            return '${s.pick('Tipo', 'Type', pt: 'Tipo', fr: 'Type')}${s.colon} ${_sidesLabel(s, t.bySides)}, ${_anglesLabel(s, t.byAngles)}\n'
-                '${s.pick('Perímetro', 'Perimeter', pt: 'Perímetro', fr: 'Périmètre')}${s.colon} ${a + b + c}\n'
-                '${s.pick('Área', 'Area', pt: 'Área', fr: 'Aire')}${s.colon} $area  ≈ ${area.toDouble().toStringAsFixed(4)}\n'
+            return '${s.pick('Tipo', 'Type', pt: 'Tipo', fr: 'Type', it: 'Tipo')}${s.colon} ${_sidesLabel(s, t.bySides)}, ${_anglesLabel(s, t.byAngles)}\n'
+                '${s.pick('Perímetro', 'Perimeter', pt: 'Perímetro', fr: 'Périmètre', it: 'Perimetro')}${s.colon} ${a + b + c}\n'
+                '${s.pick('Área', 'Area', pt: 'Área', fr: 'Aire', it: 'Area')}${s.colon} $area  ≈ ${area.toDouble().toStringAsFixed(4)}\n'
                 'R = $big  ≈ ${big.toDouble().toStringAsFixed(4)}\n'
                 'r = $r  ≈ ${r.toDouble().toStringAsFixed(4)}';
           },
@@ -438,10 +438,10 @@ class GeometryToolScreen extends StatelessWidget {
         ),
         CalcTool(
           title: s.pick('Ángulos del triángulo (ley del coseno)',
-              'Triangle angles (law of cosines)', pt: 'Ângulos do triângulo (lei dos cossenos)', fr: 'Angles du triangle (loi des cosinus)'),
+              'Triangle angles (law of cosines)', pt: 'Ângulos do triângulo (lei dos cossenos)', fr: 'Angles du triangle (loi des cosinus)', it: 'Angoli del triangolo (teorema del coseno)'),
           description: s.pick(
               'Coseno exacto de cada ángulo y su valor en grados.',
-              'Exact cosine of each angle and its value in degrees.', pt: 'Cosseno exato de cada ângulo e seu valor em graus.', fr: 'Cosinus exact de chaque angle et sa valeur en degrés.'),
+              'Exact cosine of each angle and its value in degrees.', pt: 'Cosseno exato de cada ângulo e seu valor em graus.', fr: 'Cosinus exact de chaque angle et sa valeur en degrés.', it: 'Coseno esatto di ogni angolo e il suo valore in gradi.'),
           fields: [
             ToolField('a', initial: '13'),
             ToolField('b', initial: '14'),
@@ -489,15 +489,15 @@ class GeometryToolScreen extends StatelessWidget {
           },
         ),
         CalcTool(
-          title: s.pick('Ley de los senos', 'Law of sines', pt: 'Lei dos senos', fr: 'Loi des sinus'),
+          title: s.pick('Ley de los senos', 'Law of sines', pt: 'Lei dos senos', fr: 'Loi des sinus', it: 'Teorema dei seni'),
           description: s.pick(
               'Dado un lado y su ángulo opuesto, halla el lado opuesto a otro ángulo.',
-              'Given a side and its opposite angle, find the side opposite another angle.', pt: 'Dado um lado e o seu ângulo oposto, encontra o lado oposto a outro ângulo.', fr: 'Étant donné un côté et son angle opposé, trouve le côté opposé à un autre angle.'),
+              'Given a side and its opposite angle, find the side opposite another angle.', pt: 'Dado um lado e o seu ângulo oposto, encontra o lado oposto a outro ângulo.', fr: 'Étant donné un côté et son angle opposé, trouve le côté opposé à un autre angle.', it: 'Dato un lato e il suo angolo opposto, trova il lato opposto a un altro angolo.'),
           fields: [
-            ToolField(s.pick('Lado conocido', 'Known side', pt: 'Lado conhecido', fr: 'Côté connu'), initial: '10'),
-            ToolField(s.pick('Su ángulo opuesto (°)', 'Its opposite angle (°)', pt: 'Seu ângulo oposto (°)', fr: 'Son angle opposé (°)'),
+            ToolField(s.pick('Lado conocido', 'Known side', pt: 'Lado conhecido', fr: 'Côté connu', it: 'Lato noto'), initial: '10'),
+            ToolField(s.pick('Su ángulo opuesto (°)', 'Its opposite angle (°)', pt: 'Seu ângulo oposto (°)', fr: 'Son angle opposé (°)', it: 'Il suo angolo opposto (°)'),
                 initial: '30'),
-            ToolField(s.pick('Ángulo buscado (°)', 'Wanted angle (°)', pt: 'Ângulo procurado (°)', fr: 'Angle cherché (°)'),
+            ToolField(s.pick('Ángulo buscado (°)', 'Wanted angle (°)', pt: 'Ângulo procurado (°)', fr: 'Angle cherché (°)', it: 'Angolo cercato (°)'),
                 initial: '45'),
           ],
           compute: (i) {
@@ -507,59 +507,59 @@ class GeometryToolScreen extends StatelessWidget {
             final side = GeometryService.sideFromLawOfSines(
                 known, knownAngle, wantedAngle);
             final third = 180 - knownAngle - wantedAngle;
-            return '${s.pick('Lado buscado', 'Wanted side', pt: 'Lado procurado', fr: 'Côté cherché')} ≈ '
+            return '${s.pick('Lado buscado', 'Wanted side', pt: 'Lado procurado', fr: 'Côté cherché', it: 'Lato cercato')} ≈ '
                 '${side.toStringAsFixed(6)}\n'
-                '${s.pick('Tercer ángulo', 'Third angle', pt: 'Terceiro ângulo', fr: 'Troisième angle')} = '
+                '${s.pick('Tercer ángulo', 'Third angle', pt: 'Terceiro ângulo', fr: 'Troisième angle', it: 'Terzo angolo')} = '
                 '${third.toStringAsFixed(4)}°';
           },
         ),
         CalcTool(
-          title: s.pick('Ternas pitagóricas primitivas', 'Primitive Pythagorean triples', pt: 'Ternos pitagóricos primitivos', fr: 'Triplets pythagoriciens primitifs'),
-          fields: [ToolField(s.pick('Hipotenusa máx', 'Max hypotenuse', pt: 'Hipotenusa máx', fr: 'Hypoténuse max'), initial: '50')],
+          title: s.pick('Ternas pitagóricas primitivas', 'Primitive Pythagorean triples', pt: 'Ternos pitagóricos primitivos', fr: 'Triplets pythagoriciens primitifs', it: 'Terne pitagoriche primitive'),
+          fields: [ToolField(s.pick('Hipotenusa máx', 'Max hypotenuse', pt: 'Hipotenusa máx', fr: 'Hypoténuse max', it: 'Ipotenusa max'), initial: '50')],
           compute: (i) {
             final list = GeometryService.primitivePythagoreanTriples(_int(i[0]));
-            if (list.isEmpty) return s.pick('Ninguna', 'None', pt: 'Nenhuma', fr: 'Aucune');
+            if (list.isEmpty) return s.pick('Ninguna', 'None', pt: 'Nenhuma', fr: 'Aucune', it: 'Nessuna');
             return list.map((t) => '${t[0]}, ${t[1]}, ${t[2]}').join('\n');
           },
         ),
         CalcTool(
           title: s.pick('Todas las ternas pitagóricas',
-              'All Pythagorean triples', pt: 'Todos os ternos pitagóricos', fr: 'Tous les triplets pythagoriciens'),
+              'All Pythagorean triples', pt: 'Todos os ternos pitagóricos', fr: 'Tous les triplets pythagoriciens', it: 'Tutte le terne pitagoriche'),
           description: s.pick(
               'Primitivas y sus múltiplos, ordenadas por hipotenusa.',
-              'Primitives and their multiples, ordered by hypotenuse.', pt: 'Primitivos e seus múltiplos, ordenados pela hipotenusa.', fr: 'Les primitifs et leurs multiples, triés par hypoténuse.'),
-          fields: [ToolField(s.pick('Hipotenusa máx', 'Max hypotenuse', pt: 'Hipotenusa máx', fr: 'Hypoténuse max'), initial: '50')],
+              'Primitives and their multiples, ordered by hypotenuse.', pt: 'Primitivos e seus múltiplos, ordenados pela hipotenusa.', fr: 'Les primitifs et leurs multiples, triés par hypoténuse.', it: 'Le primitive e i loro multipli, ordinate per ipotenusa.'),
+          fields: [ToolField(s.pick('Hipotenusa máx', 'Max hypotenuse', pt: 'Hipotenusa máx', fr: 'Hypoténuse max', it: 'Ipotenusa max'), initial: '50')],
           compute: (i) {
             final list = GeometryService.allPythagoreanTriples(_int(i[0]));
-            if (list.isEmpty) return s.pick('Ninguna', 'None', pt: 'Nenhuma', fr: 'Aucune');
-            return '${s.pick('Total', 'Total', pt: 'Total', fr: 'Total')}${s.colon} ${list.length}\n'
+            if (list.isEmpty) return s.pick('Ninguna', 'None', pt: 'Nenhuma', fr: 'Aucune', it: 'Nessuna');
+            return '${s.pick('Total', 'Total', pt: 'Total', fr: 'Total', it: 'Totale')}${s.colon} ${list.length}\n'
                 '${list.map((t) => '${t[0]}, ${t[1]}, ${t[2]}').join('\n')}';
           },
         ),
         CalcTool(
-          title: s.pick('Triángulos heronianos', 'Heronian triangles', pt: 'Triângulos heronianos', fr: 'Triangles héroniens'),
+          title: s.pick('Triángulos heronianos', 'Heronian triangles', pt: 'Triângulos heronianos', fr: 'Triangles héroniens', it: 'Triangoli eroniani'),
           description: s.pick(
               'Lados enteros y área entera, con todos los lados ≤ n.',
-              'Integer sides and integer area, with every side ≤ n.', pt: 'Lados inteiros e área inteira, com todos os lados ≤ n.', fr: 'Côtés entiers et aire entière, avec tous les côtés ≤ n.'),
-          fields: [ToolField(s.pick('Lado máx', 'Max side', pt: 'Lado máx', fr: 'Côté max'), initial: '20')],
+              'Integer sides and integer area, with every side ≤ n.', pt: 'Lados inteiros e área inteira, com todos os lados ≤ n.', fr: 'Côtés entiers et aire entière, avec tous les côtés ≤ n.', it: 'Lati interi e area intera, con tutti i lati ≤ n.'),
+          fields: [ToolField(s.pick('Lado máx', 'Max side', pt: 'Lado máx', fr: 'Côté max', it: 'Lato max'), initial: '20')],
           compute: (i) {
             final list = GeometryService.heronianTriangles(_int(i[0]));
-            if (list.isEmpty) return s.pick('Ninguno', 'None', pt: 'Nenhum', fr: 'Aucun');
-            final areaLabel = s.pick('área', 'area', pt: 'área', fr: 'aire');
-            return '${s.pick('Total', 'Total', pt: 'Total', fr: 'Total')}${s.colon} ${list.length}\n'
+            if (list.isEmpty) return s.pick('Ninguno', 'None', pt: 'Nenhum', fr: 'Aucun', it: 'Nessuno');
+            final areaLabel = s.pick('área', 'area', pt: 'área', fr: 'aire', it: 'area');
+            return '${s.pick('Total', 'Total', pt: 'Total', fr: 'Total', it: 'Totale')}${s.colon} ${list.length}\n'
                 '${list.map((t) => '$t  $areaLabel=${t.area}').join('\n')}';
           },
         ),
         CalcTool(
-          title: s.pick('Área por coordenadas (shoelace)', 'Area from coordinates (shoelace)', pt: 'Área por coordenadas (shoelace)', fr: 'Aire par coordonnées (formule du lacet)'),
+          title: s.pick('Área por coordenadas (shoelace)', 'Area from coordinates (shoelace)', pt: 'Área por coordenadas (shoelace)', fr: 'Aire par coordonnées (formule du lacet)', it: "Area da coordinate (formula dell'area di Gauss)"),
           description: s.pick('Vértices "x,y" separados por ";".',
-              'Vertices "x,y" separated by ";".', pt: 'Vértices "x,y" separados por ";".', fr: 'Sommets « x,y » séparés par « ; ».'),
+              'Vertices "x,y" separated by ";".', pt: 'Vértices "x,y" separados por ";".', fr: 'Sommets « x,y » séparés par « ; ».', it: 'Vertici «x,y» separati da «;».'),
           fields: [
-            ToolField(s.pick('Vértices', 'Vertices', pt: 'Vértices', fr: 'Sommets'), initial: '0,0; 4,0; 0,3'),
+            ToolField(s.pick('Vértices', 'Vertices', pt: 'Vértices', fr: 'Sommets', it: 'Vertici'), initial: '0,0; 4,0; 0,3'),
           ],
           compute: (i) {
             final area = GeometryService.shoelaceArea(_pointList(i[0]));
-            return '${s.pick('Área', 'Area', pt: 'Área', fr: 'Aire')}${s.colon} $area  ≈ ${area.toDouble()}';
+            return '${s.pick('Área', 'Area', pt: 'Área', fr: 'Aire', it: 'Area')}${s.colon} $area  ≈ ${area.toDouble()}';
           },
           visualize: (ctx, i) {
             final pts = _pointList(i[0]);
@@ -579,19 +579,19 @@ class GeometryToolScreen extends StatelessWidget {
           },
         ),
         CalcTool(
-          title: s.pick('Teorema de Pick', "Pick's theorem", pt: 'Teorema de Pick', fr: 'Théorème de Pick'),
+          title: s.pick('Teorema de Pick', "Pick's theorem", pt: 'Teorema de Pick', fr: 'Théorème de Pick', it: 'Teorema di Pick'),
           description: s.pick(
               'Polígono de vértices enteros: A = I + B/2 − 1. Vértices "x,y" separados por ";".',
-              'Integer-vertex polygon: A = I + B/2 − 1. Vertices "x,y" separated by ";".', pt: 'Polígono de vértices inteiros: A = I + B/2 − 1. Vértices "x,y" separados por ";".', fr: 'Polygone à sommets entiers : A = I + B/2 − 1. Sommets « x,y » séparés par « ; ».'),
+              'Integer-vertex polygon: A = I + B/2 − 1. Vertices "x,y" separated by ";".', pt: 'Polígono de vértices inteiros: A = I + B/2 − 1. Vértices "x,y" separados por ";".', fr: 'Polygone à sommets entiers : A = I + B/2 − 1. Sommets « x,y » séparés par « ; ».', it: 'Poligono a vertici interi: A = I + B/2 − 1. Vertici «x,y» separati da «;».'),
           fields: [
-            ToolField(s.pick('Vértices', 'Vertices', pt: 'Vértices', fr: 'Sommets'), initial: '0,0; 5,0; 5,4; 0,4'),
+            ToolField(s.pick('Vértices', 'Vertices', pt: 'Vértices', fr: 'Sommets', it: 'Vertici'), initial: '0,0; 5,0; 5,4; 0,4'),
           ],
           compute: (i) {
             final r = GeometryService.pickAnalysis(_pointList(i[0]));
-            return '${s.pick('Área', 'Area', pt: 'Área', fr: 'Aire')}${s.colon} ${r.area}\n'
-                'B (${s.pick('frontera', 'boundary', pt: 'fronteira', fr: 'frontière')}): ${r.boundary}\n'
-                'I (${s.pick('interior', 'interior', pt: 'interior', fr: 'intérieur')}): ${r.interior}\n'
-                '${s.pick('Verificación', 'Check', pt: 'Verificação', fr: 'Vérification')}${s.colon} ${r.interior} + ${r.boundary}/2 − 1 = ${r.area}';
+            return '${s.pick('Área', 'Area', pt: 'Área', fr: 'Aire', it: 'Area')}${s.colon} ${r.area}\n'
+                'B (${s.pick('frontera', 'boundary', pt: 'fronteira', fr: 'frontière', it: 'frontiera')}): ${r.boundary}\n'
+                'I (${s.pick('interior', 'interior', pt: 'interior', fr: 'intérieur', it: 'interno')}): ${r.interior}\n'
+                '${s.pick('Verificación', 'Check', pt: 'Verificação', fr: 'Vérification', it: 'Verifica')}${s.colon} ${r.interior} + ${r.boundary}/2 − 1 = ${r.area}';
           },
           visualize: (ctx, i) {
             final pts = _pointList(i[0]);
@@ -615,10 +615,10 @@ class GeometryToolScreen extends StatelessWidget {
           },
         ),
         CalcTool(
-          title: s.pick('Centros del triángulo', 'Triangle centers', pt: 'Centros do triângulo', fr: 'Centres du triangle'),
+          title: s.pick('Centros del triángulo', 'Triangle centers', pt: 'Centros do triângulo', fr: 'Centres du triangle', it: 'Punti notevoli del triangolo'),
           description: s.pick(
               'G, O, H exactos y recta de Euler; incentro aproximado. Vértices "x,y".',
-              'Exact G, O, H and Euler line; approximate incenter. Vertices "x,y".', pt: 'G, O, H exatos e reta de Euler; incentro aproximado. Vértices "x,y".', fr: "G, O, H exacts et droite d'Euler ; incentre approché. Sommets « x,y »."),
+              'Exact G, O, H and Euler line; approximate incenter. Vertices "x,y".', pt: 'G, O, H exatos e reta de Euler; incentro aproximado. Vértices "x,y".', fr: "G, O, H exacts et droite d'Euler ; incentre approché. Sommets « x,y ».", it: 'G, O, H esatti e retta di Eulero; incentro approssimato. Vertici «x,y».'),
           fields: [
             ToolField('A', initial: '0,0'),
             ToolField('B', initial: '6,0'),
@@ -627,12 +627,12 @@ class GeometryToolScreen extends StatelessWidget {
           compute: (i) {
             final r = GeometryService.triangleCenters(
                 _point(i[0]), _point(i[1]), _point(i[2]));
-            return '${s.pick('Baricentro', 'Centroid', pt: 'Baricentro', fr: 'Barycentre')} G: ${r.centroid}\n'
-                '${s.pick('Circuncentro', 'Circumcenter', pt: 'Circuncentro', fr: 'Circoncentre')} O: ${r.circumcenter}\n'
-                '${s.pick('Ortocentro', 'Orthocenter', pt: 'Ortocentro', fr: 'Orthocentre')} H: ${r.orthocenter}\n'
-                '${s.pick('Incentro', 'Incenter', pt: 'Incentro', fr: 'Incentre')} I ≈ '
+            return '${s.pick('Baricentro', 'Centroid', pt: 'Baricentro', fr: 'Barycentre', it: 'Baricentro')} G: ${r.centroid}\n'
+                '${s.pick('Circuncentro', 'Circumcenter', pt: 'Circuncentro', fr: 'Circoncentre', it: 'Circocentro')} O: ${r.circumcenter}\n'
+                '${s.pick('Ortocentro', 'Orthocenter', pt: 'Ortocentro', fr: 'Orthocentre', it: 'Ortocentro')} H: ${r.orthocenter}\n'
+                '${s.pick('Incentro', 'Incenter', pt: 'Incentro', fr: 'Incentre', it: 'Incentro')} I ≈ '
                 '(${r.incenterX.toStringAsFixed(4)}, ${r.incenterY.toStringAsFixed(4)})\n'
-                '${s.pick('Recta de Euler', 'Euler line', pt: 'Reta de Euler', fr: "Droite d'Euler")}${s.colon} H = 3·G − 2·O ✓';
+                '${s.pick('Recta de Euler', 'Euler line', pt: 'Reta de Euler', fr: "Droite d'Euler", it: 'Retta di Eulero')}${s.colon} H = 3·G − 2·O ✓';
           },
           visualize: (ctx, i) {
             final a = _point(i[0]), b = _point(i[1]), c = _point(i[2]);
@@ -679,33 +679,33 @@ class PolynomialsToolScreen extends StatelessWidget {
       title: s.catPolynomials,
       tools: [
         CalcTool(
-          title: s.pick('Analizar polinomio', 'Analyze polynomial', pt: 'Analisar polinômio', fr: 'Analyser le polynôme'),
+          title: s.pick('Analizar polinomio', 'Analyze polynomial', pt: 'Analisar polinômio', fr: 'Analyser le polynôme', it: 'Analizza il polinomio'),
           description: s.pick(
               'Grado, raíces racionales, Vieta, discriminante, derivada. '
               'Solo en x, ya desarrollado (para varias variables o paréntesis: Álgebra).',
               'Degree, rational roots, Vieta, discriminant, derivative. '
-              'In x only, already expanded (for several variables or parentheses: Algebra).', pt: 'Grau, raízes racionais, Vieta, discriminante, derivada. Somente em x, já desenvolvido (para várias variáveis ou parênteses: Álgebra).', fr: 'Degré, racines rationnelles, Viète, discriminant, dérivée. En x uniquement, déjà développé (pour plusieurs variables ou des parenthèses : Algèbre).'),
+              'In x only, already expanded (for several variables or parentheses: Algebra).', pt: 'Grau, raízes racionais, Vieta, discriminante, derivada. Somente em x, já desenvolvido (para várias variáveis ou parênteses: Álgebra).', fr: 'Degré, racines rationnelles, Viète, discriminant, dérivée. En x uniquement, déjà développé (pour plusieurs variables ou des parenthèses : Algèbre).', it: 'Grado, radici razionali, Viète, discriminante, derivata. Solo in x, già sviluppato (per più variabili o parentesi: Algebra).'),
           fields: [
-            ToolField(s.pick('Polinomio', 'Polynomial', pt: 'Polinômio', fr: 'Polynôme'),
+            ToolField(s.pick('Polinomio', 'Polynomial', pt: 'Polinômio', fr: 'Polynôme', it: 'Polinomio'),
                 hint: 'x^2-5x+6', initial: 'x^2-5x+6')
           ],
           compute: (i) {
             final p = PolynomialService.parse(i[0]);
             final sb = StringBuffer();
-            sb.writeln('${s.pick('Grado', 'Degree', pt: 'Grau', fr: 'Degré')}${s.colon} ${p.degree}');
+            sb.writeln('${s.pick('Grado', 'Degree', pt: 'Grau', fr: 'Degré', it: 'Grado')}${s.colon} ${p.degree}');
             final roots = PolynomialService.rationalRoots(p);
-            sb.writeln('${s.pick('Raíces racionales', 'Rational roots', pt: 'Raízes racionais', fr: 'Racines rationnelles')}${s.colon} '
-                '${roots.isEmpty ? s.pick('ninguna', 'none', pt: 'nenhuma', fr: 'aucune') : roots.join(', ')}');
+            sb.writeln('${s.pick('Raíces racionales', 'Rational roots', pt: 'Raízes racionais', fr: 'Racines rationnelles', it: 'Radici razionali')}${s.colon} '
+                '${roots.isEmpty ? s.pick('ninguna', 'none', pt: 'nenhuma', fr: 'aucune', it: 'nessuna') : roots.join(', ')}');
             if (p.degree >= 1) {
               final v = PolynomialService.vieta(p);
-              sb.writeln('${s.pick('Suma de raíces', 'Sum of roots', pt: 'Soma das raízes', fr: 'Somme des racines')}${s.colon} ${v.sumOfRoots}');
-              sb.writeln('${s.pick('Producto de raíces', 'Product of roots', pt: 'Produto das raízes', fr: 'Produit des racines')}${s.colon} ${v.productOfRoots}');
+              sb.writeln('${s.pick('Suma de raíces', 'Sum of roots', pt: 'Soma das raízes', fr: 'Somme des racines', it: 'Somma delle radici')}${s.colon} ${v.sumOfRoots}');
+              sb.writeln('${s.pick('Producto de raíces', 'Product of roots', pt: 'Produto das raízes', fr: 'Produit des racines', it: 'Prodotto delle radici')}${s.colon} ${v.productOfRoots}');
             }
             if (p.degree == 2 || p.degree == 3) {
-              sb.writeln('${s.pick('Discriminante', 'Discriminant', pt: 'Discriminante', fr: 'Discriminant')}${s.colon} '
+              sb.writeln('${s.pick('Discriminante', 'Discriminant', pt: 'Discriminante', fr: 'Discriminant', it: 'Discriminante')}${s.colon} '
                   '${PolynomialService.discriminant(p)}');
             }
-            sb.write('${s.pick('Derivada', 'Derivative', pt: 'Derivada', fr: 'Dérivée')}${s.colon} ${p.derivative()}');
+            sb.write('${s.pick('Derivada', 'Derivative', pt: 'Derivada', fr: 'Dérivée', it: 'Derivata')}${s.colon} ${p.derivative()}');
             return sb.toString();
           },
           visualize: (ctx, i) {
@@ -749,11 +749,11 @@ class PolynomialsToolScreen extends StatelessWidget {
           },
         ),
         CalcTool(
-          title: s.pick('Ruffini: dividir entre (x − c)', 'Ruffini: divide by (x − c)', pt: 'Ruffini: dividir por (x − c)', fr: 'Ruffini : diviser par (x − c)'),
+          title: s.pick('Ruffini: dividir entre (x − c)', 'Ruffini: divide by (x − c)', pt: 'Ruffini: dividir por (x − c)', fr: 'Ruffini : diviser par (x − c)', it: 'Ruffini: dividere per (x − c)'),
           description: s.pick('División sintética con pasos.',
-              'Synthetic division with steps.', pt: 'Divisão sintética com passos.', fr: 'Division synthétique, étape par étape.'),
+              'Synthetic division with steps.', pt: 'Divisão sintética com passos.', fr: 'Division synthétique, étape par étape.', it: 'Divisione sintetica con i passaggi.'),
           fields: [
-            ToolField(s.pick('Polinomio', 'Polynomial', pt: 'Polinômio', fr: 'Polynôme'), initial: 'x^3-6x^2+11x-6'),
+            ToolField(s.pick('Polinomio', 'Polynomial', pt: 'Polinômio', fr: 'Polynôme', it: 'Polinomio'), initial: 'x^3-6x^2+11x-6'),
             ToolField('c (p/q)', initial: '1'),
           ],
           compute: (i) => StepsService.ruffiniSteps(
@@ -762,12 +762,12 @@ class PolynomialsToolScreen extends StatelessWidget {
               .toString(),
         ),
         CalcTool(
-          title: s.pick('Sistema lineal 2×2 / 3×3', 'Linear system 2×2 / 3×3', pt: 'Sistema linear 2×2 / 3×3', fr: 'Système linéaire 2×2 / 3×3'),
+          title: s.pick('Sistema lineal 2×2 / 3×3', 'Linear system 2×2 / 3×3', pt: 'Sistema linear 2×2 / 3×3', fr: 'Système linéaire 2×2 / 3×3', it: 'Sistema lineare 2×2 / 3×3'),
           description: s.pick(
               'Filas "a,b,…,k" (coeficientes y término independiente) separadas por ";".',
-              'Rows "a,b,…,k" (coefficients and constant) separated by ";".', pt: 'Linhas "a,b,…,k" (coeficientes e termo independente) separadas por ";".', fr: 'Lignes « a,b,…,k » (coefficients et terme constant) séparées par « ; ».'),
+              'Rows "a,b,…,k" (coefficients and constant) separated by ";".', pt: 'Linhas "a,b,…,k" (coeficientes e termo independente) separadas por ";".', fr: 'Lignes « a,b,…,k » (coefficients et terme constant) séparées par « ; ».', it: 'Righe «a,b,…,k» (coefficienti e termine noto) separate da «;».'),
           fields: [
-            ToolField(s.pick('Sistema', 'System', pt: 'Sistema', fr: 'Système'), initial: '2,1,5; 1,-1,1'),
+            ToolField(s.pick('Sistema', 'System', pt: 'Sistema', fr: 'Système', it: 'Sistema'), initial: '2,1,5; 1,-1,1'),
           ],
           compute: (i) {
             final rows = i[0]
@@ -782,7 +782,7 @@ class PolynomialsToolScreen extends StatelessWidget {
             sb.writeln('det = $det');
             if (sol == null) {
               sb.write(s.pick('Sin solución única (determinante 0)',
-                  'No unique solution (zero determinant)', pt: 'Sem solução única (determinante 0)', fr: 'Pas de solution unique (déterminant nul)'));
+                  'No unique solution (zero determinant)', pt: 'Sem solução única (determinante 0)', fr: 'Pas de solution unique (déterminant nul)', it: 'Nessuna soluzione unica (determinante nullo)'));
             } else {
               const names = ['x', 'y', 'z'];
               for (int k = 0; k < sol.length; k++) {
@@ -794,7 +794,7 @@ class PolynomialsToolScreen extends StatelessWidget {
           },
         ),
         CalcTool(
-          title: s.pick('Resolver cuadrática ax²+bx+c', 'Solve quadratic ax²+bx+c', pt: 'Resolver a quadrática ax²+bx+c', fr: "Résoudre l'équation ax²+bx+c"),
+          title: s.pick('Resolver cuadrática ax²+bx+c', 'Solve quadratic ax²+bx+c', pt: 'Resolver a quadrática ax²+bx+c', fr: "Résoudre l'équation ax²+bx+c", it: "Risolvi l'equazione ax²+bx+c"),
           fields: [
             ToolField('a (p/q)', initial: '1'),
             ToolField('b (p/q)', initial: '-5'),
@@ -804,20 +804,20 @@ class PolynomialsToolScreen extends StatelessWidget {
             final sol = PolynomialService.solveQuadratic(
                 Fraction.parse(i[0]), Fraction.parse(i[1]), Fraction.parse(i[2]));
             final sb = StringBuffer();
-            sb.writeln('${s.pick('Discriminante', 'Discriminant', pt: 'Discriminante', fr: 'Discriminant')}${s.colon} ${sol.discriminant}');
-            sb.writeln('${s.pick('Naturaleza', 'Nature', pt: 'Natureza', fr: 'Nature')}${s.colon} ${_natureLabel(s, sol.nature)}');
+            sb.writeln('${s.pick('Discriminante', 'Discriminant', pt: 'Discriminante', fr: 'Discriminant', it: 'Discriminante')}${s.colon} ${sol.discriminant}');
+            sb.writeln('${s.pick('Naturaleza', 'Nature', pt: 'Natureza', fr: 'Nature', it: 'Natura')}${s.colon} ${_natureLabel(s, sol.nature)}');
             if (sol.rationalRoots.isNotEmpty) {
-              sb.writeln('${s.pick('Raíces exactas', 'Exact roots', pt: 'Raízes exatas', fr: 'Racines exactes')}${s.colon} ${sol.rationalRoots.join(', ')}');
+              sb.writeln('${s.pick('Raíces exactas', 'Exact roots', pt: 'Raízes exatas', fr: 'Racines exactes', it: 'Radici esatte')}${s.colon} ${sol.rationalRoots.join(', ')}');
             }
             if (sol.realRoots.isNotEmpty) {
-              sb.write('${s.pick('Raíces reales', 'Real roots', pt: 'Raízes reais', fr: 'Racines réelles')} ≈ '
+              sb.write('${s.pick('Raíces reales', 'Real roots', pt: 'Raízes reais', fr: 'Racines réelles', it: 'Radici reali')} ≈ '
                   '${sol.realRoots.map((r) => r.toStringAsFixed(6)).join(', ')}');
             }
             return sb.toString();
           },
         ),
         CalcTool(
-          title: s.pick('Raíces reales de cúbica', 'Real roots of cubic', pt: 'Raízes reais da cúbica', fr: 'Racines réelles de la cubique'),
+          title: s.pick('Raíces reales de cúbica', 'Real roots of cubic', pt: 'Raízes reais da cúbica', fr: 'Racines réelles de la cubique', it: 'Radici reali della cubica'),
           description: 'ax³+bx²+cx+d',
           fields: [
             ToolField('a', initial: '1'),
@@ -829,7 +829,7 @@ class PolynomialsToolScreen extends StatelessWidget {
             final roots = PolynomialService.solveCubicReal(
                 double.parse(i[0]), double.parse(i[1]),
                 double.parse(i[2]), double.parse(i[3]));
-            return '${s.pick('Raíces reales', 'Real roots', pt: 'Raízes reais', fr: 'Racines réelles')} ≈\n'
+            return '${s.pick('Raíces reales', 'Real roots', pt: 'Raízes reais', fr: 'Racines réelles', it: 'Radici reali')} ≈\n'
                 '${roots.map((r) => r.toStringAsFixed(6)).join('\n')}';
           },
         ),
@@ -850,7 +850,7 @@ String _algebraSyntax(OlympiadStrings s) => s.pick(
         'superíndices ((a+b+c)²).',
     'Variables: a letter with an optional subscript (a, x, x1). Implicit '
         'multiplication (2ab, (a+b)(a−b)) and exponents with ^ or '
-        'superscripts ((a+b+c)²) are supported.', pt: 'Variáveis: uma letra com subíndice opcional (a, x, x1). Admite multiplicação implícita (2ab, (a+b)(a−b)) e expoentes com ^ ou sobrescritos ((a+b+c)²).', fr: 'Variables : une lettre avec indice facultatif (a, x, x1). La multiplication implicite (2ab, (a+b)(a−b)) et les exposants avec ^ ou en exposant ((a+b+c)²) sont acceptés.');
+        'superscripts ((a+b+c)²) are supported.', pt: 'Variáveis: uma letra com subíndice opcional (a, x, x1). Admite multiplicação implícita (2ab, (a+b)(a−b)) e expoentes com ^ ou sobrescritos ((a+b+c)²).', fr: 'Variables : une lettre avec indice facultatif (a, x, x1). La multiplication implicite (2ab, (a+b)(a−b)) et les exposants avec ^ ou en exposant ((a+b+c)²) sont acceptés.', it: 'Variabili: una lettera con indice facoltativo (a, x, x1). Sono ammessi la moltiplicazione implicita (2ab, (a+b)(a−b)) e gli esponenti con ^ o in apice ((a+b+c)²).');
 
 class AlgebraToolScreen extends StatelessWidget {
   const AlgebraToolScreen({super.key});
@@ -862,46 +862,46 @@ class AlgebraToolScreen extends StatelessWidget {
       title: s.catAlgebra,
       tools: [
         CalcTool(
-          title: s.pick('Expandir y simplificar', 'Expand and simplify', pt: 'Expandir e simplificar', fr: 'Développer et simplifier'),
+          title: s.pick('Expandir y simplificar', 'Expand and simplify', pt: 'Expandir e simplificar', fr: 'Développer et simplifier', it: 'Sviluppa e semplifica'),
           description: '${s.pick('Desarrolla el producto y agrupa términos '
               'semejantes, en exacto.', 'Expands the product and collects like '
-              'terms, exactly.', pt: 'Desenvolve o produto e agrupa os termos semelhantes, de forma exata.', fr: 'Développe le produit et regroupe les termes semblables, de façon exacte.')} ${_algebraSyntax(s)}',
+              'terms, exactly.', pt: 'Desenvolve o produto e agrupa os termos semelhantes, de forma exata.', fr: 'Développe le produit et regroupe les termes semblables, de façon exacte.', it: 'Sviluppa il prodotto e raccoglie i termini simili, in modo esatto.')} ${_algebraSyntax(s)}',
           fields: [
-            ToolField(s.pick('Expresión', 'Expression', pt: 'Expressão', fr: 'Expression'), initial: '(a+b+c)^2'),
+            ToolField(s.pick('Expresión', 'Expression', pt: 'Expressão', fr: 'Expression', it: 'Espressione'), initial: '(a+b+c)^2'),
           ],
           compute: (i) {
             final p = AlgebraService.parse(i[0]);
             final sb = StringBuffer('= $p\n');
-            sb.writeln('${s.pick('Grado', 'Degree', pt: 'Grau', fr: 'Degré')}${s.colon} ${p.degree}'
-                '   ${s.pick('Términos', 'Terms', pt: 'Termos', fr: 'Termes')}${s.colon} ${p.termCount}');
+            sb.writeln('${s.pick('Grado', 'Degree', pt: 'Grau', fr: 'Degré', it: 'Grado')}${s.colon} ${p.degree}'
+                '   ${s.pick('Términos', 'Terms', pt: 'Termos', fr: 'Termes', it: 'Termini')}${s.colon} ${p.termCount}');
             if (p.variables.isNotEmpty) {
-              sb.writeln('${s.pick('Variables', 'Variables', pt: 'Variáveis', fr: 'Variables')}${s.colon} '
+              sb.writeln('${s.pick('Variables', 'Variables', pt: 'Variáveis', fr: 'Variables', it: 'Variabili')}${s.colon} '
                   '${p.variables.join(', ')}');
               final marks = <String>[
                 if (p.isHomogeneous)
-                  s.pick('homogéneo', 'homogeneous', pt: 'homogêneo', fr: 'homogène'),
+                  s.pick('homogéneo', 'homogeneous', pt: 'homogêneo', fr: 'homogène', it: 'omogeneo'),
                 if (AlgebraService.isSymmetric(p) && p.variables.length > 1)
-                  s.pick('simétrico', 'symmetric', pt: 'simétrico', fr: 'symétrique'),
+                  s.pick('simétrico', 'symmetric', pt: 'simétrico', fr: 'symétrique', it: 'simmetrico'),
               ];
               if (marks.isNotEmpty) sb.writeln(marks.join(', '));
             }
             final cf = AlgebraService.commonFactor(p);
             if (!cf.isTrivial && p.termCount > 1) {
-              sb.writeln('${s.pick('Factor común', 'Common factor', pt: 'Fator comum', fr: 'Facteur commun')}${s.colon} $cf');
+              sb.writeln('${s.pick('Factor común', 'Common factor', pt: 'Fator comum', fr: 'Facteur commun', it: 'Fattore comune')}${s.colon} $cf');
             }
             return sb.toString().trimRight();
           },
         ),
         CalcTool(
-          title: s.pick('Verificar identidad', 'Check identity', pt: 'Verificar identidade', fr: 'Vérifier une identité'),
+          title: s.pick('Verificar identidad', 'Check identity', pt: 'Verificar identidade', fr: 'Vérifier une identité', it: "Verifica un'identità"),
           description: s.pick(
               'Desarrolla ambos lados y compara. Si no coinciden, muestra la '
               'diferencia.',
               'Expands both sides and compares. If they differ, shows the '
-              'difference.', pt: 'Desenvolve os dois lados e compara. Se não coincidirem, mostra a diferença.', fr: "Développe les deux membres et les compare. S'ils diffèrent, affiche la différence."),
+              'difference.', pt: 'Desenvolve os dois lados e compara. Se não coincidirem, mostra a diferença.', fr: "Développe les deux membres et les compare. S'ils diffèrent, affiche la différence.", it: 'Sviluppa entrambi i membri e li confronta. Se differiscono, mostra la differenza.'),
           fields: [
-            ToolField(s.pick('Lado izquierdo', 'Left side', pt: 'Lado esquerdo', fr: 'Membre de gauche'), initial: '(a+b)^3'),
-            ToolField(s.pick('Lado derecho', 'Right side', pt: 'Lado direito', fr: 'Membre de droite'),
+            ToolField(s.pick('Lado izquierdo', 'Left side', pt: 'Lado esquerdo', fr: 'Membre de gauche', it: 'Primo membro'), initial: '(a+b)^3'),
+            ToolField(s.pick('Lado derecho', 'Right side', pt: 'Lado direito', fr: 'Membre de droite', it: 'Secondo membro'),
                 initial: 'a^3+3a^2b+3ab^2+b^3'),
           ],
           compute: (i) {
@@ -909,47 +909,47 @@ class AlgebraToolScreen extends StatelessWidget {
             final right = AlgebraService.parse(i[1]);
             final diff = left - right;
             if (diff.isZero) {
-              return '${s.pick('✓ Son idénticas', '✓ They are identical', pt: '✓ São idênticas', fr: '✓ Elles sont identiques')}\n'
+              return '${s.pick('✓ Son idénticas', '✓ They are identical', pt: '✓ São idênticas', fr: '✓ Elles sont identiques', it: '✓ Sono identiche')}\n'
                   '= $left';
             }
-            return '${s.pick('✗ No son iguales', '✗ Not equal', pt: '✗ Não são iguais', fr: '✗ Elles ne sont pas égales')}\n'
-                '${s.pick('Izquierda', 'Left', pt: 'Esquerda', fr: 'Gauche')} = $left\n'
-                '${s.pick('Derecha', 'Right', pt: 'Direita', fr: 'Droite')} = $right\n'
-                '${s.pick('Diferencia', 'Difference', pt: 'Diferença', fr: 'Différence')} = $diff';
+            return '${s.pick('✗ No son iguales', '✗ Not equal', pt: '✗ Não são iguais', fr: '✗ Elles ne sont pas égales', it: '✗ Non sono uguali')}\n'
+                '${s.pick('Izquierda', 'Left', pt: 'Esquerda', fr: 'Gauche', it: 'Sinistra')} = $left\n'
+                '${s.pick('Derecha', 'Right', pt: 'Direita', fr: 'Droite', it: 'Destra')} = $right\n'
+                '${s.pick('Diferencia', 'Difference', pt: 'Diferença', fr: 'Différence', it: 'Differenza')} = $diff';
           },
         ),
         CalcTool(
-          title: s.pick('Factor común', 'Common factor', pt: 'Fator comum', fr: 'Facteur commun'),
+          title: s.pick('Factor común', 'Common factor', pt: 'Fator comum', fr: 'Facteur commun', it: 'Fattore comune'),
           description: s.pick(
               'Extrae el mayor monomio y el contenido racional: '
               '2a²b + 4ab² = 2ab(a + 2b).',
               'Pulls out the greatest monomial and the rational content: '
-              '2a²b + 4ab² = 2ab(a + 2b).', pt: 'Extrai o maior monômio e o conteúdo racional: 2a²b + 4ab² = 2ab(a + 2b).', fr: 'Extrait le plus grand monôme et le contenu rationnel : 2a²b + 4ab² = 2ab(a + 2b).'),
+              '2a²b + 4ab² = 2ab(a + 2b).', pt: 'Extrai o maior monômio e o conteúdo racional: 2a²b + 4ab² = 2ab(a + 2b).', fr: 'Extrait le plus grand monôme et le contenu rationnel : 2a²b + 4ab² = 2ab(a + 2b).', it: 'Raccoglie il monomio più grande e il contenuto razionale: 2a²b + 4ab² = 2ab(a + 2b).'),
           fields: [
-            ToolField(s.pick('Expresión', 'Expression', pt: 'Expressão', fr: 'Expression'), initial: '2a^2b+4ab^2'),
+            ToolField(s.pick('Expresión', 'Expression', pt: 'Expressão', fr: 'Expression', it: 'Espressione'), initial: '2a^2b+4ab^2'),
           ],
           compute: (i) {
             final p = AlgebraService.parse(i[0]);
             final cf = AlgebraService.commonFactor(p);
             if (cf.isTrivial) {
               return '${s.pick('No hay factor común (aparte de 1)',
-                  'No common factor (other than 1)', pt: 'Não há fator comum (além de 1)', fr: 'Aucun facteur commun (hormis 1)')}\n= $p';
+                  'No common factor (other than 1)', pt: 'Não há fator comum (além de 1)', fr: 'Aucun facteur commun (hormis 1)', it: "Non c'è alcun fattore comune (a parte 1)")}\n= $p';
             }
             return '= $cf\n'
-                '${s.pick('Factor', 'Factor', pt: 'Fator', fr: 'Facteur')}${s.colon} ${cf.factor}\n'
-                '${s.pick('Resto', 'Cofactor', pt: 'Cofator', fr: 'Cofacteur')}${s.colon} ${cf.cofactor}';
+                '${s.pick('Factor', 'Factor', pt: 'Fator', fr: 'Facteur', it: 'Fattore')}${s.colon} ${cf.factor}\n'
+                '${s.pick('Resto', 'Cofactor', pt: 'Cofator', fr: 'Cofacteur', it: 'Cofattore')}${s.colon} ${cf.cofactor}';
           },
         ),
         CalcTool(
-          title: s.pick('Sustituir / evaluar', 'Substitute / evaluate', pt: 'Substituir / avaliar', fr: 'Substituer / évaluer'),
+          title: s.pick('Sustituir / evaluar', 'Substitute / evaluate', pt: 'Substituir / avaliar', fr: 'Substituer / évaluer', it: 'Sostituisci / valuta'),
           description: s.pick(
               'Los valores pueden ser números o expresiones ("a=1, b=x+1"). '
               'Si faltan variables, el resultado queda en función de ellas.',
               'Values may be numbers or expressions ("a=1, b=x+1"). Any '
-              'variable left unassigned stays in the result.', pt: 'Os valores podem ser números ou expressões ("a=1, b=x+1"). Se faltarem variáveis, o resultado fica em função delas.', fr: 'Les valeurs peuvent être des nombres ou des expressions (« a=1, b=x+1 »). Les variables non affectées restent dans le résultat.'),
+              'variable left unassigned stays in the result.', pt: 'Os valores podem ser números ou expressões ("a=1, b=x+1"). Se faltarem variáveis, o resultado fica em função delas.', fr: 'Les valeurs peuvent être des nombres ou des expressions (« a=1, b=x+1 »). Les variables non affectées restent dans le résultat.', it: 'I valori possono essere numeri o espressioni («a=1, b=x+1»). Le variabili non assegnate restano nel risultato.'),
           fields: [
-            ToolField(s.pick('Expresión', 'Expression', pt: 'Expressão', fr: 'Expression'), initial: '(a+b+c)^2'),
-            ToolField(s.pick('Valores', 'Values', pt: 'Valores', fr: 'Valeurs'), initial: 'a=1, b=2, c=3'),
+            ToolField(s.pick('Expresión', 'Expression', pt: 'Expressão', fr: 'Expression', it: 'Espressione'), initial: '(a+b+c)^2'),
+            ToolField(s.pick('Valores', 'Values', pt: 'Valores', fr: 'Valeurs', it: 'Valori'), initial: 'a=1, b=2, c=3'),
           ],
           compute: (i) {
             final p = AlgebraService.parse(i[0]);
@@ -969,30 +969,30 @@ class AlgebraToolScreen extends StatelessWidget {
           },
         ),
         CalcTool(
-          title: s.pick('Coeficiente de un monomio', 'Coefficient of a monomial', pt: 'Coeficiente de um monômio', fr: "Coefficient d'un monôme"),
+          title: s.pick('Coeficiente de un monomio', 'Coefficient of a monomial', pt: 'Coeficiente de um monômio', fr: "Coefficient d'un monôme", it: 'Coefficiente di un monomio'),
           description: s.pick(
               'Coeficiente del monomio indicado en el desarrollo: el de a²b en '
               '(a+b+c)³ es 3.',
               'Coefficient of the given monomial in the expansion: that of a²b '
-              'in (a+b+c)³ is 3.', pt: 'Coeficiente do monômio indicado no desenvolvimento: o de a²b em (a+b+c)³ é 3.', fr: 'Coefficient du monôme indiqué dans le développement : celui de a²b dans (a+b+c)³ vaut 3.'),
+              'in (a+b+c)³ is 3.', pt: 'Coeficiente do monômio indicado no desenvolvimento: o de a²b em (a+b+c)³ é 3.', fr: 'Coefficient du monôme indiqué dans le développement : celui de a²b dans (a+b+c)³ vaut 3.', it: 'Coefficiente del monomio indicato nello sviluppo: quello di a²b in (a+b+c)³ è 3.'),
           fields: [
-            ToolField(s.pick('Expresión', 'Expression', pt: 'Expressão', fr: 'Expression'), initial: '(a+b+c)^3'),
-            ToolField(s.pick('Monomio', 'Monomial', pt: 'Monômio', fr: 'Monôme'), initial: 'a^2b'),
+            ToolField(s.pick('Expresión', 'Expression', pt: 'Expressão', fr: 'Expression', it: 'Espressione'), initial: '(a+b+c)^3'),
+            ToolField(s.pick('Monomio', 'Monomial', pt: 'Monômio', fr: 'Monôme', it: 'Monomio'), initial: 'a^2b'),
           ],
           compute: (i) {
             final p = AlgebraService.parse(i[0]);
             final m = AlgebraService.parseMonomial(i[1]);
-            return '${s.pick('Coeficiente de', 'Coefficient of', pt: 'Coeficiente de', fr: 'Coefficient de')} '
+            return '${s.pick('Coeficiente de', 'Coefficient of', pt: 'Coeficiente de', fr: 'Coefficient de', it: 'Coefficiente di')} '
                 '$m: ${p.coefficient(m)}';
           },
         ),
         CalcTool(
-          title: s.pick('Derivada parcial', 'Partial derivative', pt: 'Derivada parcial', fr: 'Dérivée partielle'),
+          title: s.pick('Derivada parcial', 'Partial derivative', pt: 'Derivada parcial', fr: 'Dérivée partielle', it: 'Derivata parziale'),
           description: s.pick('∂/∂x del desarrollo, en exacto.',
-              '∂/∂x of the expansion, exactly.', pt: '∂/∂x do desenvolvimento, de forma exata.', fr: '∂/∂x du développement, de façon exacte.'),
+              '∂/∂x of the expansion, exactly.', pt: '∂/∂x do desenvolvimento, de forma exata.', fr: '∂/∂x du développement, de façon exacte.', it: '∂/∂x dello sviluppo, in modo esatto.'),
           fields: [
-            ToolField(s.pick('Expresión', 'Expression', pt: 'Expressão', fr: 'Expression'), initial: '(a+b)^3'),
-            ToolField(s.pick('Variable', 'Variable', pt: 'Variável', fr: 'Variable'), initial: 'a'),
+            ToolField(s.pick('Expresión', 'Expression', pt: 'Expressão', fr: 'Expression', it: 'Espressione'), initial: '(a+b)^3'),
+            ToolField(s.pick('Variable', 'Variable', pt: 'Variável', fr: 'Variable', it: 'Variabile'), initial: 'a'),
           ],
           compute: (i) {
             final p = AlgebraService.parse(i[0]);
@@ -1004,12 +1004,12 @@ class AlgebraToolScreen extends StatelessWidget {
           },
         ),
         CalcTool(
-          title: s.pick('Productos notables', 'Notable products', pt: 'Produtos notáveis', fr: 'Identités remarquables'),
+          title: s.pick('Productos notables', 'Notable products', pt: 'Produtos notáveis', fr: 'Identités remarquables', it: 'Prodotti notevoli'),
           description: s.pick(
               'Las identidades clásicas con A y B a tu elección (pueden ser '
               'expresiones).',
               'The classic identities for your own A and B (they may be '
-              'expressions).', pt: 'As identidades clássicas com A e B à sua escolha (podem ser expressões).', fr: 'Les identités classiques avec les A et B de votre choix (qui peuvent être des expressions).'),
+              'expressions).', pt: 'As identidades clássicas com A e B à sua escolha (podem ser expressões).', fr: 'Les identités classiques avec les A et B de votre choix (qui peuvent être des expressions).', it: 'Le identità classiche con A e B a tua scelta (possono essere espressioni).'),
           fields: [
             ToolField('A', initial: 'x'),
             ToolField('B', initial: '2y'),
@@ -1025,10 +1025,10 @@ class AlgebraToolScreen extends StatelessWidget {
           },
         ),
         CalcTool(
-          title: s.pick('Binomio de Newton (a+b)ⁿ', 'Binomial theorem (a+b)ⁿ', pt: 'Binômio de Newton (a+b)ⁿ', fr: 'Binôme de Newton (a+b)ⁿ'),
+          title: s.pick('Binomio de Newton (a+b)ⁿ', 'Binomial theorem (a+b)ⁿ', pt: 'Binômio de Newton (a+b)ⁿ', fr: 'Binôme de Newton (a+b)ⁿ', it: 'Binomio di Newton (a+b)ⁿ'),
           description: s.pick(
               'Desarrollo simbólico término a término.',
-              'Symbolic expansion, term by term.', pt: 'Desenvolvimento simbólico termo a termo.', fr: 'Développement symbolique, terme par terme.'),
+              'Symbolic expansion, term by term.', pt: 'Desenvolvimento simbólico termo a termo.', fr: 'Développement symbolique, terme par terme.', it: 'Sviluppo simbolico, termine per termine.'),
           fields: [ToolField('n', initial: '5')],
           compute: (i) {
             final n = _int(i[0]);
@@ -1038,7 +1038,7 @@ class AlgebraToolScreen extends StatelessWidget {
             }
             final p = AlgebraService.parse('(a+b)^$n');
             final sb = StringBuffer('(a+b)${_superscript(n)} = $p\n');
-            sb.write('${s.pick('Coeficientes', 'Coefficients', pt: 'Coeficientes', fr: 'Coefficients')}${s.colon} '
+            sb.write('${s.pick('Coeficientes', 'Coefficients', pt: 'Coeficientes', fr: 'Coefficients', it: 'Coefficienti')}${s.colon} '
                 '${p.sortedMonomials.map((m) => p.coefficient(m)).join(', ')}');
             return sb.toString();
           },
@@ -1062,27 +1062,27 @@ class NumberTheoryToolScreen extends StatelessWidget {
       title: s.catNumberTheory,
       tools: [
         CalcTool(
-          title: s.pick('Raíz cuadrada modular √a mod p', 'Modular square root √a mod p', pt: 'Raiz quadrada modular √a mod p', fr: 'Racine carrée modulaire √a mod p'),
-          description: s.pick('p debe ser primo.', 'p must be prime.', pt: 'p deve ser primo.', fr: 'p doit être premier.'),
+          title: s.pick('Raíz cuadrada modular √a mod p', 'Modular square root √a mod p', pt: 'Raiz quadrada modular √a mod p', fr: 'Racine carrée modulaire √a mod p', it: 'Radice quadrata modulare √a mod p'),
+          description: s.pick('p debe ser primo.', 'p must be prime.', pt: 'p deve ser primo.', fr: 'p doit être premier.', it: 'p deve essere primo.'),
           fields: [ToolField('a', initial: '2'), ToolField('p', initial: '7')],
           compute: (i) {
             final a = _bi(i[0]), p = _bi(i[1]);
             final r = NumberTheoryAdvancedService.sqrtMod(a, p);
             if (r == null) {
               return s.pick('a no es residuo cuadrático mod p',
-                  'a is not a quadratic residue mod p', pt: 'a não é resíduo quadrático mod p', fr: "a n'est pas un résidu quadratique mod p");
+                  'a is not a quadratic residue mod p', pt: 'a não é resíduo quadrático mod p', fr: "a n'est pas un résidu quadratique mod p", it: 'a non è un residuo quadratico mod p');
             }
             return '±$r  →  $r, ${p - r}';
           },
         ),
         CalcTool(
-          title: s.pick('Congruencia lineal ax≡b (mod n)', 'Linear congruence ax≡b (mod n)', pt: 'Congruência linear ax≡b (mod n)', fr: 'Congruence linéaire ax≡b (mod n)'),
+          title: s.pick('Congruencia lineal ax≡b (mod n)', 'Linear congruence ax≡b (mod n)', pt: 'Congruência linear ax≡b (mod n)', fr: 'Congruence linéaire ax≡b (mod n)', it: 'Congruenza lineare ax≡b (mod n)'),
           fields: [ToolField('a', initial: '3'), ToolField('b', initial: '6'), ToolField('n', initial: '9')],
           compute: (i) {
             final sols = NumberTheoryAdvancedService.solveLinearCongruence(
                 _bi(i[0]), _bi(i[1]), _bi(i[2]));
             return sols.isEmpty
-                ? s.pick('Sin solución', 'No solution', pt: 'Sem solução', fr: 'Aucune solution')
+                ? s.pick('Sin solución', 'No solution', pt: 'Sem solução', fr: 'Aucune solution', it: 'Nessuna soluzione')
                 : 'x ≡ ${sols.join(', ')} (mod ${i[2]})';
           },
           visualize: (ctx, i) {
@@ -1104,7 +1104,7 @@ class NumberTheoryToolScreen extends StatelessWidget {
           },
         ),
         CalcTool(
-          title: s.pick('Ecuación de Pell x²−Dy²=1', 'Pell equation x²−Dy²=1', pt: 'Equação de Pell x²−Dy²=1', fr: 'Équation de Pell x²−Dy²=1'),
+          title: s.pick('Ecuación de Pell x²−Dy²=1', 'Pell equation x²−Dy²=1', pt: 'Equação de Pell x²−Dy²=1', fr: 'Équation de Pell x²−Dy²=1', it: 'Equazione di Pell x²−Dy²=1'),
           fields: [ToolField('D', initial: '61')],
           compute: (i) {
             final sol = NumberTheoryAdvancedService.solvePell(_bi(i[0]));
@@ -1112,7 +1112,7 @@ class NumberTheoryToolScreen extends StatelessWidget {
           },
         ),
         CalcTool(
-          title: s.pick('Fracción continua de √n', 'Continued fraction of √n', pt: 'Fração contínua de √n', fr: 'Fraction continue de √n'),
+          title: s.pick('Fracción continua de √n', 'Continued fraction of √n', pt: 'Fração contínua de √n', fr: 'Fraction continue de √n', it: 'Frazione continua di √n'),
           fields: [ToolField('n', initial: '7')],
           compute: (i) {
             final cf = NumberTheoryAdvancedService.continuedFractionSqrt(_bi(i[0]));
@@ -1121,37 +1121,37 @@ class NumberTheoryToolScreen extends StatelessWidget {
           },
         ),
         CalcTool(
-          title: s.pick('Sumas de cuadrados', 'Sums of squares', pt: 'Somas de quadrados', fr: 'Sommes de carrés'),
+          title: s.pick('Sumas de cuadrados', 'Sums of squares', pt: 'Somas de quadrados', fr: 'Sommes de carrés', it: 'Somme di quadrati'),
           fields: [ToolField('n', initial: '25')],
           compute: (i) {
             final n = _bi(i[0]);
             final two = NumberTheoryAdvancedService.sumOfTwoSquares(n);
             final four = NumberTheoryAdvancedService.sumOfFourSquares(n);
             final twoStr = two == null
-                ? s.pick('no es suma de 2 cuadrados', 'not a sum of 2 squares', pt: 'não é soma de 2 quadrados', fr: "n'est pas somme de 2 carrés")
+                ? s.pick('no es suma de 2 cuadrados', 'not a sum of 2 squares', pt: 'não é soma de 2 quadrados', fr: "n'est pas somme de 2 carrés", it: 'non è somma di 2 quadrati')
                 : '${two.a}² + ${two.b}²';
-            return '${s.pick('Dos', 'Two', pt: 'Dois', fr: 'Deux')}${s.colon} $twoStr\n'
-                '${s.pick('Cuatro', 'Four', pt: 'Quatro', fr: 'Quatre')}${s.colon} ${four.a}² + ${four.b}² + ${four.c}² + ${four.d}²';
+            return '${s.pick('Dos', 'Two', pt: 'Dois', fr: 'Deux', it: 'Due')}${s.colon} $twoStr\n'
+                '${s.pick('Cuatro', 'Four', pt: 'Quatro', fr: 'Quatre', it: 'Quattro')}${s.colon} ${four.a}² + ${four.b}² + ${four.c}² + ${four.d}²';
           },
         ),
         CalcTool(
-          title: s.pick('Número de Frobenius', 'Frobenius number', pt: 'Número de Frobenius', fr: 'Nombre de Frobenius'),
+          title: s.pick('Número de Frobenius', 'Frobenius number', pt: 'Número de Frobenius', fr: 'Nombre de Frobenius', it: 'Numero di Frobenius'),
           description: s.pick('Valores separados por comas (mcd = 1).',
-              'Comma-separated values (gcd = 1).', pt: 'Valores separados por vírgulas (mdc = 1).', fr: 'Valeurs séparées par des virgules (pgcd = 1).'),
-          fields: [ToolField(s.pick('Denominaciones', 'Denominations', pt: 'Denominações', fr: 'Dénominations'), initial: '6, 9, 20')],
+              'Comma-separated values (gcd = 1).', pt: 'Valores separados por vírgulas (mdc = 1).', fr: 'Valeurs séparées par des virgules (pgcd = 1).', it: 'Valori separati da virgole (MCD = 1).'),
+          fields: [ToolField(s.pick('Denominaciones', 'Denominations', pt: 'Denominações', fr: 'Dénominations', it: 'Tagli'), initial: '6, 9, 20')],
           compute: (i) {
             final r = NumberTheoryAdvancedService.frobeniusNumber(_intList(i[0]));
             if (r == null) {
               return s.pick('mcd ≠ 1: infinitos no representables',
-                  'gcd ≠ 1: infinitely many non-representable', pt: 'mdc ≠ 1: infinitos não representáveis', fr: 'pgcd ≠ 1 : une infinité de valeurs non représentables');
+                  'gcd ≠ 1: infinitely many non-representable', pt: 'mdc ≠ 1: infinitos não representáveis', fr: 'pgcd ≠ 1 : une infinité de valeurs non représentables', it: 'MCD ≠ 1: infiniti valori non rappresentabili');
             }
             return r.toString();
           },
         ),
         CalcTool(
-          title: s.pick('Criba de Eratóstenes', 'Sieve of Eratosthenes', pt: 'Crivo de Eratóstenes', fr: "Crible d'Ératosthène"),
+          title: s.pick('Criba de Eratóstenes', 'Sieve of Eratosthenes', pt: 'Crivo de Eratóstenes', fr: "Crible d'Ératosthène", it: 'Crivello di Eratostene'),
           description: s.pick('Cuadrícula con los primos hasta n resaltados (n ≤ 400).',
-              'Grid with the primes up to n highlighted (n ≤ 400).', pt: 'Grade com os primos até n destacados (n ≤ 400).', fr: "Grille des nombres jusqu'à n avec les premiers mis en évidence (n ≤ 400)."),
+              'Grid with the primes up to n highlighted (n ≤ 400).', pt: 'Grade com os primos até n destacados (n ≤ 400).', fr: "Grille des nombres jusqu'à n avec les premiers mis en évidence (n ≤ 400).", it: 'Griglia con i primi fino a n evidenziati (n ≤ 400).'),
           fields: [ToolField('n', initial: '100')],
           compute: (i) {
             final n = _int(i[0]);
@@ -1181,7 +1181,7 @@ class NumberTheoryToolScreen extends StatelessWidget {
           },
         ),
         CalcTool(
-          title: s.pick('Residuos cuadráticos mod n', 'Quadratic residues mod n', pt: 'Resíduos quadráticos mod n', fr: 'Résidus quadratiques mod n'),
+          title: s.pick('Residuos cuadráticos mod n', 'Quadratic residues mod n', pt: 'Resíduos quadráticos mod n', fr: 'Résidus quadratiques mod n', it: 'Residui quadratici mod n'),
           fields: [ToolField('n', initial: '11')],
           compute: (i) {
             final n = _int(i[0]);
@@ -1194,18 +1194,18 @@ class NumberTheoryToolScreen extends StatelessWidget {
               residues.add(x * x % n);
             }
             final sorted = residues.toList()..sort();
-            return '${s.pick('Residuos', 'Residues', pt: 'Resíduos', fr: 'Résidus')} (${sorted.length}): '
+            return '${s.pick('Residuos', 'Residues', pt: 'Resíduos', fr: 'Résidus', it: 'Residui')} (${sorted.length}): '
                 '${sorted.join(', ')}\n'
-                '${s.pick('No residuos', 'Non-residues', pt: 'Não resíduos', fr: 'Non-résidus')}${s.colon} ${n - sorted.length}';
+                '${s.pick('No residuos', 'Non-residues', pt: 'Não resíduos', fr: 'Non-résidus', it: 'Non residui')}${s.colon} ${n - sorted.length}';
           },
         ),
         CalcTool(
-          title: s.pick('Tabla φ, τ, σ, μ', 'Table φ, τ, σ, μ', pt: 'Tabela φ, τ, σ, μ', fr: 'Table φ, τ, σ, μ'),
+          title: s.pick('Tabla φ, τ, σ, μ', 'Table φ, τ, σ, μ', pt: 'Tabela φ, τ, σ, μ', fr: 'Table φ, τ, σ, μ', it: 'Tabella φ, τ, σ, μ'),
           description: s.pick('Funciones multiplicativas para n en [a, b] (máx 30 filas).',
-              'Multiplicative functions for n in [a, b] (max 30 rows).', pt: 'Funções multiplicativas para n em [a, b] (máx 30 linhas).', fr: 'Fonctions multiplicatives pour n dans [a, b] (max 30 lignes).'),
+              'Multiplicative functions for n in [a, b] (max 30 rows).', pt: 'Funções multiplicativas para n em [a, b] (máx 30 linhas).', fr: 'Fonctions multiplicatives pour n dans [a, b] (max 30 lignes).', it: 'Funzioni moltiplicative per n in [a, b] (max 30 righe).'),
           fields: [
-            ToolField(s.pick('Desde', 'From', pt: 'De', fr: 'De'), initial: '1'),
-            ToolField(s.pick('Hasta', 'To', pt: 'Até', fr: 'À'), initial: '12'),
+            ToolField(s.pick('Desde', 'From', pt: 'De', fr: 'De', it: 'Da'), initial: '1'),
+            ToolField(s.pick('Hasta', 'To', pt: 'Até', fr: 'À', it: 'A'), initial: '12'),
           ],
           compute: (i) {
             final a = _bi(i[0]), b = _bi(i[1]);
@@ -1248,25 +1248,25 @@ class StepsToolScreen extends StatelessWidget {
       title: s.catSteps,
       tools: [
         CalcTool(
-          title: s.pick('Euclides con pasos', 'Euclid with steps', pt: 'Euclides com passos', fr: 'Euclide étape par étape'),
+          title: s.pick('Euclides con pasos', 'Euclid with steps', pt: 'Euclides com passos', fr: 'Euclide étape par étape', it: 'Euclide passo passo'),
           fields: [ToolField('a', initial: '240'), ToolField('b', initial: '46')],
           compute: (i) =>
               StepsService.euclidSteps(_bi(i[0]), _bi(i[1]), lang: s.lang)
                   .toString(),
         ),
         CalcTool(
-          title: s.pick('Factorización con pasos', 'Factorization with steps', pt: 'Fatoração com passos', fr: 'Factorisation étape par étape'),
+          title: s.pick('Factorización con pasos', 'Factorization with steps', pt: 'Fatoração com passos', fr: 'Factorisation étape par étape', it: 'Scomposizione passo passo'),
           fields: [ToolField('n', initial: '360')],
           compute: (i) =>
               StepsService.factorizationSteps(_bi(i[0]), lang: s.lang).toString(),
         ),
         CalcTool(
-          title: s.pick('TCR con pasos', 'CRT with steps', pt: 'TCR com passos', fr: 'TRC étape par étape'),
+          title: s.pick('TCR con pasos', 'CRT with steps', pt: 'TCR com passos', fr: 'TRC étape par étape', it: 'TCR passo passo'),
           description: s.pick('Restos y módulos separados por comas.',
-              'Comma-separated remainders and moduli.', pt: 'Restos e módulos separados por vírgulas.', fr: 'Restes et modules séparés par des virgules.'),
+              'Comma-separated remainders and moduli.', pt: 'Restos e módulos separados por vírgulas.', fr: 'Restes et modules séparés par des virgules.', it: 'Resti e moduli separati da virgole.'),
           fields: [
-            ToolField(s.pick('Restos', 'Remainders', pt: 'Restos', fr: 'Restes'), initial: '2, 3, 2'),
-            ToolField(s.pick('Módulos', 'Moduli', pt: 'Módulos', fr: 'Modules'), initial: '3, 5, 7'),
+            ToolField(s.pick('Restos', 'Remainders', pt: 'Restos', fr: 'Restes', it: 'Resti'), initial: '2, 3, 2'),
+            ToolField(s.pick('Módulos', 'Moduli', pt: 'Módulos', fr: 'Modules', it: 'Moduli'), initial: '3, 5, 7'),
           ],
           compute: (i) =>
               StepsService.crtSteps(_biList(i[0]), _biList(i[1]), lang: s.lang)
@@ -1291,7 +1291,7 @@ class ComplexSequencesToolScreen extends StatelessWidget {
       title: s.catComplexSeq,
       tools: [
         CalcTool(
-          title: s.pick('Raíces de la unidad', 'Roots of unity', pt: 'Raízes da unidade', fr: "Racines de l'unité"),
+          title: s.pick('Raíces de la unidad', 'Roots of unity', pt: 'Raízes da unidade', fr: "Racines de l'unité", it: "Radici dell'unità"),
           fields: [ToolField('n', initial: '3')],
           computeAsync: (i) async {
             final n = _int(i[0]);
@@ -1319,7 +1319,7 @@ class ComplexSequencesToolScreen extends StatelessWidget {
           },
         ),
         CalcTool(
-          title: s.pick('Potencia de complejo (De Moivre)', 'Complex power (De Moivre)', pt: 'Potência de complexo (De Moivre)', fr: "Puissance d'un complexe (De Moivre)"),
+          title: s.pick('Potencia de complejo (De Moivre)', 'Complex power (De Moivre)', pt: 'Potência de complexo (De Moivre)', fr: "Puissance d'un complexe (De Moivre)", it: 'Potenza di un complesso (De Moivre)'),
           description: '(re + im·i)^n',
           fields: [
             ToolField('re', initial: '1'),
@@ -1340,7 +1340,7 @@ class ComplexSequencesToolScreen extends StatelessWidget {
           },
         ),
         CalcTool(
-          title: s.pick('Raíces n-ésimas de complejo', 'n-th roots of complex', pt: 'Raízes n-ésimas de complexo', fr: "Racines n-ièmes d'un complexe"),
+          title: s.pick('Raíces n-ésimas de complejo', 'n-th roots of complex', pt: 'Raízes n-ésimas de complexo', fr: "Racines n-ièmes d'un complexe", it: 'Radici n-esime di un complesso'),
           fields: [
             ToolField('re', initial: '3'),
             ToolField('im', initial: '4'),
@@ -1376,14 +1376,14 @@ class ComplexSequencesToolScreen extends StatelessWidget {
           },
         ),
         CalcTool(
-          title: s.pick('Recurrencia lineal', 'Linear recurrence', pt: 'Recorrência linear', fr: 'Récurrence linéaire'),
+          title: s.pick('Recurrencia lineal', 'Linear recurrence', pt: 'Recorrência linear', fr: 'Récurrence linéaire', it: 'Ricorrenza lineare'),
           description: s.pick(
               'aₙ = c₁aₙ₋₁+…+cₖaₙ₋ₖ. Coef. e iniciales por comas.',
-              'aₙ = c₁aₙ₋₁+…+cₖaₙ₋ₖ. Comma-separated coeffs and seeds.', pt: 'aₙ = c₁aₙ₋₁+…+cₖaₙ₋ₖ. Coef. e iniciais por vírgulas.', fr: 'aₙ = c₁aₙ₋₁+…+cₖaₙ₋ₖ. Coef. et termes initiaux séparés par des virgules.'),
+              'aₙ = c₁aₙ₋₁+…+cₖaₙ₋ₖ. Comma-separated coeffs and seeds.', pt: 'aₙ = c₁aₙ₋₁+…+cₖaₙ₋ₖ. Coef. e iniciais por vírgulas.', fr: 'aₙ = c₁aₙ₋₁+…+cₖaₙ₋ₖ. Coef. et termes initiaux séparés par des virgules.', it: 'aₙ = c₁aₙ₋₁+…+cₖaₙ₋ₖ. Coeff. e termini iniziali separati da virgole.'),
           fields: [
-            ToolField(s.pick('Coeficientes', 'Coefficients', pt: 'Coeficientes', fr: 'Coefficients'), initial: '1, 1'),
-            ToolField(s.pick('Iniciales', 'Initial terms', pt: 'Iniciais', fr: 'Termes initiaux'), initial: '0, 1'),
-            ToolField(s.pick('Cantidad', 'Count', pt: 'Quantidade', fr: 'Quantité'), initial: '12'),
+            ToolField(s.pick('Coeficientes', 'Coefficients', pt: 'Coeficientes', fr: 'Coefficients', it: 'Coefficienti'), initial: '1, 1'),
+            ToolField(s.pick('Iniciales', 'Initial terms', pt: 'Iniciais', fr: 'Termes initiaux', it: 'Termini iniziali'), initial: '0, 1'),
+            ToolField(s.pick('Cantidad', 'Count', pt: 'Quantidade', fr: 'Quantité', it: 'Quantità'), initial: '12'),
           ],
           compute: (i) {
             final terms = SequenceService.linearRecurrenceInts(
@@ -1392,7 +1392,7 @@ class ComplexSequencesToolScreen extends StatelessWidget {
           },
         ),
         CalcTool(
-          title: s.pick('Triángulo de Pascal (fila n)', 'Pascal triangle (row n)', pt: 'Triângulo de Pascal (linha n)', fr: 'Triangle de Pascal (ligne n)'),
+          title: s.pick('Triángulo de Pascal (fila n)', 'Pascal triangle (row n)', pt: 'Triângulo de Pascal (linha n)', fr: 'Triangle de Pascal (ligne n)', it: 'Triangolo di Tartaglia (riga n)'),
           fields: [ToolField('n', initial: '6')],
           compute: (i) {
             // Capped like its sibling tools: row n holds n+1 binomials whose
@@ -1406,12 +1406,12 @@ class ComplexSequencesToolScreen extends StatelessWidget {
           },
         ),
         CalcTool(
-          title: s.pick('Pascal mod m (Sierpiński)', 'Pascal mod m (Sierpiński)', pt: 'Pascal mod m (Sierpiński)', fr: 'Pascal mod m (Sierpiński)'),
+          title: s.pick('Pascal mod m (Sierpiński)', 'Pascal mod m (Sierpiński)', pt: 'Pascal mod m (Sierpiński)', fr: 'Pascal mod m (Sierpiński)', it: 'Tartaglia mod m (Sierpiński)'),
           description: s.pick(
               'Triángulo de Pascal módulo m coloreado por residuo. Con m=2 aparece el fractal de Sierpiński.',
-              'Pascal triangle modulo m colored by residue. With m=2 the Sierpiński fractal appears.', pt: 'Triângulo de Pascal módulo m colorido por resíduo. Com m=2 aparece o fractal de Sierpiński.', fr: 'Triangle de Pascal modulo m, coloré par résidu. Avec m=2 apparaît la fractale de Sierpiński.'),
+              'Pascal triangle modulo m colored by residue. With m=2 the Sierpiński fractal appears.', pt: 'Triângulo de Pascal módulo m colorido por resíduo. Com m=2 aparece o fractal de Sierpiński.', fr: 'Triangle de Pascal modulo m, coloré par résidu. Avec m=2 apparaît la fractale de Sierpiński.', it: 'Triangolo di Tartaglia modulo m, colorato per residuo. Con m=2 compare il frattale di Sierpiński.'),
           fields: [
-            ToolField(s.pick('Filas', 'Rows', pt: 'Linhas', fr: 'Lignes'), initial: '32'),
+            ToolField(s.pick('Filas', 'Rows', pt: 'Linhas', fr: 'Lignes', it: 'Righe'), initial: '32'),
             ToolField('m', initial: '2'),
           ],
           compute: (i) {
@@ -1431,9 +1431,9 @@ class ComplexSequencesToolScreen extends StatelessWidget {
                 if (v == 0) zeros++;
               }
             }
-            return '${s.pick('Filas', 'Rows', pt: 'Linhas', fr: 'Lignes')}${s.colon} $n  (mod $m)\n'
-                '${s.pick('Coeficientes', 'Coefficients', pt: 'Coeficientes', fr: 'Coefficients')}${s.colon} $total, '
-                '${s.pick('divisibles por', 'divisible by', pt: 'divisíveis por', fr: 'divisibles par')} $m: $zeros';
+            return '${s.pick('Filas', 'Rows', pt: 'Linhas', fr: 'Lignes', it: 'Righe')}${s.colon} $n  (mod $m)\n'
+                '${s.pick('Coeficientes', 'Coefficients', pt: 'Coeficientes', fr: 'Coefficients', it: 'Coefficienti')}${s.colon} $total, '
+                '${s.pick('divisibles por', 'divisible by', pt: 'divisíveis por', fr: 'divisibles par', it: 'divisibili per')} $m: $zeros';
           },
           visualize: (ctx, i) {
             final n = _int(i[0]), m = _int(i[1]);
@@ -1451,7 +1451,7 @@ class ComplexSequencesToolScreen extends StatelessWidget {
           },
         ),
         CalcTool(
-          title: s.pick('Expansión binomial (a+b)ⁿ', 'Binomial expansion (a+b)ⁿ', pt: 'Expansão binomial (a+b)ⁿ', fr: 'Développement binomial (a+b)ⁿ'),
+          title: s.pick('Expansión binomial (a+b)ⁿ', 'Binomial expansion (a+b)ⁿ', pt: 'Expansão binomial (a+b)ⁿ', fr: 'Développement binomial (a+b)ⁿ', it: 'Sviluppo binomiale (a+b)ⁿ'),
           fields: [ToolField('n', initial: '5')],
           compute: (i) {
             final n = _int(i[0]);
@@ -1492,44 +1492,44 @@ class StatisticsToolScreen extends StatelessWidget {
       title: s.catStatistics,
       tools: [
         CalcTool(
-          title: s.pick('Estadística descriptiva', 'Descriptive statistics', pt: 'Estatística descritiva', fr: 'Statistiques descriptives'),
+          title: s.pick('Estadística descriptiva', 'Descriptive statistics', pt: 'Estatística descritiva', fr: 'Statistiques descriptives', it: 'Statistica descrittiva'),
           description: s.pick(
               'Valores (enteros, fracciones o decimales) separados por comas.',
-              'Comma-separated values (integers, fractions or decimals).', pt: 'Valores (inteiros, frações ou decimais) separados por vírgulas.', fr: 'Valeurs (entiers, fractions ou décimaux) séparées par des virgules.'),
+              'Comma-separated values (integers, fractions or decimals).', pt: 'Valores (inteiros, frações ou decimais) separados por vírgulas.', fr: 'Valeurs (entiers, fractions ou décimaux) séparées par des virgules.', it: 'Valori (interi, frazioni o decimali) separati da virgole.'),
           fields: [
-            ToolField(s.pick('Valores', 'Values', pt: 'Valores', fr: 'Valeurs'), initial: '2, 4, 4, 5, 7'),
+            ToolField(s.pick('Valores', 'Values', pt: 'Valores', fr: 'Valeurs', it: 'Valori'), initial: '2, 4, 4, 5, 7'),
           ],
           compute: (i) {
             final r = StatisticsService.descriptive(_fracList(i[0]));
             final modes = r.modes.isEmpty
-                ? s.pick('ninguna', 'none', pt: 'nenhuma', fr: 'aucune')
+                ? s.pick('ninguna', 'none', pt: 'nenhuma', fr: 'aucune', it: 'nessuna')
                 : r.modes.join(', ');
             final sb = StringBuffer();
             sb.writeln('n = ${r.count}');
             sb.writeln('min = ${r.min}, max = ${r.max}, '
-                '${s.pick('rango', 'range', pt: 'amplitude', fr: 'étendue')} = ${r.range}');
-            sb.writeln('${s.pick('Media', 'Mean', pt: 'Média', fr: 'Moyenne')}${s.colon} ${r.mean}'
+                '${s.pick('rango', 'range', pt: 'amplitude', fr: 'étendue', it: 'campo di variazione')} = ${r.range}');
+            sb.writeln('${s.pick('Media', 'Mean', pt: 'Média', fr: 'Moyenne', it: 'Media')}${s.colon} ${r.mean}'
                 '  ≈ ${r.mean.toDouble().toStringAsFixed(6)}');
-            sb.writeln('${s.pick('Mediana', 'Median', pt: 'Mediana', fr: 'Médiane')}${s.colon} ${r.median}');
-            sb.writeln('${s.pick('Moda', 'Mode', pt: 'Moda', fr: 'Mode')}${s.colon} $modes');
-            sb.writeln('${s.pick('Varianza (poblacional)', 'Variance (population)', pt: 'Variância (populacional)', fr: 'Variance (population)')}${s.colon} '
+            sb.writeln('${s.pick('Mediana', 'Median', pt: 'Mediana', fr: 'Médiane', it: 'Mediana')}${s.colon} ${r.median}');
+            sb.writeln('${s.pick('Moda', 'Mode', pt: 'Moda', fr: 'Mode', it: 'Moda')}${s.colon} $modes');
+            sb.writeln('${s.pick('Varianza (poblacional)', 'Variance (population)', pt: 'Variância (populacional)', fr: 'Variance (population)', it: 'Varianza (popolazione)')}${s.colon} '
                 '${r.variancePopulation}');
             if (r.varianceSample != null) {
-              sb.writeln('${s.pick('Varianza (muestral)', 'Variance (sample)', pt: 'Variância (amostral)', fr: 'Variance (échantillon)')}${s.colon} '
+              sb.writeln('${s.pick('Varianza (muestral)', 'Variance (sample)', pt: 'Variância (amostral)', fr: 'Variance (échantillon)', it: 'Varianza (campionaria)')}${s.colon} '
                   '${r.varianceSample}');
             }
-            sb.write('${s.pick('Desv. estándar', 'Std. deviation', pt: 'Desvio padrão', fr: 'Écart-type')} ≈ '
+            sb.write('${s.pick('Desv. estándar', 'Std. deviation', pt: 'Desvio padrão', fr: 'Écart-type', it: 'Dev. standard')} ≈ '
                 '${r.stdDevPopulation.toStringAsFixed(6)}');
             return sb.toString();
           },
         ),
         CalcTool(
           title: s.pick('Desigualdad de medias (QM ≥ AM ≥ GM ≥ HM)',
-              'Mean inequality (QM ≥ AM ≥ GM ≥ HM)', pt: 'Desigualdade das médias (MQ ≥ MA ≥ MG ≥ MH)', fr: 'Inégalité des moyennes (MQ ≥ MA ≥ MG ≥ MH)'),
+              'Mean inequality (QM ≥ AM ≥ GM ≥ HM)', pt: 'Desigualdade das médias (MQ ≥ MA ≥ MG ≥ MH)', fr: 'Inégalité des moyennes (MQ ≥ MA ≥ MG ≥ MH)', it: 'Disuguaglianza tra le medie (MQ ≥ MA ≥ MG ≥ MH)'),
           description: s.pick('Valores positivos separados por comas.',
-              'Comma-separated positive values.', pt: 'Valores positivos separados por vírgulas.', fr: 'Valeurs positives séparées par des virgules.'),
+              'Comma-separated positive values.', pt: 'Valores positivos separados por vírgulas.', fr: 'Valeurs positives séparées par des virgules.', it: 'Valori positivi separati da virgole.'),
           fields: [
-            ToolField(s.pick('Valores', 'Values', pt: 'Valores', fr: 'Valeurs'), initial: '1, 2, 4'),
+            ToolField(s.pick('Valores', 'Values', pt: 'Valores', fr: 'Valeurs', it: 'Valori'), initial: '1, 2, 4'),
           ],
           compute: (i) {
             final r = StatisticsService.means(_fracList(i[0]));
@@ -1557,45 +1557,45 @@ class MatricesToolScreen extends StatelessWidget {
     final s = OlympiadStrings.of(context);
     final matrixHint = s.pick(
         'Filas separadas por ";", entradas por ",". Admite fracciones.',
-        'Rows separated by ";", entries by ",". Fractions allowed.', pt: 'Linhas separadas por ";", entradas por ",". Admite frações.', fr: 'Lignes séparées par « ; », entrées par « , ». Les fractions sont acceptées.');
+        'Rows separated by ";", entries by ",". Fractions allowed.', pt: 'Linhas separadas por ";", entradas por ",". Admite frações.', fr: 'Lignes séparées par « ; », entrées par « , ». Les fractions sont acceptées.', it: 'Righe separate da «;», elementi da «,». Sono ammesse le frazioni.');
     return _ToolScaffold(
       title: s.catMatrices,
       tools: [
         CalcTool(
-          title: s.pick('Determinante', 'Determinant', pt: 'Determinante', fr: 'Déterminant'),
+          title: s.pick('Determinante', 'Determinant', pt: 'Determinante', fr: 'Déterminant', it: 'Determinante'),
           description: matrixHint,
           fields: [
-            ToolField(s.pick('Matriz', 'Matrix', pt: 'Matriz', fr: 'Matrice'), initial: '6,1,1; 4,-2,5; 2,8,7'),
+            ToolField(s.pick('Matriz', 'Matrix', pt: 'Matriz', fr: 'Matrice', it: 'Matrice'), initial: '6,1,1; 4,-2,5; 2,8,7'),
           ],
           compute: (i) {
             final m = _matrix(i[0]);
             if (!m.isSquare) {
-              return s.pick('La matriz debe ser cuadrada', 'Matrix must be square', pt: 'A matriz deve ser quadrada', fr: 'La matrice doit être carrée');
+              return s.pick('La matriz debe ser cuadrada', 'Matrix must be square', pt: 'A matriz deve ser quadrada', fr: 'La matrice doit être carrée', it: 'La matrice deve essere quadrata');
             }
             final det = m.determinant();
             return 'det = $det  ≈ ${det.toDouble()}';
           },
         ),
         CalcTool(
-          title: s.pick('Inversa', 'Inverse', pt: 'Inversa', fr: 'Inverse'),
+          title: s.pick('Inversa', 'Inverse', pt: 'Inversa', fr: 'Inverse', it: 'Inversa'),
           description: matrixHint,
           fields: [
-            ToolField(s.pick('Matriz', 'Matrix', pt: 'Matriz', fr: 'Matrice'), initial: '4,7; 2,6'),
+            ToolField(s.pick('Matriz', 'Matrix', pt: 'Matriz', fr: 'Matrice', it: 'Matrice'), initial: '4,7; 2,6'),
           ],
           compute: (i) {
             final m = _matrix(i[0]);
             final inv = m.inverse();
             if (inv == null) {
               return s.pick('Matriz singular o no cuadrada (sin inversa)',
-                  'Singular or non-square matrix (no inverse)', pt: 'Matriz singular ou não quadrada (sem inversa)', fr: "Matrice singulière ou non carrée (pas d'inverse)");
+                  'Singular or non-square matrix (no inverse)', pt: 'Matriz singular ou não quadrada (sem inversa)', fr: "Matrice singulière ou non carrée (pas d'inverse)", it: 'Matrice singolare o non quadrata (senza inversa)');
             }
             return inv.toString();
           },
         ),
         CalcTool(
-          title: s.pick('Multiplicar A × B', 'Multiply A × B', pt: 'Multiplicar A × B', fr: 'Multiplier A × B'),
+          title: s.pick('Multiplicar A × B', 'Multiply A × B', pt: 'Multiplicar A × B', fr: 'Multiplier A × B', it: 'Moltiplica A × B'),
           description: s.pick('Dos matrices separadas por "|".',
-              'Two matrices separated by "|".', pt: 'Duas matrizes separadas por "|".', fr: 'Deux matrices séparées par « | ».'),
+              'Two matrices separated by "|".', pt: 'Duas matrizes separadas por "|".', fr: 'Deux matrices séparées par « | ».', it: 'Due matrici separate da «|».'),
           fields: [
             ToolField('A | B', initial: '1,2; 3,4 | 5,6; 7,8'),
           ],
@@ -1608,10 +1608,10 @@ class MatricesToolScreen extends StatelessWidget {
           },
         ),
         CalcTool(
-          title: s.pick('Resolver A·x = b (n×n)', 'Solve A·x = b (n×n)', pt: 'Resolver A·x = b (n×n)', fr: 'Résoudre A·x = b (n×n)'),
+          title: s.pick('Resolver A·x = b (n×n)', 'Solve A·x = b (n×n)', pt: 'Resolver A·x = b (n×n)', fr: 'Résoudre A·x = b (n×n)', it: 'Risolvi A·x = b (n×n)'),
           description: s.pick(
               'Matriz A y vector b separados por "|".',
-              'Matrix A and vector b separated by "|".', pt: 'Matriz A e vetor b separados por "|".', fr: 'Matrice A et vecteur b séparés par « | ».'),
+              'Matrix A and vector b separated by "|".', pt: 'Matriz A e vetor b separados por "|".', fr: 'Matrice A et vecteur b séparés par « | ».', it: 'Matrice A e vettore b separati da «|».'),
           fields: [
             ToolField('A | b', initial: '2,1,1; 1,2,1; 1,1,2 | 1,1,1'),
           ],
@@ -1625,7 +1625,7 @@ class MatricesToolScreen extends StatelessWidget {
             final x = a.solve(b);
             if (x == null) {
               return s.pick('Sin solución única (singular)',
-                  'No unique solution (singular)', pt: 'Sem solução única (singular)', fr: 'Pas de solution unique (singulière)');
+                  'No unique solution (singular)', pt: 'Sem solução única (singular)', fr: 'Pas de solution unique (singulière)', it: 'Nessuna soluzione unica (singolare)');
             }
             final names = ['x', 'y', 'z', 'w'];
             final sb = StringBuffer();
@@ -1638,15 +1638,15 @@ class MatricesToolScreen extends StatelessWidget {
           },
         ),
         CalcTool(
-          title: s.pick('Rango y transpuesta', 'Rank and transpose', pt: 'Posto e transposta', fr: 'Rang et transposée'),
+          title: s.pick('Rango y transpuesta', 'Rank and transpose', pt: 'Posto e transposta', fr: 'Rang et transposée', it: 'Rango e trasposta'),
           description: matrixHint,
           fields: [
-            ToolField(s.pick('Matriz', 'Matrix', pt: 'Matriz', fr: 'Matrice'), initial: '1,2,3; 2,4,6; 1,0,1'),
+            ToolField(s.pick('Matriz', 'Matrix', pt: 'Matriz', fr: 'Matrice', it: 'Matrice'), initial: '1,2,3; 2,4,6; 1,0,1'),
           ],
           compute: (i) {
             final m = _matrix(i[0]);
-            return '${s.pick('Rango', 'Rank', pt: 'Posto', fr: 'Rang')}${s.colon} ${m.rank()}\n'
-                '${s.pick('Transpuesta', 'Transpose', pt: 'Transposta', fr: 'Transposée')}${s.colon}\n${m.transpose()}';
+            return '${s.pick('Rango', 'Rank', pt: 'Posto', fr: 'Rang', it: 'Rango')}${s.colon} ${m.rank()}\n'
+                '${s.pick('Transpuesta', 'Transpose', pt: 'Transposta', fr: 'Transposée', it: 'Trasposta')}${s.colon}\n${m.transpose()}';
           },
         ),
       ],
@@ -1666,12 +1666,12 @@ class CalculusToolScreen extends StatelessWidget {
     final s = OlympiadStrings.of(context);
     final fnHint = s.pick(
         'Función de x. Trig en radianes. Ej: x^2+sin(x), 1/x, exp(x).',
-        'Function of x. Trig in radians. E.g. x^2+sin(x), 1/x, exp(x).', pt: 'Função de x. Trigonometria em radianos. Ex.: x^2+sin(x), 1/x, exp(x).', fr: 'Fonction de x. Trigonométrie en radians. Ex. : x^2+sin(x), 1/x, exp(x).');
+        'Function of x. Trig in radians. E.g. x^2+sin(x), 1/x, exp(x).', pt: 'Função de x. Trigonometria em radianos. Ex.: x^2+sin(x), 1/x, exp(x).', fr: 'Fonction de x. Trigonométrie en radians. Ex. : x^2+sin(x), 1/x, exp(x).', it: 'Funzione di x. Trigonometria in radianti. Es.: x^2+sin(x), 1/x, exp(x).');
     return _ToolScaffold(
       title: s.catCalculus,
       tools: [
         CalcTool(
-          title: s.pick('Derivada f\'(x₀)', 'Derivative f\'(x₀)', pt: "Derivada f'(x₀)", fr: "Dérivée f'(x₀)"),
+          title: s.pick('Derivada f\'(x₀)', 'Derivative f\'(x₀)', pt: "Derivada f'(x₀)", fr: "Dérivée f'(x₀)", it: "Derivata f'(x₀)"),
           description: fnHint,
           fields: [
             ToolField('f(x)', initial: 'x^2 + sin(x)'),
@@ -1686,7 +1686,7 @@ class CalculusToolScreen extends StatelessWidget {
           },
         ),
         CalcTool(
-          title: s.pick('Integral definida ∫', 'Definite integral ∫', pt: 'Integral definida ∫', fr: 'Intégrale définie ∫'),
+          title: s.pick('Integral definida ∫', 'Definite integral ∫', pt: 'Integral definida ∫', fr: 'Intégrale définie ∫', it: 'Integrale definito ∫'),
           description: fnHint,
           fields: [
             ToolField('f(x)', initial: 'x^2'),
@@ -1700,11 +1700,11 @@ class CalculusToolScreen extends StatelessWidget {
               throw CalcException(CalcError.invalidOperation);
             }
             return s.pick('∫ de ${i[1]} a ${i[2]} ≈ ${_fmtNum(v)}',
-                '∫ from ${i[1]} to ${i[2]} ≈ ${_fmtNum(v)}', pt: '∫ de ${i[1]} a ${i[2]} ≈ ${_fmtNum(v)}', fr: '∫ de ${i[1]} à ${i[2]} ≈ ${_fmtNum(v)}');
+                '∫ from ${i[1]} to ${i[2]} ≈ ${_fmtNum(v)}', pt: '∫ de ${i[1]} a ${i[2]} ≈ ${_fmtNum(v)}', fr: '∫ de ${i[1]} à ${i[2]} ≈ ${_fmtNum(v)}', it: '∫ da ${i[1]} a ${i[2]} ≈ ${_fmtNum(v)}');
           },
         ),
         CalcTool(
-          title: s.pick('Límite (numérico)', 'Limit (numerical)', pt: 'Limite (numérico)', fr: 'Limite (numérique)'),
+          title: s.pick('Límite (numérico)', 'Limit (numerical)', pt: 'Limite (numérico)', fr: 'Limite (numérique)', it: 'Limite (numerico)'),
           description: fnHint,
           fields: [
             ToolField('f(x)', initial: 'sin(x)/x'),
@@ -1715,7 +1715,7 @@ class CalculusToolScreen extends StatelessWidget {
             if (l == null) {
               return s.pick(
                   'No existe (límites laterales distintos o no finitos)',
-                  'Does not exist (one-sided limits differ or not finite)', pt: 'Não existe (limites laterais diferentes ou não finitos)', fr: "N'existe pas (limites latérales différentes ou non finies)");
+                  'Does not exist (one-sided limits differ or not finite)', pt: 'Não existe (limites laterais diferentes ou não finitos)', fr: "N'existe pas (limites latérales différentes ou non finies)", it: 'Non esiste (limiti laterali diversi o non finiti)');
             }
             return 'lim x→${i[1]} ≈ ${_fmtNum(l)}';
           },

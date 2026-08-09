@@ -7,6 +7,7 @@ void main() {
   const en = OlympiadStrings('en');
   const pt = OlympiadStrings('pt');
   const fr = OlympiadStrings('fr');
+  const it = OlympiadStrings('it');
 
   test('every CalcError code has a non-empty translation in every language', () {
     for (final code in CalcError.values) {
@@ -15,7 +16,25 @@ void main() {
       expect(en.errorText(e).isNotEmpty, true, reason: 'EN missing for $code');
       expect(pt.errorText(e).isNotEmpty, true, reason: 'PT missing for $code');
       expect(fr.errorText(e).isNotEmpty, true, reason: 'FR missing for $code');
+      expect(it.errorText(e).isNotEmpty, true, reason: 'IT missing for $code');
     }
+  });
+
+  test('every CalcError code is actually translated into Italian', () {
+    const sameInEnglish = <CalcError>{};
+    for (final code in CalcError.values) {
+      if (sameInEnglish.contains(code)) continue;
+      final e = CalcException(code, {'value': 'foo', 'k': '2', 'max': '10'});
+      expect(it.errorText(e) == en.errorText(e), false,
+          reason: 'IT falls back to EN for $code');
+    }
+  });
+
+  test('Italian reaches the tool labels, not just the errors', () {
+    expect(it.title, 'Strumenti per le Olimpiadi');
+    expect(it.catAlgebra, 'Algebra');
+    expect(it.catFractions, 'Frazioni');
+    expect(it.compute, 'Calcola');
   });
 
   test('every CalcError code is actually translated into French', () {

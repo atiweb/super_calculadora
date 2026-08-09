@@ -1060,6 +1060,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get settingsLangFr => 'Français';
 
   @override
+  String get settingsLangIt => 'Italiano';
+
+  @override
   String get hlpTitle => 'Guia de Funções Especiais';
 
   @override
