@@ -198,7 +198,7 @@ class CalculatorService extends ChangeNotifier {
   static int _parseStringAsInt(String numStr) {
     final BigInt value = _parseStringAsBigInt(numStr);
     if (!value.isValidInt) {
-      throw ArgumentError(trLocale('Número demasiado grande', 'Number too large', pt: 'Número grande demais', fr: 'Nombre trop grand', it: 'Numero troppo grande'));
+      throw ArgumentError(trLocale('Número demasiado grande', 'Number too large', pt: 'Número grande demais', fr: 'Nombre trop grand', ru: 'Слишком большое число', it: 'Numero troppo grande'));
     }
     return value.toInt();
   }
@@ -428,7 +428,7 @@ class CalculatorService extends ChangeNotifier {
       
       if (isHeavyOperation) {
         _isCalculatingOperation = true;
-        _operationProgress = trLocale('Calculando potencia...', 'Calculating power...', pt: 'Calculando a potência...', fr: 'Calcul de la puissance…', it: 'Calcolo della potenza…');
+        _operationProgress = trLocale('Calculando potencia...', 'Calculating power...', pt: 'Calculando a potência...', fr: 'Calcul de la puissance…', ru: 'Вычисление степени…', it: 'Calcolo della potenza…');
         _canCancelOperation = true;
         notifyListeners();
         
@@ -504,7 +504,7 @@ class CalculatorService extends ChangeNotifier {
       
       if (isHeavyOperation) {
         _isCalculatingOperation = true;
-        _operationProgress = trLocale('Calculando raíz cuadrada...', 'Calculating square root...', pt: 'Calculando a raiz quadrada...', fr: 'Calcul de la racine carrée…', it: 'Calcolo della radice quadrata…');
+        _operationProgress = trLocale('Calculando raíz cuadrada...', 'Calculating square root...', pt: 'Calculando a raiz quadrada...', fr: 'Calcul de la racine carrée…', ru: 'Вычисление квадратного корня…', it: 'Calcolo della radice quadrata…');
         _canCancelOperation = true;
         notifyListeners();
         
@@ -572,7 +572,7 @@ class CalculatorService extends ChangeNotifier {
       
       if (isHeavyOperation) {
         _isCalculatingOperation = true;
-        _operationProgress = trLocale('Calculando raíz cúbica...', 'Calculating cube root...', pt: 'Calculando a raiz cúbica...', fr: 'Calcul de la racine cubique…', it: 'Calcolo della radice cubica…');
+        _operationProgress = trLocale('Calculando raíz cúbica...', 'Calculating cube root...', pt: 'Calculando a raiz cúbica...', fr: 'Calcul de la racine cubique…', ru: 'Вычисление кубического корня…', it: 'Calcolo della radice cubica…');
         _canCancelOperation = true;
         notifyListeners();
         
@@ -860,13 +860,13 @@ class CalculatorService extends ChangeNotifier {
           number = BigInt.parse(integerPart);
           analysisNote = trLocale(
               'Análisis basado en la parte entera del valor absoluto ($integerPart)',
-              'Analysis based on the integer part of the absolute value ($integerPart)', pt: 'Análise baseada na parte inteira do valor absoluto ($integerPart)', fr: 'Analyse fondée sur la partie entière de la valeur absolue ($integerPart)', it: 'Analisi basata sulla parte intera del valore assoluto ($integerPart)');
+              'Analysis based on the integer part of the absolute value ($integerPart)', pt: 'Análise baseada na parte inteira do valor absoluto ($integerPart)', fr: 'Analyse fondée sur la partie entière de la valeur absolue ($integerPart)', ru: 'Анализ по целой части модуля числа ($integerPart)', it: 'Analisi basata sulla parte intera del valore assoluto ($integerPart)');
         } else {
           integerPart = numStr.split('.')[0];
           if (integerPart.isEmpty) integerPart = '0';
           number = BigInt.parse(integerPart);
           analysisNote = trLocale('Análisis basado en la parte entera ($integerPart)',
-              'Analysis based on the integer part ($integerPart)', pt: 'Análise baseada na parte inteira ($integerPart)', fr: 'Analyse fondée sur la partie entière ($integerPart)', it: 'Analisi basata sulla parte intera ($integerPart)');
+              'Analysis based on the integer part ($integerPart)', pt: 'Análise baseada na parte inteira ($integerPart)', fr: 'Analyse fondée sur la partie entière ($integerPart)', ru: 'Анализ по целой части ($integerPart)', it: 'Analisi basata sulla parte intera ($integerPart)');
         }
       } else {
         // For integers, take the absolute value if negative
@@ -874,7 +874,7 @@ class CalculatorService extends ChangeNotifier {
           number = BigInt.parse(numStr.substring(1));
           analysisNote = trLocale(
               'Análisis basado en el valor absoluto (${number.toString()})',
-              'Analysis based on the absolute value (${number.toString()})', pt: 'Análise baseada no valor absoluto (${number.toString()})', fr: 'Analyse fondée sur la valeur absolue (${number.toString()})', it: 'Analisi basata sul valore assoluto (${number.toString()})');
+              'Analysis based on the absolute value (${number.toString()})', pt: 'Análise baseada no valor absoluto (${number.toString()})', fr: 'Analyse fondée sur la valeur absolue (${number.toString()})', ru: 'Анализ по модулю числа (${number.toString()})', it: 'Analisi basata sul valore assoluto (${number.toString()})');
         } else {
           number = BigInt.parse(numStr);
         }
@@ -951,8 +951,8 @@ class CalculatorService extends ChangeNotifier {
         } catch (e) {
           debugPrint('Error calculando primos: $e');
           if (token != _analysisToken) return;
-          _currentAnalysis['nextPrime'] = trLocale('Error en cálculo', 'Calculation error', pt: 'Erro no cálculo', fr: 'Erreur de calcul', it: 'Errore di calcolo');
-          _currentAnalysis['previousPrime'] = trLocale('Error en cálculo', 'Calculation error', pt: 'Erro no cálculo', fr: 'Erreur de calcul', it: 'Errore di calcolo');
+          _currentAnalysis['nextPrime'] = trLocale('Error en cálculo', 'Calculation error', pt: 'Erro no cálculo', fr: 'Erreur de calcul', ru: 'Ошибка вычисления', it: 'Errore di calcolo');
+          _currentAnalysis['previousPrime'] = trLocale('Error en cálculo', 'Calculation error', pt: 'Erro no cálculo', fr: 'Erreur de calcul', ru: 'Ошибка вычисления', it: 'Errore di calcolo');
           _isCalculatingPrimes = false;
           _currentAnalysis.remove('calculatingPrimes');
         }
@@ -1013,7 +1013,7 @@ class CalculatorService extends ChangeNotifier {
       return NumberAnalysisService.completeAnalysis(number);
     } catch (e) {
       return {
-        'error': trLocale('Error en análisis: ${e.toString()}', 'Analysis error: ${e.toString()}', pt: 'Erro na análise: ${e.toString()}', fr: "Erreur d'analyse : ${e.toString()}", it: 'Errore di analisi: ${e.toString()}'),
+        'error': trLocale('Error en análisis: ${e.toString()}', 'Analysis error: ${e.toString()}', pt: 'Erro na análise: ${e.toString()}', fr: "Erreur d'analyse : ${e.toString()}", ru: 'Ошибка анализа: ${e.toString()}', it: 'Errore di analisi: ${e.toString()}'),
         'originalNumber': number.toString()
       };
     }
@@ -1090,7 +1090,7 @@ class CalculatorService extends ChangeNotifier {
     final int n = args['n'] as int;
     try {
       if (n < 0) {
-        return {'success': false, 'error': trLocale('Factorial no definido para números negativos', 'Factorial is not defined for negative numbers', pt: 'O fatorial não está definido para números negativos', fr: 'Factorielle non définie pour les nombres négatifs', it: 'Fattoriale non definito per i numeri negativi')};
+        return {'success': false, 'error': trLocale('Factorial no definido para números negativos', 'Factorial is not defined for negative numbers', pt: 'O fatorial não está definido para números negativos', fr: 'Factorielle non définie pour les nombres négatifs', ru: 'Факториал не определён для отрицательных чисел', it: 'Fattoriale non definito per i numeri negativi')};
       }
       
       if (n == 0 || n == 1) {
@@ -1781,7 +1781,7 @@ class CalculatorService extends ChangeNotifier {
           _display = 'Error';
         } else {
           _isCalculatingOperation = true;
-          _operationProgress = trLocale('Calculando factorial...', 'Calculating factorial...', pt: 'Calculando o fatorial...', fr: 'Calcul de la factorielle…', it: 'Calcolo del fattoriale…');
+          _operationProgress = trLocale('Calculando factorial...', 'Calculating factorial...', pt: 'Calculando o fatorial...', fr: 'Calcul de la factorielle…', ru: 'Вычисление факториала…', it: 'Calcolo del fattoriale…');
           _canCancelOperation = false;
           notifyListeners();
           
@@ -2249,7 +2249,7 @@ class CalculatorService extends ChangeNotifier {
       return _formatNumber(result.toString());
       
     } catch (e) {
-      throw Exception(trLocale('Error en evaluación: ${e.toString()}', 'Evaluation error: ${e.toString()}', pt: 'Erro na avaliação: ${e.toString()}', fr: "Erreur d'évaluation : ${e.toString()}", it: 'Errore di valutazione: ${e.toString()}'));
+      throw Exception(trLocale('Error en evaluación: ${e.toString()}', 'Evaluation error: ${e.toString()}', pt: 'Erro na avaliação: ${e.toString()}', fr: "Erreur d'évaluation : ${e.toString()}", ru: 'Ошибка вычисления: ${e.toString()}', it: 'Errore di valutazione: ${e.toString()}'));
     }
   }
   
@@ -2572,13 +2572,13 @@ class CalculatorService extends ChangeNotifier {
     try {
       expression = expression.replaceAll(' ', '');
       if (expression.isEmpty) {
-        throw ArgumentError(trLocale('Expresión inválida: operandos vacíos', 'Invalid expression: empty operands', pt: 'Expressão inválida: operandos vazios', fr: 'Expression invalide : opérandes vides', it: 'Espressione non valida: operandi vuoti'));
+        throw ArgumentError(trLocale('Expresión inválida: operandos vacíos', 'Invalid expression: empty operands', pt: 'Expressão inválida: operandos vazios', fr: 'Expression invalide : opérandes vides', ru: 'Неверное выражение: пустые операнды', it: 'Espressione non valida: operandi vuoti'));
       }
       return _evalBigAdditive(expression).toString();
     } on _ResultTooLargeException {
       return 'err:errResultTooLarge';
     } catch (e) {
-      throw ArgumentError(trLocale('Error evaluando expresión: $e', 'Error evaluating expression: $e', pt: 'Erro ao avaliar a expressão: $e', fr: "Erreur lors de l'évaluation de l'expression : $e", it: "Errore nella valutazione dell'espressione: $e"));
+      throw ArgumentError(trLocale('Error evaluando expresión: $e', 'Error evaluating expression: $e', pt: 'Erro ao avaliar a expressão: $e', fr: "Erreur lors de l'évaluation de l'expression : $e", ru: 'Ошибка при вычислении выражения: $e', it: "Errore nella valutazione dell'espressione: $e"));
     }
   }
 
@@ -2611,7 +2611,7 @@ class CalculatorService extends ChangeNotifier {
         final BigDecimal right = _evalBigPower(s.substring(i + 1));
         if (c == '*') return left * right;
         if (right == BigDecimal.zero) {
-          throw ArgumentError(trLocale('División por cero', 'Division by zero', pt: 'Divisão por zero', fr: 'Division par zéro', it: 'Divisione per zero'));
+          throw ArgumentError(trLocale('División por cero', 'Division by zero', pt: 'Divisão por zero', fr: 'Division par zéro', ru: 'Деление на ноль', it: 'Divisione per zero'));
         }
         return left / right;
       }
@@ -2638,10 +2638,10 @@ class CalculatorService extends ChangeNotifier {
     if (exp.fractionalPart != BigInt.zero) {
       // Previously it was silently truncated (x^2.5 computed x^2).
       throw ArgumentError(trLocale('Exponente no entero no soportado en modo de números grandes',
-          'Non-integer exponent not supported in big-number mode', pt: 'Expoente não inteiro não suportado no modo de números grandes', fr: 'Exposant non entier non pris en charge en mode grands nombres', it: 'Esponente non intero non supportato in modalità numeri grandi'));
+          'Non-integer exponent not supported in big-number mode', pt: 'Expoente não inteiro não suportado no modo de números grandes', fr: 'Exposant non entier non pris en charge en mode grands nombres', ru: 'Нецелый показатель не поддерживается в режиме больших чисел', it: 'Esponente non intero non supportato in modalità numeri grandi'));
     }
     if (exp.isNegative) {
-      throw ArgumentError(trLocale('Exponente negativo no soportado', 'Negative exponent not supported', pt: 'Expoente negativo não suportado', fr: 'Exposant négatif non pris en charge', it: 'Esponente negativo non supportato'));
+      throw ArgumentError(trLocale('Exponente negativo no soportado', 'Negative exponent not supported', pt: 'Expoente negativo não suportado', fr: 'Exposant négatif non pris en charge', ru: 'Отрицательный показатель не поддерживается', it: 'Esponente negativo non supportato'));
     }
     final BigInt expInt = exp.integerPart;
     if (!expInt.isValidInt) {
@@ -2793,7 +2793,7 @@ class CalculatorService extends ChangeNotifier {
       name: 'gcd', symbol: symGcd, minParams: 2,
       displayBuilder: (p) => trLocale(
           'MCD(${p.join(", ")}, _) [= agregar, MCD resolver]',
-          'GCD(${p.join(", ")}, _) [= add, GCD solve]', pt: 'MDC(${p.join(", ")}, _) [= acrescentar, MDC resolver]', fr: 'PGCD(${p.join(", ")}, _) [= ajouter, PGCD résoudre]', it: 'MCD(${p.join(", ")}, _) [= aggiungi, MCD risolvi]'),
+          'GCD(${p.join(", ")}, _) [= add, GCD solve]', pt: 'MDC(${p.join(", ")}, _) [= acrescentar, MDC resolver]', fr: 'PGCD(${p.join(", ")}, _) [= ajouter, PGCD résoudre]', ru: 'НОД(${p.join(", ")}, _) [= добавить, НОД решить]', it: 'MCD(${p.join(", ")}, _) [= aggiungi, MCD risolvi]'),
     ));
   }
 
@@ -2803,7 +2803,7 @@ class CalculatorService extends ChangeNotifier {
       name: 'lcm', symbol: symLcm, minParams: 2,
       displayBuilder: (p) => trLocale(
           'MCM(${p.join(", ")}, _) [= agregar, MCM resolver]',
-          'LCM(${p.join(", ")}, _) [= add, LCM solve]', pt: 'MMC(${p.join(", ")}, _) [= acrescentar, MMC resolver]', fr: 'PPCM(${p.join(", ")}, _) [= ajouter, PPCM résoudre]', it: 'mcm(${p.join(", ")}, _) [= aggiungi, mcm risolvi]'),
+          'LCM(${p.join(", ")}, _) [= add, LCM solve]', pt: 'MMC(${p.join(", ")}, _) [= acrescentar, MMC resolver]', fr: 'PPCM(${p.join(", ")}, _) [= ajouter, PPCM résoudre]', ru: 'НОК(${p.join(", ")}, _) [= добавить, НОК решить]', it: 'mcm(${p.join(", ")}, _) [= aggiungi, mcm risolvi]'),
     ));
   }
 
@@ -2812,7 +2812,7 @@ class CalculatorService extends ChangeNotifier {
     _startPending(PendingOperation(
       name: 'dioph', symbol: symDioph, requiredParams: 3,
       displayBuilder: (p) {
-        if (p.isEmpty) return trLocale('Diof: a=_', 'Dioph: a=_', pt: 'Diof: a=_', fr: 'Dioph : a=_', it: 'Dioph: a=_');
+        if (p.isEmpty) return trLocale('Diof: a=_', 'Dioph: a=_', pt: 'Diof: a=_', fr: 'Dioph : a=_', ru: 'Диоф: a=_', it: 'Dioph: a=_');
         if (p.length == 1) return '${p[0]}x + _y = ?';
         if (p.length == 2) return '${p[0]}x + ${p[1]}y = _';
         return '${p[0]}x + ${p[1]}y = ${p[2]}';
@@ -2832,7 +2832,7 @@ class CalculatorService extends ChangeNotifier {
         String collected = pairs.join(', ');
         if (p.length.isEven) {
           return trLocale('$collected, x≡_(mod ?) [= agregar, TCR resolver]',
-              '$collected, x≡_(mod ?) [= add, CRT solve]', pt: '$collected, x≡_(mod ?) [= acrescentar, TCR resolver]', fr: '$collected, x≡_(mod ?) [= ajouter, TRC résoudre]', it: '$collected, x≡_(mod ?) [= aggiungi, TCR risolvi]');
+              '$collected, x≡_(mod ?) [= add, CRT solve]', pt: '$collected, x≡_(mod ?) [= acrescentar, TCR resolver]', fr: '$collected, x≡_(mod ?) [= ajouter, TRC résoudre]', ru: '$collected, x≡_(mod ?) [= добавить, КТО решить]', it: '$collected, x≡_(mod ?) [= aggiungi, TCR risolvi]');
         } else {
           return '$collected, x≡${p.last}(mod _)';
         }
@@ -2846,7 +2846,7 @@ class CalculatorService extends ChangeNotifier {
       name: 'meanA', symbol: 'MedA', minParams: 2,
       displayBuilder: (p) => trLocale(
           'MedA(${p.join(", ")}, _) [= agregar, MedA resolver]',
-          'MedA(${p.join(", ")}, _) [= add, MedA solve]', pt: 'MedA(${p.join(", ")}, _) [= acrescentar, MedA resolver]', fr: 'MoyA(${p.join(", ")}, _) [= ajouter, MoyA résoudre]', it: 'MedA(${p.join(", ")}, _) [= aggiungi, MedA risolvi]'),
+          'MedA(${p.join(", ")}, _) [= add, MedA solve]', pt: 'MedA(${p.join(", ")}, _) [= acrescentar, MedA resolver]', fr: 'MoyA(${p.join(", ")}, _) [= ajouter, MoyA résoudre]', ru: 'СрА(${p.join(", ")}, _) [= добавить, СрА решить]', it: 'MedA(${p.join(", ")}, _) [= aggiungi, MedA risolvi]'),
     ));
   }
   void geometricMeanN() {
@@ -2854,7 +2854,7 @@ class CalculatorService extends ChangeNotifier {
       name: 'meanG', symbol: 'MedG', minParams: 2,
       displayBuilder: (p) => trLocale(
           'MedG(${p.join(", ")}, _) [= agregar, MedG resolver]',
-          'MedG(${p.join(", ")}, _) [= add, MedG solve]', pt: 'MedG(${p.join(", ")}, _) [= acrescentar, MedG resolver]', fr: 'MoyG(${p.join(", ")}, _) [= ajouter, MoyG résoudre]', it: 'MedG(${p.join(", ")}, _) [= aggiungi, MedG risolvi]'),
+          'MedG(${p.join(", ")}, _) [= add, MedG solve]', pt: 'MedG(${p.join(", ")}, _) [= acrescentar, MedG resolver]', fr: 'MoyG(${p.join(", ")}, _) [= ajouter, MoyG résoudre]', ru: 'СрГ(${p.join(", ")}, _) [= добавить, СрГ решить]', it: 'MedG(${p.join(", ")}, _) [= aggiungi, MedG risolvi]'),
     ));
   }
   void harmonicMeanN() {
@@ -2862,7 +2862,7 @@ class CalculatorService extends ChangeNotifier {
       name: 'meanH', symbol: 'MedH', minParams: 2,
       displayBuilder: (p) => trLocale(
           'MedH(${p.join(", ")}, _) [= agregar, MedH resolver]',
-          'MedH(${p.join(", ")}, _) [= add, MedH solve]', pt: 'MedH(${p.join(", ")}, _) [= acrescentar, MedH resolver]', fr: 'MoyH(${p.join(", ")}, _) [= ajouter, MoyH résoudre]', it: 'MedH(${p.join(", ")}, _) [= aggiungi, MedH risolvi]'),
+          'MedH(${p.join(", ")}, _) [= add, MedH solve]', pt: 'MedH(${p.join(", ")}, _) [= acrescentar, MedH resolver]', fr: 'MoyH(${p.join(", ")}, _) [= ajouter, MoyH résoudre]', ru: 'СрГарм(${p.join(", ")}, _) [= добавить, СрГарм решить]', it: 'MedH(${p.join(", ")}, _) [= aggiungi, MedH risolvi]'),
     ));
   }
   void quadraticMeanN() {
@@ -2870,7 +2870,7 @@ class CalculatorService extends ChangeNotifier {
       name: 'meanQ', symbol: 'MedQ', minParams: 2,
       displayBuilder: (p) => trLocale(
           'MedQ(${p.join(", ")}, _) [= agregar, MedQ resolver]',
-          'MedQ(${p.join(", ")}, _) [= add, MedQ solve]', pt: 'MedQ(${p.join(", ")}, _) [= acrescentar, MedQ resolver]', fr: 'MoyQ(${p.join(", ")}, _) [= ajouter, MoyQ résoudre]', it: 'MedQ(${p.join(", ")}, _) [= aggiungi, MedQ risolvi]'),
+          'MedQ(${p.join(", ")}, _) [= add, MedQ solve]', pt: 'MedQ(${p.join(", ")}, _) [= acrescentar, MedQ resolver]', fr: 'MoyQ(${p.join(", ")}, _) [= ajouter, MoyQ résoudre]', ru: 'СрК(${p.join(", ")}, _) [= добавить, СрК решить]', it: 'MedQ(${p.join(", ")}, _) [= aggiungi, MedQ risolvi]'),
     ));
   }
   void minimumN() {
@@ -2878,7 +2878,7 @@ class CalculatorService extends ChangeNotifier {
       name: 'minN', symbol: 'min', minParams: 2,
       displayBuilder: (p) => trLocale(
           'min(${p.join(", ")}, _) [= agregar, min resolver]',
-          'min(${p.join(", ")}, _) [= add, min solve]', pt: 'min(${p.join(", ")}, _) [= acrescentar, min resolver]', fr: 'min(${p.join(", ")}, _) [= ajouter, min résoudre]', it: 'min(${p.join(", ")}, _) [= aggiungi, min risolvi]'),
+          'min(${p.join(", ")}, _) [= add, min solve]', pt: 'min(${p.join(", ")}, _) [= acrescentar, min resolver]', fr: 'min(${p.join(", ")}, _) [= ajouter, min résoudre]', ru: 'min(${p.join(", ")}, _) [= добавить, min решить]', it: 'min(${p.join(", ")}, _) [= aggiungi, min risolvi]'),
     ));
   }
   void maximumN() {
@@ -2886,7 +2886,7 @@ class CalculatorService extends ChangeNotifier {
       name: 'maxN', symbol: 'max', minParams: 2,
       displayBuilder: (p) => trLocale(
           'max(${p.join(", ")}, _) [= agregar, max resolver]',
-          'max(${p.join(", ")}, _) [= add, max solve]', pt: 'max(${p.join(", ")}, _) [= acrescentar, max resolver]', fr: 'max(${p.join(", ")}, _) [= ajouter, max résoudre]', it: 'max(${p.join(", ")}, _) [= aggiungi, max risolvi]'),
+          'max(${p.join(", ")}, _) [= add, max solve]', pt: 'max(${p.join(", ")}, _) [= acrescentar, max resolver]', fr: 'max(${p.join(", ")}, _) [= ajouter, max résoudre]', ru: 'max(${p.join(", ")}, _) [= добавить, max решить]', it: 'max(${p.join(", ")}, _) [= aggiungi, max risolvi]'),
     ));
   }
 
@@ -3011,8 +3011,8 @@ class CalculatorService extends ChangeNotifier {
   void digitSumBase() {
     _startPending(PendingOperation(name: 'digsum', symbol: symDigitSumBase, requiredParams: 2,
       displayBuilder: (p) => p.isEmpty
-          ? trLocale('ΣdígB: n=_', 'ΣdigB: n=_', pt: 'ΣdígB: n=_', fr: 'ΣchifB : n=_', it: 'ΣcifB: n=_')
-          : trLocale('Σdíg_b(${p[0]}) b=_', 'Σdig_b(${p[0]}) b=_', pt: 'Σdíg_b(${p[0]}) b=_', fr: 'Σchif_b(${p[0]}) b=_', it: 'Σcif_b(${p[0]}) b=_')));
+          ? trLocale('ΣdígB: n=_', 'ΣdigB: n=_', pt: 'ΣdígB: n=_', fr: 'ΣchifB : n=_', ru: 'ΣцифB: n=_', it: 'ΣcifB: n=_')
+          : trLocale('Σdíg_b(${p[0]}) b=_', 'Σdig_b(${p[0]}) b=_', pt: 'Σdíg_b(${p[0]}) b=_', fr: 'Σchif_b(${p[0]}) b=_', ru: 'Σциф_b(${p[0]}) b=_', it: 'Σcif_b(${p[0]}) b=_')));
   }
 
   // ====================================================================
@@ -3132,7 +3132,7 @@ class CalculatorService extends ChangeNotifier {
           break;
         case 'digsum':
           resultStr = _fmt(SpecialFunctionsService.digitSumInBase(_parseStringAsBigInt(p[0]), _parseStringAsInt(p[1])));
-          historyLabel = trLocale('Σdíg_${p[1]}(${p[0]})', 'Σdig_${p[1]}(${p[0]})', pt: 'Σdíg_${p[1]}(${p[0]})', fr: 'Σchif_${p[1]}(${p[0]})', it: 'Σcif_${p[1]}(${p[0]})');
+          historyLabel = trLocale('Σdíg_${p[1]}(${p[0]})', 'Σdig_${p[1]}(${p[0]})', pt: 'Σdíg_${p[1]}(${p[0]})', fr: 'Σchif_${p[1]}(${p[0]})', ru: 'Σциф_${p[1]}(${p[0]})', it: 'Σcif_${p[1]}(${p[0]})');
           break;
 
         // --- 3 fixed params ---
@@ -3143,7 +3143,7 @@ class CalculatorService extends ChangeNotifier {
         case 'dioph':
           Map<String, dynamic> dr = SpecialFunctionsService.solveDiophantine(_parseStringAsBigInt(p[0]), _parseStringAsBigInt(p[1]), _parseStringAsBigInt(p[2]));
           if (dr['solvable'] != true) { _showError('errNoSolution'); return; }
-          resultStr = dr['note'] ?? trLocale('Solución encontrada', 'Solution found', pt: 'Solução encontrada', fr: 'Solution trouvée', it: 'Soluzione trovata');
+          resultStr = dr['note'] ?? trLocale('Solución encontrada', 'Solution found', pt: 'Solução encontrada', fr: 'Solution trouvée', ru: 'Решение найдено', it: 'Soluzione trovata');
           historyLabel = '${p[0]}x+${p[1]}y=${p[2]}';
           break;
 
@@ -3172,7 +3172,7 @@ class CalculatorService extends ChangeNotifier {
           if (cr['solvable'] != true) { _showError('errIncompatibleSystem'); return; }
           resultStr = cr['note'] ?? cr['solution'].toString();
           historyLabel = trLocale('TCR(${remainders.length} congruencias)',
-              'CRT(${remainders.length} congruences)', pt: 'TCR(${remainders.length} congruências)', fr: 'TRC(${remainders.length} congruences)', it: 'TCR(${remainders.length} congruenze)');
+              'CRT(${remainders.length} congruences)', pt: 'TCR(${remainders.length} congruências)', fr: 'TRC(${remainders.length} congruences)', ru: 'КТО(${remainders.length} сравнений)', it: 'TCR(${remainders.length} congruenze)');
           _display = resultStr;
           _lastResult = cr['solution'].toString();
           _updateAnalysis();
@@ -3545,7 +3545,7 @@ class CalculatorService extends ChangeNotifier {
         var result = SpecialFunctionsService.primeCountingFunction(number);
         String resultStr = result['count'].toString();
         String suffix =
-            result['exact'] == true ? '' : trLocale(' (aprox)', ' (approx)', pt: ' (aprox.)', fr: ' (approx.)', it: ' (appross.)');
+            result['exact'] == true ? '' : trLocale(' (aprox)', ' (approx)', pt: ' (aprox.)', fr: ' (approx.)', ru: ' (прибл.)', it: ' (appross.)');
         _display = _formatNumber(resultStr);
         _lastResult = resultStr;
         _updateAnalysis();

@@ -27,12 +27,12 @@ class StepsService {
     BigInt y = b.abs();
     if (y == _zero) {
       steps.add(_t(lang, 'mcd($origA, $origB) = $x (el segundo término es 0)',
-          'gcd($origA, $origB) = $x (second term is 0)', pt: 'mdc($origA, $origB) = $x (o segundo termo é 0)', fr: 'pgcd($origA, $origB) = $x (le second terme est nul)', it: 'MCD($origA, $origB) = $x (il secondo termine è 0)'));
+          'gcd($origA, $origB) = $x (second term is 0)', pt: 'mdc($origA, $origB) = $x (o segundo termo é 0)', fr: 'pgcd($origA, $origB) = $x (le second terme est nul)', ru: 'НОД($origA, $origB) = $x (второй член равен 0)', it: 'MCD($origA, $origB) = $x (il secondo termine è 0)'));
       return StepResult(x.toString(), steps);
     }
 
     steps.add(_t(lang, 'Algoritmo de Euclides para mcd($x, $y):',
-        'Euclidean algorithm for gcd($x, $y):', pt: 'Algoritmo de Euclides para mdc($x, $y):', fr: "Algorithme d'Euclide pour pgcd($x, $y) :", it: 'Algoritmo di Euclide per MCD($x, $y):'));
+        'Euclidean algorithm for gcd($x, $y):', pt: 'Algoritmo de Euclides para mdc($x, $y):', fr: "Algorithme d'Euclide pour pgcd($x, $y) :", ru: 'Алгоритм Евклида для НОД($x, $y):', it: 'Algoritmo di Euclide per MCD($x, $y):'));
     while (y != _zero) {
       final BigInt q = x ~/ y;
       final BigInt r = x - q * y;
@@ -42,7 +42,7 @@ class StepsService {
     }
     final BigInt g = x;
     steps.add(_t(lang, 'Último resto no nulo ⇒ mcd = $g',
-        'Last nonzero remainder ⇒ gcd = $g', pt: 'Último resto não nulo ⇒ mdc = $g', fr: 'Dernier reste non nul ⇒ pgcd = $g', it: 'Ultimo resto non nullo ⇒ MCD = $g'));
+        'Last nonzero remainder ⇒ gcd = $g', pt: 'Último resto não nulo ⇒ mdc = $g', fr: 'Dernier reste non nul ⇒ pgcd = $g', ru: 'Последний ненулевой остаток ⇒ НОД = $g', it: 'Ultimo resto non nullo ⇒ MCD = $g'));
 
     // Bézout via extended Euclid.
     final ext = _extendedGcd(origA.abs(), origB.abs());
@@ -50,7 +50,7 @@ class StepsService {
     if (origA.isNegative) bx = -bx;
     if (origB.isNegative) by = -by;
     steps.add(_t(lang, 'Identidad de Bézout: $g = ($bx)·$origA + ($by)·$origB',
-        'Bézout identity: $g = ($bx)·$origA + ($by)·$origB', pt: 'Identidade de Bézout: $g = ($bx)·$origA + ($by)·$origB', fr: 'Identité de Bézout : $g = ($bx)·$origA + ($by)·$origB', it: 'Identità di Bézout: $g = ($bx)·$origA + ($by)·$origB'));
+        'Bézout identity: $g = ($bx)·$origA + ($by)·$origB', pt: 'Identidade de Bézout: $g = ($bx)·$origA + ($by)·$origB', fr: 'Identité de Bézout : $g = ($bx)·$origA + ($by)·$origB', ru: 'Соотношение Безу: $g = ($bx)·$origA + ($by)·$origB', it: 'Identità di Bézout: $g = ($bx)·$origA + ($by)·$origB'));
 
     return StepResult(g.toString(), steps);
   }
@@ -60,12 +60,12 @@ class StepsService {
     final List<String> steps = [];
     if (n < BigInt.from(2)) {
       steps.add(_t(lang, '$n no tiene factorización en primos (n < 2)',
-          '$n has no prime factorization (n < 2)', pt: '$n não tem fatoração em primos (n < 2)', fr: "$n n'a pas de décomposition en facteurs premiers (n < 2)", it: '$n non ha una scomposizione in fattori primi (n < 2)'));
+          '$n has no prime factorization (n < 2)', pt: '$n não tem fatoração em primos (n < 2)', fr: "$n n'a pas de décomposition en facteurs premiers (n < 2)", ru: 'У $n нет разложения на простые множители (n < 2)', it: '$n non ha una scomposizione in fattori primi (n < 2)'));
       return StepResult(n.toString(), steps);
     }
 
     steps.add(_t(lang, 'Factorización de $n por divisiones sucesivas:',
-        'Factorization of $n by successive division:', pt: 'Fatoração de $n por divisões sucessivas:', fr: 'Décomposition de $n par divisions successives :', it: 'Scomposizione di $n per divisioni successive:'));
+        'Factorization of $n by successive division:', pt: 'Fatoração de $n por divisões sucessivas:', fr: 'Décomposition de $n par divisions successives :', ru: 'Разложение $n последовательным делением:', it: 'Scomposizione di $n per divisioni successive:'));
     BigInt remaining = n;
     final Map<BigInt, int> factors = {};
 
@@ -80,7 +80,7 @@ class StepsService {
     }
     if (remaining > _one) {
       if (factors.isNotEmpty || remaining != n) {
-        steps.add(_t(lang, '$remaining es primo', '$remaining is prime', pt: '$remaining é primo', fr: '$remaining est premier', it: '$remaining è primo'));
+        steps.add(_t(lang, '$remaining es primo', '$remaining is prime', pt: '$remaining é primo', fr: '$remaining est premier', ru: '$remaining — простое', it: '$remaining è primo'));
       }
       factors[remaining] = (factors[remaining] ?? 0) + 1;
     }
@@ -106,7 +106,7 @@ class StepsService {
       throw CalcException(CalcError.moduliPositive);
     }
     final List<String> steps = [];
-    steps.add(_t(lang, 'Sistema de congruencias:', 'System of congruences:', pt: 'Sistema de congruências:', fr: 'Système de congruences :', it: 'Sistema di congruenze:'));
+    steps.add(_t(lang, 'Sistema de congruencias:', 'System of congruences:', pt: 'Sistema de congruências:', fr: 'Système de congruences :', ru: 'Система сравнений:', it: 'Sistema di congruenze:'));
     for (int i = 0; i < remainders.length; i++) {
       steps.add('  x ≡ ${remainders[i]} (mod ${moduli[i]})');
     }
@@ -126,8 +126,8 @@ class StepsService {
             'Combinar con x ≡ $a2 (mod $m2): mcd($curM, $m2) = $g no divide '
                 'a ${a2 - curR} ⇒ sistema incompatible',
             'Combine with x ≡ $a2 (mod $m2): gcd($curM, $m2) = $g does not '
-                'divide ${a2 - curR} ⇒ incompatible system', pt: 'Combinar com x ≡ $a2 (mod $m2): mdc($curM, $m2) = $g não divide ${a2 - curR} ⇒ sistema incompatível', fr: 'Combiner avec x ≡ $a2 (mod $m2) : pgcd($curM, $m2) = $g ne divise pas ${a2 - curR} ⇒ système incompatible', it: 'Combinare con x ≡ $a2 (mod $m2): MCD($curM, $m2) = $g non divide ${a2 - curR} ⇒ sistema incompatibile'));
-        return StepResult(_t(lang, 'sin solución', 'no solution', pt: 'sem solução', fr: 'aucune solution', it: 'nessuna soluzione'), steps);
+                'divide ${a2 - curR} ⇒ incompatible system', pt: 'Combinar com x ≡ $a2 (mod $m2): mdc($curM, $m2) = $g não divide ${a2 - curR} ⇒ sistema incompatível', fr: 'Combiner avec x ≡ $a2 (mod $m2) : pgcd($curM, $m2) = $g ne divise pas ${a2 - curR} ⇒ système incompatible', ru: 'Объединяем с x ≡ $a2 (mod $m2): НОД($curM, $m2) = $g не делит ${a2 - curR} ⇒ система несовместна', it: 'Combinare con x ≡ $a2 (mod $m2): MCD($curM, $m2) = $g non divide ${a2 - curR} ⇒ sistema incompatibile'));
+        return StepResult(_t(lang, 'sin solución', 'no solution', pt: 'sem solução', fr: 'aucune solution', ru: 'решений нет', it: 'nessuna soluzione'), steps);
       }
 
       final BigInt lcm = curM ~/ g * m2;
@@ -139,13 +139,13 @@ class StepsService {
       if (newR.isNegative) newR += lcm;
 
       steps.add(_t(lang, 'Combinar con x ≡ $a2 (mod $m2) ⇒ x ≡ $newR (mod $lcm)',
-          'Combine with x ≡ $a2 (mod $m2) ⇒ x ≡ $newR (mod $lcm)', pt: 'Combinar com x ≡ $a2 (mod $m2) ⇒ x ≡ $newR (mod $lcm)', fr: 'Combiner avec x ≡ $a2 (mod $m2) ⇒ x ≡ $newR (mod $lcm)', it: 'Combinare con x ≡ $a2 (mod $m2) ⇒ x ≡ $newR (mod $lcm)'));
+          'Combine with x ≡ $a2 (mod $m2) ⇒ x ≡ $newR (mod $lcm)', pt: 'Combinar com x ≡ $a2 (mod $m2) ⇒ x ≡ $newR (mod $lcm)', fr: 'Combiner avec x ≡ $a2 (mod $m2) ⇒ x ≡ $newR (mod $lcm)', ru: 'Объединяем с x ≡ $a2 (mod $m2) ⇒ x ≡ $newR (mod $lcm)', it: 'Combinare con x ≡ $a2 (mod $m2) ⇒ x ≡ $newR (mod $lcm)'));
       curR = newR;
       curM = lcm;
     }
 
     final String result = 'x ≡ $curR (mod $curM)';
-    steps.add(_t(lang, 'Solución: $result', 'Solution: $result', pt: 'Solução: $result', fr: 'Solution : $result', it: 'Soluzione: $result'));
+    steps.add(_t(lang, 'Solución: $result', 'Solution: $result', pt: 'Solução: $result', fr: 'Solution : $result', ru: 'Решение: $result', it: 'Soluzione: $result'));
     return StepResult(result, steps);
   }
 
@@ -158,20 +158,20 @@ class StepsService {
     }
     final List<String> steps = [];
     steps.add(_t(lang, 'Ruffini: dividir p(x) = $p entre (x − ${_paren(c)})',
-        'Ruffini: divide p(x) = $p by (x − ${_paren(c)})', pt: 'Ruffini: dividir p(x) = $p por (x − ${_paren(c)})', fr: 'Ruffini : diviser p(x) = $p par (x − ${_paren(c)})', it: 'Ruffini: dividere p(x) = $p per (x − ${_paren(c)})'));
+        'Ruffini: divide p(x) = $p by (x − ${_paren(c)})', pt: 'Ruffini: dividir p(x) = $p por (x − ${_paren(c)})', fr: 'Ruffini : diviser p(x) = $p par (x − ${_paren(c)})', ru: 'Схема Горнера: делим p(x) = $p на (x − ${_paren(c)})', it: 'Ruffini: dividere p(x) = $p per (x − ${_paren(c)})'));
 
     // Coefficients from highest to lowest degree.
     final List<Fraction> desc =
         p.coefficients.reversed.toList(growable: false);
     steps.add(_t(lang,
         'Coeficientes (grado ${p.degree} → 0): ${desc.join(', ')}',
-        'Coefficients (degree ${p.degree} → 0): ${desc.join(', ')}', pt: "Coeficientes (grau ${p.degree} → 0): ${desc.join(', ')}", fr: "Coefficients (degré ${p.degree} → 0) : ${desc.join(', ')}", it: "Coefficienti (grado ${p.degree} → 0): ${desc.join(', ')}"));
+        'Coefficients (degree ${p.degree} → 0): ${desc.join(', ')}', pt: "Coeficientes (grau ${p.degree} → 0): ${desc.join(', ')}", fr: "Coefficients (degré ${p.degree} → 0) : ${desc.join(', ')}", ru: "Коэффициенты (от степени ${p.degree} к 0): ${desc.join(', ')}", it: "Coefficienti (grado ${p.degree} → 0): ${desc.join(', ')}"));
 
     // r[k] accumulates the result of each column.
     final List<Fraction> r = List.filled(desc.length, Fraction.zero);
     r[0] = desc[0];
     steps.add(_t(lang, 'Bajar el primer coeficiente: ${r[0]}',
-        'Bring down the first coefficient: ${r[0]}', pt: 'Baixar o primeiro coeficiente: ${r[0]}', fr: 'Abaisser le premier coefficient : ${r[0]}', it: 'Abbassare il primo coefficiente: ${r[0]}'));
+        'Bring down the first coefficient: ${r[0]}', pt: 'Baixar o primeiro coeficiente: ${r[0]}', fr: 'Abaisser le premier coefficient : ${r[0]}', ru: 'Сносим первый коэффициент: ${r[0]}', it: 'Abbassare il primo coefficiente: ${r[0]}'));
     for (int k = 1; k < desc.length; k++) {
       final Fraction prod = c * r[k - 1];
       r[k] = desc[k] + prod;
@@ -182,18 +182,18 @@ class StepsService {
     final Fraction remainder = r.last;
     final Polynomial quotient =
         Polynomial(r.sublist(0, r.length - 1).reversed.toList());
-    steps.add(_t(lang, 'Cociente: $quotient', 'Quotient: $quotient', pt: 'Quociente: $quotient', fr: 'Quotient : $quotient', it: 'Quoziente: $quotient'));
-    steps.add(_t(lang, 'Resto: $remainder', 'Remainder: $remainder', pt: 'Resto: $remainder', fr: 'Reste : $remainder', it: 'Resto: $remainder'));
+    steps.add(_t(lang, 'Cociente: $quotient', 'Quotient: $quotient', pt: 'Quociente: $quotient', fr: 'Quotient : $quotient', ru: 'Частное: $quotient', it: 'Quoziente: $quotient'));
+    steps.add(_t(lang, 'Resto: $remainder', 'Remainder: $remainder', pt: 'Resto: $remainder', fr: 'Reste : $remainder', ru: 'Остаток: $remainder', it: 'Resto: $remainder'));
     if (remainder.isZero) {
       steps.add(_t(lang, '⇒ ${_paren(c)} es raíz de p(x)',
-          '⇒ ${_paren(c)} is a root of p(x)', pt: '⇒ ${_paren(c)} é raiz de p(x)', fr: '⇒ ${_paren(c)} est racine de p(x)', it: '⇒ ${_paren(c)} è radice di p(x)'));
+          '⇒ ${_paren(c)} is a root of p(x)', pt: '⇒ ${_paren(c)} é raiz de p(x)', fr: '⇒ ${_paren(c)} est racine de p(x)', ru: '⇒ ${_paren(c)} — корень p(x)', it: '⇒ ${_paren(c)} è radice di p(x)'));
     } else {
       steps.add(_t(lang, '⇒ p(${_paren(c)}) = $remainder (teorema del resto)',
-          '⇒ p(${_paren(c)}) = $remainder (remainder theorem)', pt: '⇒ p(${_paren(c)}) = $remainder (teorema do resto)', fr: '⇒ p(${_paren(c)}) = $remainder (théorème du reste)', it: '⇒ p(${_paren(c)}) = $remainder (teorema del resto)'));
+          '⇒ p(${_paren(c)}) = $remainder (remainder theorem)', pt: '⇒ p(${_paren(c)}) = $remainder (teorema do resto)', fr: '⇒ p(${_paren(c)}) = $remainder (théorème du reste)', ru: '⇒ p(${_paren(c)}) = $remainder (теорема Безу об остатке)', it: '⇒ p(${_paren(c)}) = $remainder (teorema del resto)'));
     }
 
     final String result = _t(lang, 'cociente $quotient, resto $remainder',
-        'quotient $quotient, remainder $remainder', pt: 'quociente $quotient, resto $remainder', fr: 'quotient $quotient, reste $remainder', it: 'quoziente $quotient, resto $remainder');
+        'quotient $quotient, remainder $remainder', pt: 'quociente $quotient, resto $remainder', fr: 'quotient $quotient, reste $remainder', ru: 'частное $quotient, остаток $remainder', it: 'quoziente $quotient, resto $remainder');
     return StepResult(result, steps);
   }
 

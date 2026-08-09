@@ -10,6 +10,7 @@ import 'app_localizations_es.dart';
 import 'app_localizations_fr.dart';
 import 'app_localizations_it.dart';
 import 'app_localizations_pt.dart';
+import 'app_localizations_ru.dart';
 
 // ignore_for_file: type=lint
 
@@ -102,6 +103,7 @@ abstract class AppLocalizations {
     Locale('fr'),
     Locale('it'),
     Locale('pt'),
+    Locale('ru'),
   ];
 
   /// App title shown in the title bar and about screen
@@ -1933,6 +1935,12 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Italiano'**
   String get settingsLangIt;
+
+  /// No description provided for @settingsLangRu.
+  ///
+  /// In es, this message translates to:
+  /// **'Русский'**
+  String get settingsLangRu;
 
   /// Help screen title
   ///
@@ -4237,8 +4245,14 @@ class _AppLocalizationsDelegate
   }
 
   @override
-  bool isSupported(Locale locale) =>
-      <String>['en', 'es', 'fr', 'it', 'pt'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => <String>[
+    'en',
+    'es',
+    'fr',
+    'it',
+    'pt',
+    'ru',
+  ].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
@@ -4257,6 +4271,8 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
       return AppLocalizationsIt();
     case 'pt':
       return AppLocalizationsPt();
+    case 'ru':
+      return AppLocalizationsRu();
   }
 
   throw FlutterError(

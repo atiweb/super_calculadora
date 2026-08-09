@@ -1,0 +1,1106 @@
+{
+  "@@locale": "ru",
+  "appTitle": "Супер Калькулятор",
+  "appVersion": "Версия 1.2.1",
+  "appDeveloped": "Разработано на Flutter",
+  "appDynamicThemes": "С поддержкой динамических тем",
+  "navStandard": "Стандартный",
+  "navStandardSub": "Основные операции",
+  "navScientific": "Инженерный",
+  "navScientificSub": "Расширенные функции",
+  "navSpecial": "Специальные функции",
+  "navSpecialSub": "Теория чисел",
+  "navHistory": "История",
+  "navHistorySub": "Посмотреть предыдущие операции",
+  "navSettings": "Настройки",
+  "navSettingsSub": "Настройки приложения",
+  "navHelp": "Справка",
+  "navHelpSub": "Руководство по специальным функциям",
+  "navAbout": "О приложении",
+  "navAboutSub": "Супер Калькулятор v1.2.1",
+  "navCalculator": "Калькулятор",
+  "navSelectType": "Выберите режим",
+  "navAngleMode": "Режим: {mode}",
+  "@navAngleMode": {
+    "placeholders": {
+      "mode": {
+        "type": "String"
+      }
+    }
+  },
+  "navRadians": "Радианы",
+  "navDegrees": "Градусы",
+  "calcAnalysis": "Анализ",
+  "calcExpressions": "Выражения",
+  "calcScientific": "Инженерный калькулятор",
+  "calcSpecialFunctions": "Специальные функции",
+  "calcSuperCalculator": "Супер Калькулятор",
+  "calcNumericAnalysis": "Числовой анализ",
+  "calcMathExpressions": "Математические выражения",
+  "calcResult": "Результат:",
+  "calcProcessing": "Обработка больших чисел…",
+  "calcHighPrecision": "Вычисление (высокая точность)…",
+  "calcCancel": "Отмена",
+  "displayPaste": "Вставить",
+  "displayCopy": "Копировать",
+  "displayCopied": "Скопировано: {text}",
+  "@displayCopied": {
+    "placeholders": {
+      "text": {
+        "type": "String"
+      }
+    }
+  },
+  "displayCopyResult": "Копировать результат",
+  "displayPasteNumber": "Вставить число",
+  "displayClearDisplay": "Очистить дисплей",
+  "displayInvalidNumber": "Ошибка: вставленный текст не является числом",
+  "displayNothingToPaste": "Нечего вставлять",
+  "displayPasteError": "Ошибка вставки: {error}",
+  "@displayPasteError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "displayPasted": "Вставлено: {text}",
+  "@displayPasted": {
+    "placeholders": {
+      "text": {
+        "type": "String"
+      }
+    }
+  },
+  "histTitle": "История",
+  "histClearAll": "Очистить историю",
+  "histClearAllTooltip": "Очистить всю историю",
+  "histConfirmClear": "Удалить всю историю?",
+  "histConfirmClearN": "Удалить все операции из истории ({count})? Это действие нельзя отменить.",
+  "@histConfirmClearN": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "histCleared": "История очищена",
+  "histDeleted": "История удалена",
+  "histOperationDeleted": "Операция удалена",
+  "histCopiedToClipboard": "Скопировано в буфер обмена",
+  "histCopiedClipboardText": "Скопировано в буфер обмена: {text}",
+  "@histCopiedClipboardText": {
+    "placeholders": {
+      "text": {
+        "type": "String"
+      }
+    }
+  },
+  "histFullResult": "Полный результат",
+  "histClose": "Закрыть",
+  "histExpression": "Выражение:",
+  "histResult": "Результат:",
+  "histCopyResult": "Копировать результат",
+  "histCopyAll": "Копировать всё",
+  "histCopyExpression": "Копировать выражение",
+  "histUseResult": "Использовать результат",
+  "histViewResult": "Показать результат",
+  "histDelete": "Удалить",
+  "histEmpty": "В истории нет операций",
+  "histEmptyHint": "Выполните несколько вычислений, чтобы увидеть здесь историю",
+  "histEmptyHintAlt": "Выполненные операции появятся здесь",
+  "histOperations": "операций",
+  "histNow": "Сейчас",
+  "histErrorLoading": "Ошибка загрузки истории: {error}",
+  "@histErrorLoading": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "histErrorClearing": "Ошибка очистки истории: {error}",
+  "@histErrorClearing": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "histErrorDeleting": "Ошибка удаления операции: {error}",
+  "@histErrorDeleting": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsTitle": "Настройки",
+  "settingsTheme": "Тема",
+  "settingsNumberFormat": "Формат чисел",
+  "settingsScientificNotation": "Использовать научную запись",
+  "settingsScientificHint": "Если выключено, числа показываются целиком (напр. 123000)",
+  "settingsHighPrecision": "Режим высокой точности",
+  "settingsHighPrecisionHint": "Вычисляет sin, cos, tan, ln, √… через точные конструктивные вещественные числа (медленнее). Особые точки, например tan 90°, помечаются как неопределённые.",
+  "settingsPrecisionDigits": "Знаков точности: {digits}",
+  "@settingsPrecisionDigits": {
+    "placeholders": {
+      "digits": {
+        "type": "int"
+      }
+    }
+  },
+  "settingsOpenSourceLicenses": "Лицензии открытого кода",
+  "settingsFormatExamples": "Примеры формата",
+  "settingsLargeNumber": "Большое число:",
+  "settingsSmallNumber": "Маленькое число:",
+  "settingsNormal": "Обычная:",
+  "settingsScientific": "Научная:",
+  "settingsAboutApp": "О приложении",
+  "themeLight": "Светлая",
+  "themeDark": "Тёмная",
+  "themeAuto": "Автоматически",
+  "themeLightDesc": "Всегда использовать светлую тему",
+  "themeDarkDesc": "Всегда использовать тёмную тему",
+  "themeAutoDesc": "Следовать настройкам системы",
+  "aboutTitle": "Супер Калькулятор",
+  "aboutDescription": "Продвинутый калькулятор с инженерными возможностями и полным числовым анализом.",
+  "aboutFeatures": "Возможности:",
+  "aboutClose": "Закрыть",
+  "aboutFeature1": "Числа до 1024 бит",
+  "aboutFeature2": "64-битная десятичная точность",
+  "aboutFeature3": "Стандартный и инженерный режимы калькулятора",
+  "aboutFeature4": "Тригонометрические функции (sin, cos, tan)",
+  "aboutFeature5": "Обратные тригонометрические функции (asin, acos, atan)",
+  "aboutFeature6": "Натуральный (ln) и десятичный (log) логарифмы",
+  "aboutFeature7": "Показательные функции (eˣ, 10ˣ)",
+  "aboutFeature8": "Вычисление факториала (n!)",
+  "aboutFeature9": "Математические константы (π, e)",
+  "aboutFeature10": "Степени и корни (x², x³, √, ∛)",
+  "aboutFeature11": "Перевод градусов в радианы и обратно",
+  "aboutFeature12": "Анализ простых чисел",
+  "aboutFeature13": "Разложение на простые множители",
+  "aboutFeature14": "Двоичное и десятичное представление",
+  "aboutFeature15": "Анализ математических свойств",
+  "aboutFeature16": "Операции с чрезвычайно большими числами",
+  "aboutFeature17": "Тяжёлые вычисления в отдельных потоках (isolate)",
+  "aboutFeature18": "Обработка ошибок области определения и размера",
+  "aboutFeature19": "Олимпиадные инструменты: 11 точных разделов (дроби, радикалы, геометрия, многочлены, алгебра, теория чисел, матрицы…)",
+  "aboutFeature20": "Символьная алгебра: раскрытие скобок и тождества от нескольких переменных",
+  "exprMathExpression": "Математическое выражение",
+  "exprHideHistory": "Скрыть историю",
+  "exprShowHistory": "Показать историю",
+  "exprClearExpression": "Очистить выражение",
+  "exprHint": "Напр.: (5 + 3) * sqrt(9) - 2^3",
+  "exprDelete": "Стереть",
+  "exprEvaluate": "Вычислить (Enter)",
+  "exprParenthesis": "Скобки",
+  "exprSquareRoot": "Квадратный корень",
+  "exprPower": "Степень",
+  "exprSin": "Синус",
+  "exprCos": "Косинус",
+  "exprTan": "Тангенс",
+  "exprLog": "Логарифм",
+  "exprLn": "Натуральный логарифм",
+  "exprPi": "Pi",
+  "exprEuler": "Euler",
+  "analysisEnterNumber": "Введите число, чтобы увидеть его анализ",
+  "analysisLoading": "Анализ числа…",
+  "analysisLoadingHint": "Для больших чисел это может занять некоторое время",
+  "analysisLimited": "Ограниченный анализ",
+  "analysisExtremelyLarge": "Чрезвычайно большое число",
+  "analysisDigitsCount": "Цифр: {count}",
+  "@analysisDigitsCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "analysisPrimalityNote": "Примечание о проверке простоты",
+  "analysisOriginalInput": "Исходный ввод: {original} → Проанализировано: {analyzed}",
+  "@analysisOriginalInput": {
+    "placeholders": {
+      "original": {
+        "type": "String"
+      },
+      "analyzed": {
+        "type": "String"
+      }
+    }
+  },
+  "analysisCalculatingPrimes": "Вычисление простых чисел…",
+  "analysisSearchingPrimes": "Поиск предыдущего и следующего простого",
+  "analysisBasicProperties": "Основные свойства",
+  "analysisValue": "Значение",
+  "analysisIsPrime": "Простое",
+  "analysisDigits": "Цифры",
+  "analysisNextPrime": "Следующее простое",
+  "analysisPrevPrime": "Предыдущее простое",
+  "analysisDigitSum": "Сумма цифр",
+  "analysisBinary": "Двоичное",
+  "analysisYes": "Да",
+  "analysisNo": "No",
+  "analysisRepresentations": "Представления",
+  "analysisOctal": "Octal",
+  "analysisHex": "Шестнадцатеричное",
+  "analysisMathAnalysis": "Математический анализ",
+  "analysisIsPerfect": "Совершенное",
+  "analysisIsPalindrome": "Палиндром",
+  "analysisIsFibonacci": "Число Фибоначчи",
+  "analysisIsTriangular": "Треугольное",
+  "analysisPrimeFactors": "Разложение на простые множители",
+  "analysisPrimeFactorsLabel": "Простые множители",
+  "analysisDivisors": "Делители",
+  "analysisAllDivisors": "Все делители",
+  "analysisDivisorCount": "Количество делителей",
+  "analysisArithmeticFunctions": "Арифметические функции",
+  "analysisEulerPhi": "φ(n) Euler",
+  "analysisCarmichael": "λ(n) Carmichael",
+  "analysisMobius": "μ(n) Möbius",
+  "analysisSmallOmega": "ω(n) различных простых",
+  "analysisBigOmega": "Ω(n) простых с кратн.",
+  "analysisSopfr": "sopfr(n) Σпростых с повт.",
+  "analysisSopf": "sopf(n) Σразличных простых",
+  "analysisRadical": "rad(n) radical",
+  "analysisDigitalRoot": "Цифровой корень",
+  "analysisClassification": "Классификация",
+  "analysisSquareFree": "Свободное от квадратов",
+  "analysisPowerful": "Мощное",
+  "analysisHarshad": "Harshad",
+  "analysisSemiprime": "Полупростое",
+  "analysisAbundant": "Избыточное",
+  "analysisDeficient": "Недостаточное",
+  "analysisOperations": "Операции",
+  "analysisSquare": "Квадрат",
+  "analysisCube": "Куб",
+  "analysisSquareRootLabel": "Квадратный корень",
+  "analysisIsPerfectSquare": "Точный квадрат",
+  "analysisCubeRoot": "Кубический корень",
+  "analysisIsPerfectCube": "Точный куб",
+  "analysisPerfectPower": "Точная степень",
+  "analysisExpression": "Выражение",
+  "analysisBase": "Base",
+  "analysisExponent": "Показатель",
+  "cardPrime": "Простое",
+  "cardPerfect": "Совершенное",
+  "cardPalindrome": "Палиндром",
+  "cardFibonacci": "Fibonacci",
+  "cardTriangular": "Треугольное",
+  "cardEven": "Чётное",
+  "cardOdd": "Нечётное",
+  "cardQuickProperties": "Быстрые свойства:",
+  "cardConvert": "Преобразовать:",
+  "cardToDecimal": "В десятичное",
+  "cardToBinary": "В двоичное",
+  "cardAdvancedOps": "Расширенные операции:",
+  "cardDigits": "цифр",
+  "kbdNumberTheory": "Теория чисел",
+  "kbdModularArith": "Модульная арифметика",
+  "kbdCombinatorics": "Комбинаторика",
+  "kbdStatistics": "Статистика",
+  "errPower": "Ошибка возведения в степень: {error}",
+  "@errPower": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errSquareRoot": "Ошибка квадратного корня: {error}",
+  "@errSquareRoot": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errNegativeSqrt": "Нельзя извлечь квадратный корень из отрицательного числа",
+  "@errNegativeSqrt": {
+    "description": "Error when taking square root of a negative number"
+  },
+  "errCubeRoot": "Ошибка кубического корня: {error}",
+  "@errCubeRoot": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errBinaryConversion": "Ошибка перевода в двоичную систему: {error}",
+  "@errBinaryConversion": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errEmptyBinary": "Пустое двоичное число",
+  "errInvalidBinary": "Число должно содержать только двоичные цифры (0 и 1)",
+  "errBinaryFromConversion": "Ошибка перевода из двоичной системы: {error}",
+  "@errBinaryFromConversion": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errTrigTooLarge": "Число слишком велико для тригонометрических функций",
+  "errSin": "Ошибка синуса: {error}",
+  "@errSin": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errCos": "Ошибка косинуса: {error}",
+  "@errCos": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errTanUndefined": "Тангенс не определён для этого угла",
+  "errTan": "Ошибка тангенса: {error}",
+  "@errTan": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errAsinDomain": "Арксинус определён только для значений от -1 до 1",
+  "errAsin": "Ошибка арксинуса: {error}",
+  "@errAsin": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errAcosDomain": "Арккосинус определён только для значений от -1 до 1",
+  "errAcos": "Ошибка арккосинуса: {error}",
+  "@errAcos": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errAtan": "Ошибка арктангенса: {error}",
+  "@errAtan": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errLnDomain": "Натуральный логарифм определён только для положительных чисел",
+  "errLnTooLarge": "Число слишком велико для натурального логарифма",
+  "errLn": "Ошибка натурального логарифма: {error}",
+  "@errLn": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errLogDomain": "Логарифм определён только для положительных чисел",
+  "errLogTooLarge": "Число слишком велико для десятичного логарифма",
+  "errLog": "Ошибка логарифма: {error}",
+  "@errLog": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errExpTooLarge": "Число слишком велико для экспоненты",
+  "errExp": "Ошибка экспоненты: {error}",
+  "@errExp": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errTenPowTooLarge": "Число слишком велико для 10^x",
+  "errTenPow": "Ошибка 10^x: {error}",
+  "@errTenPow": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errFactorialInvalid": "Недопустимое число для факториала",
+  "errFactorialNonNeg": "Факториал определён только для неотрицательных целых чисел",
+  "errFactorialTooLarge": "Число слишком велико для факториала (максимум 170)",
+  "errFactorial": "Ошибка факториала: {error}",
+  "@errFactorial": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errOperationCancelled": "Операция отменена",
+  "errGeneric": "Ошибка: {error}",
+  "@errGeneric": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errPhiDomain": "φ(n) определена только при n > 0",
+  "errPhi": "Ошибка φ(n): {error}",
+  "@errPhi": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errPrimorialDomain": "Праймориал определён только при n ≥ 0",
+  "errPrimorial": "Ошибка праймориала: {error}",
+  "@errPrimorial": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errSigma0Domain": "σ₀(n) определена только при n > 0",
+  "errSigma0": "Ошибка σ₀(n): {error}",
+  "@errSigma0": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errSigmaDomain": "σ(m,n) определена только при n > 0",
+  "errSigma": "Ошибка σ(m,n): {error}",
+  "@errSigma": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errFloorCeil": "Ошибка целой части (пол/потолок): {error}",
+  "@errFloorCeil": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errMobiusDomain": "μ(n) определена только при n > 0",
+  "errMobius": "Ошибка μ(n): {error}",
+  "@errMobius": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errFactorialNeg": "Факториал не определён для отрицательных чисел",
+  "errFactorialMax": "n! слишком велик (макс. n=10000)",
+  "errFactorialN": "Ошибка n!: {error}",
+  "@errFactorialN": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errDoubleFactorialNeg": "Двойной факториал не определён для отрицательных чисел",
+  "errDoubleFactorial": "Ошибка n!!: {error}",
+  "@errDoubleFactorial": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errFibonacciNeg": "F(n) не определено при n < 0",
+  "errFibonacci": "Ошибка F(n): {error}",
+  "@errFibonacci": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errCatalanNeg": "Число Каталана не определено при n < 0",
+  "errCatalan": "Ошибка числа Каталана: {error}",
+  "@errCatalan": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errDerangementNeg": "D(n) не определено при n < 0",
+  "errDerangement": "Ошибка D(n): {error}",
+  "@errDerangement": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errPartitionNeg": "p(n) не определено при n < 0",
+  "errPartition": "Ошибка p(n): {error}",
+  "@errPartition": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errBellNeg": "B(n) не определено при n < 0",
+  "errBell": "Ошибка Bell(n): {error}",
+  "@errBell": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errDigitalRoot": "Ошибка цифрового корня: {error}",
+  "@errDigitalRoot": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errPrimitiveRootDomain": "Требуется n > 1",
+  "errNoPrimitiveRoot": "Первообразного корня по модулю {n} не существует",
+  "@errNoPrimitiveRoot": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "errLiouvilleDomain": "λ_L(n) определена только при n > 0",
+  "errLiouville": "Ошибка λ_L(n): {error}",
+  "@errLiouville": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errPrimeCounting": "Ошибка π(n): {error}",
+  "@errPrimeCounting": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errRadDomain": "rad(n) определена только при n > 0",
+  "errRad": "Ошибка rad(n): {error}",
+  "@errRad": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errOmegaDomain": "ω(n) определена только при n > 0",
+  "errOmega": "Ошибка ω(n): {error}",
+  "@errOmega": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errBigOmegaDomain": "Ω(n) определена только при n > 0",
+  "errBigOmega": "Ошибка Ω(n): {error}",
+  "@errBigOmega": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errCarmichaelDomain": "λ(n) определена только при n > 0",
+  "errCarmichael": "Ошибка λ(n): {error}",
+  "@errCarmichael": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errSopfrDomain": "sopfr(n) определена только при n > 0",
+  "errSopfr": "Ошибка sopfr(n): {error}",
+  "@errSopfr": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errSopfDomain": "sopf(n) определена только при n > 0",
+  "errSopf": "Ошибка sopf(n): {error}",
+  "@errSopf": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errPercentage": "Ошибка процента: {error}",
+  "@errPercentage": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errDivisionByZero": "Деление на ноль",
+  "errReciprocal": "Ошибка обратного числа: {error}",
+  "@errReciprocal": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errNoInverse": "Обратного по модулю для {a} mod {n} не существует",
+  "@errNoInverse": {
+    "placeholders": {
+      "a": {
+        "type": "String"
+      },
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "errModPow": "Ошибка возведения в степень по модулю: {error}",
+  "@errModPow": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errDiophantine": "Ошибка диофантова уравнения: {error}",
+  "@errDiophantine": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errCRT": "Ошибка КТО: {error}",
+  "@errCRT": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsLanguage": "Язык",
+  "settingsLangAuto": "Автоматически (системный)",
+  "settingsLangAutoDesc": "Использовать язык устройства",
+  "settingsLangEs": "Español",
+  "settingsLangEn": "English",
+  "settingsLangPt": "Português",
+  "settingsLangFr": "Français",
+  "settingsLangIt": "Italiano",
+  "settingsLangRu": "Русский",
+  "hlpTitle": "Руководство по специальным функциям",
+  "hlpQuickStartHeader": "Быстрый старт",
+  "hlpQuickStartWelcome": "Добро пожаловать в олимпиадный калькулятор",
+  "hlpQuickStartStep1": "Откройте боковое меню (☰) и выберите «Специальные функции»",
+  "hlpQuickStartStep2": "На верхней клавиатуре (прокручивается) около 40 функций в 4 разделах",
+  "hlpQuickStartStep3": "Введите число и нажмите любую кнопку функции",
+  "hlpQuickStartStep4": "Если функции нужны ещё значения, появится индикатор незавершённой операции",
+  "hlpQuickStartStep5": "Боковая панель показывает автоматический анализ введённого числа",
+  "hlpQuickStartNote": "Функции с 1 параметром выполняются сразу.\nФункции с 2 и более параметрами показывают индикатор и ждут остальные значения.",
+  "hlpParamHeader": "Система параметров",
+  "hlpParamTypesTitle": "Типы функций по числу параметров",
+  "hlpParam1Title": "1 параметр (сразу)",
+  "hlpParam1Desc": "Введите число → Нажмите функцию → Результат",
+  "hlpParam1Example": "Напр.: φ(12) → введите 12, нажмите φ → покажет 4",
+  "hlpParam2Title": "2-3-4 параметра (фиксированное число)",
+  "hlpParam2Desc": "Введите значение → Функция → Значение → = → (повторите, если нужно ещё)\nВыполняется само, когда заполнены все параметры.",
+  "hlpParam2Example": "Напр.: C(10,3) → введите 10 → C(n,k) → 3 → =",
+  "hlpParamNTitle": "N параметров (переменное число)",
+  "hlpParamNDesc": "Введите значение → Функция → Значение → = (добавьте ещё)\nНажмите ТУ ЖЕ ФУНКЦИЮ ещё раз, чтобы выполнить.",
+  "hlpParamNExample": "Напр.: НОД(12,18,24) → 12 → НОД → 18 → = → 24 → НОД",
+  "hlpPendingOpTitle": "Индикатор незавершённой операции",
+  "hlpPendingOpDesc": "Когда функция ждёт новых значений, на экране появляется цветной индикатор: он показывает, какая операция выполняется и чего не хватает.\n\nПример: «C(10, _)» означает, что не хватает k для C(n,k).\n«НОД(12, 18, _) [= добавить, НОД решить]» — операция переменной длины.",
+  "hlpNumberTheoryHeader": "Теория чисел",
+  "hlpEulerPhiTitle": "φ(n) — функция Эйлера",
+  "hlpEulerPhiParams": "1 param",
+  "hlpEulerPhiDesc": "Считает, сколько целых чисел от 1 до n взаимно просты с n (то есть НОД(k,n)=1).",
+  "hlpEulerPhiFormula": "φ(n) = n × ∏(1 − 1/p) по каждому простому p | n",
+  "hlpEulerPhiEx1": "φ(1) = 1",
+  "hlpEulerPhiEx2": "φ(9) = 6 → [1,2,4,5,7,8]",
+  "hlpEulerPhiEx3": "φ(12) = 4 → [1,5,7,11]",
+  "hlpEulerPhiEx4": "φ(p) = p−1 для простого p",
+  "hlpEulerPhiTip1": "Мультипликативна: φ(mn) = φ(m)φ(n), если НОД(m,n)=1",
+  "hlpEulerPhiTip2": "Теорема Эйлера: a^φ(n) ≡ 1 (mod n), если НОД(a,n)=1",
+  "hlpEulerPhiTip3": "Σ φ(d) по d|n = n",
+  "hlpCarmichaelTitle": "λ(n) — функция Кармайкла",
+  "hlpCarmichaelParams": "1 param",
+  "hlpCarmichaelDesc": "Наименьшее m > 0, при котором a^m ≡ 1 (mod n) для ВСЕХ a, взаимно простых с n. Всегда делит φ(n).",
+  "hlpCarmichaelFormula": "λ(p^k) = φ(p^k), если p нечётное\nλ(2)=1, λ(4)=2, λ(2^k)=2^(k−2) при k≥3\nλ(n) = НОК частей",
+  "hlpCarmichaelEx1": "λ(8) = 2",
+  "hlpCarmichaelEx2": "λ(15) = НОК(λ(3),λ(5)) = НОК(2,4) = 4",
+  "hlpCarmichaelEx3": "λ(p) = p−1 для простого p",
+  "hlpCarmichaelTip1": "λ(n) | φ(n) всегда",
+  "hlpCarmichaelTip2": "λ(n) = φ(n) тогда и только тогда, когда у n есть первообразный корень",
+  "hlpMobiusTitle": "μ(n) — функция Мёбиуса",
+  "hlpMobiusParams": "1 param",
+  "hlpMobiusDesc": "Определяет, свободно ли n от квадратов, и считает простые множители.",
+  "hlpMobiusFormula": "μ(1) = 1\nμ(n) = (−1)^k, если n = p₁·p₂·...·pₖ (различные)\nμ(n) = 0, если p² | n",
+  "hlpMobiusEx1": "μ(1) = 1",
+  "hlpMobiusEx2": "μ(6) = μ(2×3) = (−1)² = 1",
+  "hlpMobiusEx3": "μ(30) = μ(2×3×5) = (−1)³ = −1",
+  "hlpMobiusEx4": "μ(12) = 0 (содержит 2²)",
+  "hlpMobiusTip1": "Обращение Мёбиуса: если g(n) = Σ f(d) по d|n, то f(n) = Σ μ(d)g(n/d)",
+  "hlpMobiusTip2": "Σ μ(d) по d|n = [n=1]",
+  "hlpLiouvilleTitle": "λL(n) — функция Лиувилля",
+  "hlpLiouvilleParams": "1 param",
+  "hlpLiouvilleDesc": "Вполне мультипликативна: λL(n) = (−1)^Ω(n).",
+  "hlpLiouvilleFormula": "λL(n) = (−1)^Ω(n)",
+  "hlpLiouvilleEx1": "λL(12) = (−1)³ = −1 (Ω(12)=3)",
+  "hlpLiouvilleEx2": "λL(36) = (−1)⁴ = 1 (Ω(36)=4)",
+  "hlpLiouvilleTip1": "Σ λL(d) по d|n = 1, если n — точный квадрат, иначе 0",
+  "hlpSmallOmegaTitle": "ω(n) — различные простые множители",
+  "hlpSmallOmegaParams": "1 param",
+  "hlpSmallOmegaDesc": "Считает количество различных простых, делящих n.",
+  "hlpSmallOmegaFormula": "ω(n) = k, если n = p₁^a₁ × ... × pₖ^aₖ",
+  "hlpSmallOmegaEx1": "ω(12) = 2 → [2, 3]",
+  "hlpSmallOmegaEx2": "ω(30) = 3 → [2, 3, 5]",
+  "hlpSmallOmegaEx3": "ω(p^k) = 1",
+  "hlpBigOmegaTitle": "Ω(n) — простые множители с кратностью",
+  "hlpBigOmegaParams": "1 param",
+  "hlpBigOmegaDesc": "Общее число простых множителей с учётом повторений.",
+  "hlpBigOmegaFormula": "Ω(n) = a₁ + a₂ + ... + aₖ",
+  "hlpBigOmegaEx1": "Ω(12) = 3 → 2×2×3",
+  "hlpBigOmegaEx2": "Ω(72) = 5 → 2³×3² → 3+2",
+  "hlpBigOmegaEx3": "Ω(p) = 1, Ω(p²) = 2",
+  "hlpSigma0Title": "σ₀(n) — количество делителей",
+  "hlpSigma0Params": "1 param",
+  "hlpSigma0Desc": "Общее число положительных делителей n.",
+  "hlpSigma0Formula": "Если n = p₁^a₁ × ... × pₖ^aₖ\nσ₀(n) = (a₁+1)(a₂+1)...(aₖ+1)",
+  "hlpSigma0Ex1": "σ₀(12) = 6 → [1,2,3,4,6,12]",
+  "hlpSigma0Ex2": "σ₀(p) = 2",
+  "hlpSigma0Ex3": "σ₀(p²) = 3",
+  "hlpSigmaTitle": "σ(n) — сумма делителей",
+  "hlpSigmaParams": "1 param",
+  "hlpSigmaDesc": "Сумма всех положительных делителей n.",
+  "hlpSigmaFormula": "σ(n) = Σ d по d | n",
+  "hlpSigmaEx1": "σ(6) = 1+2+3+6 = 12 (6 совершенное)",
+  "hlpSigmaEx2": "σ(12) = 1+2+3+4+6+12 = 28",
+  "hlpSigmaEx3": "σ(p) = p+1",
+  "hlpSigmaTip1": "n совершенное ⟺ σ(n) = 2n",
+  "hlpSigmaTip2": "n избыточное ⟺ σ(n) > 2n",
+  "hlpSopfrTitle": "sopfr(n) — сумма простых с повторениями",
+  "hlpSopfrParams": "1 param",
+  "hlpSopfrDesc": "Складывает простые множители с учётом кратности.",
+  "hlpSopfrFormula": "sopfr(n) = a₁p₁ + a₂p₂ + ... + aₖpₖ",
+  "hlpSopfrEx1": "sopfr(12) = 2+2+3 = 7",
+  "hlpSopfrEx2": "sopfr(60) = 2+2+3+5 = 12",
+  "hlpSopfTitle": "sopf(n) — сумма различных простых",
+  "hlpSopfParams": "1 param",
+  "hlpSopfDesc": "Сумма различных простых, делящих n.",
+  "hlpSopfFormula": "sopf(n) = p₁ + p₂ + ... + pₖ",
+  "hlpSopfEx1": "sopf(12) = 2+3 = 5",
+  "hlpSopfEx2": "sopf(60) = 2+3+5 = 10",
+  "hlpRadTitle": "rad(n) — Radical",
+  "hlpRadParams": "1 param",
+  "hlpRadDesc": "Произведение различных простых, делящих n (функция из abc-гипотезы).",
+  "hlpRadFormula": "rad(n) = ∏ p по простым p, p | n",
+  "hlpRadEx1": "rad(72) = rad(2³×3²) = 2×3 = 6",
+  "hlpRadEx2": "rad(480) = rad(2⁵×3×5) = 30",
+  "hlpRadEx3": "rad(p) = p",
+  "hlpPrimorialTitle": "n# — Primorial",
+  "hlpPrimorialParams": "1 param",
+  "hlpPrimorialDesc": "Произведение всех простых ≤ n.",
+  "hlpPrimorialFormula": "n# = ∏ p по простым p, p ≤ n",
+  "hlpPrimorialEx1": "5# = 2×3×5 = 30",
+  "hlpPrimorialEx2": "7# = 210",
+  "hlpPrimorialEx3": "11# = 2310",
+  "hlpPrimeCountTitle": "π(n) — функция распределения простых чисел",
+  "hlpPrimeCountParams": "1 param",
+  "hlpPrimeCountDesc": "Считает простые ≤ n. Точно при n ≤ 1 000 000; далее приближение Li(x).",
+  "hlpPrimeCountFormula": "π(n) ~ n/ln(n) (теорема о распределении простых чисел)",
+  "hlpPrimeCountEx1": "π(10) = 4",
+  "hlpPrimeCountEx2": "π(100) = 25",
+  "hlpPrimeCountEx3": "π(1 000 000) = 78 498",
+  "hlpDigitalRootTitle": "dr(n) — цифровой корень",
+  "hlpDigitalRootParams": "1 param",
+  "hlpDigitalRootDesc": "Повторная сумма цифр, пока не останется одна цифра.",
+  "hlpDigitalRootFormula": "dr(n) = 1 + (n−1) mod 9  (при n > 0)",
+  "hlpDigitalRootEx1": "dr(493) → 4+9+3=16 → 1+6 = 7",
+  "hlpDigitalRootEx2": "dr(999) = 9",
+  "hlpDigitalRootEx3": "dr(n) ≡ n (mod 9)",
+  "hlpFloorCeilTitle": "⌊x⌋ / ⌈x⌉ — пол и потолок",
+  "hlpFloorCeilParams": "1 param",
+  "hlpFloorCeilDesc": "Пол: наибольшее целое ≤ x. Потолок: наименьшее целое ≥ x. Кнопка переключает их.",
+  "hlpFloorCeilFormula": "⌊x⌋ ≤ x < ⌊x⌋+1\n⌈x⌉−1 < x ≤ ⌈x⌉",
+  "hlpFloorCeilEx1": "⌊3,7⌋ = 3, ⌈3,7⌉ = 4",
+  "hlpFloorCeilEx2": "⌊−2,3⌋ = −3, ⌈−2,3⌉ = −2",
+  "hlpFloorCeilEx3": "⌊5⌋ = ⌈5⌉ = 5",
+  "hlpPadicTitle": "Vₚ(n) — p-адическое нормирование",
+  "hlpPadicParams": "2 params: n → Vₚ → p → =",
+  "hlpPadicDesc": "Наибольшая степень простого p, делящая n.",
+  "hlpPadicFormula": "Vₚ(n) = max[k : p^k | n]",
+  "hlpPadicEx1": "V₂(24) = 3 → 24 = 2³×3",
+  "hlpPadicEx2": "V₃(81) = 4 → 81 = 3⁴",
+  "hlpPadicEx3": "V₅(100) = 2 → 100 = 2²×5²",
+  "hlpPadicTip1": "Формула Лежандра: Vₚ(n!) = Σ ⌊n/pⁱ⌋",
+  "hlpPadicTip2": "Vₚ(ab) = Vₚ(a) + Vₚ(b)",
+  "hlpModArithHeader": "Модульная арифметика",
+  "hlpModTitle": "a mod b — остаток от деления",
+  "hlpModParams": "2 params: a → mod → b → =",
+  "hlpModDesc": "Остаток от деления a на b.",
+  "hlpModFormula": "a mod b = a − b × ⌊a/b⌋",
+  "hlpModEx1": "17 mod 5 = 2",
+  "hlpModEx2": "23 mod 7 = 2",
+  "hlpModEx3": "−8 mod 3 = 1",
+  "hlpModPowTitle": "a^b mod n — возведение в степень по модулю",
+  "hlpModPowParams": "3 params: a → a%n → b → = → n → =",
+  "hlpModPowDesc": "Быстро вычисляет a^b mod n последовательным возведением в квадрат за O(log b).",
+  "hlpModPowFormula": "Разложить b в двоичной системе и последовательно возводить в квадрат",
+  "hlpModPowEx1": "2¹⁰⁰ mod 7 = 2",
+  "hlpModPowEx2": "3¹³ mod 11 = 5",
+  "hlpModPowEx3": "Основа RSA и тестов простоты",
+  "hlpModPowTip1": "Порядок: введите a → нажмите a%n → введите b → нажмите = → введите n → нажмите =",
+  "hlpModInvTitle": "a⁻¹ mod n — обратный элемент по модулю",
+  "hlpModInvParams": "2 params: a → a⁻¹ → n → =",
+  "hlpModInvDesc": "Находит b, при котором a×b ≡ 1 (mod n). Существует только если НОД(a,n) = 1.",
+  "hlpModInvFormula": "Расширенный алгоритм Евклида",
+  "hlpModInvEx1": "3⁻¹ mod 7 = 5 → 3×5=15≡1",
+  "hlpModInvEx2": "5⁻¹ mod 11 = 9 → 5×9=45≡1",
+  "hlpModInvEx3": "Не существует, если НОД(a,n) ≠ 1",
+  "hlpOrdTitle": "ord_n(a) — мультипликативный порядок",
+  "hlpOrdParams": "2 params: a → ord → n → =",
+  "hlpOrdDesc": "Наименьшее k > 0, при котором a^k ≡ 1 (mod n). Требуется НОД(a,n)=1.",
+  "hlpOrdFormula": "ord_n(a) = min[k > 0 : a^k ≡ 1 (mod n)]",
+  "hlpOrdEx1": "ord₇(2) = 3 → 2³=8≡1",
+  "hlpOrdEx2": "ord₁₀(3) = 4 → 3⁴=81≡1",
+  "hlpOrdTip1": "ord_n(a) всегда делит φ(n)",
+  "hlpOrdTip2": "a — первообразный корень ⟺ ord_n(a) = φ(n)",
+  "hlpLegendreTitle": "(a/p) — символ Лежандра",
+  "hlpLegendreParams": "2 params: a → (a/p) → p → =",
+  "hlpLegendreDesc": "1, если a — квадратичный вычет по модулю p, −1 если нет, 0 если p|a. Требуется нечётное простое p.",
+  "hlpLegendreFormula": "(a/p) ≡ a^((p−1)/2) (mod p) — критерий Эйлера",
+  "hlpLegendreEx1": "(2/7) = 1 → 3²≡2 (mod 7)",
+  "hlpLegendreEx2": "(3/7) = −1 → решения x²≡3 нет",
+  "hlpLegendreEx3": "(5/5) = 0",
+  "hlpJacobiTitle": "(a/n)ⱼ — символ Якоби",
+  "hlpJacobiParams": "2 params: a → (a/n)ⱼ → n → =",
+  "hlpJacobiDesc": "Обобщение символа Лежандра на нечётное составное n. Использует квадратичный закон взаимности.",
+  "hlpJacobiFormula": "(a/n) = ∏(a/pᵢ)^eᵢ, где n = ∏pᵢ^eᵢ",
+  "hlpJacobiEx1": "(2/15) = (2/3)(2/5) = (−1)(−1) = 1",
+  "hlpJacobiEx2": "(a/n) = −1 ⟹ a НЕ является квадратичным вычетом",
+  "hlpJacobiEx3": "(a/n) = 1 НЕ гарантирует, что является",
+  "hlpPrimRootTitle": "g — первообразный корень",
+  "hlpPrimRootParams": "1 param",
+  "hlpPrimRootDesc": "Наименьший первообразный корень по модулю n (если он есть). g первообразный, если ord_n(g) = φ(n).",
+  "hlpPrimRootFormula": "[g, g², ..., g^φ(n)] = (Z/nZ)*",
+  "hlpPrimRootEx1": "g(7) = 3 → [3,2,6,4,5,1]",
+  "hlpPrimRootEx2": "g(11) = 2",
+  "hlpPrimRootEx3": "Существует только при n = 1,2,4,p^k,2p^k",
+  "hlpGcdTitle": "НОД — наибольший общий делитель",
+  "hlpGcdParams": "N парам. (переменное, мин. 2)",
+  "hlpGcdDesc": "Наибольшее целое, делящее все значения. Принимает 2 и более чисел.",
+  "hlpGcdFormula": "НОД(a,b) по алгоритму Евклида",
+  "hlpGcdEx1": "НОД(12,18) = 6",
+  "hlpGcdEx2": "НОД(12,18,24) = 6",
+  "hlpGcdEx3": "НОД(a,b) × НОК(a,b) = a×b",
+  "hlpGcdTip1": "Порядок: 12 → НОД → 18 → НОД (выполняет)",
+  "hlpGcdTip2": "Для 3 и более чисел: 12 → НОД → 18 → = → 24 → НОД",
+  "hlpGcdTip3": "Нажмите =, чтобы добавить ещё, и НОД, чтобы выполнить",
+  "hlpLcmTitle": "НОК — наименьшее общее кратное",
+  "hlpLcmParams": "N парам. (переменное, мин. 2)",
+  "hlpLcmDesc": "Наименьшее положительное целое, делящееся на все значения.",
+  "hlpLcmFormula": "НОК(a,b) = a×b / НОД(a,b)",
+  "hlpLcmEx1": "НОК(4,6) = 12",
+  "hlpLcmEx2": "НОК(3,5,7) = 105",
+  "hlpLcmTip1": "Тот же порядок, что и у НОД: нажмите НОК ещё раз, чтобы выполнить",
+  "hlpDiophTitle": "Диоф — линейное диофантово уравнение",
+  "hlpDiophParams": "3 парам.: a → Диоф → b → = → c → =",
+  "hlpDiophDesc": "Решает ax + by = c. Даёт частное и общее решение.",
+  "hlpDiophFormula": "ax + by = c разрешимо ⟺ НОД(a,b) | c\nx = x₀ + (b/g)t,  y = y₀ − (a/g)t",
+  "hlpDiophEx1": "3x + 5y = 1 → x=2+5t, y=−1−3t",
+  "hlpDiophEx2": "6x + 9y = 12 → x=2+3t, y=0−2t",
+  "hlpDiophEx3": "4x + 6y = 3 → Решений нет",
+  "hlpDiophTip1": "Шаг 1: введите a (коэффициент при x)",
+  "hlpDiophTip2": "Шаг 2: нажмите Диоф",
+  "hlpDiophTip3": "Шаг 3: введите b (коэффициент при y), нажмите =",
+  "hlpDiophTip4": "Шаг 4: введите c (свободный член), нажмите =",
+  "hlpCrtTitle": "КТО — китайская теорема об остатках",
+  "hlpCrtParams": "Переменное число (4+ парам. парами a,m)",
+  "hlpCrtDesc": "Решает систему сравнений x ≡ aᵢ (mod mᵢ).",
+  "hlpCrtFormula": "x ≡ a₁ (mod m₁)\nx ≡ a₂ (mod m₂)\n→ x ≡ r (mod НОК(m₁,m₂))",
+  "hlpCrtEx1": "x≡2(mod 3), x≡3(mod 5) → x≡8(mod 15)",
+  "hlpCrtEx2": "x≡1(mod 4), x≡2(mod 3) → x≡5(mod 12)",
+  "hlpCrtTip1": "Порядок: a₁ → КТО → m₁ → = → a₂ → = → m₂ → КТО",
+  "hlpCrtTip2": "Модули должны быть согласованы",
+  "hlpCombinatoricsHeader": "Комбинаторика",
+  "hlpFactorialTitle": "n! — Factorial",
+  "hlpFactorialParams": "1 param",
+  "hlpFactorialDesc": "Произведение от 1 до n. Произвольная точность.",
+  "hlpFactorialFormula": "n! = 1 × 2 × ... × n,  0! = 1",
+  "hlpFactorialEx1": "5! = 120",
+  "hlpFactorialEx2": "10! = 3 628 800",
+  "hlpFactorialEx3": "20! = 2 432 902 008 176 640 000",
+  "hlpDblFactorialTitle": "n!! — двойной факториал",
+  "hlpDblFactorialParams": "1 param",
+  "hlpDblFactorialDesc": "Произведение целых чисел той же чётности.",
+  "hlpDblFactorialFormula": "n!! = n × (n−2) × (n−4) × ...",
+  "hlpDblFactorialEx1": "7!! = 7×5×3×1 = 105",
+  "hlpDblFactorialEx2": "8!! = 8×6×4×2 = 384",
+  "hlpDblFactorialEx3": "0!! = 1!! = 1",
+  "hlpCombTitle": "C(n,k) — сочетания",
+  "hlpCombParams": "2 params: n → C(n,k) → k → =",
+  "hlpCombDesc": "Способы выбрать k из n без учёта порядка.",
+  "hlpCombFormula": "C(n,k) = n! / (k!(n−k)!)",
+  "hlpCombEx1": "C(5,2) = 10",
+  "hlpCombEx2": "C(10,3) = 120",
+  "hlpCombEx3": "C(n,0) = C(n,n) = 1",
+  "hlpCombTip1": "Тождество Паскаля: C(n,k) = C(n−1,k−1) + C(n−1,k)",
+  "hlpCombTip2": "C(n,k) = C(n, n−k)",
+  "hlpVarTitle": "V(n,k) — размещения",
+  "hlpVarParams": "2 params: n → V(n,k) → k → =",
+  "hlpVarDesc": "Способы выбрать k из n С УЧЁТОМ порядка.",
+  "hlpVarFormula": "V(n,k) = n! / (n−k)!",
+  "hlpVarEx1": "V(5,2) = 20",
+  "hlpVarEx2": "V(10,3) = 720",
+  "hlpCatalanTitle": "Cat(n) — числа Каталана",
+  "hlpCatalanParams": "1 param",
+  "hlpCatalanDesc": "Считают двоичные деревья, триангуляции, пути Дика, правильные скобочные последовательности.",
+  "hlpCatalanFormula": "Cₙ = C(2n,n)/(n+1)",
+  "hlpCatalanEx1": "C₀ = 1, C₁ = 1, C₂ = 2",
+  "hlpCatalanEx2": "C₃ = 5, C₄ = 14, C₅ = 42",
+  "hlpDerangementTitle": "D(n) — беспорядки",
+  "hlpDerangementParams": "1 param",
+  "hlpDerangementDesc": "Перестановки, в которых ни один элемент не остался на своём месте.",
+  "hlpDerangementFormula": "D(n) = n! × Σ(−1)^k/k! = (n−1)(D(n−1)+D(n−2))",
+  "hlpDerangementEx1": "D(3) = 2 → [231, 312]",
+  "hlpDerangementEx2": "D(4) = 9",
+  "hlpDerangementEx3": "D(n)/n! → 1/e ≈ 0,3679",
+  "hlpBellTitle": "B(n) — числа Белла",
+  "hlpBellParams": "1 param",
+  "hlpBellDesc": "Общее число разбиений множества из n элементов.",
+  "hlpBellFormula": "B(n) = Σ S₂(n,k) при k=0..n",
+  "hlpBellEx1": "B(3) = 5",
+  "hlpBellEx2": "B(4) = 15",
+  "hlpBellEx3": "B(5) = 52",
+  "hlpPartitionTitle": "p(n) — разбиения числа",
+  "hlpPartitionParams": "1 param",
+  "hlpPartitionDesc": "Способы записать n суммой натуральных чисел (порядок не важен).",
+  "hlpPartitionFormula": "Вычисляется динамическим программированием",
+  "hlpPartitionEx1": "p(4) = 5 → [4, 3+1, 2+2, 2+1+1, 1+1+1+1]",
+  "hlpPartitionEx2": "p(10) = 42",
+  "hlpPartitionEx3": "p(100) = 190 569 292 356",
+  "hlpStirling2Title": "S₂(n,k) — числа Стирлинга второго рода",
+  "hlpStirling2Params": "2 params: n → S₂ → k → =",
+  "hlpStirling2Desc": "Способы разбить n элементов ровно на k непустых подмножеств.",
+  "hlpStirling2Formula": "S₂(n,k) = k·S₂(n−1,k) + S₂(n−1,k−1)",
+  "hlpStirling2Ex1": "S₂(4,2) = 7",
+  "hlpStirling2Ex2": "S₂(5,3) = 25",
+  "hlpStirling2Ex3": "B(n) = Σ S₂(n,k)",
+  "hlpStirling1Title": "s₁(n,k) — числа Стирлинга первого рода (без знака)",
+  "hlpStirling1Params": "2 params: n → s₁ → k → =",
+  "hlpStirling1Desc": "Перестановки n элементов ровно с k циклами.",
+  "hlpStirling1Formula": "|s₁(n,k)| = (n−1)·|s₁(n−1,k)| + |s₁(n−1,k−1)|",
+  "hlpStirling1Ex1": "s₁(4,2) = 11",
+  "hlpStirling1Ex2": "s₁(4,1) = 6",
+  "hlpFibTitle": "F(n) — n-е число Фибоначчи",
+  "hlpFibParams": "1 param",
+  "hlpFibDesc": "Вычисляет F(n) быстрым удвоением за O(log n). Принимает очень большие n.",
+  "hlpFibFormula": "F(0)=0, F(1)=1, F(n)=F(n−1)+F(n−2)",
+  "hlpFibEx1": "F(10) = 55",
+  "hlpFibEx2": "F(50) = 12 586 269 025",
+  "hlpFibEx3": "F(100) = 354 224 848 179 261 915 075",
+  "hlpFibTip1": "F(n) mod m периодично (период Пизано)",
+  "hlpFibTip2": "НОД(F(m), F(n)) = F(НОД(m,n))",
+  "hlpDigitSumBaseTitle": "ΣцифB — сумма цифр в системе с основанием b",
+  "hlpDigitSumBaseParams": "2 парам.: n → ΣцифB → b → =",
+  "hlpDigitSumBaseDesc": "Складывает цифры числа n, записанного в системе с основанием b.",
+  "hlpDigitSumBaseFormula": "Если n = Σ dᵢ × bⁱ, то ΣцифB = Σ dᵢ",
+  "hlpDigitSumBaseEx1": "ΣцифB(255, 2) = 8 → 11111111₂",
+  "hlpDigitSumBaseEx2": "ΣцифB(100, 10) = 1",
+  "hlpDigitSumBaseEx3": "ΣцифB(100, 16) = 10 → 64₁₆",
+  "hlpStatisticsHeader": "Статистика",
+  "hlpArithMeanTitle": "Среднее арифметическое — Ср ариф",
+  "hlpArithMeanParams": "N парам. (переменное, мин. 2)",
+  "hlpArithMeanDesc": "Обычное среднее N чисел.",
+  "hlpArithMeanFormula": "СА = (x₁ + x₂ + ... + xₙ) / n",
+  "hlpArithMeanEx1": "СА(3, 7) = 5",
+  "hlpArithMeanEx2": "СА(2, 4, 6) = 4",
+  "hlpArithMeanTip1": "Порядок: 3 → Ср ариф → 7 → Ср ариф (выполняет)",
+  "hlpArithMeanTip2": "Для 3 и более чисел: 2 → Ср ариф → 4 → = → 6 → Ср ариф",
+  "hlpGeoMeanTitle": "Среднее геометрическое — Ср геом",
+  "hlpGeoMeanParams": "N парам. (переменное, мин. 2)",
+  "hlpGeoMeanDesc": "Корень n-й степени из произведения. Только положительные значения.",
+  "hlpGeoMeanFormula": "СГ = (x₁ × x₂ × ... × xₙ)^(1/n)",
+  "hlpGeoMeanEx1": "СГ(2, 8) = 4",
+  "hlpGeoMeanEx2": "СГ(1, 4, 9) ≈ 3,30",
+  "hlpHarmMeanTitle": "Среднее гармоническое — Ср гарм",
+  "hlpHarmMeanParams": "N парам. (переменное, мин. 2)",
+  "hlpHarmMeanDesc": "Число, обратное среднему арифметическому обратных. Только положительные значения.",
+  "hlpHarmMeanFormula": "СГарм = n / (1/x₁ + 1/x₂ + ... + 1/xₙ)",
+  "hlpHarmMeanEx1": "СГарм(2, 8) = 3,2",
+  "hlpHarmMeanEx2": "СГарм(1, 4, 9) ≈ 2,08",
+  "hlpQuadMeanTitle": "Среднее квадратическое — Ср квад",
+  "hlpQuadMeanParams": "N парам. (переменное, мин. 2)",
+  "hlpQuadMeanDesc": "Корень из среднего квадратов (RMS).",
+  "hlpQuadMeanFormula": "СК = √((x₁² + x₂² + ... + xₙ²) / n)",
+  "hlpQuadMeanEx1": "СК(3, 4) ≈ 3,54",
+  "hlpQuadMeanEx2": "СК(1, 2, 3) ≈ 2,16",
+  "hlpMinMaxTitle": "min / max — минимум и максимум",
+  "hlpMinMaxParams": "N парам. (переменное, мин. 2)",
+  "hlpMinMaxDesc": "Находит наименьшее/наибольшее значение среди N чисел.",
+  "hlpMinMaxFormula": "min(a₁,...,aₙ) и max(a₁,...,aₙ)",
+  "hlpMinMaxEx1": "min(3, 7, 1) = 1",
+  "hlpMinMaxEx2": "max(3, 7, 1) = 7",
+  "hlpMinMaxTip1": "Тот же переменный порядок: нажмите min/max ещё раз, чтобы выполнить",
+  "hlpMeanInequalityTitle": "Неравенство о средних (СА-СГ-СГарм)",
+  "hlpMeanInequalityContent": "Для положительных чисел всегда верно:\n\nСГарм ≤ СГ ≤ СА ≤ СК\n\nРавенство достигается, только когда все значения равны.\nЭто неравенство — одно из основных на олимпиадах.",
+  "hlpAnalysisPanelHeader": "Панель числового анализа",
+  "hlpAutoAnalysisTitle": "Автоматический анализ",
+  "hlpAutoAnalysisContent": "Как только введено число, правая панель (планшет) или нижняя (телефон) автоматически показывает:\n\n• Свойства: цифры, чётность, знак\n• Представления: двоичное, восьмеричное, шестнадцатеричное\n• Простоту: тест Миллера — Рабина, полное разложение\n• Соседние простые: предыдущее и следующее\n• Делители: полный список, сумма, количество\n• Классификации: точный квадрат/куб, точная степень, число Фибоначчи, треугольное, палиндром\n\nДля чисел не длиннее 15 цифр показывает также:\n\n• Арифметические функции: φ, λ, μ, ω, Ω, sopfr, sopf, rad, dr\n• Классификации: свободное от квадратов, мощное, число Харшад, полупростое, избыточное/недостаточное/совершенное",
+  "hlpHighPrecHeader": "Высокая точность и инструменты",
+  "hlpHighPrecTitle": "Режим высокой точности",
+  "hlpHighPrecContent": "Включается в настройках. Вычисляет sin, cos, tan, ln, log, exp, √ и ∛ на ТОЧНЫХ конструктивных вещественных числах и округляет только при выводе (от 5 до 100 знаков). Без ошибок с плавающей точкой: √2 до 30 знаков = 1,41421356237309504880168872421. Особые точки распознаются по построению (tan 90° = не определён). Всё считается в фоне с индикатором загрузки, приложение не зависает.",
+  "hlpNewToolsTitle": "Олимпиадные инструменты",
+  "hlpNewToolsContent": "Из бокового меню → Олимпиадные инструменты: Дроби, Радикалы, Геометрия (с чертежами: треугольник, Пик, замечательные точки и прямая Эйлера), Многочлены (график, схема Горнера, системы n×n), Алгебра (раскрытие скобок и тождества от нескольких переменных), Теория чисел (решето, модульные часы, вычеты), Пошаговые процедуры, Комплексные числа (единичная окружность, Серпинский — в высокой точности), Статистика, Матрицы (точные), Анализ (производная/интеграл/предел) и Тренировка с проверкой.",
+  "hlpOlympiadHeader": "Ключевые олимпиадные формулы",
+  "hlpIdentitiesTitle": "Основные тождества",
+  "hlpIdentitiesContent": "• Теорема Эйлера: a^φ(n) ≡ 1 (mod n), если НОД(a,n)=1\n• Малая теорема Ферма: a^(p−1) ≡ 1 (mod p), если p простое\n• Вильсон: (p−1)! ≡ −1 (mod p) ⟺ p простое\n• Формула Лежандра: Vₚ(n!) = Σᵢ ⌊n/pⁱ⌋\n• Люка: C(n,k) mod p = ∏ C(nᵢ,kᵢ) mod p\n• Σ φ(d) по d|n = n\n• Σ μ(d) по d|n = [n=1]\n• φ(mn) = φ(m)φ(n)·НОД(m,n)/φ(НОД(m,n))\n• НОД(F(m),F(n)) = F(НОД(m,n))\n• СА ≥ СГ ≥ СГарм (неравенство о средних)",
+  "hlpRefTableTitle": "Краткая таблица-справочник",
+  "hlpRefTableContent": "n    φ(n)  λ(n)  μ(n)  σ(n)  ω  Ω\n1    1     1     1     1     0  0\n6    2     2     1     12    2  2\n12   4     2     0     28    2  3\n30   8     4     −1    72    3  3\n60   16    4     0     168   3  4\n100  40    20    0     217   2  4",
+  "hlpExamplesLabel": "Примеры:",
+  "hlpTipsLabel": "Tips:",
+  "errExprEmpty": "Ошибка: пустое выражение",
+  "errExprMalformed": "Ошибка: неверно составленное выражение",
+  "errExprDivZero": "Ошибка: деление на ноль",
+  "errResultInvalid": "Ошибка: недопустимый результат",
+  "errResultTooLarge": "Результат слишком велик, чтобы вычислить его точно",
+  "errAnalysisInvalid": "Ошибка: недопустимое число для анализа",
+  "errAnalysisFail": "Не удаётся проанализировать число",
+  "errNoSolution": "Решений нет",
+  "errIncompatibleSystem": "Несовместная система",
+  "errCRTNeedPairs": "Для КТО нужны пары (aᵢ, mᵢ)",
+  "errUnknownOp": "Неизвестная операция: {op}"
+}
