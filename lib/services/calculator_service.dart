@@ -2790,7 +2790,7 @@ class CalculatorService extends ChangeNotifier {
   /// GCD of N numbers (variable, minimum 2)
   void gcdFunction() {
     _startPending(PendingOperation(
-      name: 'gcd', symbol: trLocale('MCD', 'GCD', pt: 'MDC', fr: 'PGCD', it: 'MCD'), minParams: 2,
+      name: 'gcd', symbol: symGcd, minParams: 2,
       displayBuilder: (p) => trLocale(
           'MCD(${p.join(", ")}, _) [= agregar, MCD resolver]',
           'GCD(${p.join(", ")}, _) [= add, GCD solve]', pt: 'MDC(${p.join(", ")}, _) [= acrescentar, MDC resolver]', fr: 'PGCD(${p.join(", ")}, _) [= ajouter, PGCD résoudre]', it: 'MCD(${p.join(", ")}, _) [= aggiungi, MCD risolvi]'),
@@ -2800,7 +2800,7 @@ class CalculatorService extends ChangeNotifier {
   /// LCM of N numbers (variable, minimum 2)
   void lcmFunction() {
     _startPending(PendingOperation(
-      name: 'lcm', symbol: trLocale('MCM', 'LCM', pt: 'MMC', fr: 'PPCM', it: 'mcm'), minParams: 2,
+      name: 'lcm', symbol: symLcm, minParams: 2,
       displayBuilder: (p) => trLocale(
           'MCM(${p.join(", ")}, _) [= agregar, MCM resolver]',
           'LCM(${p.join(", ")}, _) [= add, LCM solve]', pt: 'MMC(${p.join(", ")}, _) [= acrescentar, MMC resolver]', fr: 'PPCM(${p.join(", ")}, _) [= ajouter, PPCM résoudre]', it: 'mcm(${p.join(", ")}, _) [= aggiungi, mcm risolvi]'),
@@ -2810,7 +2810,7 @@ class CalculatorService extends ChangeNotifier {
   /// Diophantine equation ax + by = c (3 fixed parameters)
   void diophantineFunction() {
     _startPending(PendingOperation(
-      name: 'dioph', symbol: trLocale('Diof', 'Dioph', pt: 'Diof', fr: 'Dioph', it: 'Dioph'), requiredParams: 3,
+      name: 'dioph', symbol: symDioph, requiredParams: 3,
       displayBuilder: (p) {
         if (p.isEmpty) return trLocale('Diof: a=_', 'Dioph: a=_', pt: 'Diof: a=_', fr: 'Dioph : a=_', it: 'Dioph: a=_');
         if (p.length == 1) return '${p[0]}x + _y = ?';
@@ -2823,7 +2823,7 @@ class CalculatorService extends ChangeNotifier {
   /// CRT of N congruences (variable, aᵢ,mᵢ pairs, minimum 4 = 2 pairs)
   void crtFunction() {
     _startPending(PendingOperation(
-      name: 'crt', symbol: trLocale('TCR', 'CRT', pt: 'TCR', fr: 'TRC', it: 'TCR'), minParams: 4,
+      name: 'crt', symbol: symCrt, minParams: 4,
       displayBuilder: (p) {
         List<String> pairs = [];
         for (int i = 0; i + 1 < p.length; i += 2) {
@@ -3009,7 +3009,7 @@ class CalculatorService extends ChangeNotifier {
   }
   /// Digit sum in base b (2 fixed params)
   void digitSumBase() {
-    _startPending(PendingOperation(name: 'digsum', symbol: trLocale('ΣdígB', 'ΣdigB', pt: 'ΣdígB', fr: 'ΣchifB', it: 'ΣcifB'), requiredParams: 2,
+    _startPending(PendingOperation(name: 'digsum', symbol: symDigitSumBase, requiredParams: 2,
       displayBuilder: (p) => p.isEmpty
           ? trLocale('ΣdígB: n=_', 'ΣdigB: n=_', pt: 'ΣdígB: n=_', fr: 'ΣchifB : n=_', it: 'ΣcifB: n=_')
           : trLocale('Σdíg_b(${p[0]}) b=_', 'Σdig_b(${p[0]}) b=_', pt: 'Σdíg_b(${p[0]}) b=_', fr: 'Σchif_b(${p[0]}) b=_', it: 'Σcif_b(${p[0]}) b=_')));
@@ -3151,12 +3151,12 @@ class CalculatorService extends ChangeNotifier {
         case 'gcd':
           BigInt r = p.map(_parseStringAsBigInt).reduce(SpecialFunctionsService.gcd);
           resultStr = _fmt(r);
-          historyLabel = '${trLocale('MCD', 'GCD', pt: 'MDC', fr: 'PGCD', it: 'MCD')}(${p.join(",")})';
+          historyLabel = '$symGcd(${p.join(",")})';
           break;
         case 'lcm':
           BigInt r = p.map(_parseStringAsBigInt).reduce(SpecialFunctionsService.lcm);
           resultStr = _fmt(r);
-          historyLabel = '${trLocale('MCM', 'LCM', pt: 'MMC', fr: 'PPCM', it: 'mcm')}(${p.join(",")})';
+          historyLabel = '$symLcm(${p.join(",")})';
           break;
 
         // --- Variable: CRT with N pairs ---

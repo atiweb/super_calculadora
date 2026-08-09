@@ -56,3 +56,19 @@ String appLanguage = 'en';
 String trLocale(String es, String en, {String? pt, String? fr, String? it, String? ru, String? vi,
           String? id}) =>
     trLang(appLanguage, es, en, pt: pt, fr: fr, it: it, ru: ru, vi: vi, id: id);
+
+/// Symbols of the special-function keys whose spelling changes with the
+/// language.
+///
+/// Each of them shows up in four places — the key itself, the pending
+/// operation indicator, the history label and the in-app guide — and they
+/// used to be spelled out at every one of them. The keypad and the guide had
+/// already drifted apart: they carried a two-language `es ? 'MCD' : 'GCD'`,
+/// so a French or Italian user read PGCD/MCD in the guide and GCD on the key.
+/// Defining them once is what keeps the four in step.
+String get symGcd => trLocale('MCD', 'GCD', pt: 'MDC', fr: 'PGCD', it: 'MCD');
+String get symLcm => trLocale('MCM', 'LCM', pt: 'MMC', fr: 'PPCM', it: 'mcm');
+String get symDioph => trLocale('Diof', 'Dioph', pt: 'Diof', fr: 'Dioph', it: 'Dioph');
+String get symCrt => trLocale('TCR', 'CRT', pt: 'TCR', fr: 'TRC', it: 'TCR');
+String get symDigitSumBase =>
+    trLocale('ΣdígB', 'ΣdigB', pt: 'ΣdígB', fr: 'ΣchifB', it: 'ΣcifB');

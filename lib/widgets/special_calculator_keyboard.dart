@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../l10n/app_localizations.dart';
 import '../services/calculator_service.dart';
 import '../models/button_type.dart';
+import '../utils/app_locale.dart';
 
 class SpecialCalculatorKeyboard extends StatelessWidget {
   const SpecialCalculatorKeyboard({super.key});
@@ -14,7 +15,6 @@ class SpecialCalculatorKeyboard extends StatelessWidget {
         final l = AppLocalizations.of(context)!;
         // Acronyms that differ per language; the English help documents the
         // buttons as GCD/LCM/Dioph/CRT/ΣdigB, so they must match.
-        final es = Localizations.localeOf(context).languageCode == 'es';
         return Container(
           padding: const EdgeInsets.all(4.0),
           child: Column(
@@ -64,12 +64,12 @@ class SpecialCalculatorKeyboard extends StatelessWidget {
                         _buildButton(context, '(a/p)', () => calculator.legendreSymbol(), ButtonType.function),
                         _buildButton(context, '(a/n)ⱼ', () => calculator.jacobiSymbol(), ButtonType.function),
                         _buildButton(context, 'g', () => calculator.primitiveRoot(), ButtonType.function),
-                        _buildButton(context, es ? 'MCD' : 'GCD', () => calculator.gcdFunction(), ButtonType.function),
+                        _buildButton(context, symGcd, () => calculator.gcdFunction(), ButtonType.function),
                       ]),
                       Row(children: [
-                        _buildButton(context, es ? 'MCM' : 'LCM', () => calculator.lcmFunction(), ButtonType.function),
-                        _buildButton(context, es ? 'Diof' : 'Dioph', () => calculator.diophantineFunction(), ButtonType.function),
-                        _buildButton(context, es ? 'TCR' : 'CRT', () => calculator.crtFunction(), ButtonType.function),
+                        _buildButton(context, symLcm, () => calculator.lcmFunction(), ButtonType.function),
+                        _buildButton(context, symDioph, () => calculator.diophantineFunction(), ButtonType.function),
+                        _buildButton(context, symCrt, () => calculator.crtFunction(), ButtonType.function),
                         _buildButton(context, '', () {}, ButtonType.function),
                       ]),
 
@@ -91,7 +91,7 @@ class SpecialCalculatorKeyboard extends StatelessWidget {
                         _buildButton(context, 'S₂(n,k)', () => calculator.stirlingSecond(), ButtonType.function),
                         _buildButton(context, 's₁(n,k)', () => calculator.stirlingFirst(), ButtonType.function),
                         _buildButton(context, 'F(n)', () => calculator.fibonacciN(), ButtonType.function),
-                        _buildButton(context, es ? 'ΣdígB' : 'ΣdigB', () => calculator.digitSumBase(), ButtonType.function),
+                        _buildButton(context, symDigitSumBase, () => calculator.digitSumBase(), ButtonType.function),
                       ]),
 
                       // === STATISTICS ===

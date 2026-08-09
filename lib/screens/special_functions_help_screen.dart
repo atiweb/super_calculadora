@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../l10n/app_localizations.dart';
+import '../utils/app_locale.dart';
 
 class SpecialFunctionsHelpScreen extends StatelessWidget {
   const SpecialFunctionsHelpScreen({super.key});
@@ -10,7 +11,6 @@ class SpecialFunctionsHelpScreen extends StatelessWidget {
     final l = AppLocalizations.of(context)!;
     // Button acronyms that differ per language (must match the
     // special keyboard and the hlp* titles for each language).
-    final es = Localizations.localeOf(context).languageCode == 'es';
     return Scaffold(
       appBar: AppBar(
         title: Text(l.hlpTitle),
@@ -287,7 +287,7 @@ class SpecialFunctionsHelpScreen extends StatelessWidget {
           ),
           _CollapsibleSection(
             title: l.hlpGcdTitle,
-            symbol: es ? 'MCD' : 'GCD',
+            symbol: symGcd,
             params: l.hlpGcdParams,
             description: l.hlpGcdDesc,
             formula: l.hlpGcdFormula,
@@ -298,7 +298,7 @@ class SpecialFunctionsHelpScreen extends StatelessWidget {
           ),
           _CollapsibleSection(
             title: l.hlpLcmTitle,
-            symbol: es ? 'MCM' : 'LCM',
+            symbol: symLcm,
             params: l.hlpLcmParams,
             description: l.hlpLcmDesc,
             formula: l.hlpLcmFormula,
@@ -309,7 +309,7 @@ class SpecialFunctionsHelpScreen extends StatelessWidget {
           ),
           _CollapsibleSection(
             title: l.hlpDiophTitle,
-            symbol: es ? 'Diof' : 'Dioph',
+            symbol: symDioph,
             params: l.hlpDiophParams,
             description: l.hlpDiophDesc,
             formula: l.hlpDiophFormula,
@@ -320,7 +320,7 @@ class SpecialFunctionsHelpScreen extends StatelessWidget {
           ),
           _CollapsibleSection(
             title: l.hlpCrtTitle,
-            symbol: es ? 'TCR' : 'CRT',
+            symbol: symCrt,
             params: l.hlpCrtParams,
             description: l.hlpCrtDesc,
             formula: l.hlpCrtFormula,
@@ -449,7 +449,7 @@ class SpecialFunctionsHelpScreen extends StatelessWidget {
           ),
           _CollapsibleSection(
             title: l.hlpDigitSumBaseTitle,
-            symbol: es ? 'ΣdígB' : 'ΣdigB',
+            symbol: symDigitSumBase,
             params: l.hlpDigitSumBaseParams,
             description: l.hlpDigitSumBaseDesc,
             formula: l.hlpDigitSumBaseFormula,
