@@ -147,6 +147,13 @@
       nav.open{transform:translateX(0)}
       .nav-backdrop.show{display:block}
       main{padding:64px 18px 60px}
+      /* Eight language buttons no longer fit next to the ☰ on a phone: the
+         pill keeps to the viewport and scrolls on its own instead of pushing
+         the rest of the page sideways. */
+      .controls{left:56px;right:8px;justify-content:flex-end}
+      .lang-pill{max-width:100%;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none}
+      .lang-pill::-webkit-scrollbar{display:none}
+      .lbtn{padding:4px 9px;flex:0 0 auto}
     }
   </style>
 </head>
@@ -1080,7 +1087,11 @@ function setLang(lang){
   i18nWanted=lang;
   document.documentElement.lang=lang;
   document.querySelectorAll('.lbtn').forEach(function(b){
-    b.classList.toggle('active',b.dataset.lang===lang);
+    var on=b.dataset.lang===lang;
+    b.classList.toggle('active',on);
+    // On a phone the pill is narrower than its eight buttons and scrolls, so
+    // the active one can start out off-screen. Bring it into view.
+    if(on&&b.scrollIntoView) b.scrollIntoView({block:'nearest',inline:'nearest'});
   });
   try{localStorage.setItem('sc-lang',lang);}catch(e){console.warn('localStorage unavailable',e);}
   // Reset to English first: a key the target language has not translated
