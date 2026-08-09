@@ -143,6 +143,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         {'code': 'it', 'label': l.settingsLangIt, 'subtitle': null},
                         {'code': 'ru', 'label': l.settingsLangRu, 'subtitle': null},
                         {'code': 'vi', 'label': l.settingsLangVi, 'subtitle': null},
+                        {'code': 'id', 'label': l.settingsLangId, 'subtitle': null},
                       ].map((option) {
                         final code = option['code'] as String;
                         final selected = (themeProvider.locale == null && code.isEmpty) ||

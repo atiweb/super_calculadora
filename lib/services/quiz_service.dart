@@ -33,7 +33,7 @@ class QuizService {
     return QuizProblem(
       topic: 'φ(n)',
       prompt: _t(lang, 'Calcula φ($n) (función totiente de Euler)',
-          'Compute φ($n) (Euler\'s totient)', pt: 'Calcule φ($n) (função totiente de Euler)', fr: "Calculez φ($n) (indicatrice d'Euler)", vi: 'Hãy tính φ($n) (hàm Euler)', ru: 'Вычислите φ($n) (функция Эйлера)', it: 'Calcola φ($n) (funzione toziente di Eulero)'),
+          'Compute φ($n) (Euler\'s totient)', pt: 'Calcule φ($n) (função totiente de Euler)', fr: "Calculez φ($n) (indicatrice d'Euler)", id: 'Hitunglah φ($n) (fungsi Euler)', vi: 'Hãy tính φ($n) (hàm Euler)', ru: 'Вычислите φ($n) (функция Эйлера)', it: 'Calcola φ($n) (funzione toziente di Eulero)'),
       answer: SpecialFunctionsService.eulerPhi(BigInt.from(n)).toString(),
     );
   }
@@ -42,8 +42,8 @@ class QuizService {
     final a = 2 + r.nextInt(98);
     final b = 2 + r.nextInt(98);
     return QuizProblem(
-      topic: _t(lang, 'mcd', 'gcd', pt: 'mdc', fr: 'pgcd', vi: 'ƯCLN', ru: 'НОД', it: 'MCD'),
-      prompt: _t(lang, 'Calcula mcd($a, $b)', 'Compute gcd($a, $b)', pt: 'Calcule mdc($a, $b)', fr: 'Calculez pgcd($a, $b)', vi: 'Hãy tính ƯCLN($a, $b)', ru: 'Вычислите НОД($a, $b)', it: 'Calcola MCD($a, $b)'),
+      topic: _t(lang, 'mcd', 'gcd', pt: 'mdc', fr: 'pgcd', id: 'FPB', vi: 'ƯCLN', ru: 'НОД', it: 'MCD'),
+      prompt: _t(lang, 'Calcula mcd($a, $b)', 'Compute gcd($a, $b)', pt: 'Calcule mdc($a, $b)', fr: 'Calculez pgcd($a, $b)', id: 'Hitunglah FPB($a, $b)', vi: 'Hãy tính ƯCLN($a, $b)', ru: 'Вычислите НОД($a, $b)', it: 'Calcola MCD($a, $b)'),
       answer:
           SpecialFunctionsService.gcd(BigInt.from(a), BigInt.from(b)).toString(),
     );
@@ -53,7 +53,7 @@ class QuizService {
     final n = 2 + r.nextInt(7); // 2..8
     return QuizProblem(
       topic: 'n!',
-      prompt: _t(lang, 'Calcula $n!', 'Compute $n!', pt: 'Calcule $n!', fr: 'Calculez $n!', vi: 'Hãy tính $n!', ru: 'Вычислите $n!', it: 'Calcola $n!'),
+      prompt: _t(lang, 'Calcula $n!', 'Compute $n!', pt: 'Calcule $n!', fr: 'Calculez $n!', id: 'Hitunglah $n!', vi: 'Hãy tính $n!', ru: 'Вычислите $n!', it: 'Calcola $n!'),
       answer: SpecialFunctionsService.factorial(n).toString(),
     );
   }
@@ -64,7 +64,7 @@ class QuizService {
     return QuizProblem(
       topic: 'C(n,k)',
       prompt: _t(lang, 'Calcula C($n, $k) (combinaciones)',
-          'Compute C($n, $k) (combinations)', pt: 'Calcule C($n, $k) (combinações)', fr: 'Calculez C($n, $k) (combinaisons)', vi: 'Hãy tính C($n, $k) (tổ hợp)', ru: 'Вычислите C($n, $k) (сочетания)', it: 'Calcola C($n, $k) (combinazioni)'),
+          'Compute C($n, $k) (combinations)', pt: 'Calcule C($n, $k) (combinações)', fr: 'Calculez C($n, $k) (combinaisons)', id: 'Hitunglah C($n, $k) (kombinasi)', vi: 'Hãy tính C($n, $k) (tổ hợp)', ru: 'Вычислите C($n, $k) (сочетания)', it: 'Calcola C($n, $k) (combinazioni)'),
       answer: SpecialFunctionsService.combinations(n, k).toString(),
     );
   }
@@ -74,7 +74,7 @@ class QuizService {
     return QuizProblem(
       topic: 'σ₀(n)',
       prompt: _t(lang, '¿Cuántos divisores positivos tiene $n?',
-          'How many positive divisors does $n have?', pt: 'Quantos divisores positivos $n tem?', fr: 'Combien de diviseurs positifs $n possède-t-il ?', vi: '$n có bao nhiêu ước dương?', ru: 'Сколько положительных делителей у $n?', it: 'Quanti divisori positivi ha $n?'),
+          'How many positive divisors does $n have?', pt: 'Quantos divisores positivos $n tem?', fr: 'Combien de diviseurs positifs $n possède-t-il ?', id: 'Berapa banyak pembagi positif yang dimiliki $n?', vi: '$n có bao nhiêu ước dương?', ru: 'Сколько положительных делителей у $n?', it: 'Quanti divisori positivi ha $n?'),
       answer:
           SpecialFunctionsService.divisorCount(BigInt.from(n)).toString(),
     );
@@ -87,8 +87,8 @@ class QuizService {
       s += int.parse(ch);
     }
     return QuizProblem(
-      topic: _t(lang, 'Σ díg', 'Σ dig', pt: 'Σ díg', fr: 'Σ chif', vi: 'Σ chữ số', ru: 'Σ цифр', it: 'Σ cif'),
-      prompt: _t(lang, 'Suma de los dígitos de $n', 'Digit sum of $n', pt: 'Soma dos dígitos de $n', fr: 'Somme des chiffres de $n', vi: 'Tổng các chữ số của $n', ru: 'Сумма цифр числа $n', it: 'Somma delle cifre di $n'),
+      topic: _t(lang, 'Σ díg', 'Σ dig', pt: 'Σ díg', fr: 'Σ chif', id: 'Σ digit', vi: 'Σ chữ số', ru: 'Σ цифр', it: 'Σ cif'),
+      prompt: _t(lang, 'Suma de los dígitos de $n', 'Digit sum of $n', pt: 'Soma dos dígitos de $n', fr: 'Somme des chiffres de $n', id: 'Jumlah digit dari $n', vi: 'Tổng các chữ số của $n', ru: 'Сумма цифр числа $n', it: 'Somma delle cifre di $n'),
       answer: s.toString(),
     );
   }
@@ -98,7 +98,7 @@ class QuizService {
     final b = 2 + r.nextInt(48);
     return QuizProblem(
       topic: 'mod',
-      prompt: _t(lang, 'Calcula $a mod $b', 'Compute $a mod $b', pt: 'Calcule $a mod $b', fr: 'Calculez $a mod $b', vi: 'Hãy tính $a mod $b', ru: 'Вычислите $a mod $b', it: 'Calcola $a mod $b'),
+      prompt: _t(lang, 'Calcula $a mod $b', 'Compute $a mod $b', pt: 'Calcule $a mod $b', fr: 'Calculez $a mod $b', id: 'Hitunglah $a mod $b', vi: 'Hãy tính $a mod $b', ru: 'Вычислите $a mod $b', it: 'Calcola $a mod $b'),
       answer: (a % b).toString(),
     );
   }
@@ -108,7 +108,7 @@ class QuizService {
     return QuizProblem(
       topic: 'F(n)',
       prompt: _t(lang, 'Calcula el $n-ésimo número de Fibonacci F($n)',
-          'Compute the $n-th Fibonacci number F($n)', pt: 'Calcule o $n-ésimo número de Fibonacci F($n)', fr: 'Calculez le $n-ième nombre de Fibonacci F($n)', vi: 'Hãy tính số Fibonacci thứ $n, tức F($n)', ru: 'Вычислите $n-е число Фибоначчи F($n)', it: "Calcola l'$n-esimo numero di Fibonacci F($n)"),
+          'Compute the $n-th Fibonacci number F($n)', pt: 'Calcule o $n-ésimo número de Fibonacci F($n)', fr: 'Calculez le $n-ième nombre de Fibonacci F($n)', id: 'Hitunglah bilangan Fibonacci ke-$n, yaitu F($n)', vi: 'Hãy tính số Fibonacci thứ $n, tức F($n)', ru: 'Вычислите $n-е число Фибоначчи F($n)', it: "Calcola l'$n-esimo numero di Fibonacci F($n)"),
       answer: SpecialFunctionsService.fibonacci(n).toString(),
     );
   }

@@ -8,6 +8,7 @@ import 'package:intl/intl.dart' as intl;
 import 'app_localizations_en.dart';
 import 'app_localizations_es.dart';
 import 'app_localizations_fr.dart';
+import 'app_localizations_id.dart';
 import 'app_localizations_it.dart';
 import 'app_localizations_pt.dart';
 import 'app_localizations_ru.dart';
@@ -102,6 +103,7 @@ abstract class AppLocalizations {
     Locale('en'),
     Locale('es'),
     Locale('fr'),
+    Locale('id'),
     Locale('it'),
     Locale('pt'),
     Locale('ru'),
@@ -1949,6 +1951,12 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Tiếng Việt'**
   String get settingsLangVi;
+
+  /// No description provided for @settingsLangId.
+  ///
+  /// In es, this message translates to:
+  /// **'Bahasa Indonesia'**
+  String get settingsLangId;
 
   /// Help screen title
   ///
@@ -4257,6 +4265,7 @@ class _AppLocalizationsDelegate
     'en',
     'es',
     'fr',
+    'id',
     'it',
     'pt',
     'ru',
@@ -4276,6 +4285,8 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
       return AppLocalizationsEs();
     case 'fr':
       return AppLocalizationsFr();
+    case 'id':
+      return AppLocalizationsId();
     case 'it':
       return AppLocalizationsIt();
     case 'pt':

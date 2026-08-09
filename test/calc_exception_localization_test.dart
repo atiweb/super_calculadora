@@ -10,6 +10,7 @@ void main() {
   const it = OlympiadStrings('it');
   const ru = OlympiadStrings('ru');
   const vi = OlympiadStrings('vi');
+  const id = OlympiadStrings('id');
 
   test('every CalcError code has a non-empty translation in every language', () {
     for (final code in CalcError.values) {
@@ -21,7 +22,25 @@ void main() {
       expect(it.errorText(e).isNotEmpty, true, reason: 'IT missing for $code');
       expect(ru.errorText(e).isNotEmpty, true, reason: 'RU missing for $code');
       expect(vi.errorText(e).isNotEmpty, true, reason: 'VI missing for $code');
+      expect(id.errorText(e).isNotEmpty, true, reason: 'ID missing for $code');
     }
+  });
+
+  test('every CalcError code is actually translated into Indonesian', () {
+    const sameInEnglish = <CalcError>{};
+    for (final code in CalcError.values) {
+      if (sameInEnglish.contains(code)) continue;
+      final e = CalcException(code, {'value': 'foo', 'k': '2', 'max': '10'});
+      expect(id.errorText(e) == en.errorText(e), false,
+          reason: 'ID falls back to EN for $code');
+    }
+  });
+
+  test('Indonesian reaches the tool labels, not just the errors', () {
+    expect(id.title, 'Alat Olimpiade');
+    expect(id.catAlgebra, 'Aljabar');
+    expect(id.catFractions, 'Pecahan');
+    expect(id.compute, 'Hitung');
   });
 
   test('every CalcError code is actually translated into Vietnamese', () {

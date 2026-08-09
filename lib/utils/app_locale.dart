@@ -66,19 +66,19 @@ String trLocale(String es, String en, {String? pt, String? fr, String? it, Strin
 /// already drifted apart: they carried a two-language `es ? 'MCD' : 'GCD'`,
 /// so a French or Italian user read PGCD/MCD in the guide and GCD on the key.
 /// Defining them once is what keeps the four in step.
-String get symGcd => trLocale('MCD', 'GCD', pt: 'MDC', fr: 'PGCD', it: 'MCD', ru: 'НОД', vi: 'ƯCLN');
-String get symLcm => trLocale('MCM', 'LCM', pt: 'MMC', fr: 'PPCM', it: 'mcm', ru: 'НОК', vi: 'BCNN');
-String get symDioph => trLocale('Diof', 'Dioph', pt: 'Diof', fr: 'Dioph', it: 'Dioph', ru: 'Диоф', vi: 'Dioph');
-String get symCrt => trLocale('TCR', 'CRT', pt: 'TCR', fr: 'TRC', it: 'TCR', ru: 'КТО', vi: 'CRT');
+String get symGcd => trLocale('MCD', 'GCD', pt: 'MDC', fr: 'PGCD', it: 'MCD', ru: 'НОД', vi: 'ƯCLN', id: 'FPB');
+String get symLcm => trLocale('MCM', 'LCM', pt: 'MMC', fr: 'PPCM', it: 'mcm', ru: 'НОК', vi: 'BCNN', id: 'KPK');
+String get symDioph => trLocale('Diof', 'Dioph', pt: 'Diof', fr: 'Dioph', it: 'Dioph', ru: 'Диоф', vi: 'Dioph', id: 'Dioph');
+String get symCrt => trLocale('TCR', 'CRT', pt: 'TCR', fr: 'TRC', it: 'TCR', ru: 'КТО', vi: 'CRT', id: 'CRT');
 String get symDigitSumBase =>
-    trLocale('ΣdígB', 'ΣdigB', pt: 'ΣdígB', fr: 'ΣchifB', it: 'ΣcifB', ru: 'ΣцифB', vi: 'ΣcsB');
+    trLocale('ΣdígB', 'ΣdigB', pt: 'ΣdígB', fr: 'ΣchifB', it: 'ΣcifB', ru: 'ΣцифB', vi: 'ΣcsB', id: 'ΣdigB');
 
 /// The four mean keys, for the same reason. They were hard-coded as
 /// `Med A … Med C` for every language while the guide already called them
 /// `Moy A … Moy Q` in French and `Méd A … Méd Q` in Portuguese, so the key
 /// and the instructions for pressing it disagreed. The spelling below is the
 /// one each guide already uses; the keypad splits the space into a line break.
-String get symMeanA => trLocale('Med A', 'Med A', pt: 'Méd A', fr: 'Moy A', it: 'Med A', ru: 'Ср ариф', vi: 'AM');
-String get symMeanG => trLocale('Med G', 'Med G', pt: 'Méd G', fr: 'Moy G', it: 'Med G', ru: 'Ср геом', vi: 'GM');
-String get symMeanH => trLocale('Med H', 'Med H', pt: 'Méd H', fr: 'Moy H', it: 'Med H', ru: 'Ср гарм', vi: 'HM');
-String get symMeanQ => trLocale('Med C', 'Med C', pt: 'Méd Q', fr: 'Moy Q', it: 'Med Q', ru: 'Ср квад', vi: 'QM');
+String get symMeanA => trLocale('Med A', 'Med A', pt: 'Méd A', fr: 'Moy A', it: 'Med A', ru: 'Ср ариф', vi: 'AM', id: 'AM');
+String get symMeanG => trLocale('Med G', 'Med G', pt: 'Méd G', fr: 'Moy G', it: 'Med G', ru: 'Ср геом', vi: 'GM', id: 'GM');
+String get symMeanH => trLocale('Med H', 'Med H', pt: 'Méd H', fr: 'Moy H', it: 'Med H', ru: 'Ср гарм', vi: 'HM', id: 'HM');
+String get symMeanQ => trLocale('Med C', 'Med C', pt: 'Méd Q', fr: 'Moy Q', it: 'Med Q', ru: 'Ср квад', vi: 'QM', id: 'QM');

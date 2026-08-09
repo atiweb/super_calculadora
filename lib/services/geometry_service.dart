@@ -403,7 +403,7 @@ class GeometryService {
 
   /// Integer (floor) square root of a non-negative BigInt.
   static BigInt _integerSqrt(BigInt n) {
-    if (n < BigInt.zero) throw ArgumentError(trLocale('Raíz de número negativo', 'Root of a negative number', pt: 'Raiz de número negativo', fr: "Racine d'un nombre négatif", vi: 'Căn của số âm', ru: 'Корень из отрицательного числа', it: 'Radice di un numero negativo'));
+    if (n < BigInt.zero) throw ArgumentError(trLocale('Raíz de número negativo', 'Root of a negative number', pt: 'Raiz de número negativo', fr: "Racine d'un nombre négatif", id: 'Akar dari bilangan negatif', vi: 'Căn của số âm', ru: 'Корень из отрицательного числа', it: 'Radice di un numero negativo'));
     if (n < BigInt.two) return n;
     BigInt x = n;
     BigInt y = (x + BigInt.one) >> 1;

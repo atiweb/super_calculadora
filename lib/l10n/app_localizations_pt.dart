@@ -1069,6 +1069,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get settingsLangVi => 'Tiếng Việt';
 
   @override
+  String get settingsLangId => 'Bahasa Indonesia';
+
+  @override
   String get hlpTitle => 'Guia de Funções Especiais';
 
   @override
