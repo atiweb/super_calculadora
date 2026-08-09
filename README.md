@@ -20,7 +20,7 @@
 <p align="center">
   <b><a href="https://play.google.com/store/apps/details?id=br.dev.ati.supercalculadora">📲 Get it on Google Play</a></b> (free, no ads)
   &nbsp;·&nbsp;
-  <b><a href="https://atiweb.github.io/super_calculadora/">📖 Online User Guide &amp; Function Reference</a></b> (bilingual EN/ES)
+  <b><a href="https://atiweb.github.io/super_calculadora/">📖 Online User Guide &amp; Function Reference</a></b> (EN, ES, PT, FR, IT, RU, VI, ID)
 </p>
 
 ---
@@ -105,7 +105,7 @@ A dedicated section (from the navigation drawer) with **exact** tools, many with
 
 ### Other
 - **Persistent history** — last 100 operations saved on device
-- **Trilingual** — English, Spanish and Portuguese (auto-detected from the device locale, or chosen in Settings)
+- **Eight languages** — English, Spanish, Portuguese, French, Italian, Russian, Vietnamese and Indonesian (auto-detected from the device locale, or chosen in Settings)
 - **Light / Dark / System** theme
 - **Copy & Paste** support for large numbers
 - Fully **offline** — no internet required, no data collected
@@ -195,7 +195,7 @@ lib/
 │   ├── olympiad/                        # hub + 10 tool screens + quiz
 │   └── settings_screen.dart
 ├── vendor/computable_reals/             # vendored constructive-reals (see its LICENSE)
-└── l10n/                               # English + Spanish translations
+└── l10n/                               # translations, one .arb per language
 ```
 
 ---
