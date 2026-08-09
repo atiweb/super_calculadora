@@ -20,8 +20,9 @@ class OlympiadStrings {
 
   /// Text for the active language, falling back to English (see [trLang]),
   /// so a language can be filled in tool by tool.
-  String pick(String spanish, String english, {String? pt}) =>
-      trLang(lang, spanish, english, pt: pt);
+  String pick(String spanish, String english, {String? pt, String? fr, String? it, String? ru, String? vi,
+          String? id}) =>
+      trLang(lang, spanish, english, pt: pt, fr: fr, it: it, ru: ru, vi: vi, id: id);
 
   // Hub
   String get title => pick('Herramientas de Olimpiada', 'Olympiad Tools', pt: 'Ferramentas de Olimpíada');

@@ -13,8 +13,9 @@ class StepsService {
   static final BigInt _one = BigInt.one;
 
   static String _t(String lang, String spanish, String english,
-          {String? pt}) =>
-      trLang(lang, spanish, english, pt: pt);
+          {String? pt, String? fr, String? it, String? ru, String? vi,
+          String? id}) =>
+      trLang(lang, spanish, english, pt: pt, fr: fr, it: it, ru: ru, vi: vi, id: id);
 
   /// Euclidean algorithm with steps, including the Bézout identity
   /// g = x·a + y·b. The result is the gcd.

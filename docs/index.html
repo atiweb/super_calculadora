@@ -36,11 +36,6 @@
     html[data-theme=dark] .pending-box{background:#2a2200}
     html[data-theme=dark] .lang-pill,.html[data-theme=dark] .theme-btn{box-shadow:0 1px 4px rgba(0,0,0,.4)}
 
-    /* ── Bilingual ── */
-    .en,.es,.en-blk,.es-blk{display:none}
-    html[lang=en] .en{display:inline} html[lang=en] .en-blk{display:block}
-    html[lang=es] .es{display:inline} html[lang=es] .es-blk{display:block}
-
     /* ── Controls (lang + theme) ── */
     .controls{position:fixed;top:12px;right:16px;display:flex;align-items:center;gap:8px;z-index:200}
     .lang-pill{display:flex;background:var(--accent-light);border-radius:20px;padding:2px;gap:2px;box-shadow:0 1px 4px rgba(0,0,0,.15)}
@@ -165,6 +160,7 @@
   <div class="lang-pill">
     <button class="lbtn" data-lang="en" onclick="setLang('en')">EN</button>
     <button class="lbtn" data-lang="es" onclick="setLang('es')">ES</button>
+    <button class="lbtn" data-lang="pt" onclick="setLang('pt')">PT</button>
   </div>
 </div>
 
@@ -172,82 +168,82 @@
 
 <!-- ══ NAV ══════════════════════════════════════════════════════════════ -->
 <nav id="site-nav">
-  <div class="nav-section"><span class="en">Getting Started</span><span class="es">Inicio</span></div>
-  <a href="#download"><span class="en">📲 Download</span><span class="es">📲 Descargar</span></a>
-  <a href="#quick-start"><span class="en">Quick Start</span><span class="es">Inicio Rápido</span></a>
-  <a href="#parameter-system"><span class="en">Parameter System</span><span class="es">Sistema de Parámetros</span></a>
-  <a href="#high-precision"><span class="en">High-Precision Mode</span><span class="es">Alta Precisión</span></a>
+  <div class="nav-section"><span data-i18n="site-nav-01">Getting Started</span></div>
+  <a href="#download"><span data-i18n="site-nav-02">📲 Download</span></a>
+  <a href="#quick-start"><span data-i18n="site-nav-03">Quick Start</span></a>
+  <a href="#parameter-system"><span data-i18n="site-nav-04">Parameter System</span></a>
+  <a href="#high-precision"><span data-i18n="site-nav-05">High-Precision Mode</span></a>
 
-  <div class="nav-section"><span class="en">Number Theory</span><span class="es">Teoría de Números</span></div>
-  <a href="#euler-phi"><span class="en">φ(n) Euler's Totient</span><span class="es">φ(n) Totiente de Euler</span></a>
+  <div class="nav-section"><span data-i18n="site-nav-06">Number Theory</span></div>
+  <a href="#euler-phi"><span data-i18n="site-nav-07">φ(n) Euler's Totient</span></a>
   <a href="#carmichael">λ(n) Carmichael</a>
   <a href="#mobius">μ(n) Möbius</a>
   <a href="#liouville">λL(n) Liouville</a>
-  <a href="#small-omega"><span class="en">ω(n) Distinct Primes</span><span class="es">ω(n) Primos Distintos</span></a>
-  <a href="#big-omega"><span class="en">Ω(n) Primes w/Mult.</span><span class="es">Ω(n) Primos c/Mult.</span></a>
-  <a href="#sigma0"><span class="en">σ₀(n) Divisor Count</span><span class="es">σ₀(n) Cant. Divisores</span></a>
-  <a href="#sigma"><span class="en">σ(n) Sum of Divisors</span><span class="es">σ(n) Suma Divisores</span></a>
+  <a href="#small-omega"><span data-i18n="site-nav-08">ω(n) Distinct Primes</span></a>
+  <a href="#big-omega"><span data-i18n="site-nav-09">Ω(n) Primes w/Mult.</span></a>
+  <a href="#sigma0"><span data-i18n="site-nav-10">σ₀(n) Divisor Count</span></a>
+  <a href="#sigma"><span data-i18n="site-nav-11">σ(n) Sum of Divisors</span></a>
   <a href="#sopfr">sopfr(n)</a>
   <a href="#sopf">sopf(n)</a>
   <a href="#rad">rad(n) Radical</a>
   <a href="#primorial">n# Primorial</a>
-  <a href="#prime-count"><span class="en">π(n) Prime Counting</span><span class="es">π(n) Conteo Primos</span></a>
-  <a href="#digital-root"><span class="en">dr(n) Digital Root</span><span class="es">dr(n) Raíz Digital</span></a>
-  <a href="#floor-ceil"><span class="en">Floor / Ceiling</span><span class="es">Piso / Techo</span></a>
+  <a href="#prime-count"><span data-i18n="site-nav-12">π(n) Prime Counting</span></a>
+  <a href="#digital-root"><span data-i18n="site-nav-13">dr(n) Digital Root</span></a>
+  <a href="#floor-ceil"><span data-i18n="site-nav-14">Floor / Ceiling</span></a>
   <a href="#padic">Vₚ(n) p-adic</a>
 
-  <div class="nav-section"><span class="en">Modular Arithmetic</span><span class="es">Aritmética Modular</span></div>
+  <div class="nav-section"><span data-i18n="site-nav-15">Modular Arithmetic</span></div>
   <a href="#mod">a mod b</a>
   <a href="#mod-pow">a^b mod n</a>
   <a href="#mod-inv">a⁻¹ mod n</a>
   <a href="#ord">ord_n(a)</a>
-  <a href="#legendre"><span class="en">Legendre Symbol</span><span class="es">Símbolo de Legendre</span></a>
-  <a href="#jacobi"><span class="en">Jacobi Symbol</span><span class="es">Símbolo de Jacobi</span></a>
-  <a href="#prim-root"><span class="en">Primitive Root</span><span class="es">Raíz Primitiva</span></a>
-  <a href="#gcd">GCD / MCD</a>
-  <a href="#lcm">LCM / MCM</a>
-  <a href="#dioph"><span class="en">Diophantine</span><span class="es">Diofántica</span></a>
-  <a href="#crt">CRT / TCR</a>
+  <a href="#legendre"><span data-i18n="site-nav-16">Legendre Symbol</span></a>
+  <a href="#jacobi"><span data-i18n="site-nav-17">Jacobi Symbol</span></a>
+  <a href="#prim-root"><span data-i18n="site-nav-18">Primitive Root</span></a>
+  <a href="#gcd" data-i18n="site-nav-50">GCD</a>
+  <a href="#lcm" data-i18n="site-nav-51">LCM</a>
+  <a href="#dioph"><span data-i18n="site-nav-19">Diophantine</span></a>
+  <a href="#crt" data-i18n="site-nav-52">CRT</a>
 
-  <div class="nav-section"><span class="en">Combinatorics</span><span class="es">Combinatoria</span></div>
+  <div class="nav-section"><span data-i18n="site-nav-20">Combinatorics</span></div>
   <a href="#factorial">n! Factorial</a>
-  <a href="#dbl-factorial">n!! <span class="en">Double</span><span class="es">Doble</span></a>
-  <a href="#comb">C(n,k) <span class="en">Comb.</span><span class="es">Comb.</span></a>
-  <a href="#var">V(n,k) <span class="en">Var.</span><span class="es">Var.</span></a>
+  <a href="#dbl-factorial">n!! <span data-i18n="site-nav-21">Double</span></a>
+  <a href="#comb">C(n,k) <span data-i18n="site-nav-22">Comb.</span></a>
+  <a href="#var">V(n,k) <span data-i18n="site-nav-23">Var.</span></a>
   <a href="#catalan">Catalan</a>
-  <a href="#derangement">D(n) <span class="en">Derang.</span><span class="es">Desarreglos</span></a>
+  <a href="#derangement">D(n) <span data-i18n="site-nav-24">Derang.</span></a>
   <a href="#bell">B(n) Bell</a>
-  <a href="#partition">p(n) <span class="en">Partitions</span><span class="es">Particiones</span></a>
+  <a href="#partition">p(n) <span data-i18n="site-nav-25">Partitions</span></a>
   <a href="#stirling2">S₂(n,k) Stirling</a>
   <a href="#stirling1">s₁(n,k) Stirling</a>
   <a href="#fibonacci">F(n) Fibonacci</a>
-  <a href="#digit-sum-base"><span class="en">Digit Sum Base b</span><span class="es">Suma Díg. Base b</span></a>
+  <a href="#digit-sum-base"><span data-i18n="site-nav-26">Digit Sum Base b</span></a>
 
-  <div class="nav-section"><span class="en">Statistics</span><span class="es">Estadística</span></div>
-  <a href="#arith-mean"><span class="en">Arithmetic Mean</span><span class="es">Media Aritmética</span></a>
-  <a href="#geo-mean"><span class="en">Geometric Mean</span><span class="es">Media Geométrica</span></a>
-  <a href="#harm-mean"><span class="en">Harmonic Mean</span><span class="es">Media Armónica</span></a>
-  <a href="#quad-mean"><span class="en">Quadratic Mean</span><span class="es">Media Cuadrática</span></a>
+  <div class="nav-section"><span data-i18n="site-nav-27">Statistics</span></div>
+  <a href="#arith-mean"><span data-i18n="site-nav-28">Arithmetic Mean</span></a>
+  <a href="#geo-mean"><span data-i18n="site-nav-29">Geometric Mean</span></a>
+  <a href="#harm-mean"><span data-i18n="site-nav-30">Harmonic Mean</span></a>
+  <a href="#quad-mean"><span data-i18n="site-nav-31">Quadratic Mean</span></a>
   <a href="#minmax">min / max</a>
-  <a href="#mean-ineq"><span class="en">Mean Inequality</span><span class="es">Desigualdad Medias</span></a>
+  <a href="#mean-ineq"><span data-i18n="site-nav-32">Mean Inequality</span></a>
 
-  <div class="nav-section"><span class="en">Olympiad Tools</span><span class="es">Herramientas Olímpicas</span></div>
-  <a href="#tools-fractions"><span class="en">Fractions</span><span class="es">Fracciones</span></a>
-  <a href="#tools-radicals"><span class="en">Radicals</span><span class="es">Radicales</span></a>
-  <a href="#tools-geometry"><span class="en">Geometry</span><span class="es">Geometría</span></a>
-  <a href="#tools-polynomials"><span class="en">Polynomials</span><span class="es">Polinomios</span></a>
-  <a href="#tools-algebra"><span class="en">Algebra</span><span class="es">Álgebra</span></a>
-  <a href="#tools-numtheory"><span class="en">Adv. Number Theory</span><span class="es">T.N. Avanzada</span></a>
-  <a href="#tools-steps"><span class="en">Step by step</span><span class="es">Procedimientos</span></a>
-  <a href="#tools-complex"><span class="en">Complex &amp; Sequences</span><span class="es">Complejos y Sucesiones</span></a>
-  <a href="#tools-statistics"><span class="en">Statistics</span><span class="es">Estadística</span></a>
-  <a href="#tools-matrices"><span class="en">Matrices</span><span class="es">Matrices</span></a>
-  <a href="#tools-calculus"><span class="en">Calculus</span><span class="es">Cálculo</span></a>
-  <a href="#tools-practice"><span class="en">Practice</span><span class="es">Práctica</span></a>
+  <div class="nav-section"><span data-i18n="site-nav-33">Olympiad Tools</span></div>
+  <a href="#tools-fractions"><span data-i18n="site-nav-34">Fractions</span></a>
+  <a href="#tools-radicals"><span data-i18n="site-nav-35">Radicals</span></a>
+  <a href="#tools-geometry"><span data-i18n="site-nav-36">Geometry</span></a>
+  <a href="#tools-polynomials"><span data-i18n="site-nav-37">Polynomials</span></a>
+  <a href="#tools-algebra"><span data-i18n="site-nav-38">Algebra</span></a>
+  <a href="#tools-numtheory"><span data-i18n="site-nav-39">Adv. Number Theory</span></a>
+  <a href="#tools-steps"><span data-i18n="site-nav-40">Step by step</span></a>
+  <a href="#tools-complex"><span data-i18n="site-nav-41">Complex &amp; Sequences</span></a>
+  <a href="#tools-statistics"><span data-i18n="site-nav-42">Statistics</span></a>
+  <a href="#tools-matrices"><span data-i18n="site-nav-43">Matrices</span></a>
+  <a href="#tools-calculus"><span data-i18n="site-nav-44">Calculus</span></a>
+  <a href="#tools-practice"><span data-i18n="site-nav-45">Practice</span></a>
 
-  <div class="nav-section"><span class="en">Reference</span><span class="es">Referencia</span></div>
-  <a href="#analysis-panel"><span class="en">Analysis Panel</span><span class="es">Panel de Análisis</span></a>
-  <a href="#olympiad"><span class="en">Olympiad Formulas</span><span class="es">Fórmulas Olímpicas</span></a>
+  <div class="nav-section"><span data-i18n="site-nav-46">Reference</span></div>
+  <a href="#analysis-panel"><span data-i18n="site-nav-47">Analysis Panel</span></a>
+  <a href="#olympiad"><span data-i18n="site-nav-48">Olympiad Formulas</span></a>
 </nav>
 
 <!-- ══ MAIN ══════════════════════════════════════════════════════════════ -->
@@ -256,8 +252,7 @@
 <!-- Page header -->
 <div class="page-header">
   <h1>Super Calculator / Super Calculadora</h1>
-  <p class="en">Complete guide — special functions, number theory, modular arithmetic, combinatorics, geometry, algebra and more.</p>
-  <p class="es">Guía completa — funciones especiales, teoría de números, aritmética modular, combinatoria, geometría, álgebra y más.</p>
+  <p data-i18n="site-nav-49">Complete guide — special functions, number theory, modular arithmetic, combinatorics, geometry, algebra and more.</p>
   <div class="badges">
     <span class="badge">Android</span>
     <span class="badge">Flutter</span>
@@ -268,92 +263,83 @@
 
 <!-- ════ DOWNLOAD ═══════════════════════════════════════════════════════ -->
 <section class="get-banner" id="download">
-  <h2>📲 <span class="en">Now on Google Play — free</span><span class="es">Ya en Google Play — gratis</span></h2>
-  <p class="en">Super Calculator is published. Install it straight from Google Play — no tester group, no sign-up. Android 7.0 or newer.</p>
-  <p class="es">Super Calculadora ya está publicada. Instálala directamente desde Google Play — sin grupo de testers ni registro. Android 7.0 o superior.</p>
+  <h2>📲 <span data-i18n="download-01">Now on Google Play — free</span></h2>
+  <p data-i18n="download-02">Super Calculator is published. Install it straight from Google Play — no tester group, no sign-up. Android 7.0 or newer.</p>
   <ul class="get-points">
-    <li>✓ <span class="en">Free, no ads</span><span class="es">Gratis, sin anuncios</span></li>
-    <li>✓ <span class="en">Works fully offline</span><span class="es">Funciona sin conexión</span></li>
-    <li>✓ <span class="en">No account needed</span><span class="es">Sin necesidad de cuenta</span></li>
+    <li>✓ <span data-i18n="download-03">Free, no ads</span></li>
+    <li>✓ <span data-i18n="download-04">Works fully offline</span></li>
+    <li>✓ <span data-i18n="download-05">No account needed</span></li>
   </ul>
   <div class="get-actions">
-    <a class="get-btn primary" href="https://play.google.com/store/apps/details?id=br.dev.ati.supercalculadora" target="_blank" rel="noopener">🚀 <span class="en">Get it on Google Play</span><span class="es">Descargar en Google Play</span></a>
-    <a class="get-btn secondary" href="#quick-start">📖 <span class="en">Quick start</span><span class="es">Inicio rápido</span></a>
+    <a class="get-btn primary" href="https://play.google.com/store/apps/details?id=br.dev.ati.supercalculadora" target="_blank" rel="noopener">🚀 <span data-i18n="download-06">Get it on Google Play</span></a>
+    <a class="get-btn secondary" href="#quick-start">📖 <span data-i18n="download-07">Quick start</span></a>
   </div>
-  <p class="get-note en">Thanks to everyone who tested the app before release — your reports shaped this version. 🙏</p>
-  <p class="get-note es">Gracias a quienes probaron la app antes del lanzamiento — sus reportes moldearon esta versión. 🙏</p>
+  <p class="get-note" data-i18n="download-08">Thanks to everyone who tested the app before release — your reports shaped this version. 🙏</p>
 </section>
 
 <!-- ════ QUICK START ════════════════════════════════════════════════════ -->
-<h2 id="quick-start"><span class="en">Quick Start</span><span class="es">Inicio Rápido</span></h2>
+<h2 id="quick-start"><span data-i18n="quick-start-01">Quick Start</span></h2>
 <div class="quick-start">
-  <h3><span class="en">Welcome to the olympiad calculator</span><span class="es">Bienvenido a la calculadora olímpica</span></h3>
+  <h3><span data-i18n="quick-start-02">Welcome to the olympiad calculator</span></h3>
   <ol class="steps">
     <li><span class="step-num">1</span>
-      <span class="en">Open the side menu (☰) and select <strong>Special Functions</strong> for the classic calculator keypad (~40 functions).</span>
-      <span class="es">Abre el menú lateral (☰) y selecciona <strong>Funciones Especiales</strong> para el teclado clásico (~40 funciones).</span>
+      <span data-i18n="quick-start-03">Open the side menu (☰) and select <strong>Special Functions</strong> for the classic calculator keypad (~40 functions).</span>
     </li>
     <li><span class="step-num">2</span>
-      <span class="en">Enter a number and press any function button.</span>
-      <span class="es">Ingresa un número y presiona cualquier botón de función.</span>
+      <span data-i18n="quick-start-04">Enter a number and press any function button.</span>
     </li>
     <li><span class="step-num">3</span>
-      <span class="en">If the function needs more values, a pending operation indicator appears on screen.</span>
-      <span class="es">Si la función necesita más valores, aparece un indicador de operación pendiente en pantalla.</span>
+      <span data-i18n="quick-start-05">If the function needs more values, a pending operation indicator appears on screen.</span>
     </li>
     <li><span class="step-num">4</span>
-      <span class="en">For exact olympiad tools (fractions, geometry, polynomials, …) open the menu → <strong>Olympiad Tools</strong>.</span>
-      <span class="es">Para herramientas olímpicas exactas (fracciones, geometría, polinomios, …) abre el menú → <strong>Herramientas de Olimpiada</strong>.</span>
+      <span data-i18n="quick-start-06">For exact olympiad tools (fractions, geometry, polynomials, …) open the menu → <strong>Olympiad Tools</strong>.</span>
     </li>
     <li><span class="step-num">5</span>
-      <span class="en">The side panel (tablet) or bottom panel (mobile) shows automatic analysis of every entered number.</span>
-      <span class="es">El panel lateral (tablet) o inferior (móvil) muestra el análisis automático de cada número ingresado.</span>
+      <span data-i18n="quick-start-07">The side panel (tablet) or bottom panel (mobile) shows automatic analysis of every entered number.</span>
     </li>
   </ol>
   <div class="note-box">
-    <span class="en">1-parameter functions execute immediately. 2+ parameter functions show an indicator and wait for more values.</span>
-    <span class="es">Las funciones de 1 parámetro se ejecutan de inmediato. Las de 2+ parámetros muestran un indicador y esperan más valores.</span>
+    <span data-i18n="quick-start-08">1-parameter functions execute immediately. 2+ parameter functions show an indicator and wait for more values.</span>
   </div>
 </div>
 
 <!-- ════ PARAMETER SYSTEM ════════════════════════════════════════════════ -->
-<h2 id="parameter-system"><span class="en">Parameter System</span><span class="es">Sistema de Parámetros</span></h2>
+<h2 id="parameter-system"><span data-i18n="parameter-system-01">Parameter System</span></h2>
 <div class="param-types">
   <div class="param-type">
     <div class="param-icon green">1</div>
     <div>
-      <div class="param-label"><span class="en">1 parameter — immediate</span><span class="es">1 parámetro — inmediato</span></div>
-      <div class="param-desc"><span class="en">Enter number → Press function → Result</span><span class="es">Ingresa número → Presiona función → Resultado</span></div>
-      <div class="param-ex"><span class="en">E.g.: φ(12) → enter 12, press φ → shows 4</span><span class="es">Ej.: φ(12) → ingresa 12, presiona φ → muestra 4</span></div>
+      <div class="param-label"><span data-i18n="parameter-system-02">1 parameter — immediate</span></div>
+      <div class="param-desc"><span data-i18n="parameter-system-03">Enter number → Press function → Result</span></div>
+      <div class="param-ex"><span data-i18n="parameter-system-04">E.g.: φ(12) → enter 12, press φ → shows 4</span></div>
     </div>
   </div>
   <div class="param-type">
     <div class="param-icon blue">2</div>
     <div>
-      <div class="param-label"><span class="en">2-3-4 parameters — fixed</span><span class="es">2-3-4 parámetros — fijo</span></div>
-      <div class="param-desc"><span class="en">Enter value → Function → Value → = → (repeat if needed). Auto-executes when all parameters are filled.</span><span class="es">Ingresa valor → Función → Valor → = → (repite si hace falta). Se ejecuta automáticamente al completarse.</span></div>
-      <div class="param-ex"><span class="en">E.g.: C(10,3) → enter 10 → C(n,k) → 3 → =</span><span class="es">Ej.: C(10,3) → ingresa 10 → C(n,k) → 3 → =</span></div>
+      <div class="param-label"><span data-i18n="parameter-system-05">2-3-4 parameters — fixed</span></div>
+      <div class="param-desc"><span data-i18n="parameter-system-06">Enter value → Function → Value → = → (repeat if needed). Auto-executes when all parameters are filled.</span></div>
+      <div class="param-ex"><span data-i18n="parameter-system-07">E.g.: C(10,3) → enter 10 → C(n,k) → 3 → =</span></div>
     </div>
   </div>
   <div class="param-type">
     <div class="param-icon orange">N</div>
     <div>
-      <div class="param-label"><span class="en">N parameters — variable</span><span class="es">N parámetros — variable</span></div>
-      <div class="param-desc"><span class="en">Enter value → Function → Value → = (add more). Press the <em>same function again</em> to execute.</span><span class="es">Ingresa valor → Función → Valor → = (agrega más). Presiona la <em>misma función otra vez</em> para ejecutar.</span></div>
-      <div class="param-ex">E.g.: GCD(12,18,24) → 12 → GCD → 18 → = → 24 → GCD</div>
+      <div class="param-label"><span data-i18n="parameter-system-08">N parameters — variable</span></div>
+      <div class="param-desc"><span data-i18n="parameter-system-09">Enter value → Function → Value → = (add more). Press the <em>same function again</em> to execute.</span></div>
+      <div class="param-ex" data-i18n="parameter-system-12">E.g.: GCD(12,18,24) → 12 → GCD → 18 → = → 24 → GCD</div>
     </div>
   </div>
 </div>
 <div class="pending-box">
-  <strong><span class="en">Pending operation indicator</span><span class="es">Indicador de operación pendiente</span></strong>
-  <span class="en">"C(10, _)" means k is missing. "GCD(12, 18, _) [= add, GCD solve]" is a variable-length operation.</span>
-  <span class="es">"C(10, _)" significa que falta k. "MCD(12, 18, _) [= agregar, MCD ejecutar]" es una operación de longitud variable.</span>
+  <strong><span data-i18n="parameter-system-10">Pending operation indicator</span></strong>
+  <span data-i18n="parameter-system-11">"C(10, _)" means k is missing. "GCD(12, 18, _) [= add, GCD solve]" is a variable-length operation.</span>
 </div>
 
 <!-- ════ HIGH PRECISION ════════════════════════════════════════════════════ -->
-<h2 id="high-precision"><span class="en">High-Precision Mode</span><span class="es">Modo de Alta Precisión</span></h2>
+<h2 id="high-precision"><span data-i18n="high-precision-01">High-Precision Mode</span></h2>
 <div class="info-card">
-  <div class="en-blk"><pre>Optional toggle in Settings → "High precision mode" (with a 5–100 digit slider).
+  <div data-i18n="high-precision-02"><pre>Optional toggle in Settings → "High precision mode" (with a 5–100 digit slider).
 
 When ON, the transcendental/irrational functions — sin, cos, tan, asin, acos,
 atan, ln, log, exp, √ and ∛ — are computed with CONSTRUCTIVE (computable) real
@@ -369,40 +355,23 @@ numbers: the value is exact internally and only rounded when displayed.
 
 Powered by a vendored copy of computable_reals (a Dart port of Hans Boehm's
 constructive reals). See Settings → Open source licenses.</pre></div>
-  <div class="es-blk"><pre>Interruptor opcional en Ajustes → "Modo de alta precisión" (con deslizador de
-5 a 100 dígitos).
-
-Al activarlo, las funciones trascendentes/irracionales — sin, cos, tan, asin,
-acos, atan, ln, log, exp, √ y ∛ — se calculan con números reales CONSTRUCTIVOS:
-el valor es exacto internamente y solo se redondea al mostrarlo.
-
-  • Sin error de punto flotante.  √2 (30 díg.) = 1.41421356237309504880168872421
-  • sin(45°) (30 díg.) = 0.707106781186547524400844362105
-  • Las singularidades se detectan por construcción: tan(90°) → "indefinido"
-    (en vez de un engañoso 1.6×10¹⁶).
-  • Todo corre en un isolate en segundo plano con indicador de carga — la
-    interfaz nunca se congela. (Potencias que explotarían a miles de millones de
-    dígitos, p. ej. 1.0006^99999999, se rechazan al instante como "demasiado grande".)
-
-Usa una copia vendorizada de computable_reals (port en Dart de los reales
-constructivos de Hans Boehm). Ver Ajustes → Licencias de código abierto.</pre></div>
 </div>
 
 <!-- ════ NUMBER THEORY ════════════════════════════════════════════════════ -->
-<h2><span class="en">Number Theory</span><span class="es">Teoría de Números</span></h2>
+<h2><span data-i18n="high-precision-03">Number Theory</span></h2>
 
 <details id="euler-phi">
-  <summary><span class="fn-symbol">φ</span><span class="fn-title"><span class="en">φ(n) — Euler's Totient Function</span><span class="es">φ(n) — Función Totiente de Euler</span></span><span class="fn-params">1 <span class="en">param</span><span class="es">param</span></span><span class="chevron">▼</span></summary>
+  <summary><span class="fn-symbol">φ</span><span class="fn-title"><span data-i18n="euler-phi-01">φ(n) — Euler's Totient Function</span></span><span class="fn-params">1 <span data-i18n="euler-phi-02">param</span></span><span class="chevron">▼</span></summary>
   <div class="fn-body">
-    <div class="fn-desc"><span class="en">Counts how many integers from 1 to n are coprime with n (GCD(k,n)=1).</span><span class="es">Cuenta cuántos enteros del 1 al n son coprimos con n (MCD(k,n)=1).</span></div>
+    <div class="fn-desc"><span data-i18n="euler-phi-03">Counts how many integers from 1 to n are coprime with n (GCD(k,n)=1).</span></div>
     <div class="formula">φ(n) = n × ∏(1 − 1/p)  for each prime p | n</div>
-    <div class="examples-label"><span class="en">Examples</span><span class="es">Ejemplos</span></div>
+    <div class="examples-label"><span data-i18n="euler-phi-04">Examples</span></div>
     <ul class="examples-list"><li>φ(1)=1</li><li>φ(9)=6 → [1,2,4,5,7,8]</li><li>φ(12)=4 → [1,5,7,11]</li><li>φ(p)=p−1 for prime p</li></ul>
     <div class="tips-box">
-      <div class="tips-label"><span class="en">Tips</span><span class="es">Consejos</span></div>
+      <div class="tips-label"><span data-i18n="euler-phi-05">Tips</span></div>
       <ul class="tips-list">
-        <li><span class="en">Multiplicative: φ(mn)=φ(m)φ(n) if GCD(m,n)=1</span><span class="es">Multiplicativa: φ(mn)=φ(m)φ(n) si MCD(m,n)=1</span></li>
-        <li><span class="en">Euler's theorem: a^φ(n)≡1 (mod n) if GCD(a,n)=1</span><span class="es">Teorema de Euler: a^φ(n)≡1 (mod n) si MCD(a,n)=1</span></li>
+        <li><span data-i18n="euler-phi-06">Multiplicative: φ(mn)=φ(m)φ(n) if GCD(m,n)=1</span></li>
+        <li><span data-i18n="euler-phi-07">Euler's theorem: a^φ(n)≡1 (mod n) if GCD(a,n)=1</span></li>
         <li>Σ φ(d) for d|n = n</li>
       </ul>
     </div>
@@ -410,35 +379,35 @@ constructivos de Hans Boehm). Ver Ajustes → Licencias de código abierto.</pre
 </details>
 
 <details id="carmichael">
-  <summary><span class="fn-symbol">λ</span><span class="fn-title"><span class="en">λ(n) — Carmichael's λ Function</span><span class="es">λ(n) — Función λ de Carmichael</span></span><span class="fn-params">1 param</span><span class="chevron">▼</span></summary>
+  <summary><span class="fn-symbol">λ</span><span class="fn-title"><span data-i18n="carmichael-01">λ(n) — Carmichael's λ Function</span></span><span class="fn-params">1 param</span><span class="chevron">▼</span></summary>
   <div class="fn-body">
-    <div class="fn-desc"><span class="en">Smallest m&gt;0 such that a^m≡1 (mod n) for ALL a coprime to n. Always divides φ(n).</span><span class="es">El menor m&gt;0 tal que aᵐ≡1 (mod n) para TODO a coprimo con n. Siempre divide a φ(n).</span></div>
+    <div class="fn-desc"><span data-i18n="carmichael-02">Smallest m&gt;0 such that a^m≡1 (mod n) for ALL a coprime to n. Always divides φ(n).</span></div>
     <div class="formula">λ(p^k)=φ(p^k) if p odd
 λ(2)=1, λ(4)=2, λ(2^k)=2^(k−2) if k≥3
 λ(n) = lcm of parts</div>
-    <div class="examples-label"><span class="en">Examples</span><span class="es">Ejemplos</span></div>
+    <div class="examples-label"><span data-i18n="carmichael-03">Examples</span></div>
     <ul class="examples-list"><li>λ(8)=2</li><li>λ(15)=lcm(2,4)=4</li><li>λ(p)=p−1</li></ul>
-    <div class="tips-box"><div class="tips-label"><span class="en">Tips</span><span class="es">Consejos</span></div>
+    <div class="tips-box"><div class="tips-label"><span data-i18n="carmichael-04">Tips</span></div>
       <ul class="tips-list">
-        <li>λ(n)|φ(n) <span class="en">always</span><span class="es">siempre</span></li>
-        <li>λ(n)=φ(n) <span class="en">iff n has a primitive root</span><span class="es">ssi n tiene raíz primitiva</span></li>
+        <li>λ(n)|φ(n) <span data-i18n="carmichael-05">always</span></li>
+        <li>λ(n)=φ(n) <span data-i18n="carmichael-06">iff n has a primitive root</span></li>
       </ul>
     </div>
   </div>
 </details>
 
 <details id="mobius">
-  <summary><span class="fn-symbol">μ</span><span class="fn-title"><span class="en">μ(n) — Möbius Function</span><span class="es">μ(n) — Función de Möbius</span></span><span class="fn-params">1 param</span><span class="chevron">▼</span></summary>
+  <summary><span class="fn-symbol">μ</span><span class="fn-title"><span data-i18n="mobius-01">μ(n) — Möbius Function</span></span><span class="fn-params">1 param</span><span class="chevron">▼</span></summary>
   <div class="fn-body">
-    <div class="fn-desc"><span class="en">Detects whether n is square-free and counts prime factors.</span><span class="es">Detecta si n es libre de cuadrados y cuenta sus factores primos.</span></div>
+    <div class="fn-desc"><span data-i18n="mobius-02">Detects whether n is square-free and counts prime factors.</span></div>
     <div class="formula">μ(1)=1
 μ(n)=(−1)^k  if n=p₁·…·pₖ (distinct primes)
 μ(n)=0  if p²|n</div>
-    <div class="examples-label"><span class="en">Examples</span><span class="es">Ejemplos</span></div>
+    <div class="examples-label"><span data-i18n="mobius-03">Examples</span></div>
     <ul class="examples-list"><li>μ(1)=1</li><li>μ(6)=1</li><li>μ(30)=−1</li><li>μ(12)=0 (has 2²)</li></ul>
-    <div class="tips-box"><div class="tips-label"><span class="en">Tips</span><span class="es">Consejos</span></div>
+    <div class="tips-box"><div class="tips-label"><span data-i18n="mobius-04">Tips</span></div>
       <ul class="tips-list">
-        <li><span class="en">Möbius inversion: if g(n)=Σf(d), then f(n)=Σμ(d)g(n/d)</span><span class="es">Inversión de Möbius: si g(n)=Σf(d), entonces f(n)=Σμ(d)g(n/d)</span></li>
+        <li><span data-i18n="mobius-05">Möbius inversion: if g(n)=Σf(d), then f(n)=Σμ(d)g(n/d)</span></li>
         <li>Σμ(d) for d|n = [n=1]</li>
       </ul>
     </div>
@@ -446,80 +415,80 @@ constructivos de Hans Boehm). Ver Ajustes → Licencias de código abierto.</pre
 </details>
 
 <details id="liouville">
-  <summary><span class="fn-symbol">λL</span><span class="fn-title"><span class="en">λL(n) — Liouville Function</span><span class="es">λL(n) — Función de Liouville</span></span><span class="fn-params">1 param</span><span class="chevron">▼</span></summary>
+  <summary><span class="fn-symbol">λL</span><span class="fn-title"><span data-i18n="liouville-01">λL(n) — Liouville Function</span></span><span class="fn-params">1 param</span><span class="chevron">▼</span></summary>
   <div class="fn-body">
-    <div class="fn-desc"><span class="en">Completely multiplicative: λL(n)=(−1)^Ω(n).</span><span class="es">Completamente multiplicativa: λL(n)=(−1)^Ω(n).</span></div>
+    <div class="fn-desc"><span data-i18n="liouville-02">Completely multiplicative: λL(n)=(−1)^Ω(n).</span></div>
     <div class="formula">λL(n) = (−1)^Ω(n)</div>
-    <div class="examples-label"><span class="en">Examples</span><span class="es">Ejemplos</span></div>
+    <div class="examples-label"><span data-i18n="liouville-03">Examples</span></div>
     <ul class="examples-list"><li>λL(12)=(−1)³=−1 (Ω=3)</li><li>λL(36)=(−1)⁴=1 (Ω=4)</li></ul>
-    <div class="tips-box"><div class="tips-label"><span class="en">Tips</span><span class="es">Consejos</span></div>
-      <ul class="tips-list"><li><span class="en">ΣλL(d) for d|n = 1 if n is a perfect square, 0 otherwise</span><span class="es">ΣλL(d) para d|n = 1 si n es cuadrado perfecto, 0 en otro caso</span></li></ul>
+    <div class="tips-box"><div class="tips-label"><span data-i18n="liouville-04">Tips</span></div>
+      <ul class="tips-list"><li><span data-i18n="liouville-05">ΣλL(d) for d|n = 1 if n is a perfect square, 0 otherwise</span></li></ul>
     </div>
   </div>
 </details>
 
 <details id="small-omega">
-  <summary><span class="fn-symbol">ω</span><span class="fn-title"><span class="en">ω(n) — Distinct Prime Factors</span><span class="es">ω(n) — Factores Primos Distintos</span></span><span class="fn-params">1 param</span><span class="chevron">▼</span></summary>
+  <summary><span class="fn-symbol">ω</span><span class="fn-title"><span data-i18n="small-omega-01">ω(n) — Distinct Prime Factors</span></span><span class="fn-params">1 param</span><span class="chevron">▼</span></summary>
   <div class="fn-body">
-    <div class="fn-desc"><span class="en">Counts the number of distinct primes dividing n.</span><span class="es">Cuenta el número de primos distintos que dividen a n.</span></div>
+    <div class="fn-desc"><span data-i18n="small-omega-02">Counts the number of distinct primes dividing n.</span></div>
     <div class="formula">ω(n) = k  if n = p₁^a₁ × … × pₖ^aₖ</div>
-    <div class="examples-label"><span class="en">Examples</span><span class="es">Ejemplos</span></div>
+    <div class="examples-label"><span data-i18n="small-omega-03">Examples</span></div>
     <ul class="examples-list"><li>ω(12)=2 → [2,3]</li><li>ω(30)=3 → [2,3,5]</li><li>ω(p^k)=1</li></ul>
   </div>
 </details>
 
 <details id="big-omega">
-  <summary><span class="fn-symbol">Ω</span><span class="fn-title"><span class="en">Ω(n) — Prime Factors with Multiplicity</span><span class="es">Ω(n) — Factores Primos con Multiplicidad</span></span><span class="fn-params">1 param</span><span class="chevron">▼</span></summary>
+  <summary><span class="fn-symbol">Ω</span><span class="fn-title"><span data-i18n="big-omega-01">Ω(n) — Prime Factors with Multiplicity</span></span><span class="fn-params">1 param</span><span class="chevron">▼</span></summary>
   <div class="fn-body">
-    <div class="fn-desc"><span class="en">Total number of prime factors counting repetitions.</span><span class="es">Número total de factores primos contando repeticiones.</span></div>
+    <div class="fn-desc"><span data-i18n="big-omega-02">Total number of prime factors counting repetitions.</span></div>
     <div class="formula">Ω(n) = a₁ + a₂ + … + aₖ</div>
-    <div class="examples-label"><span class="en">Examples</span><span class="es">Ejemplos</span></div>
+    <div class="examples-label"><span data-i18n="big-omega-03">Examples</span></div>
     <ul class="examples-list"><li>Ω(12)=3 → 2×2×3</li><li>Ω(72)=5 → 2³×3² → 3+2</li><li>Ω(p)=1, Ω(p²)=2</li></ul>
   </div>
 </details>
 
 <details id="sigma0">
-  <summary><span class="fn-symbol">σ₀</span><span class="fn-title"><span class="en">σ₀(n) — Divisor Count</span><span class="es">σ₀(n) — Cantidad de Divisores</span></span><span class="fn-params">1 param</span><span class="chevron">▼</span></summary>
+  <summary><span class="fn-symbol">σ₀</span><span class="fn-title"><span data-i18n="sigma0-01">σ₀(n) — Divisor Count</span></span><span class="fn-params">1 param</span><span class="chevron">▼</span></summary>
   <div class="fn-body">
-    <div class="fn-desc"><span class="en">Total number of positive divisors of n.</span><span class="es">Número total de divisores positivos de n.</span></div>
+    <div class="fn-desc"><span data-i18n="sigma0-02">Total number of positive divisors of n.</span></div>
     <div class="formula">σ₀(n) = (a₁+1)(a₂+1)···(aₖ+1)  if n=p₁^a₁×…</div>
-    <div class="examples-label"><span class="en">Examples</span><span class="es">Ejemplos</span></div>
+    <div class="examples-label"><span data-i18n="sigma0-03">Examples</span></div>
     <ul class="examples-list"><li>σ₀(12)=6 → [1,2,3,4,6,12]</li><li>σ₀(p)=2</li><li>σ₀(p²)=3</li></ul>
   </div>
 </details>
 
 <details id="sigma">
-  <summary><span class="fn-symbol">σ</span><span class="fn-title"><span class="en">σ(n) — Sum of Divisors</span><span class="es">σ(n) — Suma de Divisores</span></span><span class="fn-params">1 param</span><span class="chevron">▼</span></summary>
+  <summary><span class="fn-symbol">σ</span><span class="fn-title"><span data-i18n="sigma-01">σ(n) — Sum of Divisors</span></span><span class="fn-params">1 param</span><span class="chevron">▼</span></summary>
   <div class="fn-body">
-    <div class="fn-desc"><span class="en">Sum of all positive divisors of n.</span><span class="es">Suma de todos los divisores positivos de n.</span></div>
+    <div class="fn-desc"><span data-i18n="sigma-02">Sum of all positive divisors of n.</span></div>
     <div class="formula">σ(n) = Σ d  for d | n</div>
-    <div class="examples-label"><span class="en">Examples</span><span class="es">Ejemplos</span></div>
-    <ul class="examples-list"><li>σ(6)=12 (<span class="en">perfect</span><span class="es">perfecto</span>)</li><li>σ(12)=28</li><li>σ(p)=p+1</li></ul>
-    <div class="tips-box"><div class="tips-label"><span class="en">Tips</span><span class="es">Consejos</span></div>
+    <div class="examples-label"><span data-i18n="sigma-03">Examples</span></div>
+    <ul class="examples-list"><li>σ(6)=12 (<span data-i18n="sigma-04">perfect</span>)</li><li>σ(12)=28</li><li>σ(p)=p+1</li></ul>
+    <div class="tips-box"><div class="tips-label"><span data-i18n="sigma-05">Tips</span></div>
       <ul class="tips-list">
-        <li>n <span class="en">is perfect</span><span class="es">es perfecto</span> ⟺ σ(n)=2n</li>
-        <li>n <span class="en">is abundant</span><span class="es">es abundante</span> ⟺ σ(n)&gt;2n</li>
+        <li>n <span data-i18n="sigma-06">is perfect</span> ⟺ σ(n)=2n</li>
+        <li>n <span data-i18n="sigma-07">is abundant</span> ⟺ σ(n)&gt;2n</li>
       </ul>
     </div>
   </div>
 </details>
 
 <details id="sopfr">
-  <summary><span class="fn-symbol">sopfr</span><span class="fn-title"><span class="en">sopfr(n) — Sum of Primes with Repetition</span><span class="es">sopfr(n) — Suma de Primos con Repetición</span></span><span class="fn-params">1 param</span><span class="chevron">▼</span></summary>
+  <summary><span class="fn-symbol">sopfr</span><span class="fn-title"><span data-i18n="sopfr-01">sopfr(n) — Sum of Primes with Repetition</span></span><span class="fn-params">1 param</span><span class="chevron">▼</span></summary>
   <div class="fn-body">
-    <div class="fn-desc"><span class="en">Sums the prime factors counting multiplicity.</span><span class="es">Suma los factores primos contando multiplicidad.</span></div>
+    <div class="fn-desc"><span data-i18n="sopfr-02">Sums the prime factors counting multiplicity.</span></div>
     <div class="formula">sopfr(n) = a₁p₁ + a₂p₂ + … + aₖpₖ</div>
-    <div class="examples-label"><span class="en">Examples</span><span class="es">Ejemplos</span></div>
+    <div class="examples-label"><span data-i18n="sopfr-03">Examples</span></div>
     <ul class="examples-list"><li>sopfr(12)=2+2+3=7</li><li>sopfr(60)=12</li></ul>
   </div>
 </details>
 
 <details id="sopf">
-  <summary><span class="fn-symbol">sopf</span><span class="fn-title"><span class="en">sopf(n) — Sum of Distinct Primes</span><span class="es">sopf(n) — Suma de Primos Distintos</span></span><span class="fn-params">1 param</span><span class="chevron">▼</span></summary>
+  <summary><span class="fn-symbol">sopf</span><span class="fn-title"><span data-i18n="sopf-01">sopf(n) — Sum of Distinct Primes</span></span><span class="fn-params">1 param</span><span class="chevron">▼</span></summary>
   <div class="fn-body">
-    <div class="fn-desc"><span class="en">Sum of distinct primes dividing n.</span><span class="es">Suma de los primos distintos que dividen a n.</span></div>
+    <div class="fn-desc"><span data-i18n="sopf-02">Sum of distinct primes dividing n.</span></div>
     <div class="formula">sopf(n) = p₁ + p₂ + … + pₖ</div>
-    <div class="examples-label"><span class="en">Examples</span><span class="es">Ejemplos</span></div>
+    <div class="examples-label"><span data-i18n="sopf-03">Examples</span></div>
     <ul class="examples-list"><li>sopf(12)=2+3=5</li><li>sopf(60)=10</li></ul>
   </div>
 </details>
@@ -527,9 +496,9 @@ constructivos de Hans Boehm). Ver Ajustes → Licencias de código abierto.</pre
 <details id="rad">
   <summary><span class="fn-symbol">rad</span><span class="fn-title">rad(n) — Radical</span><span class="fn-params">1 param</span><span class="chevron">▼</span></summary>
   <div class="fn-body">
-    <div class="fn-desc"><span class="en">Product of distinct primes dividing n (ABC Conjecture function).</span><span class="es">Producto de los primos distintos que dividen a n (función de la Conjetura ABC).</span></div>
+    <div class="fn-desc"><span data-i18n="rad-01">Product of distinct primes dividing n (ABC Conjecture function).</span></div>
     <div class="formula">rad(n) = ∏ p  for p prime, p | n</div>
-    <div class="examples-label"><span class="en">Examples</span><span class="es">Ejemplos</span></div>
+    <div class="examples-label"><span data-i18n="rad-02">Examples</span></div>
     <ul class="examples-list"><li>rad(72)=6</li><li>rad(480)=30</li><li>rad(p)=p</li></ul>
   </div>
 </details>
@@ -537,54 +506,54 @@ constructivos de Hans Boehm). Ver Ajustes → Licencias de código abierto.</pre
 <details id="primorial">
   <summary><span class="fn-symbol">n#</span><span class="fn-title">n# — Primorial</span><span class="fn-params">1 param</span><span class="chevron">▼</span></summary>
   <div class="fn-body">
-    <div class="fn-desc"><span class="en">Product of all primes ≤ n.</span><span class="es">Producto de todos los primos ≤ n.</span></div>
+    <div class="fn-desc"><span data-i18n="primorial-01">Product of all primes ≤ n.</span></div>
     <div class="formula">n# = ∏ p  for p prime, p ≤ n</div>
-    <div class="examples-label"><span class="en">Examples</span><span class="es">Ejemplos</span></div>
+    <div class="examples-label"><span data-i18n="primorial-02">Examples</span></div>
     <ul class="examples-list"><li>5#=30</li><li>7#=210</li><li>11#=2310</li></ul>
   </div>
 </details>
 
 <details id="prime-count">
-  <summary><span class="fn-symbol">π(n)</span><span class="fn-title"><span class="en">π(n) — Prime Counting Function</span><span class="es">π(n) — Función Contadora de Primos</span></span><span class="fn-params">1 param</span><span class="chevron">▼</span></summary>
+  <summary><span class="fn-symbol">π(n)</span><span class="fn-title"><span data-i18n="prime-count-01">π(n) — Prime Counting Function</span></span><span class="fn-params">1 param</span><span class="chevron">▼</span></summary>
   <div class="fn-body">
-    <div class="fn-desc"><span class="en">Counts primes ≤ n. Exact for n ≤ 1,000,000; Li(x) approximation for larger values.</span><span class="es">Cuenta primos ≤ n. Exacto para n ≤ 1,000,000; aproximación Li(x) para valores mayores.</span></div>
+    <div class="fn-desc"><span data-i18n="prime-count-02">Counts primes ≤ n. Exact for n ≤ 1,000,000; Li(x) approximation for larger values.</span></div>
     <div class="formula">π(n) ~ n/ln(n)  (Prime Number Theorem)</div>
-    <div class="examples-label"><span class="en">Examples</span><span class="es">Ejemplos</span></div>
+    <div class="examples-label"><span data-i18n="prime-count-03">Examples</span></div>
     <ul class="examples-list"><li>π(10)=4</li><li>π(100)=25</li><li>π(1,000,000)=78,498</li></ul>
   </div>
 </details>
 
 <details id="digital-root">
-  <summary><span class="fn-symbol">dr</span><span class="fn-title"><span class="en">dr(n) — Digital Root</span><span class="es">dr(n) — Raíz Digital</span></span><span class="fn-params">1 param</span><span class="chevron">▼</span></summary>
+  <summary><span class="fn-symbol">dr</span><span class="fn-title"><span data-i18n="digital-root-01">dr(n) — Digital Root</span></span><span class="fn-params">1 param</span><span class="chevron">▼</span></summary>
   <div class="fn-body">
-    <div class="fn-desc"><span class="en">Iterative digit sum until a single digit is obtained.</span><span class="es">Suma iterativa de dígitos hasta obtener un solo dígito.</span></div>
+    <div class="fn-desc"><span data-i18n="digital-root-02">Iterative digit sum until a single digit is obtained.</span></div>
     <div class="formula">dr(n) = 1 + (n−1) mod 9   (for n &gt; 0)</div>
-    <div class="examples-label"><span class="en">Examples</span><span class="es">Ejemplos</span></div>
+    <div class="examples-label"><span data-i18n="digital-root-03">Examples</span></div>
     <ul class="examples-list"><li>dr(493)=7</li><li>dr(999)=9</li><li>dr(n)≡n (mod 9)</li></ul>
   </div>
 </details>
 
 <details id="floor-ceil">
-  <summary><span class="fn-symbol">⌊⌉</span><span class="fn-title"><span class="en">⌊x⌋ / ⌈x⌉ — Floor and Ceiling</span><span class="es">⌊x⌋ / ⌈x⌉ — Piso y Techo</span></span><span class="fn-params">1 param</span><span class="chevron">▼</span></summary>
+  <summary><span class="fn-symbol">⌊⌉</span><span class="fn-title"><span data-i18n="floor-ceil-01">⌊x⌋ / ⌈x⌉ — Floor and Ceiling</span></span><span class="fn-params">1 param</span><span class="chevron">▼</span></summary>
   <div class="fn-body">
-    <div class="fn-desc"><span class="en">Floor: greatest integer ≤ x. Ceiling: smallest integer ≥ x. Toggles between both.</span><span class="es">Piso: el mayor entero ≤ x. Techo: el menor entero ≥ x. Alterna entre ambos.</span></div>
+    <div class="fn-desc"><span data-i18n="floor-ceil-02">Floor: greatest integer ≤ x. Ceiling: smallest integer ≥ x. Toggles between both.</span></div>
     <div class="formula">⌊x⌋ ≤ x &lt; ⌊x⌋+1
 ⌈x⌉−1 &lt; x ≤ ⌈x⌉</div>
-    <div class="examples-label"><span class="en">Examples</span><span class="es">Ejemplos</span></div>
+    <div class="examples-label"><span data-i18n="floor-ceil-03">Examples</span></div>
     <ul class="examples-list"><li>⌊3.7⌋=3, ⌈3.7⌉=4</li><li>⌊−2.3⌋=−3, ⌈−2.3⌉=−2</li><li>⌊5⌋=⌈5⌉=5</li></ul>
   </div>
 </details>
 
 <details id="padic">
-  <summary><span class="fn-symbol">Vₚ</span><span class="fn-title"><span class="en">Vₚ(n) — p-adic Valuation</span><span class="es">Vₚ(n) — Valuación p-ádica</span></span><span class="fn-params">2 <span class="en">params</span><span class="es">params</span>: n → Vₚ → p → =</span><span class="chevron">▼</span></summary>
+  <summary><span class="fn-symbol">Vₚ</span><span class="fn-title"><span data-i18n="padic-01">Vₚ(n) — p-adic Valuation</span></span><span class="fn-params">2 <span data-i18n="padic-02">params</span>: n → Vₚ → p → =</span><span class="chevron">▼</span></summary>
   <div class="fn-body">
-    <div class="fn-desc"><span class="en">Maximum power of prime p dividing n.</span><span class="es">Máxima potencia del primo p que divide a n.</span></div>
+    <div class="fn-desc"><span data-i18n="padic-03">Maximum power of prime p dividing n.</span></div>
     <div class="formula">Vₚ(n) = max[k : p^k | n]</div>
-    <div class="examples-label"><span class="en">Examples</span><span class="es">Ejemplos</span></div>
+    <div class="examples-label"><span data-i18n="padic-04">Examples</span></div>
     <ul class="examples-list"><li>V₂(24)=3</li><li>V₃(81)=4</li><li>V₅(100)=2</li></ul>
-    <div class="tips-box"><div class="tips-label"><span class="en">Tips</span><span class="es">Consejos</span></div>
+    <div class="tips-box"><div class="tips-label"><span data-i18n="padic-05">Tips</span></div>
       <ul class="tips-list">
-        <li><span class="en">Legendre's formula:</span><span class="es">Fórmula de Legendre:</span> Vₚ(n!)=Σ⌊n/pⁱ⌋</li>
+        <li><span data-i18n="padic-06">Legendre's formula:</span> Vₚ(n!)=Σ⌊n/pⁱ⌋</li>
         <li>Vₚ(ab)=Vₚ(a)+Vₚ(b)</li>
       </ul>
     </div>
@@ -592,424 +561,405 @@ constructivos de Hans Boehm). Ver Ajustes → Licencias de código abierto.</pre
 </details>
 
 <!-- ════ MODULAR ARITHMETIC ═══════════════════════════════════════════════ -->
-<h2><span class="en">Modular Arithmetic</span><span class="es">Aritmética Modular</span></h2>
+<h2><span data-i18n="padic-07">Modular Arithmetic</span></h2>
 
 <details id="mod">
-  <summary><span class="fn-symbol">mod</span><span class="fn-title"><span class="en">a mod b — Division Remainder</span><span class="es">a mod b — Resto de División</span></span><span class="fn-params">2 params: a → mod → b → =</span><span class="chevron">▼</span></summary>
+  <summary><span class="fn-symbol">mod</span><span class="fn-title"><span data-i18n="mod-01">a mod b — Division Remainder</span></span><span class="fn-params">2 params: a → mod → b → =</span><span class="chevron">▼</span></summary>
   <div class="fn-body">
-    <div class="fn-desc"><span class="en">Remainder of dividing a by b.</span><span class="es">Resto de dividir a entre b.</span></div>
+    <div class="fn-desc"><span data-i18n="mod-02">Remainder of dividing a by b.</span></div>
     <div class="formula">a mod b = a − b × ⌊a/b⌋</div>
-    <div class="examples-label"><span class="en">Examples</span><span class="es">Ejemplos</span></div>
+    <div class="examples-label"><span data-i18n="mod-03">Examples</span></div>
     <ul class="examples-list"><li>17 mod 5=2</li><li>23 mod 7=2</li><li>−8 mod 3=1</li></ul>
   </div>
 </details>
 
 <details id="mod-pow">
-  <summary><span class="fn-symbol">a%n</span><span class="fn-title"><span class="en">a^b mod n — Modular Exponentiation</span><span class="es">a^b mod n — Exponenciación Modular</span></span><span class="fn-params">3 params: a → a%n → b → = → n → =</span><span class="chevron">▼</span></summary>
+  <summary><span class="fn-symbol">a%n</span><span class="fn-title"><span data-i18n="mod-pow-01">a^b mod n — Modular Exponentiation</span></span><span class="fn-params">3 params: a → a%n → b → = → n → =</span><span class="chevron">▼</span></summary>
   <div class="fn-body">
-    <div class="fn-desc"><span class="en">Computes a^b mod n efficiently using repeated squaring O(log b).</span><span class="es">Calcula a^b mod n eficientemente usando cuadratura repetida O(log b).</span></div>
-    <div class="formula"><span class="en">Decompose b in binary and square successively</span><span class="es">Descomponer b en binario y elevar al cuadrado sucesivamente</span></div>
-    <div class="examples-label"><span class="en">Examples</span><span class="es">Ejemplos</span></div>
-    <ul class="examples-list"><li>2¹⁰⁰ mod 7=2</li><li>3¹³ mod 11=5</li><li><span class="en">Fundamental in RSA</span><span class="es">Fundamental en RSA</span></li></ul>
-    <div class="tips-box"><div class="tips-label"><span class="en">Tips</span><span class="es">Consejos</span></div>
-      <ul class="tips-list"><li><span class="en">Flow: enter a → a%n → enter b → = → enter n → =</span><span class="es">Flujo: ingresa a → a%n → ingresa b → = → ingresa n → =</span></li></ul>
+    <div class="fn-desc"><span data-i18n="mod-pow-02">Computes a^b mod n efficiently using repeated squaring O(log b).</span></div>
+    <div class="formula"><span data-i18n="mod-pow-03">Decompose b in binary and square successively</span></div>
+    <div class="examples-label"><span data-i18n="mod-pow-04">Examples</span></div>
+    <ul class="examples-list"><li>2¹⁰⁰ mod 7=2</li><li>3¹³ mod 11=5</li><li><span data-i18n="mod-pow-05">Fundamental in RSA</span></li></ul>
+    <div class="tips-box"><div class="tips-label"><span data-i18n="mod-pow-06">Tips</span></div>
+      <ul class="tips-list"><li><span data-i18n="mod-pow-07">Flow: enter a → a%n → enter b → = → enter n → =</span></li></ul>
     </div>
   </div>
 </details>
 
 <details id="mod-inv">
-  <summary><span class="fn-symbol">a⁻¹</span><span class="fn-title"><span class="en">a⁻¹ mod n — Modular Inverse</span><span class="es">a⁻¹ mod n — Inverso Modular</span></span><span class="fn-params">2 params: a → a⁻¹ → n → =</span><span class="chevron">▼</span></summary>
+  <summary><span class="fn-symbol">a⁻¹</span><span class="fn-title"><span data-i18n="mod-inv-01">a⁻¹ mod n — Modular Inverse</span></span><span class="fn-params">2 params: a → a⁻¹ → n → =</span><span class="chevron">▼</span></summary>
   <div class="fn-body">
-    <div class="fn-desc"><span class="en">Finds b such that a×b≡1 (mod n). Only exists if GCD(a,n)=1.</span><span class="es">Encuentra b tal que a×b≡1 (mod n). Solo existe si MCD(a,n)=1.</span></div>
-    <div class="formula"><span class="en">Extended Euclidean algorithm</span><span class="es">Algoritmo de Euclides extendido</span></div>
-    <div class="examples-label"><span class="en">Examples</span><span class="es">Ejemplos</span></div>
-    <ul class="examples-list"><li>3⁻¹ mod 7=5 → 3×5=15≡1</li><li>5⁻¹ mod 11=9</li><li><span class="en">Does not exist if GCD(a,n)≠1</span><span class="es">No existe si MCD(a,n)≠1</span></li></ul>
+    <div class="fn-desc"><span data-i18n="mod-inv-02">Finds b such that a×b≡1 (mod n). Only exists if GCD(a,n)=1.</span></div>
+    <div class="formula"><span data-i18n="mod-inv-03">Extended Euclidean algorithm</span></div>
+    <div class="examples-label"><span data-i18n="mod-inv-04">Examples</span></div>
+    <ul class="examples-list"><li>3⁻¹ mod 7=5 → 3×5=15≡1</li><li>5⁻¹ mod 11=9</li><li><span data-i18n="mod-inv-05">Does not exist if GCD(a,n)≠1</span></li></ul>
   </div>
 </details>
 
 <details id="ord">
-  <summary><span class="fn-symbol">ord</span><span class="fn-title"><span class="en">ord_n(a) — Multiplicative Order</span><span class="es">ord_n(a) — Orden Multiplicativo</span></span><span class="fn-params">2 params: a → ord → n → =</span><span class="chevron">▼</span></summary>
+  <summary><span class="fn-symbol">ord</span><span class="fn-title"><span data-i18n="ord-01">ord_n(a) — Multiplicative Order</span></span><span class="fn-params">2 params: a → ord → n → =</span><span class="chevron">▼</span></summary>
   <div class="fn-body">
-    <div class="fn-desc"><span class="en">Smallest k&gt;0 with a^k≡1 (mod n). Requires GCD(a,n)=1.</span><span class="es">El menor k&gt;0 con a^k≡1 (mod n). Requiere MCD(a,n)=1.</span></div>
+    <div class="fn-desc"><span data-i18n="ord-02">Smallest k&gt;0 with a^k≡1 (mod n). Requires GCD(a,n)=1.</span></div>
     <div class="formula">ord_n(a) = min[k &gt; 0 : a^k ≡ 1 (mod n)]</div>
-    <div class="examples-label"><span class="en">Examples</span><span class="es">Ejemplos</span></div>
+    <div class="examples-label"><span data-i18n="ord-03">Examples</span></div>
     <ul class="examples-list"><li>ord₇(2)=3</li><li>ord₁₀(3)=4</li></ul>
-    <div class="tips-box"><div class="tips-label"><span class="en">Tips</span><span class="es">Consejos</span></div>
+    <div class="tips-box"><div class="tips-label"><span data-i18n="ord-04">Tips</span></div>
       <ul class="tips-list">
-        <li>ord_n(a) <span class="en">always divides</span><span class="es">siempre divide a</span> φ(n)</li>
-        <li>a <span class="en">is a primitive root</span><span class="es">es raíz primitiva</span> ⟺ ord_n(a)=φ(n)</li>
+        <li>ord_n(a) <span data-i18n="ord-05">always divides</span> φ(n)</li>
+        <li>a <span data-i18n="ord-06">is a primitive root</span> ⟺ ord_n(a)=φ(n)</li>
       </ul>
     </div>
   </div>
 </details>
 
 <details id="legendre">
-  <summary><span class="fn-symbol">(a/p)</span><span class="fn-title"><span class="en">(a/p) — Legendre Symbol</span><span class="es">(a/p) — Símbolo de Legendre</span></span><span class="fn-params">2 params: a → (a/p) → p → =</span><span class="chevron">▼</span></summary>
+  <summary><span class="fn-symbol">(a/p)</span><span class="fn-title"><span data-i18n="legendre-01">(a/p) — Legendre Symbol</span></span><span class="fn-params">2 params: a → (a/p) → p → =</span><span class="chevron">▼</span></summary>
   <div class="fn-body">
-    <div class="fn-desc"><span class="en">1 if a is a quadratic residue mod p, −1 if not, 0 if p|a. Requires p odd prime.</span><span class="es">1 si a es residuo cuadrático mod p, −1 si no, 0 si p|a. Requiere p primo impar.</span></div>
+    <div class="fn-desc"><span data-i18n="legendre-02">1 if a is a quadratic residue mod p, −1 if not, 0 if p|a. Requires p odd prime.</span></div>
     <div class="formula">(a/p) ≡ a^((p−1)/2) (mod p) — Euler's Criterion</div>
-    <div class="examples-label"><span class="en">Examples</span><span class="es">Ejemplos</span></div>
+    <div class="examples-label"><span data-i18n="legendre-03">Examples</span></div>
     <ul class="examples-list"><li>(2/7)=1</li><li>(3/7)=−1</li><li>(5/5)=0</li></ul>
   </div>
 </details>
 
 <details id="jacobi">
-  <summary><span class="fn-symbol">(a/n)ⱼ</span><span class="fn-title"><span class="en">(a/n)ⱼ — Jacobi Symbol</span><span class="es">(a/n)ⱼ — Símbolo de Jacobi</span></span><span class="fn-params">2 params: a → (a/n)ⱼ → n → =</span><span class="chevron">▼</span></summary>
+  <summary><span class="fn-symbol">(a/n)ⱼ</span><span class="fn-title"><span data-i18n="jacobi-01">(a/n)ⱼ — Jacobi Symbol</span></span><span class="fn-params">2 params: a → (a/n)ⱼ → n → =</span><span class="chevron">▼</span></summary>
   <div class="fn-body">
-    <div class="fn-desc"><span class="en">Generalization of Legendre for odd composite n. Uses quadratic reciprocity.</span><span class="es">Generalización del símbolo de Legendre para n impar compuesto. Usa reciprocidad cuadrática.</span></div>
+    <div class="fn-desc"><span data-i18n="jacobi-02">Generalization of Legendre for odd composite n. Uses quadratic reciprocity.</span></div>
     <div class="formula">(a/n) = ∏(a/pᵢ)^eᵢ  where n = ∏pᵢ^eᵢ</div>
-    <div class="examples-label"><span class="en">Examples</span><span class="es">Ejemplos</span></div>
-    <ul class="examples-list"><li>(2/15)=(2/3)(2/5)=(−1)(−1)=1</li><li>(a/n)=−1 ⟹ <span class="en">a is NOT a QR</span><span class="es">a NO es residuo cuadrático</span></li></ul>
+    <div class="examples-label"><span data-i18n="jacobi-03">Examples</span></div>
+    <ul class="examples-list"><li>(2/15)=(2/3)(2/5)=(−1)(−1)=1</li><li>(a/n)=−1 ⟹ <span data-i18n="jacobi-04">a is NOT a QR</span></li></ul>
   </div>
 </details>
 
 <details id="prim-root">
-  <summary><span class="fn-symbol">g</span><span class="fn-title"><span class="en">g — Primitive Root</span><span class="es">g — Raíz Primitiva</span></span><span class="fn-params">1 param</span><span class="chevron">▼</span></summary>
+  <summary><span class="fn-symbol">g</span><span class="fn-title"><span data-i18n="prim-root-01">g — Primitive Root</span></span><span class="fn-params">1 param</span><span class="chevron">▼</span></summary>
   <div class="fn-body">
-    <div class="fn-desc"><span class="en">Smallest primitive root mod n (if exists). g is primitive if ord_n(g)=φ(n).</span><span class="es">La menor raíz primitiva mod n (si existe). g es primitiva si ord_n(g)=φ(n).</span></div>
+    <div class="fn-desc"><span data-i18n="prim-root-02">Smallest primitive root mod n (if exists). g is primitive if ord_n(g)=φ(n).</span></div>
     <div class="formula">[g, g², …, g^φ(n)] = (ℤ/nℤ)*</div>
-    <div class="examples-label"><span class="en">Examples</span><span class="es">Ejemplos</span></div>
-    <ul class="examples-list"><li>g(7)=3</li><li>g(11)=2</li><li><span class="en">Exists only for n=1,2,4,p^k,2p^k</span><span class="es">Existe solo para n=1,2,4,p^k,2p^k</span></li></ul>
+    <div class="examples-label"><span data-i18n="prim-root-03">Examples</span></div>
+    <ul class="examples-list"><li>g(7)=3</li><li>g(11)=2</li><li><span data-i18n="prim-root-04">Exists only for n=1,2,4,p^k,2p^k</span></li></ul>
   </div>
 </details>
 
 <details id="gcd">
-  <summary><span class="fn-symbol">GCD</span><span class="fn-title"><span class="en">GCD — Greatest Common Divisor</span><span class="es">MCD — Máximo Común Divisor</span></span><span class="fn-params">N params (<span class="en">variable</span><span class="es">variable</span>, min. 2)</span><span class="chevron">▼</span></summary>
+  <summary><span class="fn-symbol">GCD</span><span class="fn-title"><span data-i18n="gcd-01">GCD — Greatest Common Divisor</span></span><span class="fn-params">N params (<span data-i18n="gcd-02">variable</span>, min. 2)</span><span class="chevron">▼</span></summary>
   <div class="fn-body">
-    <div class="fn-desc"><span class="en">Largest integer dividing all values. Accepts 2 or more numbers.</span><span class="es">El mayor entero que divide a todos los valores. Acepta 2 o más números.</span></div>
+    <div class="fn-desc"><span data-i18n="gcd-03">Largest integer dividing all values. Accepts 2 or more numbers.</span></div>
     <div class="formula">GCD(a,b) via Euclidean algorithm</div>
-    <div class="examples-label"><span class="en">Examples</span><span class="es">Ejemplos</span></div>
+    <div class="examples-label"><span data-i18n="gcd-04">Examples</span></div>
     <ul class="examples-list"><li>GCD(12,18)=6</li><li>GCD(12,18,24)=6</li><li>GCD(a,b)×LCM(a,b)=a×b</li></ul>
-    <div class="tips-box"><div class="tips-label"><span class="en">Tips</span><span class="es">Consejos</span></div>
+    <div class="tips-box"><div class="tips-label"><span data-i18n="gcd-05">Tips</span></div>
       <ul class="tips-list">
-        <li><span class="en">Flow: 12→GCD→18→GCD (executes)</span><span class="es">Flujo: 12→MCD→18→MCD (ejecuta)</span></li>
-        <li><span class="en">For 3+: 12→GCD→18→=→24→GCD</span><span class="es">Para 3+: 12→MCD→18→=→24→MCD</span></li>
+        <li><span data-i18n="gcd-06">Flow: 12→GCD→18→GCD (executes)</span></li>
+        <li><span data-i18n="gcd-07">For 3+: 12→GCD→18→=→24→GCD</span></li>
       </ul>
     </div>
   </div>
 </details>
 
 <details id="lcm">
-  <summary><span class="fn-symbol">LCM</span><span class="fn-title"><span class="en">LCM — Least Common Multiple</span><span class="es">MCM — Mínimo Común Múltiplo</span></span><span class="fn-params">N params (<span class="en">variable</span><span class="es">variable</span>, min. 2)</span><span class="chevron">▼</span></summary>
+  <summary><span class="fn-symbol">LCM</span><span class="fn-title"><span data-i18n="lcm-01">LCM — Least Common Multiple</span></span><span class="fn-params">N params (<span data-i18n="lcm-02">variable</span>, min. 2)</span><span class="chevron">▼</span></summary>
   <div class="fn-body">
-    <div class="fn-desc"><span class="en">Smallest positive integer divisible by all values.</span><span class="es">El menor entero positivo divisible por todos los valores.</span></div>
+    <div class="fn-desc"><span data-i18n="lcm-03">Smallest positive integer divisible by all values.</span></div>
     <div class="formula">LCM(a,b) = a×b / GCD(a,b)</div>
-    <div class="examples-label"><span class="en">Examples</span><span class="es">Ejemplos</span></div>
+    <div class="examples-label"><span data-i18n="lcm-04">Examples</span></div>
     <ul class="examples-list"><li>LCM(4,6)=12</li><li>LCM(3,5,7)=105</li></ul>
   </div>
 </details>
 
 <details id="dioph">
-  <summary><span class="fn-symbol">Diof</span><span class="fn-title"><span class="en">Dioph — Linear Diophantine Equation</span><span class="es">Diof — Ecuación Diofántica Lineal</span></span><span class="fn-params">3 params: a → Dioph → b → = → c → =</span><span class="chevron">▼</span></summary>
+  <summary><span class="fn-symbol">Diof</span><span class="fn-title"><span data-i18n="dioph-01">Dioph — Linear Diophantine Equation</span></span><span class="fn-params">3 params: a → Dioph → b → = → c → =</span><span class="chevron">▼</span></summary>
   <div class="fn-body">
-    <div class="fn-desc"><span class="en">Solves ax+by=c. Gives particular and general solution.</span><span class="es">Resuelve ax+by=c. Devuelve la solución particular y la general.</span></div>
-    <div class="formula">ax+by=c <span class="en">has solution</span><span class="es">tiene solución</span> ⟺ GCD(a,b)|c
+    <div class="fn-desc"><span data-i18n="dioph-02">Solves ax+by=c. Gives particular and general solution.</span></div>
+    <div class="formula">ax+by=c <span data-i18n="dioph-03">has solution</span> ⟺ GCD(a,b)|c
 x=x₀+(b/g)t,  y=y₀−(a/g)t</div>
-    <div class="examples-label"><span class="en">Examples</span><span class="es">Ejemplos</span></div>
-    <ul class="examples-list"><li>3x+5y=1 → x=2+5t, y=−1−3t</li><li>4x+6y=3 → <span class="en">No solution</span><span class="es">Sin solución</span></li></ul>
+    <div class="examples-label"><span data-i18n="dioph-04">Examples</span></div>
+    <ul class="examples-list"><li>3x+5y=1 → x=2+5t, y=−1−3t</li><li>4x+6y=3 → <span data-i18n="dioph-05">No solution</span></li></ul>
   </div>
 </details>
 
 <details id="crt">
-  <summary><span class="fn-symbol">TCR</span><span class="fn-title"><span class="en">CRT — Chinese Remainder Theorem</span><span class="es">TCR — Teorema Chino del Resto</span></span><span class="fn-params"><span class="en">Variable (pairs a,m)</span><span class="es">Variable (pares a,m)</span></span><span class="chevron">▼</span></summary>
+  <summary><span class="fn-symbol">TCR</span><span class="fn-title"><span data-i18n="crt-01">CRT — Chinese Remainder Theorem</span></span><span class="fn-params"><span data-i18n="crt-02">Variable (pairs a,m)</span></span><span class="chevron">▼</span></summary>
   <div class="fn-body">
-    <div class="fn-desc"><span class="en">Solves a system of congruences x≡aᵢ (mod mᵢ).</span><span class="es">Resuelve un sistema de congruencias x≡aᵢ (mod mᵢ).</span></div>
+    <div class="fn-desc"><span data-i18n="crt-03">Solves a system of congruences x≡aᵢ (mod mᵢ).</span></div>
     <div class="formula">x≡a₁(mod m₁), x≡a₂(mod m₂) → x≡r(mod lcm(m₁,m₂))</div>
-    <div class="examples-label"><span class="en">Examples</span><span class="es">Ejemplos</span></div>
+    <div class="examples-label"><span data-i18n="crt-04">Examples</span></div>
     <ul class="examples-list"><li>x≡2(mod 3), x≡3(mod 5) → x≡8(mod 15)</li><li>x≡1(mod 4), x≡2(mod 3) → x≡5(mod 12)</li></ul>
-    <div class="tips-box"><div class="tips-label"><span class="en">Tips</span><span class="es">Consejos</span></div>
+    <div class="tips-box"><div class="tips-label"><span data-i18n="crt-05">Tips</span></div>
       <ul class="tips-list">
-        <li><span class="en">Flow: a₁→CRT→m₁→=→a₂→=→m₂→CRT</span><span class="es">Flujo: a₁→TCR→m₁→=→a₂→=→m₂→TCR</span></li>
-        <li><span class="en">Moduli must be compatible</span><span class="es">Los módulos deben ser compatibles</span></li>
+        <li><span data-i18n="crt-06">Flow: a₁→CRT→m₁→=→a₂→=→m₂→CRT</span></li>
+        <li><span data-i18n="crt-07">Moduli must be compatible</span></li>
       </ul>
     </div>
   </div>
 </details>
 
 <!-- ════ COMBINATORICS ════════════════════════════════════════════════════ -->
-<h2><span class="en">Combinatorics</span><span class="es">Combinatoria</span></h2>
+<h2><span data-i18n="crt-08">Combinatorics</span></h2>
 
 <details id="factorial"><summary><span class="fn-symbol">n!</span><span class="fn-title">n! — Factorial</span><span class="fn-params">1 param</span><span class="chevron">▼</span></summary>
-  <div class="fn-body"><div class="fn-desc"><span class="en">Product from 1 to n. Arbitrary precision.</span><span class="es">Producto del 1 al n. Precisión arbitraria.</span></div><div class="formula">n! = 1×2×…×n,  0!=1</div><div class="examples-label"><span class="en">Examples</span><span class="es">Ejemplos</span></div><ul class="examples-list"><li>5!=120</li><li>10!=3,628,800</li><li>20!=2,432,902,008,176,640,000</li></ul></div>
+  <div class="fn-body"><div class="fn-desc"><span data-i18n="factorial-01">Product from 1 to n. Arbitrary precision.</span></div><div class="formula">n! = 1×2×…×n,  0!=1</div><div class="examples-label"><span data-i18n="factorial-02">Examples</span></div><ul class="examples-list"><li>5!=120</li><li>10!=3,628,800</li><li>20!=2,432,902,008,176,640,000</li></ul></div>
 </details>
 
-<details id="dbl-factorial"><summary><span class="fn-symbol">n!!</span><span class="fn-title"><span class="en">n!! — Double Factorial</span><span class="es">n!! — Doble Factorial</span></span><span class="fn-params">1 param</span><span class="chevron">▼</span></summary>
-  <div class="fn-body"><div class="fn-desc"><span class="en">Product of integers with the same parity as n.</span><span class="es">Producto de los enteros con la misma paridad que n.</span></div><div class="formula">n!! = n×(n−2)×(n−4)×…</div><div class="examples-label"><span class="en">Examples</span><span class="es">Ejemplos</span></div><ul class="examples-list"><li>7!!=105</li><li>8!!=384</li><li>0!!=1!!=1</li></ul></div>
+<details id="dbl-factorial"><summary><span class="fn-symbol">n!!</span><span class="fn-title"><span data-i18n="dbl-factorial-01">n!! — Double Factorial</span></span><span class="fn-params">1 param</span><span class="chevron">▼</span></summary>
+  <div class="fn-body"><div class="fn-desc"><span data-i18n="dbl-factorial-02">Product of integers with the same parity as n.</span></div><div class="formula">n!! = n×(n−2)×(n−4)×…</div><div class="examples-label"><span data-i18n="dbl-factorial-03">Examples</span></div><ul class="examples-list"><li>7!!=105</li><li>8!!=384</li><li>0!!=1!!=1</li></ul></div>
 </details>
 
-<details id="comb"><summary><span class="fn-symbol">C(n,k)</span><span class="fn-title"><span class="en">C(n,k) — Combinations</span><span class="es">C(n,k) — Combinaciones</span></span><span class="fn-params">2 params: n → C(n,k) → k → =</span><span class="chevron">▼</span></summary>
-  <div class="fn-body"><div class="fn-desc"><span class="en">Ways to choose k from n regardless of order.</span><span class="es">Formas de elegir k de n sin importar el orden.</span></div><div class="formula">C(n,k) = n! / (k!(n−k)!)</div><div class="examples-label"><span class="en">Examples</span><span class="es">Ejemplos</span></div><ul class="examples-list"><li>C(5,2)=10</li><li>C(10,3)=120</li><li>C(n,0)=C(n,n)=1</li></ul><div class="tips-box"><div class="tips-label"><span class="en">Tips</span><span class="es">Consejos</span></div><ul class="tips-list"><li><span class="en">Pascal's identity:</span><span class="es">Identidad de Pascal:</span> C(n,k)=C(n−1,k−1)+C(n−1,k)</li><li>C(n,k)=C(n,n−k)</li></ul></div></div>
+<details id="comb"><summary><span class="fn-symbol">C(n,k)</span><span class="fn-title"><span data-i18n="comb-01">C(n,k) — Combinations</span></span><span class="fn-params">2 params: n → C(n,k) → k → =</span><span class="chevron">▼</span></summary>
+  <div class="fn-body"><div class="fn-desc"><span data-i18n="comb-02">Ways to choose k from n regardless of order.</span></div><div class="formula">C(n,k) = n! / (k!(n−k)!)</div><div class="examples-label"><span data-i18n="comb-03">Examples</span></div><ul class="examples-list"><li>C(5,2)=10</li><li>C(10,3)=120</li><li>C(n,0)=C(n,n)=1</li></ul><div class="tips-box"><div class="tips-label"><span data-i18n="comb-04">Tips</span></div><ul class="tips-list"><li><span data-i18n="comb-05">Pascal's identity:</span> C(n,k)=C(n−1,k−1)+C(n−1,k)</li><li>C(n,k)=C(n,n−k)</li></ul></div></div>
 </details>
 
-<details id="var"><summary><span class="fn-symbol">V(n,k)</span><span class="fn-title"><span class="en">V(n,k) — Variations</span><span class="es">V(n,k) — Variaciones</span></span><span class="fn-params">2 params: n → V(n,k) → k → =</span><span class="chevron">▼</span></summary>
-  <div class="fn-body"><div class="fn-desc"><span class="en">Ways to choose k from n WITH order.</span><span class="es">Formas de elegir k de n CON orden.</span></div><div class="formula">V(n,k) = n! / (n−k)!</div><div class="examples-label"><span class="en">Examples</span><span class="es">Ejemplos</span></div><ul class="examples-list"><li>V(5,2)=20</li><li>V(10,3)=720</li></ul></div>
+<details id="var"><summary><span class="fn-symbol">V(n,k)</span><span class="fn-title"><span data-i18n="var-01">V(n,k) — Variations</span></span><span class="fn-params">2 params: n → V(n,k) → k → =</span><span class="chevron">▼</span></summary>
+  <div class="fn-body"><div class="fn-desc"><span data-i18n="var-02">Ways to choose k from n WITH order.</span></div><div class="formula">V(n,k) = n! / (n−k)!</div><div class="examples-label"><span data-i18n="var-03">Examples</span></div><ul class="examples-list"><li>V(5,2)=20</li><li>V(10,3)=720</li></ul></div>
 </details>
 
-<details id="catalan"><summary><span class="fn-symbol">Cat</span><span class="fn-title"><span class="en">Cat(n) — Catalan Numbers</span><span class="es">Cat(n) — Números de Catalán</span></span><span class="fn-params">1 param</span><span class="chevron">▼</span></summary>
-  <div class="fn-body"><div class="fn-desc"><span class="en">Counts binary trees, triangulations, Dyck paths, balanced parentheses.</span><span class="es">Cuenta árboles binarios, triangulaciones, caminos de Dyck, paréntesis balanceados.</span></div><div class="formula">Cₙ = C(2n,n)/(n+1)</div><div class="examples-label"><span class="en">Examples</span><span class="es">Ejemplos</span></div><ul class="examples-list"><li>C₀=1, C₁=1, C₂=2, C₃=5, C₄=14, C₅=42</li></ul></div>
+<details id="catalan"><summary><span class="fn-symbol">Cat</span><span class="fn-title"><span data-i18n="catalan-01">Cat(n) — Catalan Numbers</span></span><span class="fn-params">1 param</span><span class="chevron">▼</span></summary>
+  <div class="fn-body"><div class="fn-desc"><span data-i18n="catalan-02">Counts binary trees, triangulations, Dyck paths, balanced parentheses.</span></div><div class="formula">Cₙ = C(2n,n)/(n+1)</div><div class="examples-label"><span data-i18n="catalan-03">Examples</span></div><ul class="examples-list"><li>C₀=1, C₁=1, C₂=2, C₃=5, C₄=14, C₅=42</li></ul></div>
 </details>
 
-<details id="derangement"><summary><span class="fn-symbol">D(n)</span><span class="fn-title"><span class="en">D(n) — Derangements</span><span class="es">D(n) — Desarreglos</span></span><span class="fn-params">1 param</span><span class="chevron">▼</span></summary>
-  <div class="fn-body"><div class="fn-desc"><span class="en">Permutations where no element remains in its original position.</span><span class="es">Permutaciones donde ningún elemento queda en su posición original.</span></div><div class="formula">D(n) = (n−1)(D(n−1)+D(n−2))</div><div class="examples-label"><span class="en">Examples</span><span class="es">Ejemplos</span></div><ul class="examples-list"><li>D(3)=2</li><li>D(4)=9</li><li>D(n)/n! → 1/e ≈ 0.3679</li></ul></div>
+<details id="derangement"><summary><span class="fn-symbol">D(n)</span><span class="fn-title"><span data-i18n="derangement-01">D(n) — Derangements</span></span><span class="fn-params">1 param</span><span class="chevron">▼</span></summary>
+  <div class="fn-body"><div class="fn-desc"><span data-i18n="derangement-02">Permutations where no element remains in its original position.</span></div><div class="formula">D(n) = (n−1)(D(n−1)+D(n−2))</div><div class="examples-label"><span data-i18n="derangement-03">Examples</span></div><ul class="examples-list"><li>D(3)=2</li><li>D(4)=9</li><li>D(n)/n! → 1/e ≈ 0.3679</li></ul></div>
 </details>
 
-<details id="bell"><summary><span class="fn-symbol">Bell</span><span class="fn-title"><span class="en">B(n) — Bell Numbers</span><span class="es">B(n) — Números de Bell</span></span><span class="fn-params">1 param</span><span class="chevron">▼</span></summary>
-  <div class="fn-body"><div class="fn-desc"><span class="en">Total number of partitions of a set of n elements.</span><span class="es">Número total de particiones de un conjunto de n elementos.</span></div><div class="formula">B(n) = Σ S₂(n,k) for k=0..n</div><div class="examples-label"><span class="en">Examples</span><span class="es">Ejemplos</span></div><ul class="examples-list"><li>B(3)=5</li><li>B(4)=15</li><li>B(5)=52</li></ul></div>
+<details id="bell"><summary><span class="fn-symbol">Bell</span><span class="fn-title"><span data-i18n="bell-01">B(n) — Bell Numbers</span></span><span class="fn-params">1 param</span><span class="chevron">▼</span></summary>
+  <div class="fn-body"><div class="fn-desc"><span data-i18n="bell-02">Total number of partitions of a set of n elements.</span></div><div class="formula">B(n) = Σ S₂(n,k) for k=0..n</div><div class="examples-label"><span data-i18n="bell-03">Examples</span></div><ul class="examples-list"><li>B(3)=5</li><li>B(4)=15</li><li>B(5)=52</li></ul></div>
 </details>
 
-<details id="partition"><summary><span class="fn-symbol">p(n)</span><span class="fn-title"><span class="en">p(n) — Integer Partitions</span><span class="es">p(n) — Particiones de Enteros</span></span><span class="fn-params">1 param</span><span class="chevron">▼</span></summary>
-  <div class="fn-body"><div class="fn-desc"><span class="en">Ways to write n as a sum of positive integers (order does not matter).</span><span class="es">Formas de escribir n como suma de enteros positivos (el orden no importa).</span></div><div class="formula"><span class="en">Dynamic programming</span><span class="es">Programación dinámica</span></div><div class="examples-label"><span class="en">Examples</span><span class="es">Ejemplos</span></div><ul class="examples-list"><li>p(4)=5 → [4,3+1,2+2,2+1+1,1+1+1+1]</li><li>p(10)=42</li><li>p(100)=190,569,292</li></ul></div>
+<details id="partition"><summary><span class="fn-symbol">p(n)</span><span class="fn-title"><span data-i18n="partition-01">p(n) — Integer Partitions</span></span><span class="fn-params">1 param</span><span class="chevron">▼</span></summary>
+  <div class="fn-body"><div class="fn-desc"><span data-i18n="partition-02">Ways to write n as a sum of positive integers (order does not matter).</span></div><div class="formula"><span data-i18n="partition-03">Dynamic programming</span></div><div class="examples-label"><span data-i18n="partition-04">Examples</span></div><ul class="examples-list"><li>p(4)=5 → [4,3+1,2+2,2+1+1,1+1+1+1]</li><li>p(10)=42</li><li>p(100)=190,569,292</li></ul></div>
 </details>
 
-<details id="stirling2"><summary><span class="fn-symbol">S₂</span><span class="fn-title"><span class="en">S₂(n,k) — Stirling 2nd Kind</span><span class="es">S₂(n,k) — Stirling 2ª Especie</span></span><span class="fn-params">2 params: n → S₂ → k → =</span><span class="chevron">▼</span></summary>
-  <div class="fn-body"><div class="fn-desc"><span class="en">Ways to partition n elements into exactly k non-empty subsets.</span><span class="es">Formas de particionar n elementos en exactamente k subconjuntos no vacíos.</span></div><div class="formula">S₂(n,k) = k·S₂(n−1,k) + S₂(n−1,k−1)</div><div class="examples-label"><span class="en">Examples</span><span class="es">Ejemplos</span></div><ul class="examples-list"><li>S₂(4,2)=7</li><li>S₂(5,3)=25</li></ul></div>
+<details id="stirling2"><summary><span class="fn-symbol">S₂</span><span class="fn-title"><span data-i18n="stirling2-01">S₂(n,k) — Stirling 2nd Kind</span></span><span class="fn-params">2 params: n → S₂ → k → =</span><span class="chevron">▼</span></summary>
+  <div class="fn-body"><div class="fn-desc"><span data-i18n="stirling2-02">Ways to partition n elements into exactly k non-empty subsets.</span></div><div class="formula">S₂(n,k) = k·S₂(n−1,k) + S₂(n−1,k−1)</div><div class="examples-label"><span data-i18n="stirling2-03">Examples</span></div><ul class="examples-list"><li>S₂(4,2)=7</li><li>S₂(5,3)=25</li></ul></div>
 </details>
 
-<details id="stirling1"><summary><span class="fn-symbol">s₁</span><span class="fn-title"><span class="en">s₁(n,k) — Stirling 1st Kind (unsigned)</span><span class="es">s₁(n,k) — Stirling 1ª Especie</span></span><span class="fn-params">2 params: n → s₁ → k → =</span><span class="chevron">▼</span></summary>
-  <div class="fn-body"><div class="fn-desc"><span class="en">Permutations of n elements with exactly k cycles.</span><span class="es">Permutaciones de n elementos con exactamente k ciclos.</span></div><div class="formula">|s₁(n,k)| = (n−1)·|s₁(n−1,k)| + |s₁(n−1,k−1)|</div><div class="examples-label"><span class="en">Examples</span><span class="es">Ejemplos</span></div><ul class="examples-list"><li>s₁(4,2)=11</li><li>s₁(4,1)=6</li></ul></div>
+<details id="stirling1"><summary><span class="fn-symbol">s₁</span><span class="fn-title"><span data-i18n="stirling1-01">s₁(n,k) — Stirling 1st Kind (unsigned)</span></span><span class="fn-params">2 params: n → s₁ → k → =</span><span class="chevron">▼</span></summary>
+  <div class="fn-body"><div class="fn-desc"><span data-i18n="stirling1-02">Permutations of n elements with exactly k cycles.</span></div><div class="formula">|s₁(n,k)| = (n−1)·|s₁(n−1,k)| + |s₁(n−1,k−1)|</div><div class="examples-label"><span data-i18n="stirling1-03">Examples</span></div><ul class="examples-list"><li>s₁(4,2)=11</li><li>s₁(4,1)=6</li></ul></div>
 </details>
 
-<details id="fibonacci"><summary><span class="fn-symbol">F(n)</span><span class="fn-title"><span class="en">F(n) — nth Fibonacci</span><span class="es">F(n) — n-ésimo de Fibonacci</span></span><span class="fn-params">1 param</span><span class="chevron">▼</span></summary>
-  <div class="fn-body"><div class="fn-desc"><span class="en">Computes F(n) with fast doubling O(log n). Supports very large n.</span><span class="es">Calcula F(n) con duplicación rápida O(log n). Soporta n muy grande.</span></div><div class="formula">F(0)=0, F(1)=1, F(n)=F(n−1)+F(n−2)</div><div class="examples-label"><span class="en">Examples</span><span class="es">Ejemplos</span></div><ul class="examples-list"><li>F(10)=55</li><li>F(50)=12,586,269,025</li><li>F(100)=354,224,848,179,261,915,075</li></ul><div class="tips-box"><div class="tips-label"><span class="en">Tips</span><span class="es">Consejos</span></div><ul class="tips-list"><li>F(n) mod m <span class="en">is periodic (Pisano period)</span><span class="es">es periódico (período de Pisano)</span></li><li>GCD(F(m),F(n))=F(GCD(m,n))</li></ul></div></div>
+<details id="fibonacci"><summary><span class="fn-symbol">F(n)</span><span class="fn-title"><span data-i18n="fibonacci-01">F(n) — nth Fibonacci</span></span><span class="fn-params">1 param</span><span class="chevron">▼</span></summary>
+  <div class="fn-body"><div class="fn-desc"><span data-i18n="fibonacci-02">Computes F(n) with fast doubling O(log n). Supports very large n.</span></div><div class="formula">F(0)=0, F(1)=1, F(n)=F(n−1)+F(n−2)</div><div class="examples-label"><span data-i18n="fibonacci-03">Examples</span></div><ul class="examples-list"><li>F(10)=55</li><li>F(50)=12,586,269,025</li><li>F(100)=354,224,848,179,261,915,075</li></ul><div class="tips-box"><div class="tips-label"><span data-i18n="fibonacci-04">Tips</span></div><ul class="tips-list"><li>F(n) mod m <span data-i18n="fibonacci-05">is periodic (Pisano period)</span></li><li>GCD(F(m),F(n))=F(GCD(m,n))</li></ul></div></div>
 </details>
 
-<details id="digit-sum-base"><summary><span class="fn-symbol">ΣdigB</span><span class="fn-title"><span class="en">Digit Sum in Base b</span><span class="es">Suma de Dígitos en Base b</span></span><span class="fn-params">2 params: n → ΣdigB → b → =</span><span class="chevron">▼</span></summary>
-  <div class="fn-body"><div class="fn-desc"><span class="en">Sums the digits of n written in base b.</span><span class="es">Suma los dígitos de n escrito en base b.</span></div><div class="formula">If n=Σdᵢ×bⁱ,  ΣdigB=Σdᵢ</div><div class="examples-label"><span class="en">Examples</span><span class="es">Ejemplos</span></div><ul class="examples-list"><li>ΣdigB(255,2)=8 → 11111111₂</li><li>ΣdigB(100,10)=1</li><li>ΣdigB(100,16)=10 → 64₁₆</li></ul></div>
+<details id="digit-sum-base"><summary><span class="fn-symbol">ΣdigB</span><span class="fn-title"><span data-i18n="digit-sum-base-01">Digit Sum in Base b</span></span><span class="fn-params">2 params: n → ΣdigB → b → =</span><span class="chevron">▼</span></summary>
+  <div class="fn-body"><div class="fn-desc"><span data-i18n="digit-sum-base-02">Sums the digits of n written in base b.</span></div><div class="formula">If n=Σdᵢ×bⁱ,  ΣdigB=Σdᵢ</div><div class="examples-label"><span data-i18n="digit-sum-base-03">Examples</span></div><ul class="examples-list"><li>ΣdigB(255,2)=8 → 11111111₂</li><li>ΣdigB(100,10)=1</li><li>ΣdigB(100,16)=10 → 64₁₆</li></ul></div>
 </details>
 
 <!-- ════ STATISTICS ═══════════════════════════════════════════════════════ -->
-<h2><span class="en">Statistics</span><span class="es">Estadística</span></h2>
+<h2><span data-i18n="digit-sum-base-04">Statistics</span></h2>
 
-<details id="arith-mean"><summary><span class="fn-symbol">AM</span><span class="fn-title"><span class="en">Arithmetic Mean</span><span class="es">Media Aritmética</span></span><span class="fn-params">N params</span><span class="chevron">▼</span></summary>
-  <div class="fn-body"><div class="fn-desc"><span class="en">Classic average of N numbers.</span><span class="es">Promedio clásico de N números.</span></div><div class="formula">AM = (x₁+x₂+…+xₙ)/n</div><div class="examples-label"><span class="en">Examples</span><span class="es">Ejemplos</span></div><ul class="examples-list"><li>AM(3,7)=5</li><li>AM(2,4,6)=4</li></ul><div class="tips-box"><div class="tips-label"><span class="en">Tips</span><span class="es">Consejos</span></div><ul class="tips-list"><li><span class="en">Flow: 3→Med A→7→Med A (executes)</span><span class="es">Flujo: 3→Med A→7→Med A (ejecuta)</span></li></ul></div></div>
+<details id="arith-mean"><summary><span class="fn-symbol">AM</span><span class="fn-title"><span data-i18n="arith-mean-01">Arithmetic Mean</span></span><span class="fn-params">N params</span><span class="chevron">▼</span></summary>
+  <div class="fn-body"><div class="fn-desc"><span data-i18n="arith-mean-02">Classic average of N numbers.</span></div><div class="formula">AM = (x₁+x₂+…+xₙ)/n</div><div class="examples-label"><span data-i18n="arith-mean-03">Examples</span></div><ul class="examples-list"><li>AM(3,7)=5</li><li>AM(2,4,6)=4</li></ul><div class="tips-box"><div class="tips-label"><span data-i18n="arith-mean-04">Tips</span></div><ul class="tips-list"><li><span data-i18n="arith-mean-05">Flow: 3→Med A→7→Med A (executes)</span></li></ul></div></div>
 </details>
 
-<details id="geo-mean"><summary><span class="fn-symbol">GM</span><span class="fn-title"><span class="en">Geometric Mean</span><span class="es">Media Geométrica</span></span><span class="fn-params">N params</span><span class="chevron">▼</span></summary>
-  <div class="fn-body"><div class="fn-desc"><span class="en">nth root of the product. Positive values only.</span><span class="es">Raíz n-ésima del producto. Solo valores positivos.</span></div><div class="formula">GM = (x₁×x₂×…×xₙ)^(1/n)</div><div class="examples-label"><span class="en">Examples</span><span class="es">Ejemplos</span></div><ul class="examples-list"><li>GM(2,8)=4</li><li>GM(1,4,9)≈3.30</li></ul></div>
+<details id="geo-mean"><summary><span class="fn-symbol">GM</span><span class="fn-title"><span data-i18n="geo-mean-01">Geometric Mean</span></span><span class="fn-params">N params</span><span class="chevron">▼</span></summary>
+  <div class="fn-body"><div class="fn-desc"><span data-i18n="geo-mean-02">nth root of the product. Positive values only.</span></div><div class="formula">GM = (x₁×x₂×…×xₙ)^(1/n)</div><div class="examples-label"><span data-i18n="geo-mean-03">Examples</span></div><ul class="examples-list"><li>GM(2,8)=4</li><li>GM(1,4,9)≈3.30</li></ul></div>
 </details>
 
-<details id="harm-mean"><summary><span class="fn-symbol">HM</span><span class="fn-title"><span class="en">Harmonic Mean</span><span class="es">Media Armónica</span></span><span class="fn-params">N params</span><span class="chevron">▼</span></summary>
-  <div class="fn-body"><div class="fn-desc"><span class="en">Reciprocal of the arithmetic mean of the reciprocals. Positive values only.</span><span class="es">Recíproco de la media aritmética de los recíprocos. Solo valores positivos.</span></div><div class="formula">HM = n/(1/x₁+1/x₂+…+1/xₙ)</div><div class="examples-label"><span class="en">Examples</span><span class="es">Ejemplos</span></div><ul class="examples-list"><li>HM(2,8)=3.2</li><li>HM(1,4,9)≈2.08</li></ul></div>
+<details id="harm-mean"><summary><span class="fn-symbol">HM</span><span class="fn-title"><span data-i18n="harm-mean-01">Harmonic Mean</span></span><span class="fn-params">N params</span><span class="chevron">▼</span></summary>
+  <div class="fn-body"><div class="fn-desc"><span data-i18n="harm-mean-02">Reciprocal of the arithmetic mean of the reciprocals. Positive values only.</span></div><div class="formula">HM = n/(1/x₁+1/x₂+…+1/xₙ)</div><div class="examples-label"><span data-i18n="harm-mean-03">Examples</span></div><ul class="examples-list"><li>HM(2,8)=3.2</li><li>HM(1,4,9)≈2.08</li></ul></div>
 </details>
 
-<details id="quad-mean"><summary><span class="fn-symbol">QM</span><span class="fn-title"><span class="en">Quadratic Mean (RMS)</span><span class="es">Media Cuadrática (RMS)</span></span><span class="fn-params">N params</span><span class="chevron">▼</span></summary>
-  <div class="fn-body"><div class="fn-desc"><span class="en">Root of the mean of squares (Root Mean Square).</span><span class="es">Raíz de la media de los cuadrados.</span></div><div class="formula">QM = √((x₁²+x₂²+…+xₙ²)/n)</div><div class="examples-label"><span class="en">Examples</span><span class="es">Ejemplos</span></div><ul class="examples-list"><li>QM(3,4)≈3.54</li><li>QM(1,2,3)≈2.16</li></ul></div>
+<details id="quad-mean"><summary><span class="fn-symbol">QM</span><span class="fn-title"><span data-i18n="quad-mean-01">Quadratic Mean (RMS)</span></span><span class="fn-params">N params</span><span class="chevron">▼</span></summary>
+  <div class="fn-body"><div class="fn-desc"><span data-i18n="quad-mean-02">Root of the mean of squares (Root Mean Square).</span></div><div class="formula">QM = √((x₁²+x₂²+…+xₙ²)/n)</div><div class="examples-label"><span data-i18n="quad-mean-03">Examples</span></div><ul class="examples-list"><li>QM(3,4)≈3.54</li><li>QM(1,2,3)≈2.16</li></ul></div>
 </details>
 
-<details id="minmax"><summary><span class="fn-symbol">min/max</span><span class="fn-title"><span class="en">min / max — Minimum and Maximum</span><span class="es">min / max — Mínimo y Máximo</span></span><span class="fn-params">N params</span><span class="chevron">▼</span></summary>
-  <div class="fn-body"><div class="fn-desc"><span class="en">Finds the smallest/largest value in a set of N numbers.</span><span class="es">Encuentra el menor/mayor valor en un conjunto de N números.</span></div><div class="formula">min(a₁,…,aₙ)  and  max(a₁,…,aₙ)</div><div class="examples-label"><span class="en">Examples</span><span class="es">Ejemplos</span></div><ul class="examples-list"><li>min(3,7,1)=1</li><li>max(3,7,1)=7</li></ul></div>
+<details id="minmax"><summary><span class="fn-symbol">min/max</span><span class="fn-title"><span data-i18n="minmax-01">min / max — Minimum and Maximum</span></span><span class="fn-params">N params</span><span class="chevron">▼</span></summary>
+  <div class="fn-body"><div class="fn-desc"><span data-i18n="minmax-02">Finds the smallest/largest value in a set of N numbers.</span></div><div class="formula">min(a₁,…,aₙ)  and  max(a₁,…,aₙ)</div><div class="examples-label"><span data-i18n="minmax-03">Examples</span></div><ul class="examples-list"><li>min(3,7,1)=1</li><li>max(3,7,1)=7</li></ul></div>
 </details>
 
 <div class="info-card" id="mean-ineq">
-  <h3><span class="en">Mean Inequality (AM-GM-HM)</span><span class="es">Desigualdad de Medias (AM-GM-HM)</span></h3>
-  <div class="en-blk"><pre>For positive numbers it always holds that:
+  <h3><span data-i18n="mean-ineq-01">Mean Inequality (AM-GM-HM)</span></h3>
+  <div data-i18n="mean-ineq-02"><pre>For positive numbers it always holds that:
 
 HM ≤ GM ≤ AM ≤ QM
 
 Equality holds only when all values are equal.
 This inequality is fundamental in olympiads.</pre></div>
-  <div class="es-blk"><pre>Para números positivos siempre se cumple:
-
-HM ≤ GM ≤ AM ≤ QM
-
-La igualdad se da solo cuando todos los valores son iguales.
-Esta desigualdad es fundamental en olimpiadas.</pre></div>
 </div>
 
 <!-- ════ OLYMPIAD TOOLS ═══════════════════════════════════════════════════ -->
-<h2 id="tools"><span class="en">Olympiad Tools</span><span class="es">Herramientas de Olimpiada</span></h2>
+<h2 id="tools"><span data-i18n="tools-01">Olympiad Tools</span></h2>
 
-<p class="en-blk" style="margin-bottom:16px">A dedicated training section — open the side menu → <strong>Olympiad Tools</strong>. Each tool is a small form: fill the inputs, press <em>Compute</em>, and read the exact answer. Results use exact arithmetic (fractions, surds) wherever possible.</p>
-<p class="es-blk" style="margin-bottom:16px">Una sección de entrenamiento dedicada — abre el menú → <strong>Herramientas de Olimpiada</strong>. Cada herramienta es un formulario simple: completa los campos, presiona <em>Calcular</em>, y lee la respuesta exacta. Los resultados usan aritmética exacta (fracciones, radicales) siempre que es posible.</p>
+<p style="margin-bottom:16px" data-i18n="tools-02">A dedicated training section — open the side menu → <strong>Olympiad Tools</strong>. Each tool is a small form: fill the inputs, press <em>Compute</em>, and read the exact answer. Results use exact arithmetic (fractions, surds) wherever possible.</p>
 
 <!-- Fractions -->
-<h3 id="tools-fractions"><span class="en">Fractions — Exact Rational Arithmetic</span><span class="es">Fracciones — Aritmética Racional Exacta</span></h3>
-<p class="en-blk" style="margin-bottom:10px">In olympiads, answers are exact: 22/7, not 3.14… The Fractions tool uses arbitrary-precision rationals p/q, always reduced to lowest terms with canonical sign.</p>
-<p class="es-blk" style="margin-bottom:10px">En olimpiadas, las respuestas son exactas: 22/7, no 3.14… La herramienta de Fracciones usa racionales exactos p/q de precisión arbitraria, siempre reducidos.</p>
+<h3 id="tools-fractions"><span data-i18n="tools-fractions-01">Fractions — Exact Rational Arithmetic</span></h3>
+<p style="margin-bottom:10px" data-i18n="tools-fractions-02">In olympiads, answers are exact: 22/7, not 3.14… The Fractions tool uses arbitrary-precision rationals p/q, always reduced to lowest terms with canonical sign.</p>
 <div class="tool-card">
-  <div class="tool-row"><span class="tool-name"><span class="en">Fraction arithmetic</span><span class="es">Aritmética de fracciones</span></span><span><span class="en">Two fractions and an operation (+−×÷). Result as fraction, mixed number and decimal.</span><span class="es">Dos fracciones y una operación (+−×÷). Resultado como fracción, número mixto y decimal.</span></span></div>
-  <div class="tool-row"><span class="tool-name"><span class="en">Simplify / convert</span><span class="es">Simplificar / convertir</span></span><span><span class="en">Reduces any fraction or decimal to lowest terms.</span><span class="es">Reduce cualquier fracción o decimal a su forma mínima.</span></span></div>
+  <div class="tool-row"><span class="tool-name"><span data-i18n="tools-fractions-03">Fraction arithmetic</span></span><span><span data-i18n="tools-fractions-04">Two fractions and an operation (+−×÷). Result as fraction, mixed number and decimal.</span></span></div>
+  <div class="tool-row"><span class="tool-name"><span data-i18n="tools-fractions-05">Simplify / convert</span></span><span><span data-i18n="tools-fractions-06">Reduces any fraction or decimal to lowest terms.</span></span></div>
   <div class="tool-ex">1/2 + 1/3 = 5/6  |  18/12 → 3/2 = "1 1/2" = 1.5  |  7/3 → "2 1/3"</div>
 </div>
 
 <!-- Radicals -->
-<h3 id="tools-radicals"><span class="en">Radicals — Exact Simplification</span><span class="es">Radicales — Simplificación Exacta</span></h3>
-<p class="en-blk" style="margin-bottom:10px">Simplifies radicals to the form coefficient·√radicand with no perfect-square factors inside the root.</p>
-<p class="es-blk" style="margin-bottom:10px">Simplifica radicales a la forma coeficiente·√radicando sin factores cuadrados perfectos dentro de la raíz.</p>
+<h3 id="tools-radicals"><span data-i18n="tools-radicals-01">Radicals — Exact Simplification</span></h3>
+<p style="margin-bottom:10px" data-i18n="tools-radicals-02">Simplifies radicals to the form coefficient·√radicand with no perfect-square factors inside the root.</p>
 <div class="tool-card">
-  <div class="tool-row"><span class="tool-name">√n</span><span><span class="en">Simplify a square root.</span><span class="es">Simplificar una raíz cuadrada.</span></span></div>
-  <div class="tool-row"><span class="tool-name">ⁿ√n</span><span><span class="en">Simplify the k-th root by extracting d^k factors.</span><span class="es">Simplificar la raíz k-ésima extrayendo factores dᵏ.</span></span></div>
-  <div class="tool-row"><span class="tool-name">a/√b</span><span><span class="en">Rationalize the denominator: a/√b → (a/b)·√b.</span><span class="es">Racionalizar el denominador: a/√b → (a/b)·√b.</span></span></div>
-  <div class="tool-row"><span class="tool-name">a/(c+√d)</span><span><span class="en">Rationalize with conjugate: multiply by (c−√d)/(c²−d).</span><span class="es">Racionalizar con el conjugado: multiplicar por (c−√d)/(c²−d).</span></span></div>
+  <div class="tool-row"><span class="tool-name">√n</span><span><span data-i18n="tools-radicals-03">Simplify a square root.</span></span></div>
+  <div class="tool-row"><span class="tool-name">ⁿ√n</span><span><span data-i18n="tools-radicals-04">Simplify the k-th root by extracting d^k factors.</span></span></div>
+  <div class="tool-row"><span class="tool-name">a/√b</span><span><span data-i18n="tools-radicals-05">Rationalize the denominator: a/√b → (a/b)·√b.</span></span></div>
+  <div class="tool-row"><span class="tool-name">a/(c+√d)</span><span><span data-i18n="tools-radicals-06">Rationalize with conjugate: multiply by (c−√d)/(c²−d).</span></span></div>
   <div class="tool-ex">√72 → 6√2  |  ³√54 → 3·³√2  |  1/√2 → √2/2  |  1/(1+√2) = −1+√2</div>
 </div>
 
 <!-- Geometry -->
-<h3 id="tools-geometry"><span class="en">Geometry</span><span class="es">Geometría</span></h3>
-<p class="en-blk" style="margin-bottom:10px">Geometry covers ~25% of IMO problems. Results are exact where possible: Heron area as a surd, circumradius R and inradius r as surds, shoelace areas as exact fractions.</p>
-<p class="es-blk" style="margin-bottom:10px">La geometría representa ~25% de los problemas de la IMO. Los resultados son exactos donde es posible: área de Herón como radical, radios R y r como surds, áreas por coordenadas como fracciones exactas.</p>
+<h3 id="tools-geometry"><span data-i18n="tools-geometry-01">Geometry</span></h3>
+<p style="margin-bottom:10px" data-i18n="tools-geometry-02">Geometry covers ~25% of IMO problems. Results are exact where possible: Heron area as a surd, circumradius R and inradius r as surds, shoelace areas as exact fractions.</p>
 <div class="tool-card">
-  <div class="tool-row"><span class="tool-name"><span class="en">Triangle from sides</span><span class="es">Triángulo por lados</span></span><span><span class="en">Type (scalene/isosceles/equilateral + right/acute/obtuse), perimeter, exact Heron area, circumradius R, inradius r.</span><span class="es">Tipo (escaleno/isósceles/equilátero + rectángulo/acutángulo/obtusángulo), perímetro, área de Herón exacta, radio circunscrito R, radio inscrito r.</span></span></div>
-  <div class="tool-ex">(3,4,5) → <span class="en">scalene, right</span><span class="es">escaleno, rectángulo</span>, area=6, R=5/2, r=1
-(13,14,15) → <span class="en">scalene, acute</span><span class="es">escaleno, acutángulo</span>, area=84, R=65/8, r=4</div>
-  <div class="tool-row" style="margin-top:10px"><span class="tool-name"><span class="en">Pythagorean triples</span><span class="es">Ternas pitagóricas</span></span><span><span class="en">Lists primitive triples (a,b,c) with a²+b²=c², gcd=1, using Euclid's formula m>n, gcd(m,n)=1, different parity.</span><span class="es">Lista ternas primitivas (a,b,c) con a²+b²=c², mcd=1, usando la fórmula de Euclides m>n, mcd(m,n)=1, distinta paridad.</span></span></div>
-  <div class="tool-ex"><span class="en">Up to 50:</span><span class="es">Hasta 50:</span> (3,4,5), (5,12,13), (8,15,17), (7,24,25), (20,21,29)</div>
-  <div class="tool-row" style="margin-top:10px"><span class="tool-name">Shoelace</span><span><span class="en">Exact polygon area from rational coordinates, with a drawing of the polygon. Enter vertices as "x,y" separated by ";".</span><span class="es">Área exacta de un polígono a partir de coordenadas racionales, con dibujo del polígono. Ingresa vértices como "x,y" separados por ";".</span></span></div>
+  <div class="tool-row"><span class="tool-name"><span data-i18n="tools-geometry-03">Triangle from sides</span></span><span><span data-i18n="tools-geometry-04">Type (scalene/isosceles/equilateral + right/acute/obtuse), perimeter, exact Heron area, circumradius R, inradius r.</span></span></div>
+  <div class="tool-ex">(3,4,5) → <span data-i18n="tools-geometry-05">scalene, right</span>, area=6, R=5/2, r=1
+(13,14,15) → <span data-i18n="tools-geometry-06">scalene, acute</span>, area=84, R=65/8, r=4</div>
+  <div class="tool-row" style="margin-top:10px"><span class="tool-name"><span data-i18n="tools-geometry-07">Pythagorean triples</span></span><span><span data-i18n="tools-geometry-08">Lists primitive triples (a,b,c) with a²+b²=c², gcd=1, using Euclid's formula m>n, gcd(m,n)=1, different parity.</span></span></div>
+  <div class="tool-ex"><span data-i18n="tools-geometry-09">Up to 50:</span> (3,4,5), (5,12,13), (8,15,17), (7,24,25), (20,21,29)</div>
+  <div class="tool-row" style="margin-top:10px"><span class="tool-name">Shoelace</span><span><span data-i18n="tools-geometry-10">Exact polygon area from rational coordinates, with a drawing of the polygon. Enter vertices as "x,y" separated by ";".</span></span></div>
   <div class="tool-ex">"0,0; 4,0; 0,3" → area = 6</div>
-  <div class="tool-row" style="margin-top:10px"><span class="tool-name"><span class="en">Pick's theorem</span><span class="es">Teorema de Pick</span></span><span><span class="en">For integer-vertex polygons: A = I + B/2 − 1. Computes exact area, boundary lattice points B and interior points I, and draws them on the polygon.</span><span class="es">Para polígonos de vértices enteros: A = I + B/2 − 1. Calcula el área exacta, los puntos reticulares de frontera B e interiores I, y los dibuja sobre el polígono.</span></span></div>
+  <div class="tool-row" style="margin-top:10px"><span class="tool-name"><span data-i18n="tools-geometry-11">Pick's theorem</span></span><span><span data-i18n="tools-geometry-12">For integer-vertex polygons: A = I + B/2 − 1. Computes exact area, boundary lattice points B and interior points I, and draws them on the polygon.</span></span></div>
   <div class="tool-ex">"0,0; 5,0; 5,4; 0,4" → A=20, B=18, I=12</div>
-  <div class="tool-row" style="margin-top:10px"><span class="tool-name"><span class="en">Triangle centers</span><span class="es">Centros del triángulo</span></span><span><span class="en">Centroid G, circumcenter O and orthocenter H as exact fractions; incenter approximated. Draws the triangle, the four centers and the Euler line (H = 3G − 2O).</span><span class="es">Baricentro G, circuncentro O y ortocentro H como fracciones exactas; incentro aproximado. Dibuja el triángulo, los cuatro centros y la recta de Euler (H = 3G − 2O).</span></span></div>
+  <div class="tool-row" style="margin-top:10px"><span class="tool-name"><span data-i18n="tools-geometry-13">Triangle centers</span></span><span><span data-i18n="tools-geometry-14">Centroid G, circumcenter O and orthocenter H as exact fractions; incenter approximated. Draws the triangle, the four centers and the Euler line (H = 3G − 2O).</span></span></div>
   <div class="tool-ex">A=(0,0), B=(4,0), C=(0,3) → O=(2, 3/2), H=(0,0), G=(4/3, 1)</div>
 </div>
 
 <!-- Polynomials -->
-<h3 id="tools-polynomials"><span class="en">Polynomials — Exact Analysis</span><span class="es">Polinomios — Análisis Exacto</span></h3>
-<p class="en-blk" style="margin-bottom:10px">Polynomials with rational coefficients. Accepts natural notation: <code>x^2-5x+6</code>, <code>3/2x-1</code>, <code>-x^3+x</code>.</p>
-<p class="es-blk" style="margin-bottom:10px">Polinomios con coeficientes racionales. Acepta notación natural: <code>x^2-5x+6</code>, <code>3/2x-1</code>, <code>-x^3+x</code>.</p>
+<h3 id="tools-polynomials"><span data-i18n="tools-polynomials-01">Polynomials — Exact Analysis</span></h3>
+<p style="margin-bottom:10px" data-i18n="tools-polynomials-02">Polynomials with rational coefficients. Accepts natural notation: <code>x^2-5x+6</code>, <code>3/2x-1</code>, <code>-x^3+x</code>.</p>
 <div class="tool-card">
-  <div class="tool-row"><span class="tool-name"><span class="en">Analyze polynomial</span><span class="es">Analizar polinomio</span></span><span><span class="en">Degree, rational roots (rational root theorem), Vieta's relations, discriminant (degree 2 and 3), derivative.</span><span class="es">Grado, raíces racionales (teorema de la raíz racional), relaciones de Vieta, discriminante (grado 2 y 3), derivada.</span></span></div>
-  <div class="tool-ex">x²−5x+6 → <span class="en">rational roots: 2,3 · sum=5 · product=6 · disc=1 · derivative: 2x−5</span><span class="es">raíces racionales: 2,3 · suma=5 · producto=6 · disc=1 · derivada: 2x−5</span></div>
-  <div class="tool-row" style="margin-top:10px"><span class="tool-name"><span class="en">Solve quadratic</span><span class="es">Resolver cuadrática</span></span><span><span class="en">Discriminant, nature of roots, exact rational roots when possible, approximate real roots.</span><span class="es">Discriminante, naturaleza de las raíces, raíces racionales exactas cuando es posible, raíces reales aproximadas.</span></span></div>
-  <div class="tool-row" style="margin-top:10px"><span class="tool-name"><span class="en">Real roots of cubic</span><span class="es">Raíces reales cúbica</span></span><span><span class="en">Depressed cubic / Cardano / trigonometric method (3 real roots case).</span><span class="es">Cúbica deprimida / Cardano / método trigonométrico (caso 3 raíces reales).</span></span></div>
+  <div class="tool-row"><span class="tool-name"><span data-i18n="tools-polynomials-03">Analyze polynomial</span></span><span><span data-i18n="tools-polynomials-04">Degree, rational roots (rational root theorem), Vieta's relations, discriminant (degree 2 and 3), derivative.</span></span></div>
+  <div class="tool-ex">x²−5x+6 → <span data-i18n="tools-polynomials-05">rational roots: 2,3 · sum=5 · product=6 · disc=1 · derivative: 2x−5</span></div>
+  <div class="tool-row" style="margin-top:10px"><span class="tool-name"><span data-i18n="tools-polynomials-06">Solve quadratic</span></span><span><span data-i18n="tools-polynomials-07">Discriminant, nature of roots, exact rational roots when possible, approximate real roots.</span></span></div>
+  <div class="tool-row" style="margin-top:10px"><span class="tool-name"><span data-i18n="tools-polynomials-08">Real roots of cubic</span></span><span><span data-i18n="tools-polynomials-09">Depressed cubic / Cardano / trigonometric method (3 real roots case).</span></span></div>
   <div class="tool-ex">x³−6x²+11x−6 → 1, 2, 3</div>
-  <div class="tool-row" style="margin-top:10px"><span class="tool-name">Ruffini</span><span><span class="en">Synthetic division of p(x) by (x − c) with every step shown; verifies the remainder theorem p(c) = remainder.</span><span class="es">División sintética de p(x) entre (x − c) mostrando cada paso; verifica el teorema del resto p(c) = resto.</span></span></div>
-  <div class="tool-ex">x³−6x²+11x−6 ÷ (x−1) → x²−5x+6, <span class="en">remainder</span><span class="es">resto</span> 0</div>
-  <div class="tool-row" style="margin-top:10px"><span class="tool-name"><span class="en">Linear system 2×2 / 3×3</span><span class="es">Sistema lineal 2×2 / 3×3</span></span><span><span class="en">Cramer's rule with exact fractions. Rows "a,b,…,k" (coefficients + constant) separated by ";". Shows the determinant.</span><span class="es">Regla de Cramer con fracciones exactas. Filas "a,b,…,k" (coeficientes + término independiente) separadas por ";". Muestra el determinante.</span></span></div>
+  <div class="tool-row" style="margin-top:10px"><span class="tool-name">Ruffini</span><span><span data-i18n="tools-polynomials-10">Synthetic division of p(x) by (x − c) with every step shown; verifies the remainder theorem p(c) = remainder.</span></span></div>
+  <div class="tool-ex">x³−6x²+11x−6 ÷ (x−1) → x²−5x+6, <span data-i18n="tools-polynomials-11">remainder</span> 0</div>
+  <div class="tool-row" style="margin-top:10px"><span class="tool-name"><span data-i18n="tools-polynomials-12">Linear system 2×2 / 3×3</span></span><span><span data-i18n="tools-polynomials-13">Cramer's rule with exact fractions. Rows "a,b,…,k" (coefficients + constant) separated by ";". Shows the determinant.</span></span></div>
   <div class="tool-ex">"2,1,5; 1,-1,1" → x=2, y=1 (det=−3)</div>
 </div>
-<p class="en-blk" style="margin-top:8px"><em>Analyze polynomial</em> also plots y = p(x) marking rational roots and extrema. It works on a single variable x, already expanded — for several variables or parentheses use <a href="#tools-algebra">Algebra</a>.</p>
-<p class="es-blk" style="margin-top:8px"><em>Analizar polinomio</em> además grafica y = p(x) marcando raíces racionales y extremos. Trabaja sobre una sola variable x, ya desarrollada — para varias variables o paréntesis usa <a href="#tools-algebra">Álgebra</a>.</p>
+<p style="margin-top:8px" data-i18n="tools-polynomials-14"><em>Analyze polynomial</em> also plots y = p(x) marking rational roots and extrema. It works on a single variable x, already expanded — for several variables or parentheses use <a href="#tools-algebra">Algebra</a>.</p>
 
 <!-- Algebra -->
-<h3 id="tools-algebra"><span class="en">Algebra — Polynomials in Several Variables</span><span class="es">Álgebra — Polinomios en Varias Variables</span></h3>
-<p class="en-blk" style="margin-bottom:10px">Symbolic algebra with exact rational coefficients: expanding a product, collecting like terms and comparing two expressions are all the same operation here, so an identity is checked by expanding both sides.</p>
-<p class="es-blk" style="margin-bottom:10px">Álgebra simbólica con coeficientes racionales exactos: desarrollar un producto, agrupar términos semejantes y comparar dos expresiones son la misma operación, así que una identidad se verifica desarrollando ambos lados.</p>
-<p class="en-blk" style="margin-bottom:10px"><strong>Notation:</strong> variables are a letter with an optional subscript (<code>a</code>, <code>x</code>, <code>x1</code>); multiplication may be implicit (<code>2ab</code>, <code>(a+b)(a−b)</code>, <code>3(x+1)</code>); exponents accept <code>^</code> or superscripts (<code>(a+b+c)²</code>). Terms are printed in graded lexicographic order, the usual convention.</p>
-<p class="es-blk" style="margin-bottom:10px"><strong>Notación:</strong> las variables son una letra con subíndice opcional (<code>a</code>, <code>x</code>, <code>x1</code>); la multiplicación puede ser implícita (<code>2ab</code>, <code>(a+b)(a−b)</code>, <code>3(x+1)</code>); los exponentes admiten <code>^</code> o superíndices (<code>(a+b+c)²</code>). Los términos se imprimen en orden lexicográfico graduado, la convención habitual.</p>
+<h3 id="tools-algebra"><span data-i18n="tools-algebra-01">Algebra — Polynomials in Several Variables</span></h3>
+<p style="margin-bottom:10px" data-i18n="tools-algebra-02">Symbolic algebra with exact rational coefficients: expanding a product, collecting like terms and comparing two expressions are all the same operation here, so an identity is checked by expanding both sides.</p>
+<p style="margin-bottom:10px" data-i18n="tools-algebra-03"><strong>Notation:</strong> variables are a letter with an optional subscript (<code>a</code>, <code>x</code>, <code>x1</code>); multiplication may be implicit (<code>2ab</code>, <code>(a+b)(a−b)</code>, <code>3(x+1)</code>); exponents accept <code>^</code> or superscripts (<code>(a+b+c)²</code>). Terms are printed in graded lexicographic order, the usual convention.</p>
 <div class="tool-card">
-  <div class="tool-row"><span class="tool-name"><span class="en">Expand and simplify</span><span class="es">Expandir y simplificar</span></span><span><span class="en">Expands the expression and collects like terms. Also reports the degree, the number of terms, the variables, and whether the result is homogeneous or symmetric.</span><span class="es">Desarrolla la expresión y agrupa términos semejantes. Además informa el grado, la cantidad de términos, las variables, y si el resultado es homogéneo o simétrico.</span></span></div>
-  <div class="tool-ex">(a+b+c)² → a² + 2ab + 2ac + b² + 2bc + c²  (<span class="en">degree</span><span class="es">grado</span> 2, 6 <span class="en">terms, homogeneous, symmetric</span><span class="es">términos, homogéneo, simétrico</span>)
+  <div class="tool-row"><span class="tool-name"><span data-i18n="tools-algebra-04">Expand and simplify</span></span><span><span data-i18n="tools-algebra-05">Expands the expression and collects like terms. Also reports the degree, the number of terms, the variables, and whether the result is homogeneous or symmetric.</span></span></div>
+  <div class="tool-ex">(a+b+c)² → a² + 2ab + 2ac + b² + 2bc + c²  (<span data-i18n="tools-algebra-06">degree</span> 2, 6 <span data-i18n="tools-algebra-07">terms, homogeneous, symmetric</span>)
 (a+b)⁵ → a⁵ + 5a⁴b + 10a³b² + 10a²b³ + 5ab⁴ + b⁵</div>
-  <div class="tool-row" style="margin-top:10px"><span class="tool-name"><span class="en">Check identity</span><span class="es">Verificar identidad</span></span><span><span class="en">Expands both sides and compares them exactly. If they differ, it shows the difference, which is where the error is.</span><span class="es">Desarrolla ambos lados y los compara exactamente. Si difieren, muestra la diferencia, que es donde está el error.</span></span></div>
-  <div class="tool-ex">(a+b)³  <span class="en">vs</span><span class="es">vs</span>  a³+3a²b+3ab²+b³ → ✓
-(a+b)²  <span class="en">vs</span><span class="es">vs</span>  a²+b² → <span class="en">difference</span><span class="es">diferencia</span> = 2ab</div>
-  <div class="tool-row" style="margin-top:10px"><span class="tool-name"><span class="en">Common factor</span><span class="es">Factor común</span></span><span><span class="en">Pulls out the greatest common monomial together with the rational content, so the factor inside the parentheses has integer coefficients.</span><span class="es">Extrae el mayor monomio común junto con el contenido racional, de modo que el factor entre paréntesis quede con coeficientes enteros.</span></span></div>
+  <div class="tool-row" style="margin-top:10px"><span class="tool-name"><span data-i18n="tools-algebra-08">Check identity</span></span><span><span data-i18n="tools-algebra-09">Expands both sides and compares them exactly. If they differ, it shows the difference, which is where the error is.</span></span></div>
+  <div class="tool-ex">(a+b)³  <span data-i18n="tools-algebra-10">vs</span>  a³+3a²b+3ab²+b³ → ✓
+(a+b)²  <span data-i18n="tools-algebra-11">vs</span>  a²+b² → <span data-i18n="tools-algebra-12">difference</span> = 2ab</div>
+  <div class="tool-row" style="margin-top:10px"><span class="tool-name"><span data-i18n="tools-algebra-13">Common factor</span></span><span><span data-i18n="tools-algebra-14">Pulls out the greatest common monomial together with the rational content, so the factor inside the parentheses has integer coefficients.</span></span></div>
   <div class="tool-ex">2a²b + 4ab² → 2ab(a + 2b)
 x/2 + y/3 → (1/6)(3x + 2y)</div>
-  <div class="tool-row" style="margin-top:10px"><span class="tool-name"><span class="en">Substitute / evaluate</span><span class="es">Sustituir / evaluar</span></span><span><span class="en">Values may be numbers or expressions, and substitution is simultaneous. Any variable left unassigned stays in the result.</span><span class="es">Los valores pueden ser números o expresiones, y la sustitución es simultánea. Toda variable sin asignar permanece en el resultado.</span></span></div>
-  <div class="tool-ex">(a+b+c)²  <span class="en">with</span><span class="es">con</span> a=1, b=2, c=3 → 36
-(a+b+c)²  <span class="en">with</span><span class="es">con</span> a=1, b=2 → c² + 6c + 9</div>
-  <div class="tool-row" style="margin-top:10px"><span class="tool-name"><span class="en">Coefficient of a monomial</span><span class="es">Coeficiente de un monomio</span></span><span><span class="en">The coefficient of one monomial in the expansion, without reading the whole result.</span><span class="es">El coeficiente de un monomio en el desarrollo, sin tener que leer el resultado completo.</span></span></div>
-  <div class="tool-ex">a²b <span class="en">in</span><span class="es">en</span> (a+b+c)³ → 3    x⁵ <span class="en">in</span><span class="es">en</span> (1+x)¹⁰ → 252</div>
-  <div class="tool-row" style="margin-top:10px"><span class="tool-name"><span class="en">Partial derivative</span><span class="es">Derivada parcial</span></span><span><span class="en">∂/∂x of the expansion, exact (no numerical approximation).</span><span class="es">∂/∂x del desarrollo, exacta (sin aproximación numérica).</span></span></div>
+  <div class="tool-row" style="margin-top:10px"><span class="tool-name"><span data-i18n="tools-algebra-15">Substitute / evaluate</span></span><span><span data-i18n="tools-algebra-16">Values may be numbers or expressions, and substitution is simultaneous. Any variable left unassigned stays in the result.</span></span></div>
+  <div class="tool-ex">(a+b+c)²  <span data-i18n="tools-algebra-17">with</span> a=1, b=2, c=3 → 36
+(a+b+c)²  <span data-i18n="tools-algebra-18">with</span> a=1, b=2 → c² + 6c + 9</div>
+  <div class="tool-row" style="margin-top:10px"><span class="tool-name"><span data-i18n="tools-algebra-19">Coefficient of a monomial</span></span><span><span data-i18n="tools-algebra-20">The coefficient of one monomial in the expansion, without reading the whole result.</span></span></div>
+  <div class="tool-ex">a²b <span data-i18n="tools-algebra-21">in</span> (a+b+c)³ → 3    x⁵ <span data-i18n="tools-algebra-22">in</span> (1+x)¹⁰ → 252</div>
+  <div class="tool-row" style="margin-top:10px"><span class="tool-name"><span data-i18n="tools-algebra-23">Partial derivative</span></span><span><span data-i18n="tools-algebra-24">∂/∂x of the expansion, exact (no numerical approximation).</span></span></div>
   <div class="tool-ex">∂/∂a (a+b)³ → 3a² + 6ab + 3b²</div>
-  <div class="tool-row" style="margin-top:10px"><span class="tool-name"><span class="en">Notable products</span><span class="es">Productos notables</span></span><span><span class="en">The classic identities for your own A and B, which may themselves be expressions: (A±B)², (A+B)(A−B), (A±B)³ and the sum/difference of cubes.</span><span class="es">Las identidades clásicas con A y B a tu elección, que pueden ser expresiones: (A±B)², (A+B)(A−B), (A±B)³ y la suma/diferencia de cubos.</span></span></div>
+  <div class="tool-row" style="margin-top:10px"><span class="tool-name"><span data-i18n="tools-algebra-25">Notable products</span></span><span><span data-i18n="tools-algebra-26">The classic identities for your own A and B, which may themselves be expressions: (A±B)², (A+B)(A−B), (A±B)³ and the sum/difference of cubes.</span></span></div>
   <div class="tool-ex">A=x, B=2y → (A+B)² = x² + 4xy + 4y²  |  (A+B)(A²−AB+B²) = x³ + 8y³</div>
-  <div class="tool-row" style="margin-top:10px"><span class="tool-name">(a+b)ⁿ</span><span><span class="en">Symbolic binomial expansion term by term, with its list of coefficients.</span><span class="es">Desarrollo binomial simbólico término a término, con su lista de coeficientes.</span></span></div>
+  <div class="tool-row" style="margin-top:10px"><span class="tool-name">(a+b)ⁿ</span><span><span data-i18n="tools-algebra-27">Symbolic binomial expansion term by term, with its list of coefficients.</span></span></div>
   <div class="tool-ex">n=5 → a⁵ + 5a⁴b + 10a³b² + 10a²b³ + 5ab⁴ + b⁵  (1, 5, 10, 10, 5, 1)</div>
 </div>
-<p class="en-blk" style="margin-top:8px">Division is allowed by a number or by a monomial that divides every term: <code>(a²b+ab²)/(ab)</code> → <code>a + b</code>. An expansion that would be too large to read (or to compute quickly) is refused with a message instead of freezing the app.</p>
-<p class="es-blk" style="margin-top:8px">Se puede dividir entre un número o entre un monomio que divida a todos los términos: <code>(a²b+ab²)/(ab)</code> → <code>a + b</code>. Un desarrollo demasiado grande para leerse (o para calcularse rápido) se rechaza con un mensaje en lugar de congelar la app.</p>
+<p style="margin-top:8px" data-i18n="tools-algebra-28">Division is allowed by a number or by a monomial that divides every term: <code>(a²b+ab²)/(ab)</code> → <code>a + b</code>. An expansion that would be too large to read (or to compute quickly) is refused with a message instead of freezing the app.</p>
 
 <!-- Advanced Number Theory -->
-<h3 id="tools-numtheory"><span class="en">Advanced Number Theory</span><span class="es">Teoría de Números Avanzada</span></h3>
-<p class="en-blk" style="margin-bottom:10px">Tools for the harder number-theory problems that appear in national and international olympiads.</p>
-<p class="es-blk" style="margin-bottom:10px">Herramientas para los problemas de teoría de números más avanzados de olimpiadas nacionales e internacionales.</p>
+<h3 id="tools-numtheory"><span data-i18n="tools-numtheory-01">Advanced Number Theory</span></h3>
+<p style="margin-bottom:10px" data-i18n="tools-numtheory-02">Tools for the harder number-theory problems that appear in national and international olympiads.</p>
 <div class="tool-card">
-  <div class="tool-row"><span class="tool-name">√a mod p</span><span><span class="en">Modular square root (Tonelli-Shanks). Returns ±r such that r²≡a (mod p) for prime p.</span><span class="es">Raíz cuadrada modular (Tonelli-Shanks). Devuelve ±r tal que r²≡a (mod p) para p primo.</span></span></div>
+  <div class="tool-row"><span class="tool-name">√a mod p</span><span><span data-i18n="tools-numtheory-03">Modular square root (Tonelli-Shanks). Returns ±r such that r²≡a (mod p) for prime p.</span></span></div>
   <div class="tool-ex">√2 mod 7 → ±3  (3²=9≡2)</div>
-  <div class="tool-row" style="margin-top:8px"><span class="tool-name">ax≡b (mod n)</span><span><span class="en">Linear congruence — all solutions in [0,n). Has solutions iff gcd(a,n)|b. Shows the solutions highlighted on a "modular clock" (n ≤ 120).</span><span class="es">Congruencia lineal — todas las soluciones en [0,n). Tiene soluciones ssi mcd(a,n)|b. Muestra las soluciones resaltadas en un "reloj modular" (n ≤ 120).</span></span></div>
+  <div class="tool-row" style="margin-top:8px"><span class="tool-name">ax≡b (mod n)</span><span><span data-i18n="tools-numtheory-04">Linear congruence — all solutions in [0,n). Has solutions iff gcd(a,n)|b. Shows the solutions highlighted on a "modular clock" (n ≤ 120).</span></span></div>
   <div class="tool-ex">3x≡6 (mod 9) → x∈{2,5,8}</div>
-  <div class="tool-row" style="margin-top:8px"><span class="tool-name"><span class="en">Sieve of Eratosthenes</span><span class="es">Criba de Eratóstenes</span></span><span><span class="en">Numbered grid up to n (≤ 400) with primes highlighted; lists the primes and π(n).</span><span class="es">Cuadrícula numerada hasta n (≤ 400) con los primos resaltados; lista los primos y π(n).</span></span></div>
+  <div class="tool-row" style="margin-top:8px"><span class="tool-name"><span data-i18n="tools-numtheory-05">Sieve of Eratosthenes</span></span><span><span data-i18n="tools-numtheory-06">Numbered grid up to n (≤ 400) with primes highlighted; lists the primes and π(n).</span></span></div>
   <div class="tool-ex">n=100 → π(100)=25: 2, 3, 5, 7, 11, …, 97</div>
-  <div class="tool-row" style="margin-top:8px"><span class="tool-name">x²−Dy²=1</span><span><span class="en">Pell equation — fundamental solution via continued fraction of √D.</span><span class="es">Ecuación de Pell — solución fundamental vía fracción continua de √D.</span></span></div>
+  <div class="tool-row" style="margin-top:8px"><span class="tool-name">x²−Dy²=1</span><span><span data-i18n="tools-numtheory-07">Pell equation — fundamental solution via continued fraction of √D.</span></span></div>
   <div class="tool-ex">D=61 → x=1766319049, y=226153980</div>
-  <div class="tool-row" style="margin-top:8px"><span class="tool-name">CF(√n)</span><span><span class="en">Periodic continued fraction [a₀;(a₁,…,aₖ)] of √n.</span><span class="es">Fracción continua periódica [a₀;(a₁,…,aₖ)] de √n.</span></span></div>
+  <div class="tool-row" style="margin-top:8px"><span class="tool-name">CF(√n)</span><span><span data-i18n="tools-numtheory-08">Periodic continued fraction [a₀;(a₁,…,aₖ)] of √n.</span></span></div>
   <div class="tool-ex">√7=[2;(1,1,1,4)]  |  √2=[1;(2)]</div>
-  <div class="tool-row" style="margin-top:8px"><span class="tool-name"><span class="en">Sums of squares</span><span class="es">Sumas de cuadrados</span></span><span><span class="en">Decompose n as a²+b² (when possible) and always as a²+b²+c²+d² (Lagrange's theorem).</span><span class="es">Descompone n como a²+b² (cuando es posible) y siempre como a²+b²+c²+d² (teorema de Lagrange).</span></span></div>
+  <div class="tool-row" style="margin-top:8px"><span class="tool-name"><span data-i18n="tools-numtheory-09">Sums of squares</span></span><span><span data-i18n="tools-numtheory-10">Decompose n as a²+b² (when possible) and always as a²+b²+c²+d² (Lagrange's theorem).</span></span></div>
   <div class="tool-ex">25=3²+4²  |  7=0²+1²+1²+√5... → 0²+1²+1²+√5</div>
-  <div class="tool-row" style="margin-top:8px"><span class="tool-name"><span class="en">Frobenius number</span><span class="es">Número de Frobenius</span></span><span><span class="en">Largest integer that CANNOT be represented as a non-negative combination of the given denominations (gcd must be 1).</span><span class="es">El mayor entero que NO se puede representar como combinación no negativa de las denominaciones dadas (mcd debe ser 1).</span></span></div>
+  <div class="tool-row" style="margin-top:8px"><span class="tool-name"><span data-i18n="tools-numtheory-11">Frobenius number</span></span><span><span data-i18n="tools-numtheory-12">Largest integer that CANNOT be represented as a non-negative combination of the given denominations (gcd must be 1).</span></span></div>
   <div class="tool-ex">{6,9,20} → 43  |  {3,5} → 7  (Chicken McNugget)</div>
-  <div class="tool-row" style="margin-top:8px"><span class="tool-name"><span class="en">Quadratic residues mod n</span><span class="es">Residuos cuadráticos mod n</span></span><span><span class="en">The set {x² mod n} and its size. For odd prime p there are (p+1)/2 residues.</span><span class="es">El conjunto {x² mod n} y su tamaño. Para p primo impar hay (p+1)/2 residuos.</span></span></div>
-  <div class="tool-ex">mod 11 → {0, 1, 3, 4, 5, 9}  (6 <span class="en">residues</span><span class="es">residuos</span>)</div>
-  <div class="tool-row" style="margin-top:8px"><span class="tool-name">φ, τ, σ, μ</span><span><span class="en">Table of multiplicative functions (totient, divisor count, divisor sum, Möbius) for n in a range (max 30 rows).</span><span class="es">Tabla de funciones multiplicativas (totiente, cantidad de divisores, suma de divisores, Möbius) para n en un rango (máx 30 filas).</span></span></div>
+  <div class="tool-row" style="margin-top:8px"><span class="tool-name"><span data-i18n="tools-numtheory-13">Quadratic residues mod n</span></span><span><span data-i18n="tools-numtheory-14">The set {x² mod n} and its size. For odd prime p there are (p+1)/2 residues.</span></span></div>
+  <div class="tool-ex">mod 11 → {0, 1, 3, 4, 5, 9}  (6 <span data-i18n="tools-numtheory-15">residues</span>)</div>
+  <div class="tool-row" style="margin-top:8px"><span class="tool-name">φ, τ, σ, μ</span><span><span data-i18n="tools-numtheory-16">Table of multiplicative functions (totient, divisor count, divisor sum, Möbius) for n in a range (max 30 rows).</span></span></div>
   <div class="tool-ex">n=12 → φ=4, τ=6, σ=28, μ=0</div>
 </div>
 
 <!-- Step by step -->
-<h3 id="tools-steps"><span class="en">Step by Step — Worked Procedures</span><span class="es">Procedimientos — Paso a Paso</span></h3>
-<p class="en-blk" style="margin-bottom:10px">Shows the algorithm step by step, not just the answer. Essential for understanding and teaching the methods.</p>
-<p class="es-blk" style="margin-bottom:10px">Muestra el algoritmo paso a paso, no solo la respuesta. Esencial para entender y enseñar los métodos.</p>
+<h3 id="tools-steps"><span data-i18n="tools-steps-01">Step by Step — Worked Procedures</span></h3>
+<p style="margin-bottom:10px" data-i18n="tools-steps-02">Shows the algorithm step by step, not just the answer. Essential for understanding and teaching the methods.</p>
 <div class="tool-card">
-  <div class="tool-row"><span class="tool-name"><span class="en">Euclidean algorithm</span><span class="es">Algoritmo de Euclides</span></span><span><span class="en">Each division step plus the Bézout identity gcd(a,b)=x·a+y·b.</span><span class="es">Cada paso de división más la identidad de Bézout mcd(a,b)=x·a+y·b.</span></span></div>
+  <div class="tool-row"><span class="tool-name"><span data-i18n="tools-steps-03">Euclidean algorithm</span></span><span><span data-i18n="tools-steps-04">Each division step plus the Bézout identity gcd(a,b)=x·a+y·b.</span></span></div>
   <div class="tool-ex">gcd(240,46): 240=5·46+10 / 46=4·10+6 / 10=1·6+4 / 6=1·4+2 / 4=2·2+0 → gcd=2</div>
-  <div class="tool-row" style="margin-top:8px"><span class="tool-name"><span class="en">Prime factorization</span><span class="es">Factorización en primos</span></span><span><span class="en">Each successive division shown: n÷d=quotient.</span><span class="es">Cada división sucesiva mostrada: n÷d=cociente.</span></span></div>
+  <div class="tool-row" style="margin-top:8px"><span class="tool-name"><span data-i18n="tools-steps-05">Prime factorization</span></span><span><span data-i18n="tools-steps-06">Each successive division shown: n÷d=quotient.</span></span></div>
   <div class="tool-ex">360: 360÷2=180 / 180÷2=90 / 90÷2=45 / 45÷3=15 / 15÷3=5 → 2³×3²×5</div>
-  <div class="tool-row" style="margin-top:8px"><span class="tool-name">CRT / TCR</span><span><span class="en">Combines congruences pairwise showing each intermediate step.</span><span class="es">Combina las congruencias de a pares mostrando cada paso intermedio.</span></span></div>
+  <div class="tool-row" style="margin-top:8px"><span class="tool-name" data-i18n="tools-steps-09">CRT</span><span><span data-i18n="tools-steps-07">Combines congruences pairwise showing each intermediate step.</span></span></div>
   <div class="tool-ex">x≡2(3), x≡3(5), x≡2(7) → x≡23(mod 105)</div>
-  <div class="tool-row" style="margin-top:8px"><span class="tool-name">Ruffini</span><span><span class="en">Also available under Polynomials: synthetic division by (x − c) with each column shown.</span><span class="es">También disponible en Polinomios: división sintética entre (x − c) mostrando cada columna.</span></span></div>
+  <div class="tool-row" style="margin-top:8px"><span class="tool-name">Ruffini</span><span><span data-i18n="tools-steps-08">Also available under Polynomials: synthetic division by (x − c) with each column shown.</span></span></div>
 </div>
 
 <!-- Complex & Sequences -->
-<h3 id="tools-complex"><span class="en">Complex Numbers &amp; Sequences</span><span class="es">Números Complejos y Sucesiones</span></h3>
+<h3 id="tools-complex"><span data-i18n="tools-complex-01">Complex Numbers &amp; Sequences</span></h3>
 <div class="tool-card">
-  <div class="tool-row"><span class="tool-name"><span class="en">Roots of unity</span><span class="es">Raíces de la unidad</span></span><span><span class="en">All n-th roots e^(2πik/n), drawn on the unit circle as a regular polygon. Their sum is always 0 for n&gt;1.</span><span class="es">Todas las raíces n-ésimas e^(2πik/n), dibujadas sobre el círculo unitario como polígono regular. Su suma es siempre 0 para n&gt;1.</span></span></div>
-  <div class="tool-row" style="margin-top:8px"><span class="tool-name"><span class="en">De Moivre power</span><span class="es">Potencia (De Moivre)</span></span><span><span class="en">Computes (re+im·i)^n. Example: (1+i)^8=16, (1+i)^4=−4.</span><span class="es">Calcula (re+im·i)^n. Ejemplo: (1+i)^8=16, (1+i)^4=−4.</span></span></div>
-  <div class="tool-row" style="margin-top:8px"><span class="tool-name"><span class="en">n-th roots of complex</span><span class="es">Raíces n-ésimas</span></span><span><span class="en">All n roots, evenly spaced on a circle of radius |z|^(1/n).</span><span class="es">Las n raíces, equidistantes en un círculo de radio |z|^(1/n).</span></span></div>
-  <div class="tool-row" style="margin-top:8px"><span class="tool-name"><span class="en">Linear recurrence</span><span class="es">Recurrencia lineal</span></span><span><span class="en">Generates terms of aₙ=c₁aₙ₋₁+…+cₖaₙ₋ₖ with given seeds. Works with rational coefficients.</span><span class="es">Genera términos de aₙ=c₁aₙ₋₁+…+cₖaₙ₋ₖ con iniciales dados. Funciona con coeficientes racionales.</span></span></div>
-  <div class="tool-ex"><span class="en">Fibonacci:</span><span class="es">Fibonacci:</span> coeffs=[1,1], seeds=[0,1] → 0,1,1,2,3,5,8,13,21,34
-<span class="en">Lucas:</span><span class="es">Lucas:</span> seeds=[2,1] → 2,1,3,4,7,11,18
-<span class="en">Pell:</span><span class="es">Pell:</span> coeffs=[2,1], seeds=[0,1] → 0,1,2,5,12,29</div>
-  <div class="tool-row" style="margin-top:8px"><span class="tool-name"><span class="en">Pascal row n</span><span class="es">Fila n de Pascal</span></span><span><span class="en">[C(n,0),…,C(n,n)]. Row sum = 2^n. Also: multinomial coefficients.</span><span class="es">[C(n,0),…,C(n,n)]. Suma de la fila = 2^n. También: coeficientes multinomiales.</span></span></div>
-  <div class="tool-ex"><span class="en">Row</span><span class="es">Fila</span> 6 = 1, 6, 15, 20, 15, 6, 1  (sum=64)</div>
-  <div class="tool-row" style="margin-top:8px"><span class="tool-name">(a+b)ⁿ</span><span><span class="en">Full binomial expansion with superscript formatting (n ≤ 30).</span><span class="es">Expansión binomial completa con superíndices (n ≤ 30).</span></span></div>
+  <div class="tool-row"><span class="tool-name"><span data-i18n="tools-complex-02">Roots of unity</span></span><span><span data-i18n="tools-complex-03">All n-th roots e^(2πik/n), drawn on the unit circle as a regular polygon. Their sum is always 0 for n&gt;1.</span></span></div>
+  <div class="tool-row" style="margin-top:8px"><span class="tool-name"><span data-i18n="tools-complex-04">De Moivre power</span></span><span><span data-i18n="tools-complex-05">Computes (re+im·i)^n. Example: (1+i)^8=16, (1+i)^4=−4.</span></span></div>
+  <div class="tool-row" style="margin-top:8px"><span class="tool-name"><span data-i18n="tools-complex-06">n-th roots of complex</span></span><span><span data-i18n="tools-complex-07">All n roots, evenly spaced on a circle of radius |z|^(1/n).</span></span></div>
+  <div class="tool-row" style="margin-top:8px"><span class="tool-name"><span data-i18n="tools-complex-08">Linear recurrence</span></span><span><span data-i18n="tools-complex-09">Generates terms of aₙ=c₁aₙ₋₁+…+cₖaₙ₋ₖ with given seeds. Works with rational coefficients.</span></span></div>
+  <div class="tool-ex"><span data-i18n="tools-complex-10">Fibonacci:</span> coeffs=[1,1], seeds=[0,1] → 0,1,1,2,3,5,8,13,21,34
+<span data-i18n="tools-complex-11">Lucas:</span> seeds=[2,1] → 2,1,3,4,7,11,18
+<span data-i18n="tools-complex-12">Pell:</span> coeffs=[2,1], seeds=[0,1] → 0,1,2,5,12,29</div>
+  <div class="tool-row" style="margin-top:8px"><span class="tool-name"><span data-i18n="tools-complex-13">Pascal row n</span></span><span><span data-i18n="tools-complex-14">[C(n,0),…,C(n,n)]. Row sum = 2^n. Also: multinomial coefficients.</span></span></div>
+  <div class="tool-ex"><span data-i18n="tools-complex-15">Row</span> 6 = 1, 6, 15, 20, 15, 6, 1  (sum=64)</div>
+  <div class="tool-row" style="margin-top:8px"><span class="tool-name">(a+b)ⁿ</span><span><span data-i18n="tools-complex-16">Full binomial expansion with superscript formatting (n ≤ 30).</span></span></div>
   <div class="tool-ex">(a+b)³ = a³ + 3a²b + 3ab² + b³</div>
-  <div class="tool-row" style="margin-top:8px"><span class="tool-name"><span class="en">Pascal mod m</span><span class="es">Pascal mod m</span></span><span><span class="en">Pascal's triangle modulo m drawn as a colored grid (up to 128 rows); counts coefficients divisible by m. With m=2 the Sierpiński fractal appears (Kummer/Lucas theorems).</span><span class="es">Triángulo de Pascal módulo m dibujado como cuadrícula coloreada (hasta 128 filas); cuenta los coeficientes divisibles por m. Con m=2 aparece el fractal de Sierpiński (teoremas de Kummer/Lucas).</span></span></div>
-  <div class="tool-ex">32 <span class="en">rows</span><span class="es">filas</span>, m=2 → Sierpiński</div>
+  <div class="tool-row" style="margin-top:8px"><span class="tool-name"><span data-i18n="tools-complex-17">Pascal mod m</span></span><span><span data-i18n="tools-complex-18">Pascal's triangle modulo m drawn as a colored grid (up to 128 rows); counts coefficients divisible by m. With m=2 the Sierpiński fractal appears (Kummer/Lucas theorems).</span></span></div>
+  <div class="tool-ex">32 <span data-i18n="tools-complex-19">rows</span>, m=2 → Sierpiński</div>
 </div>
 
 <!-- Statistics -->
-<h3 id="tools-statistics"><span class="en">Statistics — Exact Descriptive</span><span class="es">Estadística — Descriptiva Exacta</span></h3>
+<h3 id="tools-statistics"><span data-i18n="tools-statistics-01">Statistics — Exact Descriptive</span></h3>
 <div class="tool-card">
-  <div class="tool-row"><span class="tool-name"><span class="en">Descriptive statistics</span><span class="es">Estadística descriptiva</span></span><span><span class="en">Count, min/max/range, mean, median and variance as exact fractions; mode(s); standard deviation approximated.</span><span class="es">Cantidad, min/max/rango, media, mediana y varianza como fracciones exactas; moda(s); desviación estándar aproximada.</span></span></div>
-  <div class="tool-ex">2, 4, 4, 5, 7 → <span class="en">mean</span><span class="es">media</span>=22/5, <span class="en">median</span><span class="es">mediana</span>=4, <span class="en">mode</span><span class="es">moda</span>=4, σ²=66/25</div>
-  <div class="tool-row" style="margin-top:8px"><span class="tool-name">QM ≥ AM ≥ GM ≥ HM</span><span><span class="en">The four classical means of a positive list — AM and HM exact, QM and GM approximate — verifying the chain of inequalities.</span><span class="es">Las cuatro medias clásicas de una lista positiva — AM y HM exactas, QM y GM aproximadas — verificando la cadena de desigualdades.</span></span></div>
+  <div class="tool-row"><span class="tool-name"><span data-i18n="tools-statistics-02">Descriptive statistics</span></span><span><span data-i18n="tools-statistics-03">Count, min/max/range, mean, median and variance as exact fractions; mode(s); standard deviation approximated.</span></span></div>
+  <div class="tool-ex">2, 4, 4, 5, 7 → <span data-i18n="tools-statistics-04">mean</span>=22/5, <span data-i18n="tools-statistics-05">median</span>=4, <span data-i18n="tools-statistics-06">mode</span>=4, σ²=66/25</div>
+  <div class="tool-row" style="margin-top:8px"><span class="tool-name">QM ≥ AM ≥ GM ≥ HM</span><span><span data-i18n="tools-statistics-07">The four classical means of a positive list — AM and HM exact, QM and GM approximate — verifying the chain of inequalities.</span></span></div>
   <div class="tool-ex">1, 2, 4 → AM=7/3, GM=2, HM=12/7</div>
 </div>
 
 <!-- Matrices -->
-<h3 id="tools-matrices"><span class="en">Matrices — Exact Linear Algebra</span><span class="es">Matrices — Álgebra Lineal Exacta</span></h3>
-<p class="en-blk" style="margin-bottom:10px">Fraction-exact (no floating-point error). Rows separated by "<code>;</code>", entries by "<code>,</code>"; two matrices separated by "<code>|</code>".</p>
-<p class="es-blk" style="margin-bottom:10px">Exactas con fracciones (sin error de punto flotante). Filas separadas por "<code>;</code>", entradas por "<code>,</code>"; dos matrices separadas por "<code>|</code>".</p>
+<h3 id="tools-matrices"><span data-i18n="tools-matrices-01">Matrices — Exact Linear Algebra</span></h3>
+<p style="margin-bottom:10px" data-i18n="tools-matrices-02">Fraction-exact (no floating-point error). Rows separated by "<code>;</code>", entries by "<code>,</code>"; two matrices separated by "<code>|</code>".</p>
 <div class="tool-card">
-  <div class="tool-row"><span class="tool-name"><span class="en">Determinant</span><span class="es">Determinante</span></span><span><span class="en">Determinant of a square matrix by Gaussian elimination.</span><span class="es">Determinante de una matriz cuadrada por eliminación gaussiana.</span></span></div>
+  <div class="tool-row"><span class="tool-name"><span data-i18n="tools-matrices-03">Determinant</span></span><span><span data-i18n="tools-matrices-04">Determinant of a square matrix by Gaussian elimination.</span></span></div>
   <div class="tool-ex">"6,1,1; 4,-2,5; 2,8,7" → det = −306</div>
-  <div class="tool-row" style="margin-top:8px"><span class="tool-name"><span class="en">Inverse</span><span class="es">Inversa</span></span><span><span class="en">Exact inverse (fractions); reports singular matrices.</span><span class="es">Inversa exacta (fracciones); avisa si es singular.</span></span></div>
+  <div class="tool-row" style="margin-top:8px"><span class="tool-name"><span data-i18n="tools-matrices-05">Inverse</span></span><span><span data-i18n="tools-matrices-06">Exact inverse (fractions); reports singular matrices.</span></span></div>
   <div class="tool-ex">"4,7; 2,6" → [[3/5, −7/10], [−1/5, 2/5]]</div>
-  <div class="tool-row" style="margin-top:8px"><span class="tool-name">A × B</span><span><span class="en">Matrix product of two matrices.</span><span class="es">Producto de dos matrices.</span></span></div>
+  <div class="tool-row" style="margin-top:8px"><span class="tool-name">A × B</span><span><span data-i18n="tools-matrices-07">Matrix product of two matrices.</span></span></div>
   <div class="tool-ex">"1,2; 3,4 | 5,6; 7,8" → [[19,22],[43,50]]</div>
-  <div class="tool-row" style="margin-top:8px"><span class="tool-name"><span class="en">Solve A·x = b (n×n)</span><span class="es">Resolver A·x = b (n×n)</span></span><span><span class="en">Exact solution of a square system, or "no unique solution" if singular.</span><span class="es">Solución exacta de un sistema cuadrado, o "sin solución única" si es singular.</span></span></div>
+  <div class="tool-row" style="margin-top:8px"><span class="tool-name"><span data-i18n="tools-matrices-08">Solve A·x = b (n×n)</span></span><span><span data-i18n="tools-matrices-09">Exact solution of a square system, or "no unique solution" if singular.</span></span></div>
   <div class="tool-ex">"2,1,1; 1,2,1; 1,1,2 | 1,1,1" → x=y=z=1/4</div>
-  <div class="tool-row" style="margin-top:8px"><span class="tool-name"><span class="en">Rank &amp; transpose</span><span class="es">Rango y transpuesta</span></span><span><span class="en">Matrix rank and its transpose.</span><span class="es">Rango de la matriz y su transpuesta.</span></span></div>
+  <div class="tool-row" style="margin-top:8px"><span class="tool-name"><span data-i18n="tools-matrices-10">Rank &amp; transpose</span></span><span><span data-i18n="tools-matrices-11">Matrix rank and its transpose.</span></span></div>
 </div>
 
 <!-- Calculus -->
-<h3 id="tools-calculus"><span class="en">Calculus — Numerical</span><span class="es">Cálculo — Numérico</span></h3>
-<p class="en-blk" style="margin-bottom:10px">Numerical analysis of any function <code>f(x)</code> (e.g. <code>x^2+sin(x)</code>, <code>1/x</code>, <code>exp(x)</code>). Trigonometry in radians.</p>
-<p class="es-blk" style="margin-bottom:10px">Análisis numérico de cualquier función <code>f(x)</code> (ej. <code>x^2+sin(x)</code>, <code>1/x</code>, <code>exp(x)</code>). Trigonometría en radianes.</p>
+<h3 id="tools-calculus"><span data-i18n="tools-calculus-01">Calculus — Numerical</span></h3>
+<p style="margin-bottom:10px" data-i18n="tools-calculus-02">Numerical analysis of any function <code>f(x)</code> (e.g. <code>x^2+sin(x)</code>, <code>1/x</code>, <code>exp(x)</code>). Trigonometry in radians.</p>
 <div class="tool-card">
-  <div class="tool-row"><span class="tool-name"><span class="en">Derivative f'(x₀)</span><span class="es">Derivada f'(x₀)</span></span><span><span class="en">Central differences with Richardson extrapolation.</span><span class="es">Diferencias centrales con extrapolación de Richardson.</span></span></div>
+  <div class="tool-row"><span class="tool-name"><span data-i18n="tools-calculus-03">Derivative f'(x₀)</span></span><span><span data-i18n="tools-calculus-04">Central differences with Richardson extrapolation.</span></span></div>
   <div class="tool-ex">d/dx (x²+sin x) at 1 ≈ 2.540302306</div>
-  <div class="tool-row" style="margin-top:8px"><span class="tool-name"><span class="en">Definite integral ∫</span><span class="es">Integral definida ∫</span></span><span><span class="en">Composite Simpson's rule over [a,b].</span><span class="es">Regla de Simpson compuesta sobre [a,b].</span></span></div>
+  <div class="tool-row" style="margin-top:8px"><span class="tool-name"><span data-i18n="tools-calculus-05">Definite integral ∫</span></span><span><span data-i18n="tools-calculus-06">Composite Simpson's rule over [a,b].</span></span></div>
   <div class="tool-ex">∫₀¹ x² dx ≈ 0.3333333333</div>
-  <div class="tool-row" style="margin-top:8px"><span class="tool-name"><span class="en">Limit</span><span class="es">Límite</span></span><span><span class="en">Two-sided numerical limit; reports "does not exist" when the sides differ.</span><span class="es">Límite numérico bilateral; indica "no existe" si los lados difieren.</span></span></div>
+  <div class="tool-row" style="margin-top:8px"><span class="tool-name"><span data-i18n="tools-calculus-07">Limit</span></span><span><span data-i18n="tools-calculus-08">Two-sided numerical limit; reports "does not exist" when the sides differ.</span></span></div>
   <div class="tool-ex">lim<sub>x→0</sub> sin(x)/x ≈ 1</div>
 </div>
 
 <!-- Practice -->
-<h3 id="tools-practice"><span class="en">Practice Mode</span><span class="es">Modo Práctica</span></h3>
+<h3 id="tools-practice"><span data-i18n="tools-practice-01">Practice Mode</span></h3>
 <div class="info-card">
-  <div class="en-blk"><pre>Access via Olympiad Tools → Practice. The app presents a problem; type
+  <div data-i18n="tools-practice-02"><pre>Access via Olympiad Tools → Practice. The app presents a problem; type
 your answer — it tells you immediately if you are right and tracks your
 score for the session.
 
@@ -1017,20 +967,12 @@ Topics: φ(n) Euler's totient, GCD, n! factorial, C(n,k) combinations,
 σ₀(n) divisor count, digit sum, a mod b, F(n) Fibonacci.
 
 Tip: The checker tolerates leading zeros and extra spaces.</pre></div>
-  <div class="es-blk"><pre>Accede desde Herramientas de Olimpiada → Práctica. La app presenta un
-problema; escribe la respuesta — te indica de inmediato si es correcta
-y lleva el puntaje de la sesión.
-
-Temas: φ(n) totiente de Euler, MCD, n! factorial, C(n,k) combinaciones,
-σ₀(n) cantidad de divisores, suma de dígitos, a mod b, F(n) Fibonacci.
-
-Consejo: El verificador tolera ceros iniciales y espacios extra.</pre></div>
 </div>
 
 <!-- ════ ANALYSIS PANEL ════════════════════════════════════════════════════ -->
-<h2 id="analysis-panel"><span class="en">Numeric Analysis Panel</span><span class="es">Panel de Análisis Numérico</span></h2>
+<h2 id="analysis-panel"><span data-i18n="analysis-panel-01">Numeric Analysis Panel</span></h2>
 <div class="info-card">
-  <div class="en-blk"><pre>When any number is entered the right panel (tablet) or bottom panel
+  <div data-i18n="analysis-panel-02"><pre>When any number is entered the right panel (tablet) or bottom panel
 (mobile) automatically shows:
 
   • Properties: digits, parity, sign
@@ -1048,45 +990,27 @@ For numbers with ≤ 15 digits, it also shows:
     abundant / deficient / perfect
 
 Note: pressing CE (Clear Entry) clears the analysis panel immediately.</pre></div>
-  <div class="es-blk"><pre>Cuando se ingresa cualquier número, el panel derecho (tablet) o inferior
-(móvil) muestra automáticamente:
-
-  • Propiedades: dígitos, paridad, signo
-  • Representaciones: binario, octal, hexadecimal
-  • Primalidad: Miller-Rabin (determinista para n &lt; 3.2×10¹⁸), factorización
-  • Primos vecinos: anterior y siguiente
-  • Divisores: lista completa, suma, cantidad
-  • Clasificaciones: cuadrado/cubo perfecto, potencia perfecta, Fibonacci,
-    triangular, palíndromo
-
-Para números de hasta 15 dígitos, también muestra:
-
-  • Funciones aritméticas: φ, λ, μ, ω, Ω, sopfr, sopf, rad, raíz digital
-  • Clasificaciones: libre de cuadrados, poderoso, Harshad, semiprimo,
-    abundante / deficiente / perfecto
-
-Nota: presionar CE limpia el panel de análisis de inmediato.</pre></div>
 </div>
 
 <!-- ════ OLYMPIAD FORMULAS ═════════════════════════════════════════════════ -->
-<h2 id="olympiad"><span class="en">Key Olympiad Formulas</span><span class="es">Fórmulas Clave para Olimpiada</span></h2>
+<h2 id="olympiad"><span data-i18n="olympiad-01">Key Olympiad Formulas</span></h2>
 
 <div class="info-card">
-  <h3><span class="en">Fundamental Identities</span><span class="es">Identidades Fundamentales</span></h3>
-  <pre>• <span class="en">Euler's theorem:</span><span class="es">Teorema de Euler:</span>    a^φ(n) ≡ 1 (mod n)  if GCD(a,n)=1
-• <span class="en">Fermat's little:</span><span class="es">Pequeño de Fermat:</span>   a^(p−1) ≡ 1 (mod p)  if p prime
+  <h3><span data-i18n="olympiad-02">Fundamental Identities</span></h3>
+  <pre>• <span data-i18n="olympiad-03">Euler's theorem:</span>    a^φ(n) ≡ 1 (mod n)  if GCD(a,n)=1
+• <span data-i18n="olympiad-04">Fermat's little:</span>   a^(p−1) ≡ 1 (mod p)  if p prime
 • Wilson:             (p−1)! ≡ −1 (mod p) ⟺ p is prime
-• <span class="en">Legendre's formula:</span><span class="es">Fórmula de Legendre:</span> Vₚ(n!) = Σᵢ ⌊n/pⁱ⌋
+• <span data-i18n="olympiad-05">Legendre's formula:</span> Vₚ(n!) = Σᵢ ⌊n/pⁱ⌋
 • Lucas:              C(n,k) mod p = ∏ C(nᵢ,kᵢ) mod p
 • Σ φ(d) for d|n = n
 • Σ μ(d) for d|n = [n=1]
 • φ(mn) = φ(m)φ(n)·GCD(m,n)/φ(GCD(m,n))
 • GCD(F(m),F(n)) = F(GCD(m,n))
-• AM ≥ GM ≥ HM  (<span class="en">mean inequality</span><span class="es">desigualdad de medias</span>)</pre>
+• AM ≥ GM ≥ HM  (<span data-i18n="olympiad-06">mean inequality</span>)</pre>
 </div>
 
 <div class="info-card">
-  <h3><span class="en">Quick Reference Table</span><span class="es">Tabla de Referencia Rápida</span></h3>
+  <h3><span data-i18n="olympiad-07">Quick Reference Table</span></h3>
   <pre>n     φ(n)  λ(n)  μ(n)  σ(n)   ω   Ω
 1     1     1     1     1      0   0
 6     2     2     1     12     2   2
@@ -1097,10 +1021,10 @@ Nota: presionar CE limpia el panel de análisis de inmediato.</pre></div>
 </div>
 
 <footer>
-  <span><span class="en">Super Calculator</span><span class="es">Super Calculadora</span> v1.2.1 — Adalberto Garcia Garces</span>
+  <span><span data-i18n="olympiad-08">Super Calculator</span> v1.2.1 — Adalberto Garcia Garces</span>
   <span>
-    <a href="https://play.google.com/store/apps/details?id=br.dev.ati.supercalculadora"><span class="en">Google Play</span><span class="es">Google Play</span></a> ·
-    <a href="privacy.html"><span class="en">Privacy Policy</span><span class="es">Política de Privacidad</span></a> ·
+    <a href="https://play.google.com/store/apps/details?id=br.dev.ati.supercalculadora"><span data-i18n="olympiad-09">Google Play</span></a> ·
+    <a href="privacy.html"><span data-i18n="olympiad-10">Privacy Policy</span></a> ·
     <a href="https://github.com/atiweb/super_calculadora">GitHub</a>
   </span>
 </footer>
@@ -1109,12 +1033,60 @@ Nota: presionar CE limpia el panel de análisis de inmediato.</pre></div>
 </div>
 
 <script>
+/* ── Languages ───────────────────────────────────────────────────────────
+   Every translatable string carries a data-i18n key and ships in English
+   inline, so the page reads correctly with JavaScript disabled and for
+   crawlers. Other languages live in i18n/<code>.js — a JSON object wrapped
+   in one i18nRegister() call — and are pulled in on demand with a <script>
+   tag. English is snapshotted from the DOM at startup, so going back to it
+   never touches the disk or the network.
+
+   The payload is loaded as a script rather than fetched as .json on purpose:
+   fetch() is blocked for local files, so a .json would leave the page stuck
+   in English whenever index.html is opened straight from disk instead of
+   through a web server.
+
+   To add a language: drop i18n/<code>.js beside the others (same keys as
+   i18n/en.js — test/docs_i18n_test.dart checks that) and add one button to
+   the .lang-pill in the header. Nothing else changes.                       */
+var I18N={};       // code -> {key: html}
+var i18nBase=null; // the English shipped in the markup
+var i18nWanted='en';
+
+function i18nApply(dict){
+  document.querySelectorAll('[data-i18n]').forEach(function(el){
+    var v=dict[el.dataset.i18n];
+    if(v!==undefined) el.innerHTML=v;
+  });
+}
+// Entry point the language files call.
+function i18nRegister(code,dict){
+  I18N[code]=dict;
+  if(i18nWanted===code) i18nApply(dict);
+}
 function setLang(lang){
+  if(!i18nBase){
+    i18nBase={};
+    document.querySelectorAll('[data-i18n]').forEach(function(el){
+      i18nBase[el.dataset.i18n]=el.innerHTML;
+    });
+    I18N.en=i18nBase;
+  }
+  i18nWanted=lang;
   document.documentElement.lang=lang;
   document.querySelectorAll('.lbtn').forEach(function(b){
     b.classList.toggle('active',b.dataset.lang===lang);
   });
   try{localStorage.setItem('sc-lang',lang);}catch(e){console.warn('localStorage unavailable',e);}
+  // Reset to English first: a key the target language has not translated
+  // yet then falls back to English instead of keeping the previous language.
+  i18nApply(i18nBase);
+  if(lang==='en') return;
+  if(I18N[lang]){ i18nApply(I18N[lang]); return; }
+  var s=document.createElement('script');
+  s.src='i18n/'+lang+'.js';
+  s.onerror=function(){ console.warn('i18n: could not load "'+lang+'"'); };
+  document.head.appendChild(s);
 }
 function setTheme(theme){
   document.documentElement.dataset.theme=theme;

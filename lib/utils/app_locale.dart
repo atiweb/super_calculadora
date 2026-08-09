@@ -20,12 +20,26 @@ library;
 /// To add a language: give it an optional parameter here and at the two
 /// call-site helpers (`OlympiadStrings.pick`, `StepsService`/`QuizService`),
 /// then fill it in at the call sites, gradually if needed.
-String trLang(String lang, String spanish, String english, {String? pt}) {
+///
+/// The switch is deliberate: this runs for every string on every rebuild, so
+/// it must not allocate a lookup map on each call.
+String trLang(String lang, String spanish, String english,
+    {String? pt, String? fr, String? it, String? ru, String? vi, String? id}) {
   switch (lang) {
     case 'es':
       return spanish;
     case 'pt':
       return pt ?? english;
+    case 'fr':
+      return fr ?? english;
+    case 'it':
+      return it ?? english;
+    case 'ru':
+      return ru ?? english;
+    case 'vi':
+      return vi ?? english;
+    case 'id':
+      return id ?? english;
     default:
       return english;
   }
@@ -39,5 +53,6 @@ String trLang(String lang, String spanish, String english, {String? pt}) {
 String appLanguage = 'en';
 
 /// [trLang] for the active UI language.
-String trLocale(String es, String en, {String? pt}) =>
-    trLang(appLanguage, es, en, pt: pt);
+String trLocale(String es, String en, {String? pt, String? fr, String? it, String? ru, String? vi,
+          String? id}) =>
+    trLang(appLanguage, es, en, pt: pt, fr: fr, it: it, ru: ru, vi: vi, id: id);

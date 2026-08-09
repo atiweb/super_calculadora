@@ -1004,7 +1004,7 @@ class CalculatorService extends ChangeNotifier {
   }
 
   /// Static function to analyze numbers in an isolate.
-  /// Receives `{number, isSpanish}`: the language must travel in the payload
+  /// Receives `{number, lang}`: the language must travel in the payload
   /// because globals don't cross isolates.
   static Map<String, dynamic> _analyzeNumberInIsolate(Map<String, dynamic> args) {
     appLanguage = args['lang'] as String;
@@ -1042,7 +1042,7 @@ class CalculatorService extends ChangeNotifier {
   }
 
   /// Static function to compute square root in an isolate.
-  /// Receives `{value, isSpanish}` (the language doesn't cross isolates as a global).
+  /// Receives `{value, lang}` (the language doesn't cross isolates as a global).
   static Map<String, dynamic> _calculateSqrtInIsolate(Map<String, dynamic> args) {
     appLanguage = args['lang'] as String? ?? appLanguage;
     try {
@@ -1062,7 +1062,7 @@ class CalculatorService extends ChangeNotifier {
   }
 
   /// Static function to compute cube root in an isolate.
-  /// Receives `{value, isSpanish}` (the language doesn't cross isolates as a global).
+  /// Receives `{value, lang}` (the language doesn't cross isolates as a global).
   static Map<String, dynamic> _calculateCubeRootInIsolate(Map<String, dynamic> args) {
     appLanguage = args['lang'] as String? ?? appLanguage;
     try {
@@ -1084,7 +1084,7 @@ class CalculatorService extends ChangeNotifier {
   }
 
   /// Helper function to compute factorial in an isolate.
-  /// Receives `{n, isSpanish}`.
+  /// Receives `{n, lang}`.
   static Map<String, dynamic> _calculateFactorialInIsolate(Map<String, dynamic> args) {
     appLanguage = args['lang'] as String? ?? appLanguage;
     final int n = args['n'] as int;

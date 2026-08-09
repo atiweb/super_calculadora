@@ -24,8 +24,9 @@ class QuizService {
   }
 
   static String _t(String lang, String spanish, String english,
-          {String? pt}) =>
-      trLang(lang, spanish, english, pt: pt);
+          {String? pt, String? fr, String? it, String? ru, String? vi,
+          String? id}) =>
+      trLang(lang, spanish, english, pt: pt, fr: fr, it: it, ru: ru, vi: vi, id: id);
 
   static QuizProblem _phi(Random r, String lang) {
     final n = 2 + r.nextInt(59); // 2..60
