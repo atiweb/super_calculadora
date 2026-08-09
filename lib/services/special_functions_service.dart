@@ -9,7 +9,7 @@ class SpecialFunctionsService {
   /// Euler's φ function - counts integers coprime with n
   static BigInt eulerPhi(BigInt n) {
     if (n <= BigInt.zero) {
-      throw ArgumentError(trLocale('φ(n) solo está definido para n > 0', 'φ(n) is only defined for n > 0', pt: 'φ(n) só está definido para n > 0'));
+      throw ArgumentError(trLocale('φ(n) solo está definido para n > 0', 'φ(n) is only defined for n > 0', pt: 'φ(n) só está definido para n > 0', fr: "φ(n) n'est défini que pour n > 0"));
     }
     
     if (n == BigInt.one) return BigInt.one;
@@ -30,7 +30,7 @@ class SpecialFunctionsService {
     // The sieve allocates n+1 booleans, so an unbounded n exhausted memory.
     if (n > 10000000) {
       throw ArgumentError(trLocale('n demasiado grande para el primorial (máx 10000000)',
-          'n too large for the primorial (max 10000000)', pt: 'n grande demais para o primorial (máx 10000000)'));
+          'n too large for the primorial (max 10000000)', pt: 'n grande demais para o primorial (máx 10000000)', fr: 'n trop grand pour la primorielle (max 10000000)'));
     }
 
     BigInt result = BigInt.one;
@@ -59,7 +59,7 @@ class SpecialFunctionsService {
   /// σ₀(n) - number of divisors
   static BigInt divisorCount(BigInt n) {
     if (n <= BigInt.zero) {
-      throw ArgumentError(trLocale('σ₀(n) solo está definido para n > 0', 'σ₀(n) is only defined for n > 0', pt: 'σ₀(n) só está definido para n > 0'));
+      throw ArgumentError(trLocale('σ₀(n) solo está definido para n > 0', 'σ₀(n) is only defined for n > 0', pt: 'σ₀(n) só está definido para n > 0', fr: "σ₀(n) n'est défini que pour n > 0"));
     }
     
     // σ₀(n) = ∏(eᵢ + 1) over the exponents of the factorization.
@@ -74,7 +74,7 @@ class SpecialFunctionsService {
   /// σ(m,n) - sum of divisors raised to the power m
   static BigDecimal divisorSum(int m, BigInt n) {
     if (n <= BigInt.zero) {
-      throw ArgumentError(trLocale('σ(m,n) solo está definido para n > 0', 'σ(m,n) is only defined for n > 0', pt: 'σ(m,n) só está definido para n > 0'));
+      throw ArgumentError(trLocale('σ(m,n) solo está definido para n > 0', 'σ(m,n) is only defined for n > 0', pt: 'σ(m,n) só está definido para n > 0', fr: "σ(m,n) n'est défini que pour n > 0"));
     }
     
     List<BigInt> divisors = _getDivisors(n);
@@ -104,7 +104,7 @@ class SpecialFunctionsService {
     if (divisors == null) {
       throw ArgumentError(trLocale(
           'n tiene demasiados divisores para enumerarlos',
-          'n has too many divisors to enumerate', pt: 'n tem divisores demais para enumerá-los'));
+          'n has too many divisors to enumerate', pt: 'n tem divisores demais para enumerá-los', fr: 'n a trop de diviseurs pour les énumérer'));
     }
     return divisors;
   }
@@ -126,7 +126,7 @@ class SpecialFunctionsService {
   /// GCD of multiple numbers
   static BigInt gcdMultiple(List<BigInt> numbers) {
     if (numbers.isEmpty) {
-      throw ArgumentError(trLocale('La lista no puede estar vacía', 'The list cannot be empty', pt: 'A lista não pode estar vazia'));
+      throw ArgumentError(trLocale('La lista no puede estar vacía', 'The list cannot be empty', pt: 'A lista não pode estar vazia', fr: 'La liste ne peut pas être vide'));
     }
     
     BigInt result = numbers[0].abs();
@@ -149,7 +149,7 @@ class SpecialFunctionsService {
   /// LCM of multiple numbers
   static BigInt lcmMultiple(List<BigInt> numbers) {
     if (numbers.isEmpty) {
-      throw ArgumentError(trLocale('La lista no puede estar vacía', 'The list cannot be empty', pt: 'A lista não pode estar vazia'));
+      throw ArgumentError(trLocale('La lista no puede estar vacía', 'The list cannot be empty', pt: 'A lista não pode estar vazia', fr: 'La liste ne peut pas être vide'));
     }
     
     BigInt result = numbers[0].abs();
@@ -184,7 +184,7 @@ class SpecialFunctionsService {
   /// Möbius μ function
   static int moebiusMu(BigInt n) {
     if (n <= BigInt.zero) {
-      throw ArgumentError(trLocale('μ(n) solo está definido para n > 0', 'μ(n) is only defined for n > 0', pt: 'μ(n) só está definido para n > 0'));
+      throw ArgumentError(trLocale('μ(n) solo está definido para n > 0', 'μ(n) is only defined for n > 0', pt: 'μ(n) só está definido para n > 0', fr: "μ(n) n'est défini que pour n > 0"));
     }
     
     if (n == BigInt.one) return 1;
@@ -206,7 +206,7 @@ class SpecialFunctionsService {
   /// (e.g. mod(7, -3) = 1, not -2).
   static BigInt mod(BigInt a, BigInt b) {
     if (b == BigInt.zero) {
-      throw ArgumentError(trLocale('División por cero', 'Division by zero', pt: 'Divisão por zero'));
+      throw ArgumentError(trLocale('División por cero', 'Division by zero', pt: 'Divisão por zero', fr: 'Division par zéro'));
     }
     return a % b.abs();
   }
@@ -214,10 +214,10 @@ class SpecialFunctionsService {
   /// p-adic valuation - highest power of p that divides n
   static int pAdicValuation(BigInt n, BigInt p) {
     if (n == BigInt.zero) {
-      throw ArgumentError(trLocale('La valuación p-ádica de 0 es infinita', 'The p-adic valuation of 0 is infinite', pt: 'A valuação p-ádica de 0 é infinita'));
+      throw ArgumentError(trLocale('La valuación p-ádica de 0 es infinita', 'The p-adic valuation of 0 is infinite', pt: 'A valuação p-ádica de 0 é infinita', fr: 'La valuation p-adique de 0 est infinie'));
     }
     if (p <= BigInt.one) {
-      throw ArgumentError(trLocale('p debe ser un primo > 1', 'p must be a prime > 1', pt: 'p deve ser um primo > 1'));
+      throw ArgumentError(trLocale('p debe ser un primo > 1', 'p must be a prime > 1', pt: 'p deve ser um primo > 1', fr: 'p doit être un nombre premier > 1'));
     }
     
     n = n.abs();
@@ -263,7 +263,7 @@ class SpecialFunctionsService {
   /// Arithmetic mean
   static BigDecimal arithmeticMean(List<BigDecimal> numbers) {
     if (numbers.isEmpty) {
-      throw ArgumentError(trLocale('La lista no puede estar vacía', 'The list cannot be empty', pt: 'A lista não pode estar vazia'));
+      throw ArgumentError(trLocale('La lista no puede estar vacía', 'The list cannot be empty', pt: 'A lista não pode estar vazia', fr: 'La liste ne peut pas être vide'));
     }
     
     BigDecimal sum = BigDecimal.zero;
@@ -277,13 +277,13 @@ class SpecialFunctionsService {
   /// Geometric mean
   static BigDecimal geometricMean(List<BigDecimal> numbers) {
     if (numbers.isEmpty) {
-      throw ArgumentError(trLocale('La lista no puede estar vacía', 'The list cannot be empty', pt: 'A lista não pode estar vazia'));
+      throw ArgumentError(trLocale('La lista no puede estar vacía', 'The list cannot be empty', pt: 'A lista não pode estar vazia', fr: 'La liste ne peut pas être vide'));
     }
     
     // Verify that all numbers are positive
     for (BigDecimal num in numbers) {
       if (num.isNegative || num.isZero) {
-        throw ArgumentError(trLocale('Todos los números deben ser positivos para la media geométrica', 'All numbers must be positive for the geometric mean', pt: 'Todos os números devem ser positivos para a média geométrica'));
+        throw ArgumentError(trLocale('Todos los números deben ser positivos para la media geométrica', 'All numbers must be positive for the geometric mean', pt: 'Todos os números devem ser positivos para a média geométrica', fr: 'Tous les nombres doivent être positifs pour la moyenne géométrique'));
       }
     }
     
@@ -300,13 +300,13 @@ class SpecialFunctionsService {
   /// Harmonic mean
   static BigDecimal harmonicMean(List<BigDecimal> numbers) {
     if (numbers.isEmpty) {
-      throw ArgumentError(trLocale('La lista no puede estar vacía', 'The list cannot be empty', pt: 'A lista não pode estar vazia'));
+      throw ArgumentError(trLocale('La lista no puede estar vacía', 'The list cannot be empty', pt: 'A lista não pode estar vazia', fr: 'La liste ne peut pas être vide'));
     }
     
     BigDecimal reciprocalSum = BigDecimal.zero;
     for (BigDecimal num in numbers) {
       if (num.isZero) {
-        throw ArgumentError(trLocale('No se puede calcular la media armónica con ceros', 'Cannot compute the harmonic mean with zeros', pt: 'Não é possível calcular a média harmônica com zeros'));
+        throw ArgumentError(trLocale('No se puede calcular la media armónica con ceros', 'Cannot compute the harmonic mean with zeros', pt: 'Não é possível calcular a média harmônica com zeros', fr: 'Impossible de calculer la moyenne harmonique avec des zéros'));
       }
       reciprocalSum += BigDecimal.one / num;
     }
@@ -317,7 +317,7 @@ class SpecialFunctionsService {
   /// Quadratic mean (RMS)
   static BigDecimal quadraticMean(List<BigDecimal> numbers) {
     if (numbers.isEmpty) {
-      throw ArgumentError(trLocale('La lista no puede estar vacía', 'The list cannot be empty', pt: 'A lista não pode estar vazia'));
+      throw ArgumentError(trLocale('La lista no puede estar vacía', 'The list cannot be empty', pt: 'A lista não pode estar vazia', fr: 'La liste ne peut pas être vide'));
     }
     
     BigDecimal sumOfSquares = BigDecimal.zero;
@@ -332,7 +332,7 @@ class SpecialFunctionsService {
   /// Modular inverse using the extended Euclidean algorithm
   static BigInt? modularInverse(BigInt a, BigInt n) {
     if (n <= BigInt.one) {
-      throw ArgumentError(trLocale('n debe ser > 1', 'n must be > 1', pt: 'n deve ser > 1'));
+      throw ArgumentError(trLocale('n debe ser > 1', 'n must be > 1', pt: 'n deve ser > 1', fr: 'n doit être > 1'));
     }
     
     a = mod(a, n);
@@ -370,7 +370,7 @@ class SpecialFunctionsService {
   /// Radical (product of distinct prime factors) - ABC function
   static BigInt radical(BigInt n) {
     if (n <= BigInt.zero) {
-      throw ArgumentError(trLocale('rad(n) solo está definido para n > 0', 'rad(n) is only defined for n > 0', pt: 'rad(n) só está definido para n > 0'));
+      throw ArgumentError(trLocale('rad(n) solo está definido para n > 0', 'rad(n) is only defined for n > 0', pt: 'rad(n) só está definido para n > 0', fr: "rad(n) n'est défini que pour n > 0"));
     }
     
     if (n == BigInt.one) return BigInt.one;
@@ -387,7 +387,7 @@ class SpecialFunctionsService {
   /// Finds the minimum in a list of numbers
   static BigDecimal minimum(List<BigDecimal> numbers) {
     if (numbers.isEmpty) {
-      throw ArgumentError(trLocale('La lista no puede estar vacía', 'The list cannot be empty', pt: 'A lista não pode estar vazia'));
+      throw ArgumentError(trLocale('La lista no puede estar vacía', 'The list cannot be empty', pt: 'A lista não pode estar vazia', fr: 'La liste ne peut pas être vide'));
     }
     
     BigDecimal min = numbers[0];
@@ -403,7 +403,7 @@ class SpecialFunctionsService {
   /// Finds the maximum in a list of numbers
   static BigDecimal maximum(List<BigDecimal> numbers) {
     if (numbers.isEmpty) {
-      throw ArgumentError(trLocale('La lista no puede estar vacía', 'The list cannot be empty', pt: 'A lista não pode estar vazia'));
+      throw ArgumentError(trLocale('La lista no puede estar vacía', 'The list cannot be empty', pt: 'A lista não pode estar vazia', fr: 'La liste ne peut pas être vide'));
     }
 
     BigDecimal max = numbers[0];
@@ -421,7 +421,7 @@ class SpecialFunctionsService {
   /// ω(1) = 0
   static int smallOmega(BigInt n) {
     if (n <= BigInt.zero) {
-      throw ArgumentError(trLocale('ω(n) solo está definido para n > 0', 'ω(n) is only defined for n > 0', pt: 'ω(n) só está definido para n > 0'));
+      throw ArgumentError(trLocale('ω(n) solo está definido para n > 0', 'ω(n) is only defined for n > 0', pt: 'ω(n) só está definido para n > 0', fr: "ω(n) n'est défini que pour n > 0"));
     }
 
     if (n == BigInt.one) return 0;
@@ -435,7 +435,7 @@ class SpecialFunctionsService {
   /// Ω(1) = 0
   static int bigOmega(BigInt n) {
     if (n <= BigInt.zero) {
-      throw ArgumentError(trLocale('Ω(n) solo está definido para n > 0', 'Ω(n) is only defined for n > 0', pt: 'Ω(n) só está definido para n > 0'));
+      throw ArgumentError(trLocale('Ω(n) solo está definido para n > 0', 'Ω(n) is only defined for n > 0', pt: 'Ω(n) só está definido para n > 0', fr: "Ω(n) n'est défini que pour n > 0"));
     }
 
     if (n == BigInt.one) return 0;
@@ -460,7 +460,7 @@ class SpecialFunctionsService {
   ///   λ(p₁^a₁ × p₂^a₂ × ... ) = lcm(λ(p₁^a₁), λ(p₂^a₂), ...)
   static BigInt carmichaelLambda(BigInt n) {
     if (n <= BigInt.zero) {
-      throw ArgumentError(trLocale('λ(n) solo está definido para n > 0', 'λ(n) is only defined for n > 0', pt: 'λ(n) só está definido para n > 0'));
+      throw ArgumentError(trLocale('λ(n) solo está definido para n > 0', 'λ(n) is only defined for n > 0', pt: 'λ(n) só está definido para n > 0', fr: "λ(n) n'est défini que pour n > 0"));
     }
 
     if (n == BigInt.one) return BigInt.one;
@@ -499,7 +499,7 @@ class SpecialFunctionsService {
   /// sopfr(1) = 0
   static BigInt sopfr(BigInt n) {
     if (n <= BigInt.zero) {
-      throw ArgumentError(trLocale('sopfr(n) solo está definido para n > 0', 'sopfr(n) is only defined for n > 0', pt: 'sopfr(n) só está definido para n > 0'));
+      throw ArgumentError(trLocale('sopfr(n) solo está definido para n > 0', 'sopfr(n) is only defined for n > 0', pt: 'sopfr(n) só está definido para n > 0', fr: "sopfr(n) n'est défini que pour n > 0"));
     }
 
     if (n == BigInt.one) return BigInt.zero;
@@ -516,7 +516,7 @@ class SpecialFunctionsService {
   /// sopf(1) = 0
   static BigInt sopf(BigInt n) {
     if (n <= BigInt.zero) {
-      throw ArgumentError(trLocale('sopf(n) solo está definido para n > 0', 'sopf(n) is only defined for n > 0', pt: 'sopf(n) só está definido para n > 0'));
+      throw ArgumentError(trLocale('sopf(n) solo está definido para n > 0', 'sopf(n) is only defined for n > 0', pt: 'sopf(n) só está definido para n > 0', fr: "sopf(n) n'est défini que pour n > 0"));
     }
 
     if (n == BigInt.one) return BigInt.zero;
@@ -538,14 +538,14 @@ class SpecialFunctionsService {
   /// Efficient even for huge exponents
   static BigInt modPow(BigInt base, BigInt exponent, BigInt modulus) {
     if (modulus <= BigInt.zero) {
-      throw ArgumentError(trLocale('El módulo debe ser > 0', 'The modulus must be > 0', pt: 'O módulo deve ser > 0'));
+      throw ArgumentError(trLocale('El módulo debe ser > 0', 'The modulus must be > 0', pt: 'O módulo deve ser > 0', fr: 'Le module doit être > 0'));
     }
     if (modulus == BigInt.one) return BigInt.zero;
     if (exponent < BigInt.zero) {
       // a^(-b) mod n = (a^(-1))^b mod n
       BigInt? inv = modularInverse(base, modulus);
       if (inv == null) {
-        throw ArgumentError(trLocale('No existe inverso modular, no se puede calcular exponente negativo', 'No modular inverse exists; cannot compute a negative exponent', pt: 'Não existe inverso modular; não é possível calcular expoente negativo'));
+        throw ArgumentError(trLocale('No existe inverso modular, no se puede calcular exponente negativo', 'No modular inverse exists; cannot compute a negative exponent', pt: 'Não existe inverso modular; não é possível calcular expoente negativo', fr: 'Aucun inverse modulaire : impossible de calculer un exposant négatif'));
       }
       base = inv;
       exponent = -exponent;
@@ -570,10 +570,10 @@ class SpecialFunctionsService {
   /// Requires gcd(a, n) = 1
   static BigInt multiplicativeOrder(BigInt a, BigInt n) {
     if (n <= BigInt.one) {
-      throw ArgumentError(trLocale('n debe ser > 1', 'n must be > 1', pt: 'n deve ser > 1'));
+      throw ArgumentError(trLocale('n debe ser > 1', 'n must be > 1', pt: 'n deve ser > 1', fr: 'n doit être > 1'));
     }
     if (gcd(a, n) != BigInt.one) {
-      throw ArgumentError(trLocale('gcd(a, n) debe ser 1 para que exista el orden', 'gcd(a, n) must be 1 for the order to exist', pt: 'mdc(a, n) deve ser 1 para que a ordem exista'));
+      throw ArgumentError(trLocale('gcd(a, n) debe ser 1 para que exista el orden', 'gcd(a, n) must be 1 for the order to exist', pt: 'mdc(a, n) deve ser 1 para que a ordem exista', fr: "pgcd(a, n) doit valoir 1 pour que l'ordre existe"));
     }
 
     a = a % n;
@@ -634,7 +634,7 @@ class SpecialFunctionsService {
   /// Returns 1 if a is a quadratic residue mod p, -1 if not, 0 if p|a
   static int legendreSymbol(BigInt a, BigInt p) {
     if (p <= BigInt.two) {
-      throw ArgumentError(trLocale('p debe ser un primo impar > 2', 'p must be an odd prime > 2', pt: 'p deve ser um primo ímpar > 2'));
+      throw ArgumentError(trLocale('p debe ser un primo impar > 2', 'p must be an odd prime > 2', pt: 'p deve ser um primo ímpar > 2', fr: 'p doit être un nombre premier impair > 2'));
     }
 
     a = a % p;
@@ -652,7 +652,7 @@ class SpecialFunctionsService {
   /// n must be a positive odd number
   static int jacobiSymbol(BigInt a, BigInt n) {
     if (n <= BigInt.zero || n.isEven) {
-      throw ArgumentError(trLocale('n debe ser impar positivo', 'n must be a positive odd number', pt: 'n deve ser ímpar positivo'));
+      throw ArgumentError(trLocale('n debe ser impar positivo', 'n must be a positive odd number', pt: 'n deve ser ímpar positivo', fr: 'n doit être impair et positif'));
     }
     if (n == BigInt.one) return 1;
 
@@ -696,9 +696,9 @@ class SpecialFunctionsService {
         'solvable': c == BigInt.zero,
         'note': c == BigInt.zero
             ? trLocale('Infinitas soluciones (0x + 0y = 0)',
-                'Infinitely many solutions (0x + 0y = 0)', pt: 'Infinitas soluções (0x + 0y = 0)')
+                'Infinitely many solutions (0x + 0y = 0)', pt: 'Infinitas soluções (0x + 0y = 0)', fr: 'Une infinité de solutions (0x + 0y = 0)')
             : trLocale('Sin solución (0x + 0y ≠ $c)',
-                'No solution (0x + 0y ≠ $c)', pt: 'Sem solução (0x + 0y ≠ $c)'),
+                'No solution (0x + 0y ≠ $c)', pt: 'Sem solução (0x + 0y ≠ $c)', fr: 'Aucune solution (0x + 0y ≠ $c)'),
       };
     }
 
@@ -707,7 +707,7 @@ class SpecialFunctionsService {
       return {
         'solvable': false,
         'note': trLocale('Sin solución: gcd($a,$b) = $g no divide a $c',
-            'No solution: gcd($a,$b) = $g does not divide $c', pt: 'Sem solução: mdc($a,$b) = $g não divide $c'),
+            'No solution: gcd($a,$b) = $g does not divide $c', pt: 'Sem solução: mdc($a,$b) = $g não divide $c', fr: 'Aucune solution : pgcd($a,$b) = $g ne divise pas $c'),
       };
     }
 
@@ -751,14 +751,14 @@ class SpecialFunctionsService {
   static Map<String, dynamic> chineseRemainderTheorem(
       List<BigInt> remainders, List<BigInt> moduli) {
     if (remainders.length != moduli.length || remainders.isEmpty) {
-      throw ArgumentError(trLocale('Las listas deben tener el mismo tamaño y no estar vacías', 'The lists must have the same size and not be empty', pt: 'As listas devem ter o mesmo tamanho e não estar vazias'));
+      throw ArgumentError(trLocale('Las listas deben tener el mismo tamaño y no estar vacías', 'The lists must have the same size and not be empty', pt: 'As listas devem ter o mesmo tamanho e não estar vazias', fr: 'Les listes doivent avoir la même taille et ne pas être vides'));
     }
     // A zero modulus made lcm and (m2 ~/ g) zero further down, surfacing as a
     // raw IntegerDivisionByZeroException in the UI; a negative one silently
     // produced a wrong congruence.
     if (moduli.any((m) => m <= BigInt.zero)) {
       throw ArgumentError(trLocale('Los módulos deben ser positivos',
-          'The moduli must be positive', pt: 'Os módulos devem ser positivos'));
+          'The moduli must be positive', pt: 'Os módulos devem ser positivos', fr: 'Les modules doivent être positifs'));
     }
 
     BigInt currentA = remainders[0];
@@ -773,7 +773,7 @@ class SpecialFunctionsService {
         return {
           'solvable': false,
           'note': trLocale('Sin solución: sistema incompatible',
-              'No solution: incompatible system', pt: 'Sem solução: sistema incompatível'),
+              'No solution: incompatible system', pt: 'Sem solução: sistema incompatível', fr: 'Aucune solution : système incompatible'),
         };
       }
 
@@ -799,7 +799,7 @@ class SpecialFunctionsService {
   /// Factorial n!
   static BigInt factorial(int n) {
     if (n < 0) {
-      throw ArgumentError(trLocale('El factorial no está definido para negativos', 'Factorial is not defined for negative numbers', pt: 'O fatorial não está definido para negativos'));
+      throw ArgumentError(trLocale('El factorial no está definido para negativos', 'Factorial is not defined for negative numbers', pt: 'O fatorial não está definido para negativos', fr: "La factorielle n'est pas définie pour les nombres négatifs"));
     }
     if (n <= 1) return BigInt.one;
 
@@ -815,7 +815,7 @@ class SpecialFunctionsService {
   /// n!! = n × (n-2) × (n-4) × ... × (2 o 1)
   static BigInt doubleFactorial(int n) {
     if (n < 0) {
-      throw ArgumentError(trLocale('El doble factorial no está definido para negativos', 'Double factorial is not defined for negative numbers', pt: 'O fatorial duplo não está definido para negativos'));
+      throw ArgumentError(trLocale('El doble factorial no está definido para negativos', 'Double factorial is not defined for negative numbers', pt: 'O fatorial duplo não está definido para negativos', fr: "La double factorielle n'est pas définie pour les nombres négatifs"));
     }
     if (n <= 1) return BigInt.one;
 
@@ -831,7 +831,7 @@ class SpecialFunctionsService {
   /// F(0)=0, F(1)=1, F(n)=F(n-1)+F(n-2)
   static BigInt fibonacci(int n) {
     if (n < 0) {
-      throw ArgumentError(trLocale('n debe ser ≥ 0', 'n must be ≥ 0', pt: 'n deve ser ≥ 0'));
+      throw ArgumentError(trLocale('n debe ser ≥ 0', 'n must be ≥ 0', pt: 'n deve ser ≥ 0', fr: 'n doit être ≥ 0'));
     }
     if (n == 0) return BigInt.zero;
     if (n <= 2) return BigInt.one;
@@ -864,7 +864,7 @@ class SpecialFunctionsService {
   /// n-th Catalan number: C_n = C(2n,n)/(n+1)
   static BigInt catalanNumber(int n) {
     if (n < 0) {
-      throw ArgumentError(trLocale('n debe ser ≥ 0', 'n must be ≥ 0', pt: 'n deve ser ≥ 0'));
+      throw ArgumentError(trLocale('n debe ser ≥ 0', 'n must be ≥ 0', pt: 'n deve ser ≥ 0', fr: 'n doit être ≥ 0'));
     }
 
     return combinations(2 * n, n) ~/ BigInt.from(n + 1);
@@ -875,7 +875,7 @@ class SpecialFunctionsService {
   /// D(n) = (n-1)(D(n-1) + D(n-2))
   static BigInt derangement(int n) {
     if (n < 0) {
-      throw ArgumentError(trLocale('n debe ser ≥ 0', 'n must be ≥ 0', pt: 'n deve ser ≥ 0'));
+      throw ArgumentError(trLocale('n debe ser ≥ 0', 'n must be ≥ 0', pt: 'n deve ser ≥ 0', fr: 'n doit être ≥ 0'));
     }
     if (n == 0) return BigInt.one;
     if (n == 1) return BigInt.zero;
@@ -900,7 +900,7 @@ class SpecialFunctionsService {
 
     // Limit to avoid memory issues
     if (n > 10000) {
-      throw ArgumentError(trLocale('n demasiado grande para calcular particiones (máx 10000)', 'n too large to compute partitions (max 10000)', pt: 'n grande demais para calcular partições (máx 10000)'));
+      throw ArgumentError(trLocale('n demasiado grande para calcular particiones (máx 10000)', 'n too large to compute partitions (max 10000)', pt: 'n grande demais para calcular partições (máx 10000)', fr: 'n trop grand pour calculer les partitions (max 10000)'));
     }
 
     List<BigInt> dp = List.filled(n + 1, BigInt.zero);
@@ -964,7 +964,7 @@ class SpecialFunctionsService {
   /// Bell numbers B(n): total number of partitions of a set of n elements
   static BigInt bellNumber(int n) {
     if (n < 0) {
-      throw ArgumentError(trLocale('n debe ser ≥ 0', 'n must be ≥ 0', pt: 'n deve ser ≥ 0'));
+      throw ArgumentError(trLocale('n debe ser ≥ 0', 'n must be ≥ 0', pt: 'n deve ser ≥ 0', fr: 'n doit être ≥ 0'));
     }
     if (n == 0) return BigInt.one;
 
@@ -990,7 +990,7 @@ class SpecialFunctionsService {
   /// Digit sum in base b
   static BigInt digitSumInBase(BigInt n, int base) {
     if (base < 2) {
-      throw ArgumentError(trLocale('La base debe ser ≥ 2', 'The base must be ≥ 2', pt: 'A base deve ser ≥ 2'));
+      throw ArgumentError(trLocale('La base debe ser ≥ 2', 'The base must be ≥ 2', pt: 'A base deve ser ≥ 2', fr: 'La base doit être ≥ 2'));
     }
 
     n = n.abs();
@@ -1112,7 +1112,7 @@ class SpecialFunctionsService {
   /// λ_L(n) = (-1)^Ω(n)
   static int liouvilleFunction(BigInt n) {
     if (n <= BigInt.zero) {
-      throw ArgumentError(trLocale('λ_L(n) solo está definido para n > 0', 'λ_L(n) is only defined for n > 0', pt: 'λ_L(n) só está definido para n > 0'));
+      throw ArgumentError(trLocale('λ_L(n) solo está definido para n > 0', 'λ_L(n) is only defined for n > 0', pt: 'λ_L(n) só está definido para n > 0', fr: "λ_L(n) n'est défini que pour n > 0"));
     }
     return bigOmega(n) % 2 == 0 ? 1 : -1;
   }

@@ -1504,6 +1504,10 @@
   "@settingsLangPt": {
     "description": "Portuguese language option"
   },
+  "settingsLangFr": "Français",
+  "@settingsLangFr": {
+    "description": "French language option"
+  },
   "hlpTitle": "Guía de Funciones Especiales",
   "@hlpTitle": {
     "description": "Help screen title"

@@ -6,6 +6,7 @@ void main() {
   const es = OlympiadStrings('es');
   const en = OlympiadStrings('en');
   const pt = OlympiadStrings('pt');
+  const fr = OlympiadStrings('fr');
 
   test('every CalcError code has a non-empty translation in every language', () {
     for (final code in CalcError.values) {
@@ -13,7 +14,32 @@ void main() {
       expect(es.errorText(e).isNotEmpty, true, reason: 'ES missing for $code');
       expect(en.errorText(e).isNotEmpty, true, reason: 'EN missing for $code');
       expect(pt.errorText(e).isNotEmpty, true, reason: 'PT missing for $code');
+      expect(fr.errorText(e).isNotEmpty, true, reason: 'FR missing for $code');
     }
+  });
+
+  test('every CalcError code is actually translated into French', () {
+    const sameInEnglish = <CalcError>{};
+    for (final code in CalcError.values) {
+      if (sameInEnglish.contains(code)) continue;
+      final e = CalcException(code, {'value': 'foo', 'k': '2', 'max': '10'});
+      expect(fr.errorText(e) == en.errorText(e), false,
+          reason: 'FR falls back to EN for $code');
+    }
+  });
+
+  test('French reaches the tool labels, not just the errors', () {
+    expect(fr.title, "Outils d'Olympiades");
+    expect(fr.catAlgebra, 'Algèbre');
+    expect(fr.catFractions, 'Fractions');
+    expect(fr.compute, 'Calculer');
+  });
+
+  test('French puts a space before the colon, other languages do not', () {
+    expect(fr.colon, ' :');
+    expect(es.colon, ':');
+    expect(en.colon, ':');
+    expect(pt.colon, ':');
   });
 
   test('every CalcError code is actually translated into Portuguese', () {
@@ -31,10 +57,13 @@ void main() {
   });
 
   test('a language with no translation falls back to English', () {
-    const fr = OlympiadStrings('fr');
+    // Deliberately a code that will never be a real translation: this test
+    // used to name a plausible one and started failing the day that language
+    // was actually added.
+    const unknown = OlympiadStrings('zz');
     final e = CalcException(CalcError.divisionByZero);
-    expect(fr.errorText(e), en.errorText(e));
-    expect(fr.compute, en.compute);
+    expect(unknown.errorText(e), en.errorText(e));
+    expect(unknown.compute, en.compute);
   });
 
   test('Portuguese reaches the tool labels, not just the errors', () {

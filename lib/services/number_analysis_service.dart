@@ -34,7 +34,7 @@ class NumberAnalysisService {
     // Add a note if the number was modified
     if (originalNumber != integerPart) {
       if (originalNumber < BigInt.zero) {
-        result['note'] = trLocale('Se usó el valor absoluto del número negativo', 'Used the absolute value of the negative number', pt: 'Foi usado o valor absoluto do número negativo');
+        result['note'] = trLocale('Se usó el valor absoluto del número negativo', 'Used the absolute value of the negative number', pt: 'Foi usado o valor absoluto do número negativo', fr: 'La valeur absolue du nombre négatif a été utilisée');
       }
       // Note: For decimals, this would be handled at a higher level
     }
@@ -43,9 +43,9 @@ class NumberAnalysisService {
     if (integerPart < BigInt.two) {
       result['isPrime'] = false;
       if (integerPart == BigInt.zero) {
-        result['note'] = trLocale('El cero no es primo', 'Zero is not prime', pt: 'O zero não é primo');
+        result['note'] = trLocale('El cero no es primo', 'Zero is not prime', pt: 'O zero não é primo', fr: "Zéro n'est pas premier");
       } else if (integerPart == BigInt.one) {
-        result['note'] = trLocale('El uno no es primo por definición', 'One is not prime by definition', pt: 'O um não é primo por definição');
+        result['note'] = trLocale('El uno no es primo por definición', 'One is not prime by definition', pt: 'O um não é primo por definição', fr: "Un n'est pas premier par définition");
       }
     } else {
       result['isPrime'] = isPrime(integerPart);
@@ -438,7 +438,7 @@ class NumberAnalysisService {
             analysis['divisors'] = [
               ...divisors.take(100).map((d) => d.toString()),
               trLocale('… y ${divisors.length - 100} más',
-                  '… and ${divisors.length - 100} more', pt: '… e mais ${divisors.length - 100}'),
+                  '… and ${divisors.length - 100} more', pt: '… e mais ${divisors.length - 100}', fr: '… et ${divisors.length - 100} de plus'),
             ];
           }
           analysis['isPerfect'] = isPerfectNumber(number);
@@ -449,19 +449,19 @@ class NumberAnalysisService {
             analysis['previousPrime'] = previousPrime(number).toString();
             analysis['primeFactors'] = [number.toString()];
           } else {
-            analysis['nextPrime'] = trLocale('No es primo', 'Not prime', pt: 'Não é primo');
-            analysis['previousPrime'] = trLocale('No es primo', 'Not prime', pt: 'Não é primo');
+            analysis['nextPrime'] = trLocale('No es primo', 'Not prime', pt: 'Não é primo', fr: "N'est pas premier");
+            analysis['previousPrime'] = trLocale('No es primo', 'Not prime', pt: 'Não é primo', fr: "N'est pas premier");
             
             try {
               List<BigInt> factors = primeFactorization(number);
               if (factors.length <= 20) {
                 analysis['primeFactors'] = factors.map((f) => f.toString()).toList();
               } else {
-                analysis['primeFactors'] = [trLocale('Demasiados factores', 'Too many factors', pt: 'Fatores demais')];
+                analysis['primeFactors'] = [trLocale('Demasiados factores', 'Too many factors', pt: 'Fatores demais', fr: 'Trop de facteurs')];
               }
             } catch (e) {
               analysis['primeFactors'] = [
-                trLocale('Factorización muy compleja', 'Factorization too complex', pt: 'Fatoração complexa demais')
+                trLocale('Factorización muy compleja', 'Factorization too complex', pt: 'Fatoração complexa demais', fr: 'Factorisation trop complexe')
               ];
             }
           }
@@ -502,12 +502,12 @@ class NumberAnalysisService {
           }
         }
       } catch (e) {
-        analysis['square'] = trLocale('Error en cálculo', 'Calculation error', pt: 'Erro no cálculo');
-        analysis['cube'] = trLocale('Error en cálculo', 'Calculation error', pt: 'Erro no cálculo');
+        analysis['square'] = trLocale('Error en cálculo', 'Calculation error', pt: 'Erro no cálculo', fr: 'Erreur de calcul');
+        analysis['cube'] = trLocale('Error en cálculo', 'Calculation error', pt: 'Erro no cálculo', fr: 'Erreur de calcul');
       }
       
     } catch (e) {
-      analysis['error'] = trLocale('Error en análisis: ${e.toString()}', 'Analysis error: ${e.toString()}', pt: 'Erro na análise: ${e.toString()}');
+      analysis['error'] = trLocale('Error en análisis: ${e.toString()}', 'Analysis error: ${e.toString()}', pt: 'Erro na análise: ${e.toString()}', fr: "Erreur d'analyse : ${e.toString()}");
       analysis['value'] = number.toString();
       analysis['digitCount'] = number.toString().replaceAll('-', '').length;
     }
@@ -544,14 +544,14 @@ class NumberAnalysisService {
           analysis['octal'] = number.toRadixString(8);
           analysis['hexadecimal'] = number.toRadixString(16).toUpperCase();
         } catch (e) {
-          analysis['binary'] = trLocale('No calculado (muy grande)', 'Not computed (too large)', pt: 'Não calculado (grande demais)');
-          analysis['octal'] = trLocale('No calculado (muy grande)', 'Not computed (too large)', pt: 'Não calculado (grande demais)');
-          analysis['hexadecimal'] = trLocale('No calculado (muy grande)', 'Not computed (too large)', pt: 'Não calculado (grande demais)');
+          analysis['binary'] = trLocale('No calculado (muy grande)', 'Not computed (too large)', pt: 'Não calculado (grande demais)', fr: 'Non calculé (trop grand)');
+          analysis['octal'] = trLocale('No calculado (muy grande)', 'Not computed (too large)', pt: 'Não calculado (grande demais)', fr: 'Non calculé (trop grand)');
+          analysis['hexadecimal'] = trLocale('No calculado (muy grande)', 'Not computed (too large)', pt: 'Não calculado (grande demais)', fr: 'Non calculé (trop grand)');
         }
       } else {
-        analysis['binary'] = trLocale('No calculado (número extremadamente grande)', 'Not computed (extremely large number)', pt: 'Não calculado (número extremamente grande)');
-        analysis['octal'] = trLocale('No calculado (número extremadamente grande)', 'Not computed (extremely large number)', pt: 'Não calculado (número extremamente grande)');
-        analysis['hexadecimal'] = trLocale('No calculado (número extremadamente grande)', 'Not computed (extremely large number)', pt: 'Não calculado (número extremamente grande)');
+        analysis['binary'] = trLocale('No calculado (número extremadamente grande)', 'Not computed (extremely large number)', pt: 'Não calculado (número extremamente grande)', fr: 'Non calculé (nombre extrêmement grand)');
+        analysis['octal'] = trLocale('No calculado (número extremadamente grande)', 'Not computed (extremely large number)', pt: 'Não calculado (número extremamente grande)', fr: 'Non calculé (nombre extrêmement grand)');
+        analysis['hexadecimal'] = trLocale('No calculado (número extremadamente grande)', 'Not computed (extremely large number)', pt: 'Não calculado (número extremamente grande)', fr: 'Non calculé (nombre extrêmement grand)');
       }
       
       // Limited analysis for very large numbers
@@ -561,7 +561,7 @@ class NumberAnalysisService {
           analysis['isPrime'] = isPrime(number);
         } catch (e) {
           analysis['isPrime'] = false;
-          analysis['primeNote'] = trLocale('Error en verificación de primalidad', 'Primality check error', pt: 'Erro na verificação de primalidade');
+          analysis['primeNote'] = trLocale('Error en verificación de primalidad', 'Primality check error', pt: 'Erro na verificação de primalidade', fr: 'Erreur lors du test de primalité');
         }
         
         try {
@@ -581,45 +581,45 @@ class NumberAnalysisService {
         } else {
           analysis['isFibonacci'] = false;
           analysis['isTriangular'] = false;
-          analysis['largeNumberNote'] = trLocale('Algunas propiedades no calculadas debido al tamaño extremo', 'Some properties not computed due to extreme size', pt: 'Algumas propriedades não foram calculadas devido ao tamanho extremo');
+          analysis['largeNumberNote'] = trLocale('Algunas propiedades no calculadas debido al tamaño extremo', 'Some properties not computed due to extreme size', pt: 'Algumas propriedades não foram calculadas devido ao tamanho extremo', fr: "Certaines propriétés n'ont pas été calculées en raison de la taille extrême");
         }
         
         // Properties not computed for very large numbers
-        analysis['perfectPower'] = {'isPower': false, 'reason': trLocale('Número muy grande', 'Very large number', pt: 'Número muito grande')};
-        analysis['primeFactors'] = [trLocale('No calculado (número muy grande)', 'Not computed (very large number)', pt: 'Não calculado (número muito grande)')];
-        analysis['divisors'] = [trLocale('No calculado (número muy grande)', 'Not computed (very large number)', pt: 'Não calculado (número muito grande)')];
+        analysis['perfectPower'] = {'isPower': false, 'reason': trLocale('Número muy grande', 'Very large number', pt: 'Número muito grande', fr: 'Nombre très grand')};
+        analysis['primeFactors'] = [trLocale('No calculado (número muy grande)', 'Not computed (very large number)', pt: 'Não calculado (número muito grande)', fr: 'Non calculé (nombre très grand)')];
+        analysis['divisors'] = [trLocale('No calculado (número muy grande)', 'Not computed (very large number)', pt: 'Não calculado (número muito grande)', fr: 'Non calculé (nombre très grand)')];
         analysis['isPerfect'] = false;
         
         // Primes will be computed asynchronously in the CalculatorService
-        analysis['nextPrime'] = trLocale('Calculando...', 'Calculating...', pt: 'Calculando...');
-        analysis['previousPrime'] = trLocale('Calculando...', 'Calculating...', pt: 'Calculando...');
+        analysis['nextPrime'] = trLocale('Calculando...', 'Calculating...', pt: 'Calculando...', fr: 'Calcul en cours…');
+        analysis['previousPrime'] = trLocale('Calculando...', 'Calculating...', pt: 'Calculando...', fr: 'Calcul en cours…');
         
         // Basic mathematical operations
         if (digitCount <= 50) {
           try {
             analysis['square'] = (number * number).toString();
           } catch (e) {
-            analysis['square'] = trLocale('Error en cálculo', 'Calculation error', pt: 'Erro no cálculo');
+            analysis['square'] = trLocale('Error en cálculo', 'Calculation error', pt: 'Erro no cálculo', fr: 'Erreur de calcul');
           }
           
           try {
             analysis['cube'] = (number * number * number).toString();
           } catch (e) {
-            analysis['cube'] = trLocale('Error en cálculo', 'Calculation error', pt: 'Erro no cálculo');
+            analysis['cube'] = trLocale('Error en cálculo', 'Calculation error', pt: 'Erro no cálculo', fr: 'Erreur de calcul');
           }
         } else {
-          analysis['square'] = trLocale('No calculado (resultado muy grande)', 'Not computed (result too large)', pt: 'Não calculado (resultado grande demais)');
-          analysis['cube'] = trLocale('No calculado (resultado muy grande)', 'Not computed (result too large)', pt: 'Não calculado (resultado grande demais)');
+          analysis['square'] = trLocale('No calculado (resultado muy grande)', 'Not computed (result too large)', pt: 'Não calculado (resultado grande demais)', fr: 'Non calculé (résultat trop grand)');
+          analysis['cube'] = trLocale('No calculado (resultado muy grande)', 'Not computed (result too large)', pt: 'Não calculado (resultado grande demais)', fr: 'Non calculé (résultat trop grand)');
         }
         
         // Roots are not computed for very large numbers
-        analysis['squareRoot'] = trLocale('No calculado (número muy grande)', 'Not computed (very large number)', pt: 'Não calculado (número muito grande)');
-        analysis['cubeRoot'] = trLocale('No calculado (número muy grande)', 'Not computed (very large number)', pt: 'Não calculado (número muito grande)');
+        analysis['squareRoot'] = trLocale('No calculado (número muy grande)', 'Not computed (very large number)', pt: 'Não calculado (número muito grande)', fr: 'Non calculé (nombre très grand)');
+        analysis['cubeRoot'] = trLocale('No calculado (número muy grande)', 'Not computed (very large number)', pt: 'Não calculado (número muito grande)', fr: 'Non calculé (nombre très grand)');
       }
       
     } catch (e) {
       // In case of error, return basic information
-      analysis['error'] = trLocale('Error en análisis: ${e.toString()}', 'Analysis error: ${e.toString()}', pt: 'Erro na análise: ${e.toString()}');
+      analysis['error'] = trLocale('Error en análisis: ${e.toString()}', 'Analysis error: ${e.toString()}', pt: 'Erro na análise: ${e.toString()}', fr: "Erreur d'analyse : ${e.toString()}");
       analysis['value'] = number.toString();
       analysis['digitCount'] = number.toString().replaceAll('-', '').length;
       analysis['isZero'] = number == BigInt.zero;
@@ -629,7 +629,7 @@ class NumberAnalysisService {
       analysis['isOdd'] = number % BigInt.two != BigInt.zero;
       analysis['errorNote'] = trLocale(
           'Se produjo un error durante el análisis. Mostrando información básica.',
-          'An error occurred during analysis. Showing basic information.', pt: 'Ocorreu um erro durante a análise. Mostrando informações básicas.');
+          'An error occurred during analysis. Showing basic information.', pt: 'Ocorreu um erro durante a análise. Mostrando informações básicas.', fr: "Une erreur est survenue pendant l'analyse. Affichage des informations de base.");
     }
     
     return analysis;
@@ -876,7 +876,7 @@ class NumberAnalysisService {
 
   /// Computes the square root of a BigInt (optimized for large numbers)
   static BigInt _sqrtBigInt(BigInt n) {
-    if (n < BigInt.zero) throw ArgumentError(trLocale('Raíz cuadrada de número negativo', 'Square root of a negative number', pt: 'Raiz quadrada de número negativo'));
+    if (n < BigInt.zero) throw ArgumentError(trLocale('Raíz cuadrada de número negativo', 'Square root of a negative number', pt: 'Raiz quadrada de número negativo', fr: "Racine carrée d'un nombre négatif"));
     if (n == BigInt.zero || n == BigInt.one) return n;
     
     BigInt low = BigInt.zero;
@@ -896,7 +896,7 @@ class NumberAnalysisService {
   }
 
   static BigInt _sqrt(BigInt number) {
-    if (number < BigInt.zero) throw ArgumentError(trLocale('Raíz cuadrada de número negativo', 'Square root of a negative number', pt: 'Raiz quadrada de número negativo'));
+    if (number < BigInt.zero) throw ArgumentError(trLocale('Raíz cuadrada de número negativo', 'Square root of a negative number', pt: 'Raiz quadrada de número negativo', fr: "Racine carrée d'un nombre négatif"));
     if (number == BigInt.zero) return BigInt.zero;
     if (number == BigInt.one) return BigInt.one;
     
@@ -916,9 +916,9 @@ class NumberAnalysisService {
   /// size, with no approximations, which allows detecting large perfect
   /// powers correctly.
   static BigInt _nthRoot(BigInt number, int n) {
-    if (n < 1) throw ArgumentError(trLocale('El índice de la raíz debe ser ≥ 1', 'The root index must be ≥ 1', pt: 'O índice da raiz deve ser ≥ 1'));
+    if (n < 1) throw ArgumentError(trLocale('El índice de la raíz debe ser ≥ 1', 'The root index must be ≥ 1', pt: 'O índice da raiz deve ser ≥ 1', fr: "L'indice de la racine doit être ≥ 1"));
     if (number < BigInt.zero && n.isEven) {
-      throw ArgumentError(trLocale('Raíz par de número negativo', 'Even root of a negative number', pt: 'Raiz par de número negativo'));
+      throw ArgumentError(trLocale('Raíz par de número negativo', 'Even root of a negative number', pt: 'Raiz par de número negativo', fr: "Racine d'indice pair d'un nombre négatif"));
     }
     if (number == BigInt.zero) return BigInt.zero;
     if (n == 1) return number;

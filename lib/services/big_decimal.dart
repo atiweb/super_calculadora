@@ -195,7 +195,7 @@ class BigDecimal {
   /// Division
   BigDecimal operator /(BigDecimal other) {
     if (other.isZero) {
-      throw ArgumentError(trLocale('División por cero', 'Division by zero', pt: 'Divisão por zero'));
+      throw ArgumentError(trLocale('División por cero', 'Division by zero', pt: 'Divisão por zero', fr: 'Division par zéro'));
     }
 
   // Convert to full decimal form with extra precision.
@@ -259,7 +259,7 @@ class BigDecimal {
   /// (≥ 1e21) corrupted the result (√10^44 returned 0).
   BigDecimal sqrt() {
     if (isNegative) {
-      throw ArgumentError(trLocale('Raíz cuadrada de número negativo', 'Square root of a negative number', pt: 'Raiz quadrada de número negativo'));
+      throw ArgumentError(trLocale('Raíz cuadrada de número negativo', 'Square root of a negative number', pt: 'Raiz quadrada de número negativo', fr: "Racine carrée d'un nombre négatif"));
     }
     if (isZero) return BigDecimal.zero;
     if (this == BigDecimal.one) return BigDecimal.one;

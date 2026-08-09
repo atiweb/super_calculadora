@@ -24,68 +24,73 @@ class OlympiadStrings {
           String? id}) =>
       trLang(lang, spanish, english, pt: pt, fr: fr, it: it, ru: ru, vi: vi, id: id);
 
+  /// The colon that follows a label. French typography puts a space before
+  /// it ("Degré : 2"); every other language we ship writes it tight.
+  /// Use it as '${s.pick(...)}${s.colon} $value'.
+  String get colon => lang == 'fr' ? ' :' : ':';
+
   // Hub
-  String get title => pick('Herramientas de Olimpiada', 'Olympiad Tools', pt: 'Ferramentas de Olimpíada');
+  String get title => pick('Herramientas de Olimpiada', 'Olympiad Tools', pt: 'Ferramentas de Olimpíada', fr: "Outils d'Olympiades");
   String get subtitle => pick(
-      'Herramientas exactas para entrenamiento', 'Exact tools for training', pt: 'Ferramentas exatas para treinamento');
+      'Herramientas exactas para entrenamiento', 'Exact tools for training', pt: 'Ferramentas exatas para treinamento', fr: "Outils exacts pour l'entraînement");
 
   // Chrome
-  String get compute => pick('Calcular', 'Compute', pt: 'Calcular');
-  String get copy => pick('Copiar', 'Copy', pt: 'Copiar');
-  String get result => pick('Resultado', 'Result', pt: 'Resultado');
-  String get errorPrefix => pick('Error', 'Error', pt: 'Erro');
+  String get compute => pick('Calcular', 'Compute', pt: 'Calcular', fr: 'Calculer');
+  String get copy => pick('Copiar', 'Copy', pt: 'Copiar', fr: 'Copier');
+  String get result => pick('Resultado', 'Result', pt: 'Resultado', fr: 'Résultat');
+  String get errorPrefix => pick('Error', 'Error', pt: 'Erro', fr: 'Erreur');
 
   // Categories
-  String get catFractions => pick('Fracciones', 'Fractions', pt: 'Frações');
+  String get catFractions => pick('Fracciones', 'Fractions', pt: 'Frações', fr: 'Fractions');
   String get catFractionsSub =>
-      pick('Aritmética racional exacta', 'Exact rational arithmetic', pt: 'Aritmética racional exata');
-  String get catSurds => pick('Radicales', 'Radicals', pt: 'Radicais');
+      pick('Aritmética racional exacta', 'Exact rational arithmetic', pt: 'Aritmética racional exata', fr: 'Arithmétique rationnelle exacte');
+  String get catSurds => pick('Radicales', 'Radicals', pt: 'Radicais', fr: 'Radicaux');
   String get catSurdsSub =>
-      pick('Simplificar y racionalizar', 'Simplify and rationalize', pt: 'Simplificar e racionalizar');
-  String get catGeometry => pick('Geometría', 'Geometry', pt: 'Geometria');
+      pick('Simplificar y racionalizar', 'Simplify and rationalize', pt: 'Simplificar e racionalizar', fr: 'Simplifier et rationaliser');
+  String get catGeometry => pick('Geometría', 'Geometry', pt: 'Geometria', fr: 'Géométrie');
   String get catGeometrySub =>
-      pick('Triángulos, áreas, ternas', 'Triangles, areas, triples', pt: 'Triângulos, áreas, ternos');
-  String get catPolynomials => pick('Polinomios', 'Polynomials', pt: 'Polinômios');
+      pick('Triángulos, áreas, ternas', 'Triangles, areas, triples', pt: 'Triângulos, áreas, ternos', fr: 'Triangles, aires, triplets');
+  String get catPolynomials => pick('Polinomios', 'Polynomials', pt: 'Polinômios', fr: 'Polynômes');
   String get catPolynomialsSub =>
-      pick('Raíces, Vieta, discriminante', 'Roots, Vieta, discriminant', pt: 'Raízes, Vieta, discriminante');
-  String get catAlgebra => pick('Álgebra', 'Algebra', pt: 'Álgebra');
+      pick('Raíces, Vieta, discriminante', 'Roots, Vieta, discriminant', pt: 'Raízes, Vieta, discriminante', fr: 'Racines, Viète, discriminant');
+  String get catAlgebra => pick('Álgebra', 'Algebra', pt: 'Álgebra', fr: 'Algèbre');
   String get catAlgebraSub => pick(
       'Expandir, identidades, factor común',
-      'Expand, identities, common factor', pt: 'Expandir, identidades, fator comum');
-  String get catNumberTheory => pick('Teoría de Números', 'Number Theory', pt: 'Teoria dos Números');
+      'Expand, identities, common factor', pt: 'Expandir, identidades, fator comum', fr: 'Développer, identités, facteur commun');
+  String get catNumberTheory => pick('Teoría de Números', 'Number Theory', pt: 'Teoria dos Números', fr: 'Théorie des nombres');
   String get catNumberTheorySub =>
-      pick('Congruencias, Pell, cuadrados', 'Congruences, Pell, squares', pt: 'Congruências, Pell, quadrados');
-  String get catSteps => pick('Procedimientos', 'Step by step', pt: 'Procedimentos');
+      pick('Congruencias, Pell, cuadrados', 'Congruences, Pell, squares', pt: 'Congruências, Pell, quadrados', fr: 'Congruences, Pell, carrés');
+  String get catSteps => pick('Procedimientos', 'Step by step', pt: 'Procedimentos', fr: 'Procédures');
   String get catStepsSub =>
-      pick('Euclides, TCR, factorización', 'Euclid, CRT, factorization', pt: 'Euclides, TCR, fatoração');
-  String get catComplexSeq => pick('Complejos y Sucesiones', 'Complex & Sequences', pt: 'Complexos e Sequências');
+      pick('Euclides, TCR, factorización', 'Euclid, CRT, factorization', pt: 'Euclides, TCR, fatoração', fr: 'Euclide, TRC, factorisation');
+  String get catComplexSeq => pick('Complejos y Sucesiones', 'Complex & Sequences', pt: 'Complexos e Sequências', fr: 'Complexes et suites');
   String get catComplexSeqSub =>
-      pick('Raíces de la unidad, recurrencias', 'Roots of unity, recurrences', pt: 'Raízes da unidade, recorrências');
-  String get catStatistics => pick('Estadística', 'Statistics', pt: 'Estatística');
+      pick('Raíces de la unidad, recurrencias', 'Roots of unity, recurrences', pt: 'Raízes da unidade, recorrências', fr: "Racines de l'unité, récurrences");
+  String get catStatistics => pick('Estadística', 'Statistics', pt: 'Estatística', fr: 'Statistiques');
   String get catStatisticsSub =>
       pick('Descriptiva exacta y desigualdad de medias',
-          'Exact descriptive stats and mean inequality', pt: 'Descritiva exata e desigualdade das médias');
-  String get catMatrices => pick('Matrices', 'Matrices', pt: 'Matrizes');
+          'Exact descriptive stats and mean inequality', pt: 'Descritiva exata e desigualdade das médias', fr: 'Statistiques exactes et inégalité des moyennes');
+  String get catMatrices => pick('Matrices', 'Matrices', pt: 'Matrizes', fr: 'Matrices');
   String get catMatricesSub =>
       pick('Determinante, inversa, sistemas (exacto)',
-          'Determinant, inverse, systems (exact)', pt: 'Determinante, inversa, sistemas (exato)');
-  String get catCalculus => pick('Cálculo', 'Calculus', pt: 'Cálculo');
+          'Determinant, inverse, systems (exact)', pt: 'Determinante, inversa, sistemas (exato)', fr: 'Déterminant, inverse, systèmes (exact)');
+  String get catCalculus => pick('Cálculo', 'Calculus', pt: 'Cálculo', fr: 'Analyse');
   String get catCalculusSub =>
       pick('Derivada, integral y límite numéricos',
-          'Numerical derivative, integral and limit', pt: 'Derivada, integral e limite numéricos');
+          'Numerical derivative, integral and limit', pt: 'Derivada, integral e limite numéricos', fr: 'Dérivée, intégrale et limite numériques');
 
   // Quiz
-  String get catQuiz => pick('Práctica', 'Practice', pt: 'Prática');
+  String get catQuiz => pick('Práctica', 'Practice', pt: 'Prática', fr: 'Entraînement');
   String get catQuizSub =>
-      pick('Problemas con verificación', 'Self-checking problems', pt: 'Problemas com verificação');
-  String get quizAnswer => pick('Tu respuesta', 'Your answer', pt: 'Sua resposta');
-  String get quizCheck => pick('Comprobar', 'Check', pt: 'Verificar');
-  String get quizNext => pick('Siguiente', 'Next', pt: 'Próximo');
-  String get quizCorrect => pick('¡Correcto!', 'Correct!', pt: 'Correto!');
+      pick('Problemas con verificación', 'Self-checking problems', pt: 'Problemas com verificação', fr: 'Problèmes avec correction');
+  String get quizAnswer => pick('Tu respuesta', 'Your answer', pt: 'Sua resposta', fr: 'Votre réponse');
+  String get quizCheck => pick('Comprobar', 'Check', pt: 'Verificar', fr: 'Vérifier');
+  String get quizNext => pick('Siguiente', 'Next', pt: 'Próximo', fr: 'Suivant');
+  String get quizCorrect => pick('¡Correcto!', 'Correct!', pt: 'Correto!', fr: 'Correct !');
   String quizIncorrect(String answer) =>
-      pick('Incorrecto. Respuesta: $answer', 'Incorrect. Answer: $answer', pt: 'Incorreto. Resposta: $answer');
+      pick('Incorrecto. Respuesta: $answer', 'Incorrect. Answer: $answer', pt: 'Incorreto. Resposta: $answer', fr: 'Incorrect. Réponse : $answer');
   String quizScore(int correct, int total) =>
-      pick('Puntaje: $correct / $total', 'Score: $correct / $total', pt: 'Pontuação: $correct / $total');
+      pick('Puntaje: $correct / $total', 'Score: $correct / $total', pt: 'Pontuação: $correct / $total', fr: 'Score : $correct / $total');
 
   /// Translates a [CalcException] into the active language.
   String errorText(CalcException e) {
@@ -94,153 +99,153 @@ class OlympiadStrings {
     switch (e.code) {
       case CalcError.zeroDenominator:
         return pick('El denominador no puede ser cero',
-            'Denominator cannot be zero', pt: 'O denominador não pode ser zero');
+            'Denominator cannot be zero', pt: 'O denominador não pode ser zero', fr: 'Le dénominateur ne peut pas être nul');
       case CalcError.divisionByZero:
-        return pick('División por cero', 'Division by zero', pt: 'Divisão por zero');
+        return pick('División por cero', 'Division by zero', pt: 'Divisão por zero', fr: 'Division par zéro');
       case CalcError.reciprocalOfZero:
         return pick('El recíproco de 0 no está definido',
-            'The reciprocal of 0 is undefined', pt: 'O recíproco de 0 não está definido');
+            'The reciprocal of 0 is undefined', pt: 'O recíproco de 0 não está definido', fr: "L'inverse de 0 n'est pas défini");
       case CalcError.zeroToNegativePower:
         return pick('0 elevado a un exponente negativo',
-            '0 raised to a negative power', pt: '0 elevado a um expoente negativo');
+            '0 raised to a negative power', pt: '0 elevado a um expoente negativo', fr: '0 élevé à un exposant négatif');
       case CalcError.invalidFraction:
-        return pick('Fracción inválida: "$v"', 'Invalid fraction: "$v"', pt: 'Fração inválida: "$v"');
+        return pick('Fracción inválida: "$v"', 'Invalid fraction: "$v"', pt: 'Fração inválida: "$v"', fr: 'Fraction invalide : « $v »');
       case CalcError.invalidNumber:
-        return pick('Número inválido: "$v"', 'Invalid number: "$v"', pt: 'Número inválido: "$v"');
+        return pick('Número inválido: "$v"', 'Invalid number: "$v"', pt: 'Número inválido: "$v"', fr: 'Nombre invalide : « $v »');
       case CalcError.invalidInteger:
-        return pick('Entero inválido: "$v"', 'Invalid integer: "$v"', pt: 'Inteiro inválido: "$v"');
+        return pick('Entero inválido: "$v"', 'Invalid integer: "$v"', pt: 'Inteiro inválido: "$v"', fr: 'Entier invalide : « $v »');
       case CalcError.emptyInput:
-        return pick('Entrada vacía', 'Empty input', pt: 'Entrada vazia');
+        return pick('Entrada vacía', 'Empty input', pt: 'Entrada vazia', fr: 'Saisie vide');
       case CalcError.negativeRadicand:
         return pick('Radicando negativo: no es un número real',
-            'Negative radicand: not a real number', pt: 'Radicando negativo: não é um número real');
+            'Negative radicand: not a real number', pt: 'Radicando negativo: não é um número real', fr: "Radicande négatif : ce n'est pas un nombre réel");
       case CalcError.evenRootOfNegative:
         return pick('Raíz de índice par de un número negativo',
-            'Even-index root of a negative number', pt: 'Raiz de índice par de um número negativo');
+            'Even-index root of a negative number', pt: 'Raiz de índice par de um número negativo', fr: "Racine d'indice pair d'un nombre négatif");
       case CalcError.rootIndexTooSmall:
         return pick('El índice de la raíz debe ser ≥ 2',
-            'The root index must be ≥ 2', pt: 'O índice da raiz deve ser ≥ 2');
+            'The root index must be ≥ 2', pt: 'O índice da raiz deve ser ≥ 2', fr: "L'indice de la racine doit être ≥ 2");
       case CalcError.divisionByRootZero:
-        return pick('División por √0', 'Division by √0', pt: 'Divisão por √0');
+        return pick('División por √0', 'Division by √0', pt: 'Divisão por √0', fr: 'Division par √0');
       case CalcError.binomialVanishes:
         return pick('Denominador nulo: c² = d (el binomio se anula)',
-            'Null denominator: c² = d (the binomial vanishes)', pt: 'Denominador nulo: c² = d (o binômio se anula)');
+            'Null denominator: c² = d (the binomial vanishes)', pt: 'Denominador nulo: c² = d (o binômio se anula)', fr: "Dénominateur nul : c² = d (le binôme s'annule)");
       case CalcError.invalidTriangle:
         return pick('Los lados no forman un triángulo válido',
-            'The sides do not form a valid triangle', pt: 'Os lados não formam um triângulo válido');
+            'The sides do not form a valid triangle', pt: 'Os lados não formam um triângulo válido', fr: 'Les côtés ne forment pas un triangle valide');
       case CalcError.needAtLeast3Vertices:
         return pick('Se requieren al menos 3 vértices',
-            'At least 3 vertices are required', pt: 'São necessários pelo menos 3 vértices');
+            'At least 3 vertices are required', pt: 'São necessários pelo menos 3 vértices', fr: 'Au moins 3 sommets sont requis');
       case CalcError.invalidPoint:
-        return pick('Punto inválido: "$v"', 'Invalid point: "$v"', pt: 'Ponto inválido: "$v"');
+        return pick('Punto inválido: "$v"', 'Invalid point: "$v"', pt: 'Ponto inválido: "$v"', fr: 'Point invalide : « $v »');
       case CalcError.zeroPolynomialDivision:
         return pick('División entre el polinomio nulo',
-            'Division by the zero polynomial', pt: 'Divisão pelo polinômio nulo');
+            'Division by the zero polynomial', pt: 'Divisão pelo polinômio nulo', fr: 'Division par le polynôme nul');
       case CalcError.emptyExpression:
-        return pick('Expresión vacía', 'Empty expression', pt: 'Expressão vazia');
+        return pick('Expresión vacía', 'Empty expression', pt: 'Expressão vazia', fr: 'Expression vide');
       case CalcError.invalidTerm:
-        return pick('Término inválido: "$v"', 'Invalid term: "$v"', pt: 'Termo inválido: "$v"');
+        return pick('Término inválido: "$v"', 'Invalid term: "$v"', pt: 'Termo inválido: "$v"', fr: 'Terme invalide : « $v »');
       case CalcError.degreeAtLeastOne:
-        return pick('Se requiere grado ≥ 1', 'Degree ≥ 1 is required', pt: 'É necessário grau ≥ 1');
+        return pick('Se requiere grado ≥ 1', 'Degree ≥ 1 is required', pt: 'É necessário grau ≥ 1', fr: 'Un degré ≥ 1 est requis');
       case CalcError.discriminantDegree:
         return pick('Discriminante disponible solo para grados 2 y 3',
-            'Discriminant available only for degrees 2 and 3', pt: 'Discriminante disponível apenas para os graus 2 e 3');
+            'Discriminant available only for degrees 2 and 3', pt: 'Discriminante disponível apenas para os graus 2 e 3', fr: 'Discriminant disponible uniquement pour les degrés 2 et 3');
       case CalcError.zeroPolynomialRoots:
         return pick('El polinomio nulo tiene infinitas raíces',
-            'The zero polynomial has infinitely many roots', pt: 'O polinômio nulo tem infinitas raízes');
+            'The zero polynomial has infinitely many roots', pt: 'O polinômio nulo tem infinitas raízes', fr: 'Le polynôme nul possède une infinité de racines');
       case CalcError.notQuadratic:
         return pick('a = 0: no es una ecuación cuadrática',
-            'a = 0: not a quadratic equation', pt: 'a = 0: não é uma equação quadrática');
+            'a = 0: not a quadratic equation', pt: 'a = 0: não é uma equação quadrática', fr: "a = 0 : ce n'est pas une équation du second degré");
       case CalcError.notCubic:
         return pick('a = 0: no es una ecuación cúbica',
-            'a = 0: not a cubic equation', pt: 'a = 0: não é uma equação cúbica');
+            'a = 0: not a cubic equation', pt: 'a = 0: não é uma equação cúbica', fr: "a = 0 : ce n'est pas une équation du troisième degré");
       case CalcError.modulusPositive:
         return pick('El módulo debe ser positivo',
-            'The modulus must be positive', pt: 'O módulo deve ser positivo');
+            'The modulus must be positive', pt: 'O módulo deve ser positivo', fr: 'Le module doit être positif');
       case CalcError.nNonNegative:
-        return pick('n debe ser ≥ 0', 'n must be ≥ 0', pt: 'n deve ser ≥ 0');
+        return pick('n debe ser ≥ 0', 'n must be ≥ 0', pt: 'n deve ser ≥ 0', fr: 'n doit être ≥ 0');
       case CalcError.nPositive:
-        return pick('n debe ser ≥ 1', 'n must be ≥ 1', pt: 'n deve ser ≥ 1');
+        return pick('n debe ser ≥ 1', 'n must be ≥ 1', pt: 'n deve ser ≥ 1', fr: 'n doit être ≥ 1');
       case CalcError.positiveDRequired:
-        return pick('D debe ser positivo', 'D must be positive', pt: 'D deve ser positivo');
+        return pick('D debe ser positivo', 'D must be positive', pt: 'D deve ser positivo', fr: 'D doit être positif');
       case CalcError.perfectSquareD:
         return pick('D no debe ser un cuadrado perfecto',
-            'D must not be a perfect square', pt: 'D não deve ser um quadrado perfeito');
+            'D must not be a perfect square', pt: 'D não deve ser um quadrado perfeito', fr: 'D ne doit pas être un carré parfait');
       case CalcError.needPositiveValue:
         // The rule is that EVERY value must be positive; the old wording said
         // "at least one", contradicting the check that actually runs.
         return pick('Todos los valores deben ser positivos',
-            'All values must be positive', pt: 'Todos os valores devem ser positivos');
+            'All values must be positive', pt: 'Todos os valores devem ser positivos', fr: 'Toutes les valeurs doivent être positives');
       case CalcError.nGreaterThanOne:
-        return pick('n debe ser > 1', 'n must be > 1', pt: 'n deve ser > 1');
+        return pick('n debe ser > 1', 'n must be > 1', pt: 'n deve ser > 1', fr: 'n doit être > 1');
       case CalcError.needKInitialTerms:
         return pick('Se requieren $k términos iniciales',
-            '$k initial terms are required', pt: 'São necessários $k termos iniciais');
+            '$k initial terms are required', pt: 'São necessários $k termos iniciais', fr: '$k termes initiaux sont requis');
       case CalcError.countNonNegative:
-        return pick('La cantidad debe ser ≥ 0', 'count must be ≥ 0', pt: 'A quantidade deve ser ≥ 0');
+        return pick('La cantidad debe ser ≥ 0', 'count must be ≥ 0', pt: 'A quantidade deve ser ≥ 0', fr: 'La quantité doit être ≥ 0');
       case CalcError.partsNonNegative:
         return pick('Las partes deben ser no negativas',
-            'Parts must be non-negative', pt: 'As partes devem ser não negativas');
+            'Parts must be non-negative', pt: 'As partes devem ser não negativas', fr: 'Les parts doivent être positives ou nulles');
       case CalcError.invalidOperation:
         return pick('Operación no válida (use + - * /)',
-            'Invalid operation (use + - * /)', pt: 'Operação inválida (use + - * /)');
+            'Invalid operation (use + - * /)', pt: 'Operação inválida (use + - * /)', fr: 'Opération invalide (utilisez + - * /)');
       case CalcError.listsSameSize:
         return pick('Las listas deben tener el mismo tamaño y no estar vacías',
-            'The lists must have the same size and be non-empty', pt: 'As listas devem ter o mesmo tamanho e não estar vazias');
+            'The lists must have the same size and be non-empty', pt: 'As listas devem ter o mesmo tamanho e não estar vazias', fr: 'Les listes doivent avoir la même taille et ne pas être vides');
       case CalcError.inputTooLarge:
         return pick('Entrada demasiado grande para este algoritmo (máx ${e.arg('max')})',
-            'Input too large for this algorithm (max ${e.arg('max')})', pt: "Entrada grande demais para este algoritmo (máx ${e.arg('max')})");
+            'Input too large for this algorithm (max ${e.arg('max')})', pt: "Entrada grande demais para este algoritmo (máx ${e.arg('max')})", fr: "Saisie trop grande pour cet algorithme (max ${e.arg('max')})");
       case CalcError.integerCoordinatesRequired:
         return pick('Se requieren coordenadas enteras',
-            'Integer coordinates are required', pt: 'São necessárias coordenadas inteiras');
+            'Integer coordinates are required', pt: 'São necessárias coordenadas inteiras', fr: 'Des coordonnées entières sont requises');
       case CalcError.collinearPoints:
         return pick('Los puntos son colineales: no forman un triángulo',
-            'The points are collinear: they do not form a triangle', pt: 'Os pontos são colineares: não formam um triângulo');
+            'The points are collinear: they do not form a triangle', pt: 'Os pontos são colineares: não formam um triângulo', fr: 'Les points sont alignés : ils ne forment pas un triangle');
       case CalcError.invalidSystem:
         return pick(
             'Sistema inválido: 2 o 3 filas "a,b,…,k" separadas por ";"',
-            'Invalid system: 2 or 3 rows "a,b,…,k" separated by ";"', pt: 'Sistema inválido: 2 ou 3 linhas "a,b,…,k" separadas por ";"');
+            'Invalid system: 2 or 3 rows "a,b,…,k" separated by ";"', pt: 'Sistema inválido: 2 ou 3 linhas "a,b,…,k" separadas por ";"', fr: 'Système invalide : 2 ou 3 lignes « a,b,…,k » séparées par « ; »');
       case CalcError.primeRequired:
         return pick('p debe ser primo (${e.arg('value')} no lo es)',
-            'p must be prime (${e.arg('value')} is not)', pt: "p deve ser primo (${e.arg('value')} não é)");
+            'p must be prime (${e.arg('value')} is not)', pt: "p deve ser primo (${e.arg('value')} não é)", fr: "p doit être premier (${e.arg('value')} ne l'est pas)");
       case CalcError.moduliPositive:
         return pick('Los módulos deben ser positivos',
-            'The moduli must be positive', pt: 'Os módulos devem ser positivos');
+            'The moduli must be positive', pt: 'Os módulos devem ser positivos', fr: 'Les modules doivent être positifs');
       case CalcError.invalidAngle:
         return pick('Cada ángulo debe estar entre 0° y 180° (exclusive)',
-            'Each angle must be between 0° and 180° (exclusive)', pt: 'Cada ângulo deve estar entre 0° e 180° (exclusive)');
+            'Each angle must be between 0° and 180° (exclusive)', pt: 'Cada ângulo deve estar entre 0° e 180° (exclusive)', fr: 'Chaque angle doit être compris entre 0° et 180° (exclus)');
       case CalcError.angleSumTooLarge:
         return pick('Los dos ángulos suman 180° o más: no forman un triángulo',
-            'The two angles add up to 180° or more: they cannot form a triangle', pt: 'Os dois ângulos somam 180° ou mais: não formam um triângulo');
+            'The two angles add up to 180° or more: they cannot form a triangle', pt: 'Os dois ângulos somam 180° ou mais: não formam um triângulo', fr: 'Les deux angles totalisent 180° ou plus : ils ne forment pas un triangle');
       case CalcError.invalidExponent:
         return pick('El exponente debe ser un entero ≥ 0 (recibido: "$v")',
-            'The exponent must be an integer ≥ 0 (got: "$v")', pt: 'O expoente deve ser um inteiro ≥ 0 (recebido: "$v")');
+            'The exponent must be an integer ≥ 0 (got: "$v")', pt: 'O expoente deve ser um inteiro ≥ 0 (recebido: "$v")', fr: "L'exposant doit être un entier ≥ 0 (reçu : « $v »)");
       case CalcError.unbalancedParentheses:
-        return pick('Paréntesis desbalanceados', 'Unbalanced parentheses', pt: 'Parênteses desbalanceados');
+        return pick('Paréntesis desbalanceados', 'Unbalanced parentheses', pt: 'Parênteses desbalanceados', fr: 'Parenthèses non équilibrées');
       case CalcError.unexpectedToken:
         // The parser reports the end of the input as an empty token: there is
         // no symbol to quote, the expression simply stops too early ("2a +").
         return v.isEmpty
-            ? pick('Expresión incompleta', 'Incomplete expression', pt: 'Expressão incompleta')
-            : pick('Símbolo inesperado: "$v"', 'Unexpected symbol: "$v"', pt: 'Símbolo inesperado: "$v"');
+            ? pick('Expresión incompleta', 'Incomplete expression', pt: 'Expressão incompleta', fr: 'Expression incomplète')
+            : pick('Símbolo inesperado: "$v"', 'Unexpected symbol: "$v"', pt: 'Símbolo inesperado: "$v"', fr: 'Symbole inattendu : « $v »');
       case CalcError.divisionNotExact:
         return pick(
             'Solo se puede dividir entre un número o un monomio que divida a '
             'todos los términos',
             'Division is only allowed by a number or by a monomial that '
-            'divides every term', pt: 'Só é possível dividir por um número ou por um monômio que divida todos os termos');
+            'divides every term', pt: 'Só é possível dividir por um número ou por um monômio que divida todos os termos', fr: 'On ne peut diviser que par un nombre ou par un monôme qui divise tous les termes');
       case CalcError.variableNotAssigned:
-        return pick('Falta el valor de "$v"', 'Missing value for "$v"', pt: 'Falta o valor de "$v"');
+        return pick('Falta el valor de "$v"', 'Missing value for "$v"', pt: 'Falta o valor de "$v"', fr: 'Valeur manquante pour « $v »');
       case CalcError.invalidAssignment:
         return pick('Asignación inválida: "$v" (use "a=1, b=2")',
-            'Invalid assignment: "$v" (use "a=1, b=2")', pt: 'Atribuição inválida: "$v" (use "a=1, b=2")');
+            'Invalid assignment: "$v" (use "a=1, b=2")', pt: 'Atribuição inválida: "$v" (use "a=1, b=2")', fr: 'Affectation invalide : « $v » (utilisez « a=1, b=2 »)');
       case CalcError.expansionTooLarge:
         return pick(
             'El desarrollo tiene demasiados términos (máx ${e.arg('max')})',
-            'The expansion has too many terms (max ${e.arg('max')})', pt: "O desenvolvimento tem termos demais (máx ${e.arg('max')})");
+            'The expansion has too many terms (max ${e.arg('max')})', pt: "O desenvolvimento tem termos demais (máx ${e.arg('max')})", fr: "Le développement comporte trop de termes (max ${e.arg('max')})");
       case CalcError.computationTooLong:
         return pick('El cálculo es demasiado costoso: simplifica la expresión',
-            'The computation is too expensive: simplify the expression', pt: 'O cálculo é custoso demais: simplifique a expressão');
+            'The computation is too expensive: simplify the expression', pt: 'O cálculo é custoso demais: simplifique a expressão', fr: "Le calcul est trop coûteux : simplifiez l'expression");
       case CalcError.singleVariableOnly:
         return pick(
             'Esta herramienta solo admite polinomios en x (p. ej. x^2-5x+6). '
@@ -248,7 +253,7 @@ class OlympiadStrings {
             'Expandir y simplificar',
             'This tool only takes polynomials in x (e.g. x^2-5x+6). For '
             'several variables or parentheses use Algebra → '
-            'Expand and simplify', pt: 'Esta ferramenta só aceita polinômios em x (p. ex. x^2-5x+6). Para várias variáveis ou parênteses use Álgebra → Expandir e simplificar');
+            'Expand and simplify', pt: 'Esta ferramenta só aceita polinômios em x (p. ex. x^2-5x+6). Para várias variáveis ou parênteses use Álgebra → Expandir e simplificar', fr: "Cet outil n'accepte que les polynômes en x (p. ex. x^2-5x+6). Pour plusieurs variables ou des parenthèses, utilisez Algèbre → Développer et simplifier");
     }
   }
 }
