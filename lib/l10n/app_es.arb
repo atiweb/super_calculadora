@@ -68,7 +68,7 @@
   "@navAbout": {
     "description": "Navigation drawer item for about dialog"
   },
-  "navAboutSub": "Super Calculadora v1.0",
+  "navAboutSub": "Super Calculadora v1.2.1",
   "@navAboutSub": {
     "description": "Subtitle for about nav item"
   },

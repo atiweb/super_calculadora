@@ -60,7 +60,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get navAbout => 'À propos';
 
   @override
-  String get navAboutSub => 'Super Calculatrice v1.0';
+  String get navAboutSub => 'Super Calculatrice v1.2.1';
 
   @override
   String get navCalculator => 'Calculatrice';

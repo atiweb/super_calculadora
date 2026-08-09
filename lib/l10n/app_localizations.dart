@@ -207,7 +207,7 @@ abstract class AppLocalizations {
   /// Subtitle for about nav item
   ///
   /// In es, this message translates to:
-  /// **'Super Calculadora v1.0'**
+  /// **'Super Calculadora v1.2.1'**
   String get navAboutSub;
 
   /// Calculator label in navigation
