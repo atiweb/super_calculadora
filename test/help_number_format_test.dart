@@ -49,6 +49,28 @@ void main() {
     }
   });
 
+  test('each language names a parameter the same way everywhere', () {
+    // The translation batches skipped every key whose Spanish already matched
+    // the English, on the theory that it was a formula. "1 param" is not: the
+    // Russian help ended up alternating "N парам." with "1 param". hlpGcdParams
+    // is the reference — whatever word it uses must appear in all the others.
+    for (final f in arbs) {
+      final json = read(f);
+      final reference = json['hlpGcdParams'] as String?;
+      if (reference == null) continue;
+      // The word right after the leading "N ", minus any plural or full stop.
+      final token = RegExp(r'N\s+([^\s(]+)').firstMatch(reference)?.group(1);
+      if (token == null) continue;
+      final stem = token.replaceAll(RegExp(r'[.]$'), '').replaceAll(RegExp(r's$'), '');
+      json.forEach((key, value) {
+        if (!key.endsWith('Params') || value is! String) return;
+        expect(value.contains(stem), true,
+            reason: '${f.uri.pathSegments.last} · $key says "$value" but this '
+                'language calls a parameter "$stem" (see hlpGcdParams)');
+      });
+    }
+  });
+
   test('no help text groups thousands with a dot', () {
     // "78.498" reads as a decimal on a screen whose decimal separator is the
     // dot. English and Spanish use a comma and French and Russian a space,

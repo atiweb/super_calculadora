@@ -509,7 +509,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get analysisRepresentations => 'Представления';
 
   @override
-  String get analysisOctal => 'Octal';
+  String get analysisOctal => 'Восьмеричное';
 
   @override
   String get analysisHex => 'Шестнадцатеричное';
@@ -569,7 +569,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get analysisSopf => 'sopf(n) Σразличных простых';
 
   @override
-  String get analysisRadical => 'rad(n) radical';
+  String get analysisRadical => 'rad(n) радикал';
 
   @override
   String get analysisDigitalRoot => 'Цифровой корень';
@@ -623,7 +623,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get analysisExpression => 'Выражение';
 
   @override
-  String get analysisBase => 'Base';
+  String get analysisBase => 'Основание';
 
   @override
   String get analysisExponent => 'Показатель';
@@ -1155,7 +1155,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get hlpEulerPhiTitle => 'φ(n) — функция Эйлера';
 
   @override
-  String get hlpEulerPhiParams => '1 param';
+  String get hlpEulerPhiParams => '1 парам.';
 
   @override
   String get hlpEulerPhiDesc =>
@@ -1192,7 +1192,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get hlpCarmichaelTitle => 'λ(n) — функция Кармайкла';
 
   @override
-  String get hlpCarmichaelParams => '1 param';
+  String get hlpCarmichaelParams => '1 парам.';
 
   @override
   String get hlpCarmichaelDesc =>
@@ -1222,7 +1222,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get hlpMobiusTitle => 'μ(n) — функция Мёбиуса';
 
   @override
-  String get hlpMobiusParams => '1 param';
+  String get hlpMobiusParams => '1 парам.';
 
   @override
   String get hlpMobiusDesc =>
@@ -1255,7 +1255,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get hlpLiouvilleTitle => 'λL(n) — функция Лиувилля';
 
   @override
-  String get hlpLiouvilleParams => '1 param';
+  String get hlpLiouvilleParams => '1 парам.';
 
   @override
   String get hlpLiouvilleDesc => 'Вполне мультипликативна: λL(n) = (−1)^Ω(n).';
@@ -1277,7 +1277,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get hlpSmallOmegaTitle => 'ω(n) — различные простые множители';
 
   @override
-  String get hlpSmallOmegaParams => '1 param';
+  String get hlpSmallOmegaParams => '1 парам.';
 
   @override
   String get hlpSmallOmegaDesc =>
@@ -1299,7 +1299,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get hlpBigOmegaTitle => 'Ω(n) — простые множители с кратностью';
 
   @override
-  String get hlpBigOmegaParams => '1 param';
+  String get hlpBigOmegaParams => '1 парам.';
 
   @override
   String get hlpBigOmegaDesc =>
@@ -1321,7 +1321,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get hlpSigma0Title => 'σ₀(n) — количество делителей';
 
   @override
-  String get hlpSigma0Params => '1 param';
+  String get hlpSigma0Params => '1 парам.';
 
   @override
   String get hlpSigma0Desc => 'Общее число положительных делителей n.';
@@ -1343,7 +1343,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get hlpSigmaTitle => 'σ(n) — сумма делителей';
 
   @override
-  String get hlpSigmaParams => '1 param';
+  String get hlpSigmaParams => '1 парам.';
 
   @override
   String get hlpSigmaDesc => 'Сумма всех положительных делителей n.';
@@ -1370,7 +1370,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get hlpSopfrTitle => 'sopfr(n) — сумма простых с повторениями';
 
   @override
-  String get hlpSopfrParams => '1 param';
+  String get hlpSopfrParams => '1 парам.';
 
   @override
   String get hlpSopfrDesc => 'Складывает простые множители с учётом кратности.';
@@ -1388,7 +1388,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get hlpSopfTitle => 'sopf(n) — сумма различных простых';
 
   @override
-  String get hlpSopfParams => '1 param';
+  String get hlpSopfParams => '1 парам.';
 
   @override
   String get hlpSopfDesc => 'Сумма различных простых, делящих n.';
@@ -1403,10 +1403,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get hlpSopfEx2 => 'sopf(60) = 2+3+5 = 10';
 
   @override
-  String get hlpRadTitle => 'rad(n) — Radical';
+  String get hlpRadTitle => 'rad(n) — Радикал';
 
   @override
-  String get hlpRadParams => '1 param';
+  String get hlpRadParams => '1 парам.';
 
   @override
   String get hlpRadDesc =>
@@ -1425,10 +1425,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get hlpRadEx3 => 'rad(p) = p';
 
   @override
-  String get hlpPrimorialTitle => 'n# — Primorial';
+  String get hlpPrimorialTitle => 'n# — Праймориал';
 
   @override
-  String get hlpPrimorialParams => '1 param';
+  String get hlpPrimorialParams => '1 парам.';
 
   @override
   String get hlpPrimorialDesc => 'Произведение всех простых ≤ n.';
@@ -1449,7 +1449,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get hlpPrimeCountTitle => 'π(n) — функция распределения простых чисел';
 
   @override
-  String get hlpPrimeCountParams => '1 param';
+  String get hlpPrimeCountParams => '1 парам.';
 
   @override
   String get hlpPrimeCountDesc =>
@@ -1472,7 +1472,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get hlpDigitalRootTitle => 'dr(n) — цифровой корень';
 
   @override
-  String get hlpDigitalRootParams => '1 param';
+  String get hlpDigitalRootParams => '1 парам.';
 
   @override
   String get hlpDigitalRootDesc =>
@@ -1494,7 +1494,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get hlpFloorCeilTitle => '⌊x⌋ / ⌈x⌉ — пол и потолок';
 
   @override
-  String get hlpFloorCeilParams => '1 param';
+  String get hlpFloorCeilParams => '1 парам.';
 
   @override
   String get hlpFloorCeilDesc =>
@@ -1516,7 +1516,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get hlpPadicTitle => 'Vₚ(n) — p-адическое нормирование';
 
   @override
-  String get hlpPadicParams => '2 params: n → Vₚ → p → =';
+  String get hlpPadicParams => '2 парам.: n → Vₚ → p → =';
 
   @override
   String get hlpPadicDesc => 'Наибольшая степень простого p, делящая n.';
@@ -1546,7 +1546,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get hlpModTitle => 'a mod b — остаток от деления';
 
   @override
-  String get hlpModParams => '2 params: a → mod → b → =';
+  String get hlpModParams => '2 парам.: a → mod → b → =';
 
   @override
   String get hlpModDesc => 'Остаток от деления a на b.';
@@ -1567,7 +1567,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get hlpModPowTitle => 'a^b mod n — возведение в степень по модулю';
 
   @override
-  String get hlpModPowParams => '3 params: a → a%n → b → = → n → =';
+  String get hlpModPowParams => '3 парам.: a → a%n → b → = → n → =';
 
   @override
   String get hlpModPowDesc =>
@@ -1594,7 +1594,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get hlpModInvTitle => 'a⁻¹ mod n — обратный элемент по модулю';
 
   @override
-  String get hlpModInvParams => '2 params: a → a⁻¹ → n → =';
+  String get hlpModInvParams => '2 парам.: a → a⁻¹ → n → =';
 
   @override
   String get hlpModInvDesc =>
@@ -1616,7 +1616,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get hlpOrdTitle => 'ord_n(a) — мультипликативный порядок';
 
   @override
-  String get hlpOrdParams => '2 params: a → ord → n → =';
+  String get hlpOrdParams => '2 парам.: a → ord → n → =';
 
   @override
   String get hlpOrdDesc =>
@@ -1641,7 +1641,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get hlpLegendreTitle => '(a/p) — символ Лежандра';
 
   @override
-  String get hlpLegendreParams => '2 params: a → (a/p) → p → =';
+  String get hlpLegendreParams => '2 парам.: a → (a/p) → p → =';
 
   @override
   String get hlpLegendreDesc =>
@@ -1664,7 +1664,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get hlpJacobiTitle => '(a/n)ⱼ — символ Якоби';
 
   @override
-  String get hlpJacobiParams => '2 params: a → (a/n)ⱼ → n → =';
+  String get hlpJacobiParams => '2 парам.: a → (a/n)ⱼ → n → =';
 
   @override
   String get hlpJacobiDesc =>
@@ -1686,7 +1686,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get hlpPrimRootTitle => 'g — первообразный корень';
 
   @override
-  String get hlpPrimRootParams => '1 param';
+  String get hlpPrimRootParams => '1 парам.';
 
   @override
   String get hlpPrimRootDesc =>
@@ -1823,10 +1823,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get hlpCombinatoricsHeader => 'Комбинаторика';
 
   @override
-  String get hlpFactorialTitle => 'n! — Factorial';
+  String get hlpFactorialTitle => 'n! — Факториал';
 
   @override
-  String get hlpFactorialParams => '1 param';
+  String get hlpFactorialParams => '1 парам.';
 
   @override
   String get hlpFactorialDesc =>
@@ -1848,7 +1848,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get hlpDblFactorialTitle => 'n!! — двойной факториал';
 
   @override
-  String get hlpDblFactorialParams => '1 param';
+  String get hlpDblFactorialParams => '1 парам.';
 
   @override
   String get hlpDblFactorialDesc => 'Произведение целых чисел той же чётности.';
@@ -1869,7 +1869,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get hlpCombTitle => 'C(n,k) — сочетания';
 
   @override
-  String get hlpCombParams => '2 params: n → C(n,k) → k → =';
+  String get hlpCombParams => '2 парам.: n → C(n,k) → k → =';
 
   @override
   String get hlpCombDesc => 'Способы выбрать k из n без учёта порядка.';
@@ -1896,7 +1896,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get hlpVarTitle => 'V(n,k) — размещения';
 
   @override
-  String get hlpVarParams => '2 params: n → V(n,k) → k → =';
+  String get hlpVarParams => '2 парам.: n → V(n,k) → k → =';
 
   @override
   String get hlpVarDesc => 'Способы выбрать k из n С УЧЁТОМ порядка.';
@@ -1914,7 +1914,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get hlpCatalanTitle => 'Cat(n) — числа Каталана';
 
   @override
-  String get hlpCatalanParams => '1 param';
+  String get hlpCatalanParams => '1 парам.';
 
   @override
   String get hlpCatalanDesc =>
@@ -1933,7 +1933,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get hlpDerangementTitle => 'D(n) — беспорядки';
 
   @override
-  String get hlpDerangementParams => '1 param';
+  String get hlpDerangementParams => '1 парам.';
 
   @override
   String get hlpDerangementDesc =>
@@ -1956,7 +1956,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get hlpBellTitle => 'B(n) — числа Белла';
 
   @override
-  String get hlpBellParams => '1 param';
+  String get hlpBellParams => '1 парам.';
 
   @override
   String get hlpBellDesc => 'Общее число разбиений множества из n элементов.';
@@ -1977,7 +1977,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get hlpPartitionTitle => 'p(n) — разбиения числа';
 
   @override
-  String get hlpPartitionParams => '1 param';
+  String get hlpPartitionParams => '1 парам.';
 
   @override
   String get hlpPartitionDesc =>
@@ -2000,7 +2000,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get hlpStirling2Title => 'S₂(n,k) — числа Стирлинга второго рода';
 
   @override
-  String get hlpStirling2Params => '2 params: n → S₂ → k → =';
+  String get hlpStirling2Params => '2 парам.: n → S₂ → k → =';
 
   @override
   String get hlpStirling2Desc =>
@@ -2023,7 +2023,7 @@ class AppLocalizationsRu extends AppLocalizations {
       's₁(n,k) — числа Стирлинга первого рода (без знака)';
 
   @override
-  String get hlpStirling1Params => '2 params: n → s₁ → k → =';
+  String get hlpStirling1Params => '2 парам.: n → s₁ → k → =';
 
   @override
   String get hlpStirling1Desc => 'Перестановки n элементов ровно с k циклами.';
@@ -2042,7 +2042,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get hlpFibTitle => 'F(n) — n-е число Фибоначчи';
 
   @override
-  String get hlpFibParams => '1 param';
+  String get hlpFibParams => '1 парам.';
 
   @override
   String get hlpFibDesc =>
@@ -2252,7 +2252,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get hlpExamplesLabel => 'Примеры:';
 
   @override
-  String get hlpTipsLabel => 'Tips:';
+  String get hlpTipsLabel => 'Советы:';
 
   @override
   String get errExprEmpty => 'Ошибка: пустое выражение';

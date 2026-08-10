@@ -508,7 +508,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get analysisRepresentations => 'Representasi';
 
   @override
-  String get analysisOctal => 'Octal';
+  String get analysisOctal => 'Oktal';
 
   @override
   String get analysisHex => 'Heksadesimal';
@@ -568,7 +568,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get analysisSopf => 'sopf(n) Σprima berbeda';
 
   @override
-  String get analysisRadical => 'rad(n) radical';
+  String get analysisRadical => 'rad(n) radikal';
 
   @override
   String get analysisDigitalRoot => 'Akar digital';
@@ -622,7 +622,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get analysisExpression => 'Ekspresi';
 
   @override
-  String get analysisBase => 'Base';
+  String get analysisBase => 'Basis';
 
   @override
   String get analysisExponent => 'Eksponen';
@@ -1155,7 +1155,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get hlpEulerPhiTitle => 'φ(n) — fungsi Euler';
 
   @override
-  String get hlpEulerPhiParams => '1 param';
+  String get hlpEulerPhiParams => '1 parameter';
 
   @override
   String get hlpEulerPhiDesc =>
@@ -1192,7 +1192,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get hlpCarmichaelTitle => 'λ(n) — fungsi λ Carmichael';
 
   @override
-  String get hlpCarmichaelParams => '1 param';
+  String get hlpCarmichaelParams => '1 parameter';
 
   @override
   String get hlpCarmichaelDesc =>
@@ -1222,7 +1222,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get hlpMobiusTitle => 'μ(n) — fungsi Möbius';
 
   @override
-  String get hlpMobiusParams => '1 param';
+  String get hlpMobiusParams => '1 parameter';
 
   @override
   String get hlpMobiusDesc =>
@@ -1255,7 +1255,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get hlpLiouvilleTitle => 'λL(n) — fungsi Liouville';
 
   @override
-  String get hlpLiouvilleParams => '1 param';
+  String get hlpLiouvilleParams => '1 parameter';
 
   @override
   String get hlpLiouvilleDesc => 'Multiplikatif sepenuhnya: λL(n) = (−1)^Ω(n).';
@@ -1277,7 +1277,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get hlpSmallOmegaTitle => 'ω(n) — faktor prima yang berbeda';
 
   @override
-  String get hlpSmallOmegaParams => '1 param';
+  String get hlpSmallOmegaParams => '1 parameter';
 
   @override
   String get hlpSmallOmegaDesc =>
@@ -1299,7 +1299,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get hlpBigOmegaTitle => 'Ω(n) — faktor prima dengan multiplisitas';
 
   @override
-  String get hlpBigOmegaParams => '1 param';
+  String get hlpBigOmegaParams => '1 parameter';
 
   @override
   String get hlpBigOmegaDesc =>
@@ -1321,7 +1321,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get hlpSigma0Title => 'σ₀(n) — banyak pembagi';
 
   @override
-  String get hlpSigma0Params => '1 param';
+  String get hlpSigma0Params => '1 parameter';
 
   @override
   String get hlpSigma0Desc => 'Jumlah seluruh pembagi positif dari n.';
@@ -1343,7 +1343,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get hlpSigmaTitle => 'σ(n) — jumlah pembagi';
 
   @override
-  String get hlpSigmaParams => '1 param';
+  String get hlpSigmaParams => '1 parameter';
 
   @override
   String get hlpSigmaDesc => 'Jumlah semua pembagi positif dari n.';
@@ -1370,7 +1370,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get hlpSopfrTitle => 'sopfr(n) — jumlah prima dengan pengulangan';
 
   @override
-  String get hlpSopfrParams => '1 param';
+  String get hlpSopfrParams => '1 parameter';
 
   @override
   String get hlpSopfrDesc =>
@@ -1389,7 +1389,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get hlpSopfTitle => 'sopf(n) — jumlah prima yang berbeda';
 
   @override
-  String get hlpSopfParams => '1 param';
+  String get hlpSopfParams => '1 parameter';
 
   @override
   String get hlpSopfDesc => 'Jumlah prima berbeda yang membagi n.';
@@ -1404,10 +1404,10 @@ class AppLocalizationsId extends AppLocalizations {
   String get hlpSopfEx2 => 'sopf(60) = 2+3+5 = 10';
 
   @override
-  String get hlpRadTitle => 'rad(n) — Radical';
+  String get hlpRadTitle => 'rad(n) — Radikal';
 
   @override
-  String get hlpRadParams => '1 param';
+  String get hlpRadParams => '1 parameter';
 
   @override
   String get hlpRadDesc =>
@@ -1429,7 +1429,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get hlpPrimorialTitle => 'n# — Primorial';
 
   @override
-  String get hlpPrimorialParams => '1 param';
+  String get hlpPrimorialParams => '1 parameter';
 
   @override
   String get hlpPrimorialDesc => 'Hasil kali semua bilangan prima ≤ n.';
@@ -1450,7 +1450,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get hlpPrimeCountTitle => 'π(n) — fungsi pencacah prima';
 
   @override
-  String get hlpPrimeCountParams => '1 param';
+  String get hlpPrimeCountParams => '1 parameter';
 
   @override
   String get hlpPrimeCountDesc =>
@@ -1472,7 +1472,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get hlpDigitalRootTitle => 'dr(n) — akar digital';
 
   @override
-  String get hlpDigitalRootParams => '1 param';
+  String get hlpDigitalRootParams => '1 parameter';
 
   @override
   String get hlpDigitalRootDesc =>
@@ -1494,7 +1494,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get hlpFloorCeilTitle => '⌊x⌋ / ⌈x⌉ — lantai dan langit-langit';
 
   @override
-  String get hlpFloorCeilParams => '1 param';
+  String get hlpFloorCeilParams => '1 parameter';
 
   @override
   String get hlpFloorCeilDesc =>
@@ -1516,7 +1516,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get hlpPadicTitle => 'Vₚ(n) — valuasi p-adik';
 
   @override
-  String get hlpPadicParams => '2 params: n → Vₚ → p → =';
+  String get hlpPadicParams => '2 parameter: n → Vₚ → p → =';
 
   @override
   String get hlpPadicDesc => 'Pangkat tertinggi dari prima p yang membagi n.';
@@ -1546,7 +1546,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get hlpModTitle => 'a mod b — sisa pembagian';
 
   @override
-  String get hlpModParams => '2 params: a → mod → b → =';
+  String get hlpModParams => '2 parameter: a → mod → b → =';
 
   @override
   String get hlpModDesc => 'Sisa pembagian a oleh b.';
@@ -1567,7 +1567,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get hlpModPowTitle => 'a^b mod n — pemangkatan modular';
 
   @override
-  String get hlpModPowParams => '3 params: a → a%n → b → = → n → =';
+  String get hlpModPowParams => '3 parameter: a → a%n → b → = → n → =';
 
   @override
   String get hlpModPowDesc =>
@@ -1594,7 +1594,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get hlpModInvTitle => 'a⁻¹ mod n — invers modular';
 
   @override
-  String get hlpModInvParams => '2 params: a → a⁻¹ → n → =';
+  String get hlpModInvParams => '2 parameter: a → a⁻¹ → n → =';
 
   @override
   String get hlpModInvDesc =>
@@ -1616,7 +1616,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get hlpOrdTitle => 'ord_n(a) — orde multiplikatif';
 
   @override
-  String get hlpOrdParams => '2 params: a → ord → n → =';
+  String get hlpOrdParams => '2 parameter: a → ord → n → =';
 
   @override
   String get hlpOrdDesc =>
@@ -1641,7 +1641,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get hlpLegendreTitle => '(a/p) — simbol Legendre';
 
   @override
-  String get hlpLegendreParams => '2 params: a → (a/p) → p → =';
+  String get hlpLegendreParams => '2 parameter: a → (a/p) → p → =';
 
   @override
   String get hlpLegendreDesc =>
@@ -1664,7 +1664,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get hlpJacobiTitle => '(a/n)ⱼ — simbol Jacobi';
 
   @override
-  String get hlpJacobiParams => '2 params: a → (a/n)ⱼ → n → =';
+  String get hlpJacobiParams => '2 parameter: a → (a/n)ⱼ → n → =';
 
   @override
   String get hlpJacobiDesc =>
@@ -1686,7 +1686,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get hlpPrimRootTitle => 'g — akar primitif';
 
   @override
-  String get hlpPrimRootParams => '1 param';
+  String get hlpPrimRootParams => '1 parameter';
 
   @override
   String get hlpPrimRootDesc =>
@@ -1824,10 +1824,10 @@ class AppLocalizationsId extends AppLocalizations {
   String get hlpCombinatoricsHeader => 'Kombinatorika';
 
   @override
-  String get hlpFactorialTitle => 'n! — Factorial';
+  String get hlpFactorialTitle => 'n! — Faktorial';
 
   @override
-  String get hlpFactorialParams => '1 param';
+  String get hlpFactorialParams => '1 parameter';
 
   @override
   String get hlpFactorialDesc =>
@@ -1849,7 +1849,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get hlpDblFactorialTitle => 'n!! — faktorial ganda';
 
   @override
-  String get hlpDblFactorialParams => '1 param';
+  String get hlpDblFactorialParams => '1 parameter';
 
   @override
   String get hlpDblFactorialDesc =>
@@ -1871,7 +1871,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get hlpCombTitle => 'C(n,k) — kombinasi';
 
   @override
-  String get hlpCombParams => '2 params: n → C(n,k) → k → =';
+  String get hlpCombParams => '2 parameter: n → C(n,k) → k → =';
 
   @override
   String get hlpCombDesc =>
@@ -1899,7 +1899,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get hlpVarTitle => 'V(n,k) — permutasi parsial';
 
   @override
-  String get hlpVarParams => '2 params: n → V(n,k) → k → =';
+  String get hlpVarParams => '2 parameter: n → V(n,k) → k → =';
 
   @override
   String get hlpVarDesc =>
@@ -1918,7 +1918,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get hlpCatalanTitle => 'Cat(n) — bilangan Catalan';
 
   @override
-  String get hlpCatalanParams => '1 param';
+  String get hlpCatalanParams => '1 parameter';
 
   @override
   String get hlpCatalanDesc =>
@@ -1937,7 +1937,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get hlpDerangementTitle => 'D(n) — permutasi tanpa titik tetap';
 
   @override
-  String get hlpDerangementParams => '1 param';
+  String get hlpDerangementParams => '1 parameter';
 
   @override
   String get hlpDerangementDesc =>
@@ -1960,7 +1960,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get hlpBellTitle => 'B(n) — bilangan Bell';
 
   @override
-  String get hlpBellParams => '1 param';
+  String get hlpBellParams => '1 parameter';
 
   @override
   String get hlpBellDesc =>
@@ -1982,7 +1982,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get hlpPartitionTitle => 'p(n) — partisi bilangan bulat';
 
   @override
-  String get hlpPartitionParams => '1 param';
+  String get hlpPartitionParams => '1 parameter';
 
   @override
   String get hlpPartitionDesc =>
@@ -2004,7 +2004,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get hlpStirling2Title => 'S₂(n,k) — bilangan Stirling jenis kedua';
 
   @override
-  String get hlpStirling2Params => '2 params: n → S₂ → k → =';
+  String get hlpStirling2Params => '2 parameter: n → S₂ → k → =';
 
   @override
   String get hlpStirling2Desc =>
@@ -2027,7 +2027,7 @@ class AppLocalizationsId extends AppLocalizations {
       's₁(n,k) — bilangan Stirling jenis pertama (tanpa tanda)';
 
   @override
-  String get hlpStirling1Params => '2 params: n → s₁ → k → =';
+  String get hlpStirling1Params => '2 parameter: n → s₁ → k → =';
 
   @override
   String get hlpStirling1Desc => 'Permutasi n unsur dengan tepat k siklus.';
@@ -2046,7 +2046,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get hlpFibTitle => 'F(n) — bilangan Fibonacci ke-n';
 
   @override
-  String get hlpFibParams => '1 param';
+  String get hlpFibParams => '1 parameter';
 
   @override
   String get hlpFibDesc =>

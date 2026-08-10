@@ -1432,7 +1432,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get hlpRadEx3 => 'rad(p) = p';
 
   @override
-  String get hlpPrimorialTitle => 'n# — Primorial';
+  String get hlpPrimorialTitle => 'n# — Primorielle';
 
   @override
   String get hlpPrimorialParams => '1 param';
@@ -1524,7 +1524,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get hlpPadicTitle => 'Vₚ(n) — Valuation p-adique';
 
   @override
-  String get hlpPadicParams => '2 params: n → Vₚ → p → =';
+  String get hlpPadicParams => '2 params : n → Vₚ → p → =';
 
   @override
   String get hlpPadicDesc => 'Plus grande puissance du premier p qui divise n.';
@@ -1554,7 +1554,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get hlpModTitle => 'a mod b — Reste de la division';
 
   @override
-  String get hlpModParams => '2 params: a → mod → b → =';
+  String get hlpModParams => '2 params : a → mod → b → =';
 
   @override
   String get hlpModDesc => 'Reste de la division de a par b.';
@@ -1575,7 +1575,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get hlpModPowTitle => 'a^b mod n — Exponentiation modulaire';
 
   @override
-  String get hlpModPowParams => '3 params: a → a%n → b → = → n → =';
+  String get hlpModPowParams => '3 params : a → a%n → b → = → n → =';
 
   @override
   String get hlpModPowDesc =>
@@ -1603,7 +1603,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get hlpModInvTitle => 'a⁻¹ mod n — Inverse modulaire';
 
   @override
-  String get hlpModInvParams => '2 params: a → a⁻¹ → n → =';
+  String get hlpModInvParams => '2 params : a → a⁻¹ → n → =';
 
   @override
   String get hlpModInvDesc =>
@@ -1625,7 +1625,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get hlpOrdTitle => 'ord_n(a) — Ordre multiplicatif';
 
   @override
-  String get hlpOrdParams => '2 params: a → ord → n → =';
+  String get hlpOrdParams => '2 params : a → ord → n → =';
 
   @override
   String get hlpOrdDesc =>
@@ -1650,7 +1650,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get hlpLegendreTitle => '(a/p) — Symbole de Legendre';
 
   @override
-  String get hlpLegendreParams => '2 params: a → (a/p) → p → =';
+  String get hlpLegendreParams => '2 params : a → (a/p) → p → =';
 
   @override
   String get hlpLegendreDesc =>
@@ -1673,7 +1673,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get hlpJacobiTitle => '(a/n)ⱼ — Symbole de Jacobi';
 
   @override
-  String get hlpJacobiParams => '2 params: a → (a/n)ⱼ → n → =';
+  String get hlpJacobiParams => '2 params : a → (a/n)ⱼ → n → =';
 
   @override
   String get hlpJacobiDesc =>
@@ -1836,7 +1836,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get hlpCombinatoricsHeader => 'Combinatoire';
 
   @override
-  String get hlpFactorialTitle => 'n! — Factorial';
+  String get hlpFactorialTitle => 'n! — Factorielle';
 
   @override
   String get hlpFactorialParams => '1 param';
@@ -1881,7 +1881,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get hlpCombTitle => 'C(n,k) — Combinaisons';
 
   @override
-  String get hlpCombParams => '2 params: n → C(n,k) → k → =';
+  String get hlpCombParams => '2 params : n → C(n,k) → k → =';
 
   @override
   String get hlpCombDesc =>
@@ -1910,7 +1910,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get hlpVarTitle => 'V(n,k) — Arrangements (permutations partielles)';
 
   @override
-  String get hlpVarParams => '2 params: n → V(n,k) → k → =';
+  String get hlpVarParams => '2 params : n → V(n,k) → k → =';
 
   @override
   String get hlpVarDesc =>
@@ -2015,7 +2015,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get hlpStirling2Title => 'S₂(n,k) — Stirling de 2e espèce';
 
   @override
-  String get hlpStirling2Params => '2 params: n → S₂ → k → =';
+  String get hlpStirling2Params => '2 params : n → S₂ → k → =';
 
   @override
   String get hlpStirling2Desc =>
@@ -2038,7 +2038,7 @@ class AppLocalizationsFr extends AppLocalizations {
       's₁(n,k) — Stirling de 1re espèce (non signés)';
 
   @override
-  String get hlpStirling1Params => '2 params: n → s₁ → k → =';
+  String get hlpStirling1Params => '2 params : n → s₁ → k → =';
 
   @override
   String get hlpStirling1Desc =>
@@ -2266,7 +2266,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get hlpExamplesLabel => 'Exemples :';
 
   @override
-  String get hlpTipsLabel => 'Tips:';
+  String get hlpTipsLabel => 'Conseils :';
 
   @override
   String get errExprEmpty => 'Erreur : expression vide';

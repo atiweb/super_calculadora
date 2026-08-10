@@ -510,7 +510,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get analysisRepresentations => 'Rappresentazioni';
 
   @override
-  String get analysisOctal => 'Octal';
+  String get analysisOctal => 'Ottale';
 
   @override
   String get analysisHex => 'Esadecimale';
@@ -570,7 +570,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get analysisSopf => 'sopf(n) Σprimi dist.';
 
   @override
-  String get analysisRadical => 'rad(n) radical';
+  String get analysisRadical => 'rad(n) radicale';
 
   @override
   String get analysisDigitalRoot => 'Radice numerica';
@@ -1157,7 +1157,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get hlpEulerPhiTitle => 'φ(n) — Funzione φ di Eulero (toziente)';
 
   @override
-  String get hlpEulerPhiParams => '1 param';
+  String get hlpEulerPhiParams => '1 param.';
 
   @override
   String get hlpEulerPhiDesc =>
@@ -1193,7 +1193,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get hlpCarmichaelTitle => 'λ(n) — Funzione λ di Carmichael';
 
   @override
-  String get hlpCarmichaelParams => '1 param';
+  String get hlpCarmichaelParams => '1 param.';
 
   @override
   String get hlpCarmichaelDesc =>
@@ -1223,7 +1223,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get hlpMobiusTitle => 'μ(n) — Funzione di Möbius';
 
   @override
-  String get hlpMobiusParams => '1 param';
+  String get hlpMobiusParams => '1 param.';
 
   @override
   String get hlpMobiusDesc =>
@@ -1256,7 +1256,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get hlpLiouvilleTitle => 'λL(n) — Funzione di Liouville';
 
   @override
-  String get hlpLiouvilleParams => '1 param';
+  String get hlpLiouvilleParams => '1 param.';
 
   @override
   String get hlpLiouvilleDesc =>
@@ -1279,7 +1279,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get hlpSmallOmegaTitle => 'ω(n) — Fattori primi distinti';
 
   @override
-  String get hlpSmallOmegaParams => '1 param';
+  String get hlpSmallOmegaParams => '1 param.';
 
   @override
   String get hlpSmallOmegaDesc =>
@@ -1301,7 +1301,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get hlpBigOmegaTitle => 'Ω(n) — Fattori primi con molteplicità';
 
   @override
-  String get hlpBigOmegaParams => '1 param';
+  String get hlpBigOmegaParams => '1 param.';
 
   @override
   String get hlpBigOmegaDesc =>
@@ -1323,7 +1323,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get hlpSigma0Title => 'σ₀(n) — Numero di divisori';
 
   @override
-  String get hlpSigma0Params => '1 param';
+  String get hlpSigma0Params => '1 param.';
 
   @override
   String get hlpSigma0Desc => 'Numero totale di divisori positivi di n.';
@@ -1345,7 +1345,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get hlpSigmaTitle => 'σ(n) — Somma dei divisori';
 
   @override
-  String get hlpSigmaParams => '1 param';
+  String get hlpSigmaParams => '1 param.';
 
   @override
   String get hlpSigmaDesc => 'Somma di tutti i divisori positivi di n.';
@@ -1372,7 +1372,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get hlpSopfrTitle => 'sopfr(n) — Somma dei primi con ripetizione';
 
   @override
-  String get hlpSopfrParams => '1 param';
+  String get hlpSopfrParams => '1 param.';
 
   @override
   String get hlpSopfrDesc => 'Somma i fattori primi contando la molteplicità.';
@@ -1390,7 +1390,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get hlpSopfTitle => 'sopf(n) — Somma dei primi distinti';
 
   @override
-  String get hlpSopfParams => '1 param';
+  String get hlpSopfParams => '1 param.';
 
   @override
   String get hlpSopfDesc => 'Somma dei primi distinti che dividono n.';
@@ -1405,10 +1405,10 @@ class AppLocalizationsIt extends AppLocalizations {
   String get hlpSopfEx2 => 'sopf(60) = 2+3+5 = 10';
 
   @override
-  String get hlpRadTitle => 'rad(n) — Radical';
+  String get hlpRadTitle => 'rad(n) — Radicale';
 
   @override
-  String get hlpRadParams => '1 param';
+  String get hlpRadParams => '1 param.';
 
   @override
   String get hlpRadDesc =>
@@ -1427,10 +1427,10 @@ class AppLocalizationsIt extends AppLocalizations {
   String get hlpRadEx3 => 'rad(p) = p';
 
   @override
-  String get hlpPrimorialTitle => 'n# — Primorial';
+  String get hlpPrimorialTitle => 'n# — Primoriale';
 
   @override
-  String get hlpPrimorialParams => '1 param';
+  String get hlpPrimorialParams => '1 param.';
 
   @override
   String get hlpPrimorialDesc => 'Prodotto di tutti i numeri primi ≤ n.';
@@ -1451,7 +1451,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get hlpPrimeCountTitle => 'π(n) — Funzione enumerativa dei primi';
 
   @override
-  String get hlpPrimeCountParams => '1 param';
+  String get hlpPrimeCountParams => '1 param.';
 
   @override
   String get hlpPrimeCountDesc =>
@@ -1474,7 +1474,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get hlpDigitalRootTitle => 'dr(n) — Radice numerica';
 
   @override
-  String get hlpDigitalRootParams => '1 param';
+  String get hlpDigitalRootParams => '1 param.';
 
   @override
   String get hlpDigitalRootDesc =>
@@ -1497,7 +1497,7 @@ class AppLocalizationsIt extends AppLocalizations {
       '⌊x⌋ / ⌈x⌉ — Parte intera inferiore e superiore';
 
   @override
-  String get hlpFloorCeilParams => '1 param';
+  String get hlpFloorCeilParams => '1 param.';
 
   @override
   String get hlpFloorCeilDesc =>
@@ -1519,7 +1519,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get hlpPadicTitle => 'Vₚ(n) — Valutazione p-adica';
 
   @override
-  String get hlpPadicParams => '2 params: n → Vₚ → p → =';
+  String get hlpPadicParams => '2 param.: n → Vₚ → p → =';
 
   @override
   String get hlpPadicDesc => 'La massima potenza del primo p che divide n.';
@@ -1549,7 +1549,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get hlpModTitle => 'a mod b — Resto della divisione';
 
   @override
-  String get hlpModParams => '2 params: a → mod → b → =';
+  String get hlpModParams => '2 param.: a → mod → b → =';
 
   @override
   String get hlpModDesc => 'Resto della divisione di a per b.';
@@ -1570,7 +1570,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get hlpModPowTitle => 'a^b mod n — Esponenziazione modulare';
 
   @override
-  String get hlpModPowParams => '3 params: a → a%n → b → = → n → =';
+  String get hlpModPowParams => '3 param.: a → a%n → b → = → n → =';
 
   @override
   String get hlpModPowDesc =>
@@ -1597,7 +1597,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get hlpModInvTitle => 'a⁻¹ mod n — Inverso modulare';
 
   @override
-  String get hlpModInvParams => '2 params: a → a⁻¹ → n → =';
+  String get hlpModInvParams => '2 param.: a → a⁻¹ → n → =';
 
   @override
   String get hlpModInvDesc =>
@@ -1619,7 +1619,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get hlpOrdTitle => 'ord_n(a) — Ordine moltiplicativo';
 
   @override
-  String get hlpOrdParams => '2 params: a → ord → n → =';
+  String get hlpOrdParams => '2 param.: a → ord → n → =';
 
   @override
   String get hlpOrdDesc =>
@@ -1644,7 +1644,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get hlpLegendreTitle => '(a/p) — Simbolo di Legendre';
 
   @override
-  String get hlpLegendreParams => '2 params: a → (a/p) → p → =';
+  String get hlpLegendreParams => '2 param.: a → (a/p) → p → =';
 
   @override
   String get hlpLegendreDesc =>
@@ -1667,7 +1667,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get hlpJacobiTitle => '(a/n)ⱼ — Simbolo di Jacobi';
 
   @override
-  String get hlpJacobiParams => '2 params: a → (a/n)ⱼ → n → =';
+  String get hlpJacobiParams => '2 param.: a → (a/n)ⱼ → n → =';
 
   @override
   String get hlpJacobiDesc =>
@@ -1689,7 +1689,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get hlpPrimRootTitle => 'g — Radice primitiva';
 
   @override
-  String get hlpPrimRootParams => '1 param';
+  String get hlpPrimRootParams => '1 param.';
 
   @override
   String get hlpPrimRootDesc =>
@@ -1827,10 +1827,10 @@ class AppLocalizationsIt extends AppLocalizations {
   String get hlpCombinatoricsHeader => 'Calcolo combinatorio';
 
   @override
-  String get hlpFactorialTitle => 'n! — Factorial';
+  String get hlpFactorialTitle => 'n! — Fattoriale';
 
   @override
-  String get hlpFactorialParams => '1 param';
+  String get hlpFactorialParams => '1 param.';
 
   @override
   String get hlpFactorialDesc => 'Prodotto da 1 a n. Precisione arbitraria.';
@@ -1851,7 +1851,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get hlpDblFactorialTitle => 'n!! — Semifattoriale';
 
   @override
-  String get hlpDblFactorialParams => '1 param';
+  String get hlpDblFactorialParams => '1 param.';
 
   @override
   String get hlpDblFactorialDesc =>
@@ -1873,7 +1873,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get hlpCombTitle => 'C(n,k) — Combinazioni';
 
   @override
-  String get hlpCombParams => '2 params: n → C(n,k) → k → =';
+  String get hlpCombParams => '2 param.: n → C(n,k) → k → =';
 
   @override
   String get hlpCombDesc =>
@@ -1902,7 +1902,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get hlpVarTitle => 'V(n,k) — Disposizioni semplici';
 
   @override
-  String get hlpVarParams => '2 params: n → V(n,k) → k → =';
+  String get hlpVarParams => '2 param.: n → V(n,k) → k → =';
 
   @override
   String get hlpVarDesc =>
@@ -1921,7 +1921,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get hlpCatalanTitle => 'Cat(n) — Numeri di Catalan';
 
   @override
-  String get hlpCatalanParams => '1 param';
+  String get hlpCatalanParams => '1 param.';
 
   @override
   String get hlpCatalanDesc =>
@@ -1940,7 +1940,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get hlpDerangementTitle => 'D(n) — Dismutazioni';
 
   @override
-  String get hlpDerangementParams => '1 param';
+  String get hlpDerangementParams => '1 param.';
 
   @override
   String get hlpDerangementDesc =>
@@ -1963,7 +1963,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get hlpBellTitle => 'B(n) — Numeri di Bell';
 
   @override
-  String get hlpBellParams => '1 param';
+  String get hlpBellParams => '1 param.';
 
   @override
   String get hlpBellDesc =>
@@ -1985,7 +1985,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get hlpPartitionTitle => 'p(n) — Partizioni di un intero';
 
   @override
-  String get hlpPartitionParams => '1 param';
+  String get hlpPartitionParams => '1 param.';
 
   @override
   String get hlpPartitionDesc =>
@@ -2007,7 +2007,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get hlpStirling2Title => 'S₂(n,k) — Numeri di Stirling di 2ª specie';
 
   @override
-  String get hlpStirling2Params => '2 params: n → S₂ → k → =';
+  String get hlpStirling2Params => '2 param.: n → S₂ → k → =';
 
   @override
   String get hlpStirling2Desc =>
@@ -2030,7 +2030,7 @@ class AppLocalizationsIt extends AppLocalizations {
       's₁(n,k) — Numeri di Stirling di 1ª specie (senza segno)';
 
   @override
-  String get hlpStirling1Params => '2 params: n → s₁ → k → =';
+  String get hlpStirling1Params => '2 param.: n → s₁ → k → =';
 
   @override
   String get hlpStirling1Desc =>
@@ -2050,7 +2050,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get hlpFibTitle => 'F(n) — n-esimo di Fibonacci';
 
   @override
-  String get hlpFibParams => '1 param';
+  String get hlpFibParams => '1 param.';
 
   @override
   String get hlpFibDesc =>
@@ -2257,7 +2257,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get hlpExamplesLabel => 'Esempi:';
 
   @override
-  String get hlpTipsLabel => 'Tips:';
+  String get hlpTipsLabel => 'Suggerimenti:';
 
   @override
   String get errExprEmpty => 'Errore: espressione vuota';

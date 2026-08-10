@@ -506,7 +506,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get analysisRepresentations => 'Biểu diễn';
 
   @override
-  String get analysisOctal => 'Octal';
+  String get analysisOctal => 'Bát phân';
 
   @override
   String get analysisHex => 'Thập lục phân';
@@ -620,7 +620,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get analysisExpression => 'Biểu thức';
 
   @override
-  String get analysisBase => 'Base';
+  String get analysisBase => 'Cơ số';
 
   @override
   String get analysisExponent => 'Số mũ';
@@ -1141,7 +1141,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get hlpEulerPhiTitle => 'φ(n) — hàm Euler';
 
   @override
-  String get hlpEulerPhiParams => '1 param';
+  String get hlpEulerPhiParams => '1 tham số';
 
   @override
   String get hlpEulerPhiDesc =>
@@ -1178,7 +1178,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get hlpCarmichaelTitle => 'λ(n) — hàm λ Carmichael';
 
   @override
-  String get hlpCarmichaelParams => '1 param';
+  String get hlpCarmichaelParams => '1 tham số';
 
   @override
   String get hlpCarmichaelDesc =>
@@ -1208,7 +1208,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get hlpMobiusTitle => 'μ(n) — hàm Möbius';
 
   @override
-  String get hlpMobiusParams => '1 param';
+  String get hlpMobiusParams => '1 tham số';
 
   @override
   String get hlpMobiusDesc =>
@@ -1241,7 +1241,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get hlpLiouvilleTitle => 'λL(n) — hàm Liouville';
 
   @override
-  String get hlpLiouvilleParams => '1 param';
+  String get hlpLiouvilleParams => '1 tham số';
 
   @override
   String get hlpLiouvilleDesc => 'Có tính nhân hoàn toàn: λL(n) = (−1)^Ω(n).';
@@ -1263,7 +1263,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get hlpSmallOmegaTitle => 'ω(n) — số ước nguyên tố phân biệt';
 
   @override
-  String get hlpSmallOmegaParams => '1 param';
+  String get hlpSmallOmegaParams => '1 tham số';
 
   @override
   String get hlpSmallOmegaDesc => 'Đếm số lượng ước nguyên tố phân biệt của n.';
@@ -1284,7 +1284,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get hlpBigOmegaTitle => 'Ω(n) — số ước nguyên tố kể cả bội';
 
   @override
-  String get hlpBigOmegaParams => '1 param';
+  String get hlpBigOmegaParams => '1 tham số';
 
   @override
   String get hlpBigOmegaDesc => 'Tổng số thừa số nguyên tố, tính cả lặp lại.';
@@ -1305,7 +1305,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get hlpSigma0Title => 'σ₀(n) — số lượng ước';
 
   @override
-  String get hlpSigma0Params => '1 param';
+  String get hlpSigma0Params => '1 tham số';
 
   @override
   String get hlpSigma0Desc => 'Tổng số ước dương của n.';
@@ -1327,7 +1327,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get hlpSigmaTitle => 'σ(n) — tổng các ước';
 
   @override
-  String get hlpSigmaParams => '1 param';
+  String get hlpSigmaParams => '1 tham số';
 
   @override
   String get hlpSigmaDesc => 'Tổng tất cả các ước dương của n.';
@@ -1354,7 +1354,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get hlpSopfrTitle => 'sopfr(n) — tổng các nguyên tố kể cả bội';
 
   @override
-  String get hlpSopfrParams => '1 param';
+  String get hlpSopfrParams => '1 tham số';
 
   @override
   String get hlpSopfrDesc => 'Cộng các thừa số nguyên tố có tính bội.';
@@ -1372,7 +1372,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get hlpSopfTitle => 'sopf(n) — tổng các nguyên tố phân biệt';
 
   @override
-  String get hlpSopfParams => '1 param';
+  String get hlpSopfParams => '1 tham số';
 
   @override
   String get hlpSopfDesc => 'Tổng các số nguyên tố phân biệt chia hết n.';
@@ -1390,7 +1390,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get hlpRadTitle => 'rad(n) — Radical';
 
   @override
-  String get hlpRadParams => '1 param';
+  String get hlpRadParams => '1 tham số';
 
   @override
   String get hlpRadDesc =>
@@ -1409,10 +1409,10 @@ class AppLocalizationsVi extends AppLocalizations {
   String get hlpRadEx3 => 'rad(p) = p';
 
   @override
-  String get hlpPrimorialTitle => 'n# — Primorial';
+  String get hlpPrimorialTitle => 'n# — Nguyên tố giai thừa';
 
   @override
-  String get hlpPrimorialParams => '1 param';
+  String get hlpPrimorialParams => '1 tham số';
 
   @override
   String get hlpPrimorialDesc => 'Tích tất cả các số nguyên tố ≤ n.';
@@ -1433,7 +1433,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get hlpPrimeCountTitle => 'π(n) — hàm đếm số nguyên tố';
 
   @override
-  String get hlpPrimeCountParams => '1 param';
+  String get hlpPrimeCountParams => '1 tham số';
 
   @override
   String get hlpPrimeCountDesc =>
@@ -1455,7 +1455,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get hlpDigitalRootTitle => 'dr(n) — căn số chữ số';
 
   @override
-  String get hlpDigitalRootParams => '1 param';
+  String get hlpDigitalRootParams => '1 tham số';
 
   @override
   String get hlpDigitalRootDesc =>
@@ -1477,7 +1477,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get hlpFloorCeilTitle => '⌊x⌋ / ⌈x⌉ — phần nguyên dưới và trên';
 
   @override
-  String get hlpFloorCeilParams => '1 param';
+  String get hlpFloorCeilParams => '1 tham số';
 
   @override
   String get hlpFloorCeilDesc =>
@@ -1499,7 +1499,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get hlpPadicTitle => 'Vₚ(n) — định giá p-adic';
 
   @override
-  String get hlpPadicParams => '2 params: n → Vₚ → p → =';
+  String get hlpPadicParams => '2 tham số: n → Vₚ → p → =';
 
   @override
   String get hlpPadicDesc => 'Luỹ thừa lớn nhất của số nguyên tố p chia hết n.';
@@ -1529,7 +1529,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get hlpModTitle => 'a mod b — số dư của phép chia';
 
   @override
-  String get hlpModParams => '2 params: a → mod → b → =';
+  String get hlpModParams => '2 tham số: a → mod → b → =';
 
   @override
   String get hlpModDesc => 'Số dư khi chia a cho b.';
@@ -1550,7 +1550,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get hlpModPowTitle => 'a^b mod n — luỹ thừa modulo';
 
   @override
-  String get hlpModPowParams => '3 params: a → a%n → b → = → n → =';
+  String get hlpModPowParams => '3 tham số: a → a%n → b → = → n → =';
 
   @override
   String get hlpModPowDesc =>
@@ -1578,7 +1578,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get hlpModInvTitle => 'a⁻¹ mod n — nghịch đảo modulo';
 
   @override
-  String get hlpModInvParams => '2 params: a → a⁻¹ → n → =';
+  String get hlpModInvParams => '2 tham số: a → a⁻¹ → n → =';
 
   @override
   String get hlpModInvDesc =>
@@ -1600,7 +1600,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get hlpOrdTitle => 'ord_n(a) — cấp của a theo modulo n';
 
   @override
-  String get hlpOrdParams => '2 params: a → ord → n → =';
+  String get hlpOrdParams => '2 tham số: a → ord → n → =';
 
   @override
   String get hlpOrdDesc =>
@@ -1625,7 +1625,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get hlpLegendreTitle => '(a/p) — ký hiệu Legendre';
 
   @override
-  String get hlpLegendreParams => '2 params: a → (a/p) → p → =';
+  String get hlpLegendreParams => '2 tham số: a → (a/p) → p → =';
 
   @override
   String get hlpLegendreDesc =>
@@ -1648,7 +1648,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get hlpJacobiTitle => '(a/n)ⱼ — ký hiệu Jacobi';
 
   @override
-  String get hlpJacobiParams => '2 params: a → (a/n)ⱼ → n → =';
+  String get hlpJacobiParams => '2 tham số: a → (a/n)ⱼ → n → =';
 
   @override
   String get hlpJacobiDesc =>
@@ -1670,7 +1670,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get hlpPrimRootTitle => 'g — căn nguyên thuỷ';
 
   @override
-  String get hlpPrimRootParams => '1 param';
+  String get hlpPrimRootParams => '1 tham số';
 
   @override
   String get hlpPrimRootDesc =>
@@ -1805,10 +1805,10 @@ class AppLocalizationsVi extends AppLocalizations {
   String get hlpCombinatoricsHeader => 'Tổ hợp';
 
   @override
-  String get hlpFactorialTitle => 'n! — Factorial';
+  String get hlpFactorialTitle => 'n! — Giai thừa';
 
   @override
-  String get hlpFactorialParams => '1 param';
+  String get hlpFactorialParams => '1 tham số';
 
   @override
   String get hlpFactorialDesc => 'Tích từ 1 đến n. Độ chính xác tuỳ ý.';
@@ -1829,7 +1829,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get hlpDblFactorialTitle => 'n!! — giai thừa kép';
 
   @override
-  String get hlpDblFactorialParams => '1 param';
+  String get hlpDblFactorialParams => '1 tham số';
 
   @override
   String get hlpDblFactorialDesc => 'Tích các số nguyên cùng tính chẵn lẻ.';
@@ -1850,7 +1850,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get hlpCombTitle => 'C(n,k) — tổ hợp';
 
   @override
-  String get hlpCombParams => '2 params: n → C(n,k) → k → =';
+  String get hlpCombParams => '2 tham số: n → C(n,k) → k → =';
 
   @override
   String get hlpCombDesc => 'Số cách chọn k phần tử từ n, không kể thứ tự.';
@@ -1878,7 +1878,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get hlpVarTitle => 'V(n,k) — chỉnh hợp';
 
   @override
-  String get hlpVarParams => '2 params: n → V(n,k) → k → =';
+  String get hlpVarParams => '2 tham số: n → V(n,k) → k → =';
 
   @override
   String get hlpVarDesc => 'Số cách chọn k phần tử từ n CÓ kể thứ tự.';
@@ -1896,7 +1896,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get hlpCatalanTitle => 'Cat(n) — số Catalan';
 
   @override
-  String get hlpCatalanParams => '1 param';
+  String get hlpCatalanParams => '1 tham số';
 
   @override
   String get hlpCatalanDesc =>
@@ -1915,7 +1915,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get hlpDerangementTitle => 'D(n) — hoán vị mất thứ tự';
 
   @override
-  String get hlpDerangementParams => '1 param';
+  String get hlpDerangementParams => '1 tham số';
 
   @override
   String get hlpDerangementDesc =>
@@ -1938,7 +1938,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get hlpBellTitle => 'B(n) — số Bell';
 
   @override
-  String get hlpBellParams => '1 param';
+  String get hlpBellParams => '1 tham số';
 
   @override
   String get hlpBellDesc => 'Tổng số cách phân hoạch một tập n phần tử.';
@@ -1959,7 +1959,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get hlpPartitionTitle => 'p(n) — phân hoạch số nguyên';
 
   @override
-  String get hlpPartitionParams => '1 param';
+  String get hlpPartitionParams => '1 tham số';
 
   @override
   String get hlpPartitionDesc =>
@@ -1981,7 +1981,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get hlpStirling2Title => 'S₂(n,k) — số Stirling loại hai';
 
   @override
-  String get hlpStirling2Params => '2 params: n → S₂ → k → =';
+  String get hlpStirling2Params => '2 tham số: n → S₂ → k → =';
 
   @override
   String get hlpStirling2Desc =>
@@ -2003,7 +2003,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get hlpStirling1Title => 's₁(n,k) — số Stirling loại một (không dấu)';
 
   @override
-  String get hlpStirling1Params => '2 params: n → s₁ → k → =';
+  String get hlpStirling1Params => '2 tham số: n → s₁ → k → =';
 
   @override
   String get hlpStirling1Desc =>
@@ -2023,7 +2023,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get hlpFibTitle => 'F(n) — số Fibonacci thứ n';
 
   @override
-  String get hlpFibParams => '1 param';
+  String get hlpFibParams => '1 tham số';
 
   @override
   String get hlpFibDesc =>
@@ -2228,7 +2228,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get hlpExamplesLabel => 'Ví dụ:';
 
   @override
-  String get hlpTipsLabel => 'Tips:';
+  String get hlpTipsLabel => 'Mẹo:';
 
   @override
   String get errExprEmpty => 'Lỗi: biểu thức rỗng';
