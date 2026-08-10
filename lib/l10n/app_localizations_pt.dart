@@ -12,7 +12,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get appTitle => 'Super Calculadora';
 
   @override
-  String get appVersion => 'Versão 1.2.1';
+  String get appVersion => 'Versão 1.3.0';
 
   @override
   String get appDeveloped => 'Desenvolvido em Flutter';
@@ -60,7 +60,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get navAbout => 'Sobre';
 
   @override
-  String get navAboutSub => 'Super Calculadora v1.2.1';
+  String get navAboutSub => 'Super Calculadora v1.3.0';
 
   @override
   String get navCalculator => 'Calculadora';

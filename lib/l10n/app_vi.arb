@@ -1,7 +1,7 @@
 {
   "@@locale": "vi",
   "appTitle": "Máy tính Siêu việt",
-  "appVersion": "Phiên bản 1.2.1",
+  "appVersion": "Phiên bản 1.3.0",
   "appDeveloped": "Được phát triển bằng Flutter",
   "appDynamicThemes": "Có hỗ trợ giao diện động",
   "navStandard": "Chuẩn",
@@ -17,7 +17,7 @@
   "navHelp": "Trợ giúp",
   "navHelpSub": "Hướng dẫn các hàm đặc biệt",
   "navAbout": "Giới thiệu",
-  "navAboutSub": "Máy tính Siêu việt v1.2.1",
+  "navAboutSub": "Máy tính Siêu việt v1.3.0",
   "navCalculator": "Máy tính",
   "navSelectType": "Chọn chế độ",
   "navAngleMode": "Chế độ: {mode}",

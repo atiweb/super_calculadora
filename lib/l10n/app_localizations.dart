@@ -119,7 +119,7 @@ abstract class AppLocalizations {
   /// App version string
   ///
   /// In es, this message translates to:
-  /// **'Versión 1.2.1'**
+  /// **'Versión 1.3.0'**
   String get appVersion;
 
   /// Framework credit shown in about section
@@ -215,7 +215,7 @@ abstract class AppLocalizations {
   /// Subtitle for about nav item
   ///
   /// In es, this message translates to:
-  /// **'Super Calculadora v1.2.1'**
+  /// **'Super Calculadora v1.3.0'**
   String get navAboutSub;
 
   /// Calculator label in navigation

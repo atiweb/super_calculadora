@@ -12,7 +12,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get appTitle => 'Супер Калькулятор';
 
   @override
-  String get appVersion => 'Версия 1.2.1';
+  String get appVersion => 'Версия 1.3.0';
 
   @override
   String get appDeveloped => 'Разработано на Flutter';
@@ -60,7 +60,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get navAbout => 'О приложении';
 
   @override
-  String get navAboutSub => 'Супер Калькулятор v1.2.1';
+  String get navAboutSub => 'Супер Калькулятор v1.3.0';
 
   @override
   String get navCalculator => 'Калькулятор';

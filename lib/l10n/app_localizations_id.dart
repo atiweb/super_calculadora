@@ -12,7 +12,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get appTitle => 'Kalkulator Super';
 
   @override
-  String get appVersion => 'Versi 1.2.1';
+  String get appVersion => 'Versi 1.3.0';
 
   @override
   String get appDeveloped => 'Dikembangkan dengan Flutter';
@@ -60,7 +60,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get navAbout => 'Tentang';
 
   @override
-  String get navAboutSub => 'Kalkulator Super v1.2.1';
+  String get navAboutSub => 'Kalkulator Super v1.3.0';
 
   @override
   String get navCalculator => 'Kalkulator';

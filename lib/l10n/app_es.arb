@@ -4,7 +4,7 @@
   "@appTitle": {
     "description": "App title shown in the title bar and about screen"
   },
-  "appVersion": "Versión 1.2.1",
+  "appVersion": "Versión 1.3.0",
   "@appVersion": {
     "description": "App version string"
   },
@@ -68,7 +68,7 @@
   "@navAbout": {
     "description": "Navigation drawer item for about dialog"
   },
-  "navAboutSub": "Super Calculadora v1.2.1",
+  "navAboutSub": "Super Calculadora v1.3.0",
   "@navAboutSub": {
     "description": "Subtitle for about nav item"
   },

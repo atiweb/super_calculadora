@@ -1,7 +1,7 @@
 {
   "@@locale": "pt",
   "appTitle": "Super Calculadora",
-  "appVersion": "Versão 1.2.1",
+  "appVersion": "Versão 1.3.0",
   "appDeveloped": "Desenvolvido em Flutter",
   "appDynamicThemes": "Com suporte a temas dinâmicos",
   "navStandard": "Padrão",
@@ -17,7 +17,7 @@
   "navHelp": "Ajuda",
   "navHelpSub": "Guia de funções especiais",
   "navAbout": "Sobre",
-  "navAboutSub": "Super Calculadora v1.2.1",
+  "navAboutSub": "Super Calculadora v1.3.0",
   "navCalculator": "Calculadora",
   "navSelectType": "Selecione o modo",
   "navAngleMode": "Modo: {mode}",

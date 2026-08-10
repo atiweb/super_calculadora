@@ -1,7 +1,7 @@
 {
   "@@locale": "id",
   "appTitle": "Kalkulator Super",
-  "appVersion": "Versi 1.2.1",
+  "appVersion": "Versi 1.3.0",
   "appDeveloped": "Dikembangkan dengan Flutter",
   "appDynamicThemes": "Dengan dukungan tema dinamis",
   "navStandard": "Standar",
@@ -17,7 +17,7 @@
   "navHelp": "Bantuan",
   "navHelpSub": "Panduan fungsi khusus",
   "navAbout": "Tentang",
-  "navAboutSub": "Kalkulator Super v1.2.1",
+  "navAboutSub": "Kalkulator Super v1.3.0",
   "navCalculator": "Kalkulator",
   "navSelectType": "Pilih mode",
   "navAngleMode": "Mode: {mode}",

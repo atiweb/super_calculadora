@@ -12,7 +12,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get appTitle => 'Máy tính Siêu việt';
 
   @override
-  String get appVersion => 'Phiên bản 1.2.1';
+  String get appVersion => 'Phiên bản 1.3.0';
 
   @override
   String get appDeveloped => 'Được phát triển bằng Flutter';
@@ -60,7 +60,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get navAbout => 'Giới thiệu';
 
   @override
-  String get navAboutSub => 'Máy tính Siêu việt v1.2.1';
+  String get navAboutSub => 'Máy tính Siêu việt v1.3.0';
 
   @override
   String get navCalculator => 'Máy tính';
