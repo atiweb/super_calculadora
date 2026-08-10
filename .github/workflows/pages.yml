@@ -1,0 +1,73 @@
+name: Pages
+
+# Builds the public site and deploys it to GitHub Pages via Actions:
+#
+#   /       the user guide, straight from docs/
+#   /app/   the calculator itself, compiled with `flutter build web`
+#
+# This replaces the branch-based build (main /docs) so the compiled web app
+# never has to be committed — ~34 MB of artifacts per release would otherwise
+# accumulate in the repo history forever.
+#
+# The site is served at https://supercalc.ati.dev.br (custom domain set in
+# the Pages settings; DNS is a CNAME from supercalc.ati.dev.br to
+# atiweb.github.io), which is why the app's base-href is /app/ — the guide
+# lives at the domain root.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# One deploy at a time; a newer push supersedes an in-flight one.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+env:
+  FLUTTER_VERSION: '3.35.3'
+
+jobs:
+  build:
+    name: Build the guide + web app
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+
+      - run: flutter pub get
+
+      - name: Build the web app for /app/
+        run: flutter build web --release --base-href /app/
+
+      - name: Assemble the site (guide at /, app at /app/)
+        run: |
+          mkdir -p _site/app
+          cp -r docs/. _site/
+          cp -r build/web/. _site/app/
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
