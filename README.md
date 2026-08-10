@@ -20,7 +20,9 @@
 <p align="center">
   <b><a href="https://play.google.com/store/apps/details?id=br.dev.ati.supercalculadora">📲 Get it on Google Play</a></b> (free, no ads)
   &nbsp;·&nbsp;
-  <b><a href="https://atiweb.github.io/super_calculadora/">📖 Online User Guide &amp; Function Reference</a></b> (EN, ES, PT, FR, IT, RU, VI, ID)
+  <b><a href="https://supercalc.ati.dev.br/app/">🧮 Use it in your browser</a></b>
+  &nbsp;·&nbsp;
+  <b><a href="https://supercalc.ati.dev.br/">📖 Online User Guide &amp; Function Reference</a></b> (EN, ES, PT, FR, IT, RU, VI, ID)
 </p>
 
 ---
