@@ -240,7 +240,7 @@ i18nRegister("vi", {
  "fibonacci-03": "Ví dụ",
  "fibonacci-04": "Mẹo",
  "fibonacci-05": "tuần hoàn (chu kỳ Pisano)",
- "digit-sum-base-01": "Tổng chữ số trong cơ số b",
+ "digit-sum-base-01": "ΣcsB — Tổng chữ số trong cơ số b",
  "digit-sum-base-02": "Cộng các chữ số của n khi viết trong cơ số b.",
  "digit-sum-base-03": "Ví dụ",
  "digit-sum-base-04": "Thống kê",

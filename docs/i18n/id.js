@@ -240,7 +240,7 @@ i18nRegister("id", {
  "fibonacci-03": "Contoh",
  "fibonacci-04": "Tips",
  "fibonacci-05": "bersifat periodik (periode Pisano)",
- "digit-sum-base-01": "Jumlah digit dalam basis b",
+ "digit-sum-base-01": "ΣdigB — Jumlah digit dalam basis b",
  "digit-sum-base-02": "Menjumlahkan digit n yang ditulis dalam basis b.",
  "digit-sum-base-03": "Contoh",
  "digit-sum-base-04": "Statistika",

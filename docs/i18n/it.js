@@ -240,7 +240,7 @@ i18nRegister("it", {
  "fibonacci-03": "Esempi",
  "fibonacci-04": "Suggerimenti",
  "fibonacci-05": "è periodico (periodo di Pisano)",
- "digit-sum-base-01": "Somma delle cifre in base b",
+ "digit-sum-base-01": "ΣcifB — Somma delle cifre in base b",
  "digit-sum-base-02": "Somma le cifre di n scritto in base b.",
  "digit-sum-base-03": "Esempi",
  "digit-sum-base-04": "Statistica",

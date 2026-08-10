@@ -1,5 +1,3 @@
-// Textos de la guía en "es". Cargado bajo demanda por index.html.
-// Edita solo los valores; las claves las verifica test/docs_i18n_test.dart.
 i18nRegister("es", {
  "site-nav-01": "Inicio",
  "site-nav-02": "📲 Descargar",
@@ -242,7 +240,7 @@ i18nRegister("es", {
  "fibonacci-03": "Ejemplos",
  "fibonacci-04": "Consejos",
  "fibonacci-05": "es periódico (período de Pisano)",
- "digit-sum-base-01": "Suma de Dígitos en Base b",
+ "digit-sum-base-01": "ΣdígB — Suma de Dígitos en Base b",
  "digit-sum-base-02": "Suma los dígitos de n escrito en base b.",
  "digit-sum-base-03": "Ejemplos",
  "digit-sum-base-04": "Estadística",

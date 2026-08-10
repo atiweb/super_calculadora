@@ -88,6 +88,39 @@ void main() {
         reason: 'some keyed element was not matched — check its markup');
   });
 
+  test('every language names its own key symbols', () {
+    // The key spelling changes with the language (GCD is PGCD in French,
+    // НОД in Russian…), and the guide teaches by naming the key: "12 → PGCD
+    // → 18". If a language file never writes its own symbol, its readers are
+    // being taught keys that do not exist on their keypad. This mirrors
+    // symGcd/symLcm/symCrt/symDigitSumBase in lib/utils/app_locale.dart —
+    // the digit-sum one is here because its section title was the only one
+    // that carried no symbol at all, in any language.
+    const symbols = <String, List<String>>{
+      'es': ['MCD', 'MCM', 'TCR', 'ΣdígB'],
+      'en': ['GCD', 'LCM', 'CRT', 'ΣdigB'],
+      'pt': ['MDC', 'MMC', 'TCR', 'ΣdígB'],
+      'fr': ['PGCD', 'PPCM', 'TRC', 'ΣchifB'],
+      'it': ['MCD', 'mcm', 'TCR', 'ΣcifB'],
+      'ru': ['НОД', 'НОК', 'КТО', 'ΣцифB'],
+      'vi': ['ƯCLN', 'BCNN', 'CRT', 'ΣcsB'],
+      'id': ['FPB', 'KPK', 'CRT', 'ΣdigB'],
+    };
+    for (final f in languageFiles()) {
+      final code = f.uri.pathSegments.last.replaceAll('.js', '');
+      final expected = symbols[code];
+      expect(expected, isNotNull,
+          reason: '$code has no symbol row here — add it when adding a '
+              'language');
+      final text = read(f).values.join('\n');
+      for (final s in expected!) {
+        expect(text.contains(s), true,
+            reason: '${f.path}: the guide never writes the key symbol "$s" '
+                'that the $code keypad shows');
+      }
+    }
+  });
+
   test('the old CSS-toggled scheme is gone', () {
     expect(html.contains('html[lang=es]'), false,
         reason: 'the per-language CSS rules should have been removed');
