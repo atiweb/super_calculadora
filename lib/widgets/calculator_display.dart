@@ -59,16 +59,24 @@ class _CalculatorDisplayState extends State<CalculatorDisplay> {
                       color: Theme.of(context).colorScheme.tertiary.withValues(alpha: 0.15),
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: Text(
-                      calculator.pendingDisplayLabel,
-                      style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w600,
-                        color: Theme.of(context).colorScheme.tertiary,
-                        fontFamily: 'monospace',
+                    // The label carries the instructions — "НОД(12, 18, _)
+                    // [= добавить, НОД решить]" — and runs up to 44 monospace
+                    // characters in Portuguese, wider than a 320dp screen. An
+                    // ellipsis would cut exactly the part that tells the user
+                    // which keys to press, so the text shrinks instead; on
+                    // screens where it fits, scaleDown leaves it at 13px.
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        calculator.pendingDisplayLabel,
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                          color: Theme.of(context).colorScheme.tertiary,
+                          fontFamily: 'monospace',
+                        ),
+                        maxLines: 1,
                       ),
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
                     ),
                   ),
                 ),
