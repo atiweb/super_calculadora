@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart' show LicenseRegistry, LicenseEntryWithLineBreaks;
+import 'package:flutter/foundation.dart'
+    show LicenseRegistry, LicenseEntryWithLineBreaks, kReleaseMode, debugPrint;
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -15,6 +16,12 @@ import 'providers/theme_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // debugPrint also prints in release; on the web that spills the analysis
+  // logs into every visitor's browser console (and on Android into logcat).
+  // One switch here beats guarding the 115 call sites one by one.
+  if (kReleaseMode) {
+    debugPrint = (String? message, {int? wrapWidth}) {};
+  }
   // Android 15 (SDK 35) enforces the edge-to-edge view. We enable
   // edge-to-edge mode explicitly with the current (non-deprecated) API.
   // We do not set statusBarColor/systemNavigationBarColor: on SDK 35 those
