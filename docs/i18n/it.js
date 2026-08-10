@@ -416,5 +416,8 @@ i18nRegister("it", {
  "olympiad-07": "Tabella di riferimento rapido",
  "olympiad-08": "Super Calcolatrice",
  "olympiad-09": "Google Play",
- "olympiad-10": "Informativa sulla privacy"
+ "olympiad-10": "Informativa sulla privacy",
+ "download-09": "Usala nel browser",
+ "download-10": "Niente da installare: la stessa calcolatrice funziona proprio qui, su iPhone, iPad e qualsiasi computer.",
+ "site-nav-53": "🧮 App web"
 });

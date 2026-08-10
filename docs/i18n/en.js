@@ -416,5 +416,8 @@ i18nRegister("en", {
  "olympiad-07": "Quick Reference Table",
  "olympiad-08": "Super Calculator",
  "olympiad-09": "Google Play",
- "olympiad-10": "Privacy Policy"
+ "olympiad-10": "Privacy Policy",
+ "download-09": "Use it in your browser",
+ "download-10": "No install needed — the same calculator runs right here, on iPhone, iPad and any computer.",
+ "site-nav-53": "🧮 Web app"
 });

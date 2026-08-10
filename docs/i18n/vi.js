@@ -416,5 +416,8 @@ i18nRegister("vi", {
  "olympiad-07": "Bảng tra nhanh",
  "olympiad-08": "Máy tính Siêu việt",
  "olympiad-09": "Google Play",
- "olympiad-10": "Chính sách quyền riêng tư"
+ "olympiad-10": "Chính sách quyền riêng tư",
+ "download-09": "Dùng ngay trên trình duyệt",
+ "download-10": "Không cần cài đặt — chính chiếc máy tính này chạy ngay tại đây, trên iPhone, iPad và mọi máy tính.",
+ "site-nav-53": "🧮 Bản web"
 });

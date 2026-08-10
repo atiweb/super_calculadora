@@ -416,5 +416,8 @@ i18nRegister("id", {
  "olympiad-07": "Tabel rujukan singkat",
  "olympiad-08": "Kalkulator Super",
  "olympiad-09": "Google Play",
- "olympiad-10": "Kebijakan privasi"
+ "olympiad-10": "Kebijakan privasi",
+ "download-09": "Gunakan di browser",
+ "download-10": "Tanpa instalasi — kalkulator yang sama berjalan langsung di sini, di iPhone, iPad dan komputer mana pun.",
+ "site-nav-53": "🧮 Versi web"
 });
