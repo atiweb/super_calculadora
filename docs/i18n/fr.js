@@ -1,5 +1,3 @@
-// Textes du guide en "fr". Chargé à la demande par index.html.
-// Ne modifiez que les valeurs ; les clés sont vérifiées par test/docs_i18n_test.dart.
 i18nRegister("fr", {
  "site-nav-01": "Accueil",
  "site-nav-02": "📲 Télécharger",
@@ -82,7 +80,7 @@ i18nRegister("fr", {
  "parameter-system-10": "Indicateur d'opération en attente",
  "parameter-system-11": "« C(10, _) » signifie qu'il manque k. « PGCD(12, 18, _) [= ajouter, PGCD exécuter] » est une opération à longueur variable.",
  "high-precision-01": "Mode haute précision",
- "high-precision-02": "<pre>Interrupteur facultatif dans Paramètres → « Mode haute précision » (avec un\ncurseur de 5 à 100 chiffres).\n\nUne fois activé, les fonctions transcendantes/irrationnelles — sin, cos, tan,\nasin, acos, atan, ln, log, exp, √ et ∛ — sont calculées avec des nombres réels\nCONSTRUCTIFS : la valeur est exacte en interne et n'est arrondie qu'à l'affichage.\n\n  • Aucune erreur de virgule flottante.  √2 (30 chif.) = 1,41421356237309504880168872421\n  • sin(45°) (30 chif.) = 0,707106781186547524400844362105\n  • Les singularités sont détectées par construction : tan(90°) → « indéfini »\n    (au lieu d'un trompeur 1,6×10¹⁶).\n  • Tout s'exécute dans un isolate en arrière-plan avec un indicateur de\n    chargement — l'interface ne fige jamais. (Les puissances qui exploseraient\n    à des milliards de chiffres, p. ex. 1.0006^99999999, sont refusées\n    immédiatement comme « trop grandes ».)\n\nUtilise une copie vendorisée de computable_reals (portage en Dart des réels\nconstructifs de Hans Boehm). Voir Paramètres → Licences open source.</pre>",
+ "high-precision-02": "<pre>Interrupteur facultatif dans Paramètres → « Mode haute précision » (avec un\ncurseur de 5 à 100 chiffres).\n\nUne fois activé, les fonctions transcendantes/irrationnelles — sin, cos, tan,\nasin, acos, atan, ln, log, exp, √ et ∛ — sont calculées avec des nombres réels\nCONSTRUCTIFS : la valeur est exacte en interne et n'est arrondie qu'à l'affichage.\n\n  • Aucune erreur de virgule flottante.  √2 (30 chif.) = 1.41421356237309504880168872421\n  • sin(45°) (30 chif.) = 0.707106781186547524400844362105\n  • Les singularités sont détectées par construction : tan(90°) → « indéfini »\n    (au lieu d'un trompeur 1.6×10¹⁶).\n  • Tout s'exécute dans un isolate en arrière-plan avec un indicateur de\n    chargement — l'interface ne fige jamais. (Les puissances qui exploseraient\n    à des milliards de chiffres, p. ex. 1.0006^99999999, sont refusées\n    immédiatement comme « trop grandes ».)\n\nUtilise une copie vendorisée de computable_reals (portage en Dart des réels\nconstructifs de Hans Boehm). Voir Paramètres → Licences open source.</pre>",
  "high-precision-03": "Théorie des nombres",
  "euler-phi-01": "φ(n) — Indicatrice d'Euler",
  "euler-phi-02": "param",
@@ -268,7 +266,7 @@ i18nRegister("fr", {
  "tools-01": "Outils d'Olympiades",
  "tools-02": "Une section d'entraînement dédiée — ouvrez le menu → <strong>Outils d'Olympiades</strong>. Chaque outil est un formulaire simple : remplissez les champs, appuyez sur <em>Calculer</em>, et lisez la réponse exacte. Les résultats utilisent l'arithmétique exacte (fractions, radicaux) chaque fois que c'est possible.",
  "tools-fractions-01": "Fractions — Arithmétique rationnelle exacte",
- "tools-fractions-02": "En olympiades, les réponses sont exactes : 22/7, pas 3,14… L'outil Fractions utilise des rationnels exacts p/q en précision arbitraire, toujours réduits.",
+ "tools-fractions-02": "En olympiades, les réponses sont exactes : 22/7, pas 3.14… L'outil Fractions utilise des rationnels exacts p/q en précision arbitraire, toujours réduits.",
  "tools-fractions-03": "Arithmétique des fractions",
  "tools-fractions-04": "Deux fractions et une opération (+−×÷). Résultat sous forme de fraction, de nombre mixte et de décimal.",
  "tools-fractions-05": "Simplifier / convertir",
@@ -408,7 +406,7 @@ i18nRegister("fr", {
  "tools-practice-01": "Mode entraînement",
  "tools-practice-02": "<pre>Accessible depuis Outils d'Olympiades → Entraînement. L'application propose\nun problème ; saisissez la réponse — elle indique aussitôt si elle est\ncorrecte et tient le score de la session.\n\nThèmes : φ(n) indicatrice d'Euler, PGCD, n! factorielle, C(n,k) combinaisons,\nσ₀(n) nombre de diviseurs, somme des chiffres, a mod b, F(n) Fibonacci.\n\nConseil : le correcteur tolère les zéros initiaux et les espaces en trop.</pre>",
  "analysis-panel-01": "Panneau d'analyse numérique",
- "analysis-panel-02": "<pre>Dès qu'un nombre est saisi, le panneau de droite (tablette) ou du bas\n(mobile) affiche automatiquement :\n\n  • Propriétés : chiffres, parité, signe\n  • Représentations : binaire, octal, hexadécimal\n  • Primalité : Miller-Rabin (déterministe pour n &lt; 3,2×10¹⁸), décomposition\n  • Premiers voisins : précédent et suivant\n  • Diviseurs : liste complète, somme, nombre\n  • Classifications : carré/cube parfait, puissance parfaite, Fibonacci,\n    triangulaire, palindrome\n\nPour les nombres d'au plus 15 chiffres, il affiche aussi :\n\n  • Fonctions arithmétiques : φ, λ, μ, ω, Ω, sopfr, sopf, rad, racine numérique\n  • Classifications : sans facteur carré, puissant, Harshad, semi-premier,\n    abondant / déficient / parfait\n\nRemarque : appuyer sur CE efface aussitôt le panneau d'analyse.</pre>",
+ "analysis-panel-02": "<pre>Dès qu'un nombre est saisi, le panneau de droite (tablette) ou du bas\n(mobile) affiche automatiquement :\n\n  • Propriétés : chiffres, parité, signe\n  • Représentations : binaire, octal, hexadécimal\n  • Primalité : Miller-Rabin (déterministe pour n &lt; 3.2×10¹⁸), décomposition\n  • Premiers voisins : précédent et suivant\n  • Diviseurs : liste complète, somme, nombre\n  • Classifications : carré/cube parfait, puissance parfaite, Fibonacci,\n    triangulaire, palindrome\n\nPour les nombres d'au plus 15 chiffres, il affiche aussi :\n\n  • Fonctions arithmétiques : φ, λ, μ, ω, Ω, sopfr, sopf, rad, racine numérique\n  • Classifications : sans facteur carré, puissant, Harshad, semi-premier,\n    abondant / déficient / parfait\n\nRemarque : appuyer sur CE efface aussitôt le panneau d'analyse.</pre>",
  "olympiad-01": "Formules clés pour les olympiades",
  "olympiad-02": "Identités fondamentales",
  "olympiad-03": "Théorème d'Euler :",

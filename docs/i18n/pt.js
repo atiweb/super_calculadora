@@ -1,5 +1,3 @@
-// Textos da guia em "pt". Carregado sob demanda por index.html.
-// Edite apenas os valores; as chaves são verificadas por test/docs_i18n_test.dart.
 i18nRegister("pt", {
  "site-nav-01": "Início",
  "site-nav-02": "📲 Baixar",
@@ -82,7 +80,7 @@ i18nRegister("pt", {
  "parameter-system-10": "Indicador de operação pendente",
  "parameter-system-11": "\"C(10, _)\" significa que falta o k. \"MDC(12, 18, _) [= acrescentar, MDC executar]\" é uma operação de comprimento variável.",
  "high-precision-01": "Modo de Alta Precisão",
- "high-precision-02": "<pre>Interruptor opcional em Configurações → \"Modo de alta precisão\" (com deslizador de\n5 a 100 dígitos).\n\nAo ativá-lo, as funções transcendentes/irracionais — sin, cos, tan, asin,\nacos, atan, ln, log, exp, √ e ∛ — passam a ser calculadas com números reais\nCONSTRUTIVOS: o valor é exato internamente e só é arredondado ao ser exibido.\n\n  • Sem erro de ponto flutuante.  √2 (30 díg.) = 1,41421356237309504880168872421\n  • sin(45°) (30 díg.) = 0,707106781186547524400844362105\n  • As singularidades são detectadas por construção: tan(90°) → \"indefinido\"\n    (em vez de um enganoso 1,6×10¹⁶).\n  • Tudo roda em um isolate em segundo plano com indicador de carregamento — a\n    interface nunca trava. (Potências que explodiriam para bilhões de dígitos,\n    p. ex. 1.0006^99999999, são recusadas na hora como \"grande demais\".)\n\nUsa uma cópia vendorizada de computable_reals (port em Dart dos reais\nconstrutivos de Hans Boehm). Veja Configurações → Licenças de código aberto.</pre>",
+ "high-precision-02": "<pre>Interruptor opcional em Configurações → \"Modo de alta precisão\" (com deslizador de\n5 a 100 dígitos).\n\nAo ativá-lo, as funções transcendentes/irracionais — sin, cos, tan, asin,\nacos, atan, ln, log, exp, √ e ∛ — passam a ser calculadas com números reais\nCONSTRUTIVOS: o valor é exato internamente e só é arredondado ao ser exibido.\n\n  • Sem erro de ponto flutuante.  √2 (30 díg.) = 1.41421356237309504880168872421\n  • sin(45°) (30 díg.) = 0.707106781186547524400844362105\n  • As singularidades são detectadas por construção: tan(90°) → \"indefinido\"\n    (em vez de um enganoso 1.6×10¹⁶).\n  • Tudo roda em um isolate em segundo plano com indicador de carregamento — a\n    interface nunca trava. (Potências que explodiriam para bilhões de dígitos,\n    p. ex. 1.0006^99999999, são recusadas na hora como \"grande demais\".)\n\nUsa uma cópia vendorizada de computable_reals (port em Dart dos reais\nconstrutivos de Hans Boehm). Veja Configurações → Licenças de código aberto.</pre>",
  "high-precision-03": "Teoria dos Números",
  "euler-phi-01": "φ(n) — Função Totiente de Euler",
  "euler-phi-02": "param",
@@ -268,7 +266,7 @@ i18nRegister("pt", {
  "tools-01": "Ferramentas de Olimpíada",
  "tools-02": "Uma seção de treinamento dedicada — abra o menu → <strong>Ferramentas de Olimpíada</strong>. Cada ferramenta é um formulário simples: preencha os campos, pressione <em>Calcular</em>, e leia a resposta exata. Os resultados usam aritmética exata (frações, radicais) sempre que possível.",
  "tools-fractions-01": "Frações — Aritmética Racional Exata",
- "tools-fractions-02": "Em olimpíadas, as respostas são exatas: 22/7, não 3,14… A ferramenta de Frações usa racionais exatos p/q de precisão arbitrária, sempre reduzidos.",
+ "tools-fractions-02": "Em olimpíadas, as respostas são exatas: 22/7, não 3.14… A ferramenta de Frações usa racionais exatos p/q de precisão arbitrária, sempre reduzidos.",
  "tools-fractions-03": "Aritmética de frações",
  "tools-fractions-04": "Duas frações e uma operação (+−×÷). Resultado como fração, número misto e decimal.",
  "tools-fractions-05": "Simplificar / converter",
@@ -408,7 +406,7 @@ i18nRegister("pt", {
  "tools-practice-01": "Modo Prática",
  "tools-practice-02": "<pre>Acesse em Ferramentas de Olimpíada → Prática. O app apresenta um\nproblema; escreva a resposta — ele diz na hora se está certa\ne mantém a pontuação da sessão.\n\nTemas: φ(n) totiente de Euler, MDC, n! fatorial, C(n,k) combinações,\nσ₀(n) quantidade de divisores, soma de dígitos, a mod b, F(n) Fibonacci.\n\nDica: o verificador tolera zeros à esquerda e espaços a mais.</pre>",
  "analysis-panel-01": "Painel de Análise Numérica",
- "analysis-panel-02": "<pre>Quando se digita qualquer número, o painel da direita (tablet) ou de baixo\n(celular) mostra automaticamente:\n\n  • Propriedades: dígitos, paridade, sinal\n  • Representações: binário, octal, hexadecimal\n  • Primalidade: Miller-Rabin (determinístico para n &lt; 3,2×10¹⁸), fatoração\n  • Primos vizinhos: anterior e seguinte\n  • Divisores: lista completa, soma, quantidade\n  • Classificações: quadrado/cubo perfeito, potência perfeita, Fibonacci,\n    triangular, palíndromo\n\nPara números de até 15 dígitos, também mostra:\n\n  • Funções aritméticas: φ, λ, μ, ω, Ω, sopfr, sopf, rad, raiz digital\n  • Classificações: livre de quadrados, poderoso, Harshad, semiprimo,\n    abundante / deficiente / perfeito\n\nNota: pressionar CE limpa o painel de análise na hora.</pre>",
+ "analysis-panel-02": "<pre>Quando se digita qualquer número, o painel da direita (tablet) ou de baixo\n(celular) mostra automaticamente:\n\n  • Propriedades: dígitos, paridade, sinal\n  • Representações: binário, octal, hexadecimal\n  • Primalidade: Miller-Rabin (determinístico para n &lt; 3.2×10¹⁸), fatoração\n  • Primos vizinhos: anterior e seguinte\n  • Divisores: lista completa, soma, quantidade\n  • Classificações: quadrado/cubo perfeito, potência perfeita, Fibonacci,\n    triangular, palíndromo\n\nPara números de até 15 dígitos, também mostra:\n\n  • Funções aritméticas: φ, λ, μ, ω, Ω, sopfr, sopf, rad, raiz digital\n  • Classificações: livre de quadrados, poderoso, Harshad, semiprimo,\n    abundante / deficiente / perfeito\n\nNota: pressionar CE limpa o painel de análise na hora.</pre>",
  "olympiad-01": "Fórmulas Essenciais para Olimpíada",
  "olympiad-02": "Identidades Fundamentais",
  "olympiad-03": "Teorema de Euler:",

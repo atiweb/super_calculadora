@@ -1454,7 +1454,7 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get hlpPrimeCountDesc =>
-      'Menghitung prima ≤ n. Eksak untuk n ≤ 1.000.000; di atas itu memakai hampiran Li(x).';
+      'Menghitung prima ≤ n. Eksak untuk n ≤ 1 000 000; di atas itu memakai hampiran Li(x).';
 
   @override
   String get hlpPrimeCountFormula => 'π(n) ~ n/ln(n) (teorema bilangan prima)';
@@ -1466,7 +1466,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get hlpPrimeCountEx2 => 'π(100) = 25';
 
   @override
-  String get hlpPrimeCountEx3 => 'π(1.000.000) = 78.498';
+  String get hlpPrimeCountEx3 => 'π(1 000 000) = 78 498';
 
   @override
   String get hlpDigitalRootTitle => 'dr(n) — akar digital';
@@ -1504,10 +1504,10 @@ class AppLocalizationsId extends AppLocalizations {
   String get hlpFloorCeilFormula => '⌊x⌋ ≤ x < ⌊x⌋+1\n⌈x⌉−1 < x ≤ ⌈x⌉';
 
   @override
-  String get hlpFloorCeilEx1 => '⌊3,7⌋ = 3, ⌈3,7⌉ = 4';
+  String get hlpFloorCeilEx1 => '⌊3.7⌋ = 3, ⌈3.7⌉ = 4';
 
   @override
-  String get hlpFloorCeilEx2 => '⌊−2,3⌋ = −3, ⌈−2,3⌉ = −2';
+  String get hlpFloorCeilEx2 => '⌊−2.3⌋ = −3, ⌈−2.3⌉ = −2';
 
   @override
   String get hlpFloorCeilEx3 => '⌊5⌋ = ⌈5⌉ = 5';
@@ -1840,10 +1840,10 @@ class AppLocalizationsId extends AppLocalizations {
   String get hlpFactorialEx1 => '5! = 120';
 
   @override
-  String get hlpFactorialEx2 => '10! = 3.628.800';
+  String get hlpFactorialEx2 => '10! = 3 628 800';
 
   @override
-  String get hlpFactorialEx3 => '20! = 2.432.902.008.176.640.000';
+  String get hlpFactorialEx3 => '20! = 2 432 902 008 176 640 000';
 
   @override
   String get hlpDblFactorialTitle => 'n!! — faktorial ganda';
@@ -1954,7 +1954,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get hlpDerangementEx2 => 'D(4) = 9';
 
   @override
-  String get hlpDerangementEx3 => 'D(n)/n! → 1/e ≈ 0,3679';
+  String get hlpDerangementEx3 => 'D(n)/n! → 1/e ≈ 0.3679';
 
   @override
   String get hlpBellTitle => 'B(n) — bilangan Bell';
@@ -1998,7 +1998,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get hlpPartitionEx2 => 'p(10) = 42';
 
   @override
-  String get hlpPartitionEx3 => 'p(100) = 190.569.292.356';
+  String get hlpPartitionEx3 => 'p(100) = 190 569 292 356';
 
   @override
   String get hlpStirling2Title => 'S₂(n,k) — bilangan Stirling jenis kedua';
@@ -2059,10 +2059,10 @@ class AppLocalizationsId extends AppLocalizations {
   String get hlpFibEx1 => 'F(10) = 55';
 
   @override
-  String get hlpFibEx2 => 'F(50) = 12.586.269.025';
+  String get hlpFibEx2 => 'F(50) = 12 586 269 025';
 
   @override
-  String get hlpFibEx3 => 'F(100) = 354.224.848.179.261.915.075';
+  String get hlpFibEx3 => 'F(100) = 354 224 848 179 261 915 075';
 
   @override
   String get hlpFibTip1 => 'F(n) mod m bersifat periodik (periode Pisano)';
@@ -2137,7 +2137,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get hlpGeoMeanEx1 => 'GM(2, 8) = 4';
 
   @override
-  String get hlpGeoMeanEx2 => 'GM(1, 4, 9) ≈ 3,30';
+  String get hlpGeoMeanEx2 => 'GM(1, 4, 9) ≈ 3.30';
 
   @override
   String get hlpHarmMeanTitle => 'Rata-rata harmonik — HM';
@@ -2153,10 +2153,10 @@ class AppLocalizationsId extends AppLocalizations {
   String get hlpHarmMeanFormula => 'HM = n / (1/x₁ + 1/x₂ + ... + 1/xₙ)';
 
   @override
-  String get hlpHarmMeanEx1 => 'HM(2, 8) = 3,2';
+  String get hlpHarmMeanEx1 => 'HM(2, 8) = 3.2';
 
   @override
-  String get hlpHarmMeanEx2 => 'HM(1, 4, 9) ≈ 2,08';
+  String get hlpHarmMeanEx2 => 'HM(1, 4, 9) ≈ 2.08';
 
   @override
   String get hlpQuadMeanTitle => 'Rata-rata kuadratik — QM';
@@ -2171,10 +2171,10 @@ class AppLocalizationsId extends AppLocalizations {
   String get hlpQuadMeanFormula => 'QM = √((x₁² + x₂² + ... + xₙ²) / n)';
 
   @override
-  String get hlpQuadMeanEx1 => 'QM(3, 4) ≈ 3,54';
+  String get hlpQuadMeanEx1 => 'QM(3, 4) ≈ 3.54';
 
   @override
-  String get hlpQuadMeanEx2 => 'QM(1, 2, 3) ≈ 2,16';
+  String get hlpQuadMeanEx2 => 'QM(1, 2, 3) ≈ 2.16';
 
   @override
   String get hlpMinMaxTitle => 'min / max — minimum dan maksimum';
@@ -2224,7 +2224,7 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get hlpHighPrecContent =>
-      'Aktifkan di Pengaturan. Menghitung sin, cos, tan, ln, log, exp, √ dan ∛ dengan bilangan real konstruktif yang EKSAK dan membulatkan hanya saat ditampilkan (5–100 digit). Tanpa galat titik-mengambang: √2 sampai 30 digit = 1,41421356237309504880168872421. Titik singular terdeteksi secara konstruktif (tan 90° = tak terdefinisi). Semuanya berjalan di latar belakang dengan indikator pemuatan, sehingga aplikasi tidak pernah membeku.';
+      'Aktifkan di Pengaturan. Menghitung sin, cos, tan, ln, log, exp, √ dan ∛ dengan bilangan real konstruktif yang EKSAK dan membulatkan hanya saat ditampilkan (5–100 digit). Tanpa galat titik-mengambang: √2 sampai 30 digit = 1.41421356237309504880168872421. Titik singular terdeteksi secara konstruktif (tan 90° = tak terdefinisi). Semuanya berjalan di latar belakang dengan indikator pemuatan, sehingga aplikasi tidak pernah membeku.';
 
   @override
   String get hlpNewToolsTitle => 'Alat Olimpiade';

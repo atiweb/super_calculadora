@@ -1437,7 +1437,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get hlpPrimeCountDesc =>
-      'Đếm số nguyên tố ≤ n. Chính xác khi n ≤ 1.000.000; lớn hơn thì xấp xỉ bằng Li(x).';
+      'Đếm số nguyên tố ≤ n. Chính xác khi n ≤ 1 000 000; lớn hơn thì xấp xỉ bằng Li(x).';
 
   @override
   String get hlpPrimeCountFormula => 'π(n) ~ n/ln(n) (định lý số nguyên tố)';
@@ -1449,7 +1449,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get hlpPrimeCountEx2 => 'π(100) = 25';
 
   @override
-  String get hlpPrimeCountEx3 => 'π(1.000.000) = 78.498';
+  String get hlpPrimeCountEx3 => 'π(1 000 000) = 78 498';
 
   @override
   String get hlpDigitalRootTitle => 'dr(n) — căn số chữ số';
@@ -1487,10 +1487,10 @@ class AppLocalizationsVi extends AppLocalizations {
   String get hlpFloorCeilFormula => '⌊x⌋ ≤ x < ⌊x⌋+1\n⌈x⌉−1 < x ≤ ⌈x⌉';
 
   @override
-  String get hlpFloorCeilEx1 => '⌊3,7⌋ = 3, ⌈3,7⌉ = 4';
+  String get hlpFloorCeilEx1 => '⌊3.7⌋ = 3, ⌈3.7⌉ = 4';
 
   @override
-  String get hlpFloorCeilEx2 => '⌊−2,3⌋ = −3, ⌈−2,3⌉ = −2';
+  String get hlpFloorCeilEx2 => '⌊−2.3⌋ = −3, ⌈−2.3⌉ = −2';
 
   @override
   String get hlpFloorCeilEx3 => '⌊5⌋ = ⌈5⌉ = 5';
@@ -1820,10 +1820,10 @@ class AppLocalizationsVi extends AppLocalizations {
   String get hlpFactorialEx1 => '5! = 120';
 
   @override
-  String get hlpFactorialEx2 => '10! = 3.628.800';
+  String get hlpFactorialEx2 => '10! = 3 628 800';
 
   @override
-  String get hlpFactorialEx3 => '20! = 2.432.902.008.176.640.000';
+  String get hlpFactorialEx3 => '20! = 2 432 902 008 176 640 000';
 
   @override
   String get hlpDblFactorialTitle => 'n!! — giai thừa kép';
@@ -1932,7 +1932,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get hlpDerangementEx2 => 'D(4) = 9';
 
   @override
-  String get hlpDerangementEx3 => 'D(n)/n! → 1/e ≈ 0,3679';
+  String get hlpDerangementEx3 => 'D(n)/n! → 1/e ≈ 0.3679';
 
   @override
   String get hlpBellTitle => 'B(n) — số Bell';
@@ -1975,7 +1975,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get hlpPartitionEx2 => 'p(10) = 42';
 
   @override
-  String get hlpPartitionEx3 => 'p(100) = 190.569.292.356';
+  String get hlpPartitionEx3 => 'p(100) = 190 569 292 356';
 
   @override
   String get hlpStirling2Title => 'S₂(n,k) — số Stirling loại hai';
@@ -2036,10 +2036,10 @@ class AppLocalizationsVi extends AppLocalizations {
   String get hlpFibEx1 => 'F(10) = 55';
 
   @override
-  String get hlpFibEx2 => 'F(50) = 12.586.269.025';
+  String get hlpFibEx2 => 'F(50) = 12 586 269 025';
 
   @override
-  String get hlpFibEx3 => 'F(100) = 354.224.848.179.261.915.075';
+  String get hlpFibEx3 => 'F(100) = 354 224 848 179 261 915 075';
 
   @override
   String get hlpFibTip1 => 'F(n) mod m tuần hoàn (chu kỳ Pisano)';
@@ -2112,7 +2112,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get hlpGeoMeanEx1 => 'GM(2, 8) = 4';
 
   @override
-  String get hlpGeoMeanEx2 => 'GM(1, 4, 9) ≈ 3,30';
+  String get hlpGeoMeanEx2 => 'GM(1, 4, 9) ≈ 3.30';
 
   @override
   String get hlpHarmMeanTitle => 'Trung bình điều hoà — HM';
@@ -2128,10 +2128,10 @@ class AppLocalizationsVi extends AppLocalizations {
   String get hlpHarmMeanFormula => 'HM = n / (1/x₁ + 1/x₂ + ... + 1/xₙ)';
 
   @override
-  String get hlpHarmMeanEx1 => 'HM(2, 8) = 3,2';
+  String get hlpHarmMeanEx1 => 'HM(2, 8) = 3.2';
 
   @override
-  String get hlpHarmMeanEx2 => 'HM(1, 4, 9) ≈ 2,08';
+  String get hlpHarmMeanEx2 => 'HM(1, 4, 9) ≈ 2.08';
 
   @override
   String get hlpQuadMeanTitle => 'Trung bình bậc hai — QM';
@@ -2146,10 +2146,10 @@ class AppLocalizationsVi extends AppLocalizations {
   String get hlpQuadMeanFormula => 'QM = √((x₁² + x₂² + ... + xₙ²) / n)';
 
   @override
-  String get hlpQuadMeanEx1 => 'QM(3, 4) ≈ 3,54';
+  String get hlpQuadMeanEx1 => 'QM(3, 4) ≈ 3.54';
 
   @override
-  String get hlpQuadMeanEx2 => 'QM(1, 2, 3) ≈ 2,16';
+  String get hlpQuadMeanEx2 => 'QM(1, 2, 3) ≈ 2.16';
 
   @override
   String get hlpMinMaxTitle => 'min / max — nhỏ nhất và lớn nhất';
@@ -2198,7 +2198,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get hlpHighPrecContent =>
-      'Bật trong phần Cài đặt. Tính sin, cos, tan, ln, log, exp, √ và ∛ bằng số thực kiến thiết CHÍNH XÁC, chỉ làm tròn khi hiển thị (từ 5 đến 100 chữ số). Không có sai số dấu phẩy động: √2 với 30 chữ số = 1,41421356237309504880168872421. Các điểm kỳ dị được phát hiện ngay từ cách xây dựng (tan 90° = không xác định). Mọi thứ chạy nền kèm chỉ báo tải, nên ứng dụng không bao giờ bị treo.';
+      'Bật trong phần Cài đặt. Tính sin, cos, tan, ln, log, exp, √ và ∛ bằng số thực kiến thiết CHÍNH XÁC, chỉ làm tròn khi hiển thị (từ 5 đến 100 chữ số). Không có sai số dấu phẩy động: √2 với 30 chữ số = 1.41421356237309504880168872421. Các điểm kỳ dị được phát hiện ngay từ cách xây dựng (tan 90° = không xác định). Mọi thứ chạy nền kèm chỉ báo tải, nên ứng dụng không bao giờ bị treo.';
 
   @override
   String get hlpNewToolsTitle => 'Công cụ Olympic';

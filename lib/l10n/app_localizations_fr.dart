@@ -1512,10 +1512,10 @@ class AppLocalizationsFr extends AppLocalizations {
   String get hlpFloorCeilFormula => '⌊x⌋ ≤ x < ⌊x⌋+1\n⌈x⌉−1 < x ≤ ⌈x⌉';
 
   @override
-  String get hlpFloorCeilEx1 => '⌊3,7⌋ = 3, ⌈3,7⌉ = 4';
+  String get hlpFloorCeilEx1 => '⌊3.7⌋ = 3, ⌈3.7⌉ = 4';
 
   @override
-  String get hlpFloorCeilEx2 => '⌊−2,3⌋ = −3, ⌈−2,3⌉ = −2';
+  String get hlpFloorCeilEx2 => '⌊−2.3⌋ = −3, ⌈−2.3⌉ = −2';
 
   @override
   String get hlpFloorCeilEx3 => '⌊5⌋ = ⌈5⌉ = 5';
@@ -1965,7 +1965,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get hlpDerangementEx2 => 'D(4) = 9';
 
   @override
-  String get hlpDerangementEx3 => 'D(n)/n! → 1/e ≈ 0,3679';
+  String get hlpDerangementEx3 => 'D(n)/n! → 1/e ≈ 0.3679';
 
   @override
   String get hlpBellTitle => 'B(n) — Nombres de Bell';
@@ -2149,7 +2149,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get hlpGeoMeanEx1 => 'MG(2, 8) = 4';
 
   @override
-  String get hlpGeoMeanEx2 => 'MG(1, 4, 9) ≈ 3,30';
+  String get hlpGeoMeanEx2 => 'MG(1, 4, 9) ≈ 3.30';
 
   @override
   String get hlpHarmMeanTitle => 'Moyenne harmonique — Moy H';
@@ -2165,10 +2165,10 @@ class AppLocalizationsFr extends AppLocalizations {
   String get hlpHarmMeanFormula => 'MH = n / (1/x₁ + 1/x₂ + ... + 1/xₙ)';
 
   @override
-  String get hlpHarmMeanEx1 => 'MH(2, 8) = 3,2';
+  String get hlpHarmMeanEx1 => 'MH(2, 8) = 3.2';
 
   @override
-  String get hlpHarmMeanEx2 => 'MH(1, 4, 9) ≈ 2,08';
+  String get hlpHarmMeanEx2 => 'MH(1, 4, 9) ≈ 2.08';
 
   @override
   String get hlpQuadMeanTitle => 'Moyenne quadratique — Moy Q';
@@ -2183,10 +2183,10 @@ class AppLocalizationsFr extends AppLocalizations {
   String get hlpQuadMeanFormula => 'MQ = √((x₁² + x₂² + ... + xₙ²) / n)';
 
   @override
-  String get hlpQuadMeanEx1 => 'MQ(3, 4) ≈ 3,54';
+  String get hlpQuadMeanEx1 => 'MQ(3, 4) ≈ 3.54';
 
   @override
-  String get hlpQuadMeanEx2 => 'MQ(1, 2, 3) ≈ 2,16';
+  String get hlpQuadMeanEx2 => 'MQ(1, 2, 3) ≈ 2.16';
 
   @override
   String get hlpMinMaxTitle => 'min / max — Minimum et maximum';
@@ -2236,7 +2236,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get hlpHighPrecContent =>
-      'Activez-le dans les Paramètres. Calcule sin, cos, tan, ln, log, exp, √ et ∛ avec des réels constructifs EXACTS et n\'arrondit qu\'à l\'affichage (5 à 100 chiffres). Aucune erreur de virgule flottante : √2 à 30 chiffres = 1,41421356237309504880168872421. Les singularités sont détectées par construction (tan 90° = indéfini). Tout s\'exécute en arrière-plan avec un indicateur de chargement, sans jamais figer l\'application.';
+      'Activez-le dans les Paramètres. Calcule sin, cos, tan, ln, log, exp, √ et ∛ avec des réels constructifs EXACTS et n\'arrondit qu\'à l\'affichage (5 à 100 chiffres). Aucune erreur de virgule flottante : √2 à 30 chiffres = 1.41421356237309504880168872421. Les singularités sont détectées par construction (tan 90° = indéfini). Tout s\'exécute en arrière-plan avec un indicateur de chargement, sans jamais figer l\'application.';
 
   @override
   String get hlpNewToolsTitle => 'Outils d\'Olympiades';

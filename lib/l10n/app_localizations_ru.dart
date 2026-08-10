@@ -1504,10 +1504,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get hlpFloorCeilFormula => '⌊x⌋ ≤ x < ⌊x⌋+1\n⌈x⌉−1 < x ≤ ⌈x⌉';
 
   @override
-  String get hlpFloorCeilEx1 => '⌊3,7⌋ = 3, ⌈3,7⌉ = 4';
+  String get hlpFloorCeilEx1 => '⌊3.7⌋ = 3, ⌈3.7⌉ = 4';
 
   @override
-  String get hlpFloorCeilEx2 => '⌊−2,3⌋ = −3, ⌈−2,3⌉ = −2';
+  String get hlpFloorCeilEx2 => '⌊−2.3⌋ = −3, ⌈−2.3⌉ = −2';
 
   @override
   String get hlpFloorCeilEx3 => '⌊5⌋ = ⌈5⌉ = 5';
@@ -1950,7 +1950,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get hlpDerangementEx2 => 'D(4) = 9';
 
   @override
-  String get hlpDerangementEx3 => 'D(n)/n! → 1/e ≈ 0,3679';
+  String get hlpDerangementEx3 => 'D(n)/n! → 1/e ≈ 0.3679';
 
   @override
   String get hlpBellTitle => 'B(n) — числа Белла';
@@ -2135,7 +2135,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get hlpGeoMeanEx1 => 'СГ(2, 8) = 4';
 
   @override
-  String get hlpGeoMeanEx2 => 'СГ(1, 4, 9) ≈ 3,30';
+  String get hlpGeoMeanEx2 => 'СГ(1, 4, 9) ≈ 3.30';
 
   @override
   String get hlpHarmMeanTitle => 'Среднее гармоническое — Ср гарм';
@@ -2151,10 +2151,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get hlpHarmMeanFormula => 'СГарм = n / (1/x₁ + 1/x₂ + ... + 1/xₙ)';
 
   @override
-  String get hlpHarmMeanEx1 => 'СГарм(2, 8) = 3,2';
+  String get hlpHarmMeanEx1 => 'СГарм(2, 8) = 3.2';
 
   @override
-  String get hlpHarmMeanEx2 => 'СГарм(1, 4, 9) ≈ 2,08';
+  String get hlpHarmMeanEx2 => 'СГарм(1, 4, 9) ≈ 2.08';
 
   @override
   String get hlpQuadMeanTitle => 'Среднее квадратическое — Ср квад';
@@ -2169,10 +2169,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get hlpQuadMeanFormula => 'СК = √((x₁² + x₂² + ... + xₙ²) / n)';
 
   @override
-  String get hlpQuadMeanEx1 => 'СК(3, 4) ≈ 3,54';
+  String get hlpQuadMeanEx1 => 'СК(3, 4) ≈ 3.54';
 
   @override
-  String get hlpQuadMeanEx2 => 'СК(1, 2, 3) ≈ 2,16';
+  String get hlpQuadMeanEx2 => 'СК(1, 2, 3) ≈ 2.16';
 
   @override
   String get hlpMinMaxTitle => 'min / max — минимум и максимум';
@@ -2222,7 +2222,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get hlpHighPrecContent =>
-      'Включается в настройках. Вычисляет sin, cos, tan, ln, log, exp, √ и ∛ на ТОЧНЫХ конструктивных вещественных числах и округляет только при выводе (от 5 до 100 знаков). Без ошибок с плавающей точкой: √2 до 30 знаков = 1,41421356237309504880168872421. Особые точки распознаются по построению (tan 90° = не определён). Всё считается в фоне с индикатором загрузки, приложение не зависает.';
+      'Включается в настройках. Вычисляет sin, cos, tan, ln, log, exp, √ и ∛ на ТОЧНЫХ конструктивных вещественных числах и округляет только при выводе (от 5 до 100 знаков). Без ошибок с плавающей точкой: √2 до 30 знаков = 1.41421356237309504880168872421. Особые точки распознаются по построению (tan 90° = не определён). Всё считается в фоне с индикатором загрузки, приложение не зависает.';
 
   @override
   String get hlpNewToolsTitle => 'Олимпиадные инструменты';
