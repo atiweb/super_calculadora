@@ -18,21 +18,86 @@
 
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="A new Flutter project.">
+  <meta name="description" content="Super Calculadora — exact math calculator: number theory, combinatorics, modular arithmetic, olympiad tools. Free, no account.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <!-- iOS meta tags & icons -->
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="super_calculadora">
+  <meta name="apple-mobile-web-app-title" content="Super Calculadora">
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
 
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="favicon.png"/>
 
-  <title>super_calculadora</title>
+  <title>Super Calculadora</title>
   <link rel="manifest" href="manifest.json">
+
+  <!-- Splash while the Flutter engine downloads (several MB: on a slow
+       connection the page would otherwise sit blank for a long while). Pure
+       HTML/CSS so it paints instantly; removed on `flutter-first-frame`.
+       Web-only by construction — this file never ships in the Android build. -->
+  <style>
+    #loading {
+      position: fixed; inset: 0; z-index: 9999;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 18px; background: #f8f5fc; color: #49454f;
+      font: 15px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      text-align: center; padding: 0 24px;
+      transition: opacity .3s ease;
+    }
+    #loading.done { opacity: 0; pointer-events: none; }
+    #loading img { width: 72px; height: 72px; border-radius: 18px; }
+    #loading .spin {
+      width: 34px; height: 34px; border-radius: 50%;
+      border: 4px solid #d9cfe8; border-top-color: #673ab7;
+      animation: lspin .9s linear infinite;
+    }
+    @keyframes lspin { to { transform: rotate(360deg); } }
+    #loading h1 { font-size: 19px; font-weight: 600; color: #1d1b20; margin: 0; }
+    #loading .hint { font-size: 13px; color: #79747e; max-width: 340px; }
+    @media (prefers-color-scheme: dark) {
+      #loading { background: #141218; color: #cac4d0; }
+      #loading h1 { color: #e6e0e9; }
+      #loading .spin { border-color: #3b3444; border-top-color: #b39ddb; }
+      #loading .hint { color: #938f99; }
+    }
+  </style>
 </head>
 <body>
+  <div id="loading">
+    <img src="icons/Icon-192.png" alt="">
+    <h1>Super Calculadora</h1>
+    <div class="spin"></div>
+    <p id="loading-text">Loading the calculator…</p>
+    <p class="hint" id="loading-hint">First load is the heaviest — after that it stays cached.</p>
+  </div>
+  <script>
+    (function () {
+      // The app is not running yet, so the splash localizes itself from the
+      // browser language — same eight languages the app ships.
+      var t = {
+        en: ['Loading the calculator…', 'First load is the heaviest — after that it stays cached.'],
+        es: ['Cargando la calculadora…', 'La primera carga es la más pesada; después queda en caché.'],
+        pt: ['Carregando a calculadora…', 'O primeiro carregamento é o mais pesado; depois fica em cache.'],
+        fr: ['Chargement de la calculatrice…', 'Le premier chargement est le plus lourd ; ensuite elle reste en cache.'],
+        it: ['Caricamento della calcolatrice…', 'Il primo caricamento è il più pesante; poi resta in cache.'],
+        ru: ['Загрузка калькулятора…', 'Первая загрузка самая тяжёлая — дальше всё берётся из кеша.'],
+        vi: ['Đang tải máy tính…', 'Lần tải đầu nặng nhất — sau đó sẽ được lưu trong bộ nhớ đệm.'],
+        id: ['Memuat kalkulator…', 'Pemuatan pertama paling berat — setelahnya tersimpan di cache.']
+      };
+      var lang = (navigator.language || 'en').slice(0, 2);
+      var s = t[lang] || t.en;
+      document.getElementById('loading-text').textContent = s[0];
+      document.getElementById('loading-hint').textContent = s[1];
+      window.addEventListener('flutter-first-frame', function () {
+        var el = document.getElementById('loading');
+        if (!el) return;
+        el.classList.add('done');
+        setTimeout(function () { el.remove(); }, 350);
+      });
+    })();
+  </script>
   <script src="flutter_bootstrap.js" async></script>
 </body>
 </html>
