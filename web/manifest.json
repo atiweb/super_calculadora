@@ -1,11 +1,11 @@
 {
-    "name": "super_calculadora",
-    "short_name": "super_calculadora",
+    "name": "Super Calculadora",
+    "short_name": "SuperCalc",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "background_color": "#f8f5fc",
+    "theme_color": "#673ab7",
+    "description": "Exact math calculator: number theory, combinatorics, modular arithmetic and olympiad tools.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
