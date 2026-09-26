@@ -26,16 +26,17 @@ class ThemeProvider extends ChangeNotifier {
   
   /// Changes the theme and saves it in preferences
   Future<void> setTheme(app_theme.ThemeMode theme) async {
+    // Repaint first: the UI shouldn't wait on (or depend on) the disk write.
     _currentTheme = theme;
-    await SettingsService.setThemeMode(theme);
     notifyListeners();
+    await SettingsService.setThemeMode(theme);
   }
   
   /// Changes the scientific notation setting
   Future<void> setUseScientificNotation(bool value) async {
     _useScientificNotation = value;
-    await SettingsService.setUseScientificNotation(value);
     notifyListeners();
+    await SettingsService.setUseScientificNotation(value);
   }
 
   /// Changes the application language (empty string = follow the system)
@@ -45,8 +46,8 @@ class ThemeProvider extends ChangeNotifier {
     } else {
       _locale = Locale(localeCode);
     }
-    await SettingsService.setLocale(localeCode);
     notifyListeners();
+    await SettingsService.setLocale(localeCode);
   }
   
   /// Converts the app theme to Flutter's ThemeMode

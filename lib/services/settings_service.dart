@@ -8,6 +8,8 @@ class SettingsService {
   static const String _localeKey = 'locale';
   static const String _highPrecisionKey = 'high_precision_mode';
   static const String _precisionDigitsKey = 'precision_digits';
+  static const String _calculatorTypeKey = 'calculator_type';
+  static const String _radianModeKey = 'radian_mode';
 
   /// Default digits and limits for high precision mode.
   static const int defaultPrecisionDigits = 30;
@@ -30,12 +32,22 @@ class SettingsService {
     }
   }
   
+  /// Reads [key] tolerating a value of the wrong type (left by an older
+  /// build): SharedPreferences' typed getters throw a TypeError then, and
+  /// these reads run while the app starts.
+  static T? _read<T>(String key) {
+    try {
+      final Object? value =
+          _useMemoryStore ? _memoryStore[key] : _prefs?.get(key);
+      return value is T ? value : null;
+    } catch (_) {
+      return null;
+    }
+  }
+
   /// Gets whether scientific notation should be used
   static bool getUseScientificNotation() {
-    if (_useMemoryStore) {
-      return (_memoryStore[_useScientificNotationKey] as bool?) ?? false;
-    }
-    return _prefs?.getBool(_useScientificNotationKey) ?? false;
+    return _read<bool>(_useScientificNotationKey) ?? false;
   }
   
   /// Sets whether scientific notation should be used
@@ -49,9 +61,7 @@ class SettingsService {
   
   /// Gets the current theme mode
   static app_theme.ThemeMode getThemeMode() {
-    final themeString = _useMemoryStore
-        ? (_memoryStore[_themeModeKey] as String? ?? 'system')
-        : (_prefs?.getString(_themeModeKey) ?? 'system');
+    final themeString = _read<String>(_themeModeKey) ?? 'system';
     return app_theme.ThemeModeExtension.fromString(themeString);
   }
   
@@ -66,10 +76,7 @@ class SettingsService {
 
   /// Gets whether high precision mode (constructive reals) is active.
   static bool getHighPrecisionMode() {
-    if (_useMemoryStore) {
-      return (_memoryStore[_highPrecisionKey] as bool?) ?? false;
-    }
-    return _prefs?.getBool(_highPrecisionKey) ?? false;
+    return _read<bool>(_highPrecisionKey) ?? false;
   }
 
   /// Enables/disables high precision mode.
@@ -83,9 +90,7 @@ class SettingsService {
 
   /// Precision digits to display in high precision mode (clamped to limits).
   static int getPrecisionDigits() {
-    final raw = _useMemoryStore
-        ? (_memoryStore[_precisionDigitsKey] as int?)
-        : _prefs?.getInt(_precisionDigitsKey);
+    final raw = _read<int>(_precisionDigitsKey);
     final value = raw ?? defaultPrecisionDigits;
     return value.clamp(minPrecisionDigits, maxPrecisionDigits);
   }
@@ -102,10 +107,7 @@ class SettingsService {
 
   /// Gets the saved language code (empty string = system default)
   static String getLocale() {
-    if (_useMemoryStore) {
-      return (_memoryStore[_localeKey] as String?) ?? '';
-    }
-    return _prefs?.getString(_localeKey) ?? '';
+    return _read<String>(_localeKey) ?? '';
   }
 
   /// Sets the language code (empty string = system default)
@@ -115,5 +117,27 @@ class SettingsService {
       return;
     }
     await _prefs?.setString(_localeKey, localeCode);
+  }
+
+  /// Last calculator type used (standard/scientific/special), by enum name.
+  static String getCalculatorType() => _read<String>(_calculatorTypeKey) ?? '';
+
+  static Future<void> setCalculatorType(String name) async {
+    if (_useMemoryStore) {
+      _memoryStore[_calculatorTypeKey] = name;
+      return;
+    }
+    await _prefs?.setString(_calculatorTypeKey, name);
+  }
+
+  /// Whether trigonometry works in radians (false = degrees, the default).
+  static bool getRadianMode() => _read<bool>(_radianModeKey) ?? false;
+
+  static Future<void> setRadianMode(bool value) async {
+    if (_useMemoryStore) {
+      _memoryStore[_radianModeKey] = value;
+      return;
+    }
+    await _prefs?.setBool(_radianModeKey, value);
   }
 }
