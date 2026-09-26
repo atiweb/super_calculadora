@@ -144,65 +144,14 @@ class NumberAnalysisService {
   /// own "prime factor" while isPrime said it was composite.
   static List<BigInt> primeFactorization(BigInt number) {
     if (number < BigInt.two) return [];
-
-    List<BigInt> factors = [];
-    BigInt n = number;
-
-    // Divide by 2
-    while (n % BigInt.two == BigInt.zero) {
-      factors.add(BigInt.two);
-      n ~/= BigInt.two;
-    }
-
-    // Trial division by small odd numbers (cheap and removes most factors)
-    BigInt divisor = BigInt.from(3);
-    final BigInt trialLimit = BigInt.from(100000);
-    while (divisor <= trialLimit && divisor * divisor <= n) {
-      while (n % divisor == BigInt.zero) {
-        factors.add(divisor);
-        n ~/= divisor;
-      }
-      divisor += BigInt.two;
-    }
-
-    // Remainder: prime → add; composite → factor with Pollard-rho
-    if (n > BigInt.one) {
-      _factorCompletely(n, factors);
-    }
-
-    factors.sort((a, b) => a.compareTo(b));
+    // One factorizer for the whole app (prime_utils): this copy lacked its
+    // perfect-power shortcut and Brent's batched gcd, so the square of a
+    // 16-digit prime took over 15 s here and milliseconds there.
+    final List<BigInt> factors = [
+      for (final e in factorize(number).entries)
+        for (int i = 0; i < e.value; i++) e.key,
+    ]..sort();
     return factors;
-  }
-
-  /// Factors [n] (odd, with no factors ≤ 10⁵) recursively into [factors].
-  static void _factorCompletely(BigInt n, List<BigInt> factors) {
-    if (n == BigInt.one) return;
-    if (isPrime(n)) {
-      factors.add(n);
-      return;
-    }
-    final BigInt d = _pollardRho(n);
-    _factorCompletely(d, factors);
-    _factorCompletely(n ~/ d, factors);
-  }
-
-  /// Finds a non-trivial divisor of an odd composite via
-  /// Pollard-rho (Floyd), retrying with another constant if it degenerates.
-  static BigInt _pollardRho(BigInt n) {
-    BigInt c = BigInt.one;
-    while (true) {
-      BigInt x = BigInt.two;
-      BigInt y = BigInt.two;
-      BigInt d = BigInt.one;
-      while (d == BigInt.one) {
-        x = (x * x + c) % n;
-        y = (y * y + c) % n;
-        y = (y * y + c) % n;
-        d = gcd((x - y).abs(), n);
-      }
-      if (d != n) return d;
-      c += BigInt.one;
-    }
   }
 
   /// Checks whether it is a perfect power

@@ -64,12 +64,13 @@ class ExpressionInput extends StatelessWidget {
                   ),
 
                   // Clear button
-                  IconButton(
-                    onPressed: calculator.expressionController.text.isNotEmpty
-                        ? calculator.clearExpression
-                        : null,
-                    icon: const Icon(Icons.clear, size: 20),
-                    tooltip: l.exprClearExpression,
+                  _WhenText(
+                    controller: calculator.expressionController,
+                    builder: (hasText) => IconButton(
+                      onPressed: hasText ? calculator.clearExpression : null,
+                      icon: const Icon(Icons.clear, size: 20),
+                      tooltip: l.exprClearExpression,
+                    ),
                   ),
                 ],
               ),
@@ -95,12 +96,14 @@ class ExpressionInput extends StatelessWidget {
                     horizontal: 12,
                     vertical: 12,
                   ),
-                  suffixIcon: Row(
+                  suffixIcon: _WhenText(
+                    controller: calculator.expressionController,
+                    builder: (hasText) => Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       // Delete-last-character button
                       IconButton(
-                        onPressed: calculator.expressionController.text.isNotEmpty
+                        onPressed: hasText
                             ? calculator.backspaceExpression
                             : null,
                         icon: const Icon(Icons.backspace_outlined, size: 18),
@@ -109,7 +112,7 @@ class ExpressionInput extends StatelessWidget {
 
                       // Evaluate button
                       IconButton(
-                        onPressed: calculator.expressionController.text.isNotEmpty
+                        onPressed: hasText
                             ? calculator.evaluateAndAddToHistory
                             : null,
                         icon: Icon(
@@ -119,12 +122,13 @@ class ExpressionInput extends StatelessWidget {
                         ),
                         tooltip: l.exprEvaluate,
                         style: IconButton.styleFrom(
-                          backgroundColor: calculator.expressionController.text.isNotEmpty
+                          backgroundColor: hasText
                               ? Theme.of(context).colorScheme.primaryContainer
                               : null,
                         ),
                       ),
                     ],
+                  ),
                   ),
                 ),
                 onSubmitted: (_) {
@@ -221,6 +225,24 @@ class ExpressionInput extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+/// Rebuilds [builder] when the controller's text goes empty/non-empty, so
+/// typing doesn't have to rebuild the whole calculator screen (the service
+/// used to notify every listener on each keystroke).
+class _WhenText extends StatelessWidget {
+  final TextEditingController controller;
+  final Widget Function(bool hasText) builder;
+
+  const _WhenText({required this.controller, required this.builder});
+
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder<TextEditingValue>(
+      valueListenable: controller,
+      builder: (context, value, _) => builder(value.text.isNotEmpty),
     );
   }
 }

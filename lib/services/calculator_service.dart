@@ -23,6 +23,13 @@ import 'custom_function_service.dart';
 class CalculatorService extends ChangeNotifier {
   String _display = '0';
   String _lastResult = '';
+
+  /// The exact value behind a rounded result on the display: [shown] is the
+  /// text displayed, [exact] a "(p/q)" the evaluator reads exactly. When the
+  /// next calculation starts from that result, the exact value is used, so
+  /// 1 ÷ 3 = × 3 = gives 1, not 0.999999999999999 (the display text alone
+  /// is all the old flow carried forward).
+  ({String shown, String exact})? _exactCarry;
   Map<String, dynamic> _currentAnalysis = {};
   bool _hasError = false;
   String _errorMessage = '';
@@ -107,10 +114,9 @@ class CalculatorService extends ChangeNotifier {
     _isRadianMode = SettingsService.getRadianMode();
     _loadHistory();
     _loadCustomFunctions();
-    // The UI (expression tab buttons) derives its enabled state
-    // from the controller's text; when typing directly into the TextField nobody
-    // notified and the buttons were left with stale state.
-    _expressionController.addListener(notifyListeners);
+    // The expression tab's buttons follow the controller's text through
+    // their own ValueListenableBuilder (expression_input.dart); notifying
+    // every listener here rebuilt the whole screen on each keystroke.
   }
 
   /// Changes the calculator type
@@ -131,6 +137,7 @@ class CalculatorService extends ChangeNotifier {
   void clear() {
     _display = '0';
     _lastResult = '';
+    _exactCarry = null;
     _analysisToken++; // discard in-flight analysis
     _currentAnalysis = {};
     _hasError = false;
@@ -149,6 +156,7 @@ class CalculatorService extends ChangeNotifier {
   /// Clears only the display
   void clearEntry() {
     _display = '0';
+    _exactCarry = null;
     _hasError = false;
     _errorMessage = '';
     _errorArgs = {};
@@ -402,8 +410,11 @@ class CalculatorService extends ChangeNotifier {
     }
 
     try {
+      // Continue from the exact value of the previous result when the
+      // expression starts with it.
+      final String toEvaluate = _applyExactCarry(_display);
       // Use the new method that correctly handles parentheses and functions
-      String result = evaluateCompleteExpression(_display);
+      String result = evaluateCompleteExpression(toEvaluate);
       
       // Check whether the result contains an error
       if (result.startsWith('err:')) {
@@ -427,6 +438,7 @@ class CalculatorService extends ChangeNotifier {
         // Show the result
         _display = _formatNumber(result);
         _lastResult = result;
+        _rememberExact(_display, _exactValueOf(toEvaluate));
         _hasError = false;
         _errorMessage = '';
         _errorArgs = {};
@@ -1165,6 +1177,7 @@ class CalculatorService extends ChangeNotifier {
   /// Sets the display directly (for tests)
   void setDisplay(String value) {
     _display = _formatNumber(value);
+    _exactCarry = null;
     _hasError = false;
     _errorMessage = '';
     _errorArgs = {};
@@ -2713,6 +2726,7 @@ class CalculatorService extends ChangeNotifier {
         // Update display
         _display = result;
         _lastResult = result;
+        _exactCarry = null;
         _hasError = false;
         _errorMessage = '';
         _errorArgs = {};
@@ -2721,6 +2735,7 @@ class CalculatorService extends ChangeNotifier {
         OperationEntry entry = OperationEntry(
           expression: expression,
           result: result,
+          expanded: _expandForHistory(expression),
         );
         
         // Add to the local history
@@ -2803,8 +2818,27 @@ class CalculatorService extends ChangeNotifier {
   
   /// Loads an expression from the history
   void loadFromHistory(OperationEntry entry) {
-    _expressionController.text = entry.expression;
+    // If the functions it used were edited or deleted since, reload what was
+    // actually computed rather than a call that now means something else
+    // (or fails).
+    final String? expanded = entry.expanded;
+    final bool stale =
+        expanded != null && _expandForHistory(entry.expression) != expanded;
+    _expressionController.text = stale ? expanded : entry.expression;
     notifyListeners();
+  }
+
+  /// [expression] with its custom-function calls expanded; null when it
+  /// calls none (or no longer expands).
+  String? _expandForHistory(String expression) {
+    if (_customFunctions.isEmpty) return null;
+    try {
+      final String out = CustomFunctionService.expandCalls(
+          expression, {for (final f in _customFunctions) f.name: f});
+      return out == expression ? null : out;
+    } on CustomFunctionException {
+      return null;
+    }
   }
   
   /// Loads the result of an operation from the history
@@ -2892,6 +2926,45 @@ class CalculatorService extends ChangeNotifier {
       rethrow;
     } catch (e) {
       throw ArgumentError(trLocale('Error evaluando expresión: $e', 'Error evaluating expression: $e', pt: 'Erro ao avaliar a expressão: $e', fr: "Erreur lors de l'évaluation de l'expression : $e", id: 'Kesalahan saat menghitung ekspresi: $e', vi: 'Lỗi khi tính biểu thức: $e', ru: 'Ошибка при вычислении выражения: $e', it: "Errore nella valutazione dell'espressione: $e"));
+    }
+  }
+
+  /// [expression] with a leading copy of the carried result replaced by its
+  /// exact value; unchanged when it doesn't start with it.
+  String _applyExactCarry(String expression) {
+    final carry = _exactCarry;
+    if (carry == null) return expression;
+    if (expression == carry.shown) return carry.exact;
+    if (expression.startsWith('${carry.shown} ')) {
+      return carry.exact + expression.substring(carry.shown.length);
+    }
+    return expression;
+  }
+
+  /// Stores (or clears) the exact value behind [shown]. Only worth keeping
+  /// when the display rounded it.
+  void _rememberExact(String shown, Fraction? exact) {
+    if (exact == null || exact.denominator == BigInt.one ||
+        _formatExactRational(exact) == shown) {
+      _exactCarry = null;
+      return;
+    }
+    _exactCarry = (
+      shown: shown,
+      exact: '(${exact.numerator}/${exact.denominator})',
+    );
+  }
+
+  /// Exact rational value of a keypad expression made only of numbers,
+  /// + − × ÷ ^ (integer exponents) and parentheses; null otherwise.
+  Fraction? _exactValueOf(String expression) {
+    try {
+      final String prepared =
+          _prepareExpression(expression).replaceAll(' ', '');
+      if (RegExp(r'[A-Za-z%]').hasMatch(prepared)) return null;
+      return _evalBigAdditive(prepared);
+    } catch (_) {
+      return null;
     }
   }
 
@@ -4183,9 +4256,16 @@ class CalculatorService extends ChangeNotifier {
       
       BigDecimal result = BigDecimal.one / value;
       String resultStr = _formatNumber(result.toString());
-      
+
       _display = _spliceResult(resultStr, currentNumber);
       _lastResult = resultStr;
+      if (_display == resultStr) {
+        Fraction? exact;
+        try {
+          exact = Fraction.one / Fraction.fromDecimalString(currentNumber);
+        } catch (_) {}
+        _rememberExact(resultStr, exact);
+      }
       _updateAnalysis();
       
       await _addDirectOperationToHistory('1/$currentNumber', originalValue, resultStr);
@@ -4197,14 +4277,14 @@ class CalculatorService extends ChangeNotifier {
   }
 }
 
-/// Signals that an exact result (e.g. a power) would have too many
-/// digits to compute; it translates to "errResultTooLarge".
 /// Thrown by the exact evaluator for a term it can't keep exact (fractional
 /// exponent, non-integer mod); the caller re-evaluates with doubles.
 class _NeedsDoubleFallback implements Exception {
   const _NeedsDoubleFallback();
 }
 
+/// Signals that an exact result (e.g. a power) would have too many
+/// digits to compute; it translates to "errResultTooLarge".
 class _ResultTooLargeException implements Exception {
   const _ResultTooLargeException();
 }

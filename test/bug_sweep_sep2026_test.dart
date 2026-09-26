@@ -186,6 +186,24 @@ void main() {
       keys('2 + MR');
       expect(calc.display.replaceAll(' ', ''), '2+');
     });
+    test('chaining continues from the exact result (1÷3=×3= is 1)', () {
+      keys('1 ÷ 3 =');
+      expect(calc.display, '0.333333333333333');
+      keys('× 3 =');
+      expect(calc.display, '1');
+    });
+    test('1/x keeps its exact value for the next operation', () {
+      keys('3');
+      calc.reciprocal();
+      keys('× 3 =');
+      expect(calc.display, '1');
+    });
+    test('a hand-typed rounded value is not silently "corrected"', () {
+      keys('1 ÷ 3 =');
+      calc.clear();
+      keys('0.333333333333333 × 3 =');
+      expect(calc.display, '0.999999999999999');
+    });
     test('π replaces only the operand being typed', () {
       keys('2 + 3 π');
       expect(calc.display.replaceAll(' ', ''), startsWith('2+3.14159'));
@@ -239,6 +257,24 @@ void main() {
       calc.debugSetCustomFunctions([def('f(x) = x+1')]);
       expect(calc.evaluateCompleteExpression('f(12345678901234567890)'),
           '12345678901234567891');
+    });
+    test('history reuse survives editing the function it called', () async {
+      calc.debugSetCustomFunctions([def('f(x) = x+1')]);
+      calc.expressionController.text = 'f(2)';
+      await calc.evaluateAndAddToHistory();
+      final entry = calc.history.first;
+      expect(entry.result, '3');
+      // Unchanged function: the call itself is reloaded.
+      calc.loadFromHistory(entry);
+      expect(calc.expressionController.text, 'f(2)');
+      // Edited function: the expansion that produced 3 is reloaded.
+      calc.debugSetCustomFunctions([def('f(x) = x*10')]);
+      calc.loadFromHistory(entry);
+      expect(calc.evaluateCompleteExpression(calc.expressionController.text),
+          '3');
+      // And it survives storage.
+      final restored = entry.toStorageString();
+      expect(restored, contains('"x"'));
     });
     test('corrupt stored params fail at load, not inside build()', () {
       expect(
@@ -323,6 +359,13 @@ void main() {
           SpecialFunctionsService.chineseRemainderTheorem(
               [BigInt.from(17)], [BigInt.from(5)])['solution'],
           BigInt.two);
+    });
+    test('Lucas numbers by fast doubling', () {
+      expect([for (int n = 0; n <= 10; n++) NumberTheoryAdvancedService.lucasNumber(n).toInt()],
+          [2, 1, 3, 4, 7, 11, 18, 29, 47, 76, 123]);
+      final sw = Stopwatch()..start();
+      expect(NumberTheoryAdvancedService.lucasNumber(1000000).bitLength, greaterThan(694000));
+      expect(sw.elapsed.inSeconds, lessThan(5));
     });
     test('Fraction.toDouble beyond double range', () {
       final big = BigInt.from(10).pow(400);

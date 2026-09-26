@@ -6,6 +6,11 @@ class OperationEntry {
   final String result;
   final DateTime timestamp;
 
+  /// For expressions that call user-defined functions: the same expression
+  /// with every call expanded, i.e. what actually produced [result]. Lets
+  /// the entry be reused faithfully after a function is edited or deleted.
+  final String? expanded;
+
   /// `false` for entries from the old storage format, which did not
   /// save the timestamp: the UI shows «—» instead of pretending the
   /// operation just happened.
@@ -20,6 +25,7 @@ class OperationEntry {
     required this.expression,
     required this.result,
     DateTime? timestamp,
+    this.expanded,
   })  : timestamp = timestamp ?? DateTime.now(),
         timestampKnown = true,
         _rawStorage = null;
@@ -30,6 +36,7 @@ class OperationEntry {
     required this.timestamp,
     required this.timestampKnown,
     required String rawStorage,
+    this.expanded,
   }) : _rawStorage = rawStorage;
 
   /// Converts to a Map for serialization
@@ -38,6 +45,7 @@ class OperationEntry {
       'expression': expression,
       'result': result,
       'timestamp': timestamp.millisecondsSinceEpoch,
+      if (expanded != null) 'expanded': expanded,
     };
   }
 
@@ -47,6 +55,7 @@ class OperationEntry {
       expression: map['expression'] ?? '',
       result: map['result'] ?? '',
       timestamp: DateTime.fromMillisecondsSinceEpoch(map['timestamp'] ?? 0),
+      expanded: map['expanded'] as String?,
     );
   }
 
@@ -60,6 +69,7 @@ class OperationEntry {
       'e': expression,
       'r': result,
       't': timestamp.millisecondsSinceEpoch,
+      if (expanded != null) 'x': expanded,
     });
   }
 
@@ -80,6 +90,7 @@ class OperationEntry {
               : DateTime.fromMillisecondsSinceEpoch(0),
           timestampKnown: hasTime,
           rawStorage: str,
+          expanded: decoded['x'] is String ? decoded['x'] as String : null,
         );
       }
     } catch (_) {

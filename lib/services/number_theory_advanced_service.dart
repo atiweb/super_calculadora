@@ -127,6 +127,10 @@ class NumberTheoryAdvancedService {
   /// C(n, k) mod p for prime p, using Lucas' theorem.
   static BigInt lucasTheorem(BigInt n, BigInt k, BigInt p) {
     if (k.isNegative || k > n) return _zero;
+    // Each digit's binomial costs O(p): p ≈ 10^9 ran for minutes.
+    if (p > BigInt.from(1000000)) {
+      throw CalcException(CalcError.inputTooLarge, {'max': '1000000'});
+    }
     BigInt result = _one;
     while (n > _zero || k > _zero) {
       final BigInt ni = n % p;
@@ -371,13 +375,19 @@ class NumberTheoryAdvancedService {
     if (n < 0) throw CalcException(CalcError.nNonNegative);
     if (n == 0) return _two;
     if (n == 1) return _one;
-    BigInt prev = _two, cur = _one;
-    for (int i = 2; i <= n; i++) {
-      final BigInt next = prev + cur;
-      prev = cur;
-      cur = next;
-    }
-    return cur;
+    // L(n) = F(n−1) + F(n+1) with fast-doubling Fibonacci: O(log n) steps
+    // (the linear loop took over 15 s for n = 10^6).
+    final (fn, fn1) = _fibPair(n); // F(n), F(n+1)
+    return _two * fn1 - fn;
+  }
+
+  /// (F(n), F(n+1)) by fast doubling.
+  static (BigInt, BigInt) _fibPair(int n) {
+    if (n == 0) return (_zero, _one);
+    final (a, b) = _fibPair(n >> 1); // F(k), F(k+1), k = n ~/ 2
+    final BigInt c = a * (_two * b - a); // F(2k)
+    final BigInt d = a * a + b * b; // F(2k+1)
+    return n.isEven ? (c, d) : (d, c + d);
   }
 
   // ── Discrete logarithm ───────────────────────────────────────────────────
@@ -389,6 +399,11 @@ class NumberTheoryAdvancedService {
     if (g.isNegative) g += n;
     h = h % n;
     if (h.isNegative) h += n;
+    // The baby-step table has √n entries (and the non-invertible walk can
+    // reach n): beyond 10^12 that is minutes and gigabytes.
+    if (n > BigInt.from(10).pow(12)) {
+      throw CalcException(CalcError.inputTooLarge, {'max': '10^12'});
+    }
 
     final BigInt m = _isqrt(n) + _one;
 
