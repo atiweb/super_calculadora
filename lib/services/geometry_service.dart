@@ -321,6 +321,11 @@ class GeometryService {
   /// Uses Euclid's formula: a=m²−n², b=2mn, c=m²+n²
   /// with m>n>0, gcd(m,n)=1 and m,n of opposite parity.
   static List<List<BigInt>> primitivePythagoreanTriples(int maxHypotenuse) {
+    // Bounded like allPythagoreanTriples: synchronous on the UI thread, and
+    // 10^8 ran for minutes.
+    if (maxHypotenuse > 100000) {
+      throw CalcException(CalcError.inputTooLarge, {'max': '100000'});
+    }
     final List<List<BigInt>> triples = [];
     for (int m = 2; m * m <= maxHypotenuse; m++) {
       for (int n = 1; n < m; n++) {

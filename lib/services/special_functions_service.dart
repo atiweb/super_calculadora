@@ -280,21 +280,40 @@ class SpecialFunctionsService {
       throw ArgumentError(trLocale('La lista no puede estar vacía', 'The list cannot be empty', pt: 'A lista não pode estar vazia', fr: 'La liste ne peut pas être vide', id: 'Daftarnya tidak boleh kosong', vi: 'Danh sách không được rỗng', ru: 'Список не может быть пустым', it: 'La lista non può essere vuota'));
     }
     
-    // Verify that all numbers are positive
+    // Verify that no number is negative; a zero makes the product, and so
+    // the mean, zero (it used to be rejected as "not positive").
     for (BigDecimal num in numbers) {
-      if (num.isNegative || num.isZero) {
+      if (num.isNegative) {
         throw ArgumentError(trLocale('Todos los números deben ser positivos para la media geométrica', 'All numbers must be positive for the geometric mean', pt: 'Todos os números devem ser positivos para a média geométrica', fr: 'Tous les nombres doivent être positifs pour la moyenne géométrique', id: 'Semua bilangan harus positif untuk rata-rata ukur', vi: 'Trung bình nhân đòi hỏi mọi số đều dương', ru: 'Для среднего геометрического все числа должны быть положительными', it: 'Tutti i numeri devono essere positivi per la media geometrica'));
       }
     }
     
-    // Compute using logarithms to avoid overflow
+    if (numbers.any((n) => n.isZero)) return BigDecimal.zero;
+
+    // Compute using logarithms to avoid overflow. Past double range the log
+    // comes from the digits (toDouble() was Infinity and the result a raw
+    // "Invalid number: Infinity").
     double logSum = 0;
     for (BigDecimal num in numbers) {
-      logSum += math.log(num.toDouble());
+      logSum += _lnOfPositive(num);
     }
-    
-    double result = math.exp(logSum / numbers.length);
-    return BigDecimal.fromDouble(result);
+
+    final double meanLog = logSum / numbers.length;
+    final double result = math.exp(meanLog);
+    if (result.isFinite) return BigDecimal.fromDouble(result);
+    final int exponent = (meanLog / math.ln10).floor();
+    final double mantissa = math.exp(meanLog - exponent * math.ln10);
+    return BigDecimal.fromString('${mantissa}e$exponent');
+  }
+
+  /// ln of a positive BigDecimal, also beyond double range.
+  static double _lnOfPositive(BigDecimal x) {
+    final double d = x.toDouble();
+    if (d.isFinite && d > 0) return math.log(d);
+    final String intDigits = x.integerPart.toString();
+    final double mantissa =
+        double.parse('0.${intDigits.substring(0, math.min(17, intDigits.length))}');
+    return math.log(mantissa) + intDigits.length * math.ln10;
   }
   
   /// Harmonic mean
@@ -761,8 +780,10 @@ class SpecialFunctionsService {
           'The moduli must be positive', pt: 'Os módulos devem ser positivos', fr: 'Les modules doivent être positifs', id: 'Modulusnya harus positif', vi: 'Các modulo phải dương', ru: 'Модули должны быть положительными', it: 'I moduli devono essere positivi'));
     }
 
-    BigInt currentA = remainders[0];
+    // Reduced up front: with a single congruence the loop never ran and
+    // x ≡ 17 (mod 5) came back unreduced instead of x ≡ 2.
     BigInt currentM = moduli[0];
+    BigInt currentA = remainders[0] % currentM;
 
     for (int i = 1; i < remainders.length; i++) {
       BigInt a2 = remainders[i];
@@ -903,22 +924,34 @@ class SpecialFunctionsService {
       throw ArgumentError(trLocale('n demasiado grande para calcular particiones (máx 10000)', 'n too large to compute partitions (max 10000)', pt: 'n grande demais para calcular partições (máx 10000)', fr: 'n trop grand pour calculer les partitions (max 10000)', id: 'n terlalu besar untuk menghitung partisi (maks. 10000)', vi: 'n quá lớn để tính phân hoạch (tối đa 10000)', ru: 'n слишком велико для вычисления разбиений (макс. 10000)', it: 'n troppo grande per calcolare le partizioni (max 10000)'));
     }
 
-    List<BigInt> dp = List.filled(n + 1, BigInt.zero);
-    dp[0] = BigInt.one;
-
-    for (int k = 1; k <= n; k++) {
-      for (int i = k; i <= n; i++) {
-        dp[i] += dp[i - k];
+    // Euler's pentagonal-number recurrence, O(n^1.5):
+    // p(n) = Σ_{k≥1} (−1)^(k+1) [p(n − k(3k−1)/2) + p(n − k(3k+1)/2)].
+    // The coin-change DP was O(n²) and took 6 s at the n = 10000 cap.
+    final List<BigInt> p = List.filled(n + 1, BigInt.zero);
+    p[0] = BigInt.one;
+    for (int m = 1; m <= n; m++) {
+      BigInt sum = BigInt.zero;
+      for (int k = 1;; k++) {
+        final int g1 = k * (3 * k - 1) ~/ 2;
+        if (g1 > m) break;
+        final int g2 = k * (3 * k + 1) ~/ 2;
+        final BigInt term = p[m - g1] + (g2 <= m ? p[m - g2] : BigInt.zero);
+        sum = k.isOdd ? sum + term : sum - term;
       }
+      p[m] = sum;
     }
-
-    return dp[n];
+    return p[n];
   }
 
   /// Stirling numbers of the second kind S(n,k)
   /// Number of ways to partition a set of n elements into k non-empty subsets
   static BigInt stirlingSecond(int n, int k) {
     if (k < 0 || k > n) return BigInt.zero;
+    // Synchronous on the UI thread; beyond this it runs for minutes.
+    if (n > 1000) {
+      throw ArgumentError(trLocale('n demasiado grande (máx 1000)', 'n too large (max 1000)', pt: 'n grande demais (máx 1000)', fr: 'n trop grand (max 1000)', id: 'n terlalu besar (maks. 1000)', vi: 'n quá lớn (tối đa 1000)', ru: 'n слишком велико (макс. 1000)', it: 'n troppo grande (max 1000)'));
+    }
+
     if (k == 0 && n == 0) return BigInt.one;
     if (k == 0 || n == 0) return BigInt.zero;
     if (k == 1 || k == n) return BigInt.one;
@@ -944,21 +977,23 @@ class SpecialFunctionsService {
     if (k == 0 && n == 0) return BigInt.one;
     if (k == 0 || n == 0) return BigInt.zero;
 
-    // Use the recurrence: |s(n,k)| = (n-1)|s(n-1,k)| + |s(n-1,k-1)|
-    // DP table
-    List<List<BigInt>> dp = List.generate(
-      n + 1,
-      (_) => List.filled(k + 1, BigInt.zero),
-    );
-    dp[0][0] = BigInt.one;
-
-    for (int i = 1; i <= n; i++) {
-      for (int j = 1; j <= math.min(i, k); j++) {
-        dp[i][j] = BigInt.from(i - 1) * dp[i - 1][j] + dp[i - 1][j - 1];
-      }
+    // Synchronous on the UI thread; (5000, 2500) ran for minutes.
+    if (n > 1000) {
+      throw ArgumentError(trLocale('n demasiado grande (máx 1000)', 'n too large (max 1000)', pt: 'n grande demais (máx 1000)', fr: 'n trop grand (max 1000)', id: 'n terlalu besar (maks. 1000)', vi: 'n quá lớn (tối đa 1000)', ru: 'n слишком велико (макс. 1000)', it: 'n troppo grande (max 1000)'));
     }
 
-    return dp[n][k];
+    // Recurrence |s(i,j)| = (i−1)|s(i−1,j)| + |s(i−1,j−1)|, one row at a
+    // time (the full (n+1)×(k+1) table of BigInts is not needed).
+    List<BigInt> row = List.filled(k + 1, BigInt.zero);
+    row[0] = BigInt.one;
+    for (int i = 1; i <= n; i++) {
+      final List<BigInt> next = List.filled(k + 1, BigInt.zero);
+      for (int j = 1; j <= math.min(i, k); j++) {
+        next[j] = BigInt.from(i - 1) * row[j] + row[j - 1];
+      }
+      row = next;
+    }
+    return row[k];
   }
 
   /// Bell numbers B(n): total number of partitions of a set of n elements
@@ -968,12 +1003,20 @@ class SpecialFunctionsService {
     }
     if (n == 0) return BigInt.one;
 
-    // B(n) = Σ S(n,k) for k=0..n
-    BigInt sum = BigInt.zero;
-    for (int k = 0; k <= n; k++) {
-      sum += stirlingSecond(n, k);
+    if (n > 2000) {
+      throw ArgumentError(trLocale('n demasiado grande (máx 2000)', 'n too large (max 2000)', pt: 'n grande demais (máx 2000)', fr: 'n trop grand (max 2000)', id: 'n terlalu besar (maks. 2000)', vi: 'n quá lớn (tối đa 2000)', ru: 'n слишком велико (макс. 2000)', it: 'n troppo grande (max 2000)'));
     }
-    return sum;
+    // Bell triangle: only additions, O(n²). Summing S(n,k) by inclusion–
+    // exclusion needed n² big powers (11 s for n = 500).
+    List<BigInt> row = [BigInt.one];
+    for (int i = 1; i <= n; i++) {
+      final List<BigInt> next = [row.last];
+      for (final v in row) {
+        next.add(next.last + v);
+      }
+      row = next;
+    }
+    return row.first;
   }
 
   /// Digital root: apply digit sum iteratively until a single digit remains

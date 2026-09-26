@@ -2,6 +2,7 @@ import 'dart:math' as math;
 import '../models/calc_exception.dart';
 import '../models/fraction.dart';
 import '../models/polynomial.dart';
+import 'prime_utils.dart';
 
 /// Vieta's relations for a polynomial.
 class VietaRelations {
@@ -239,10 +240,20 @@ class PolynomialService {
     }
 
     if (!d.isNegative) {
+      // Cancellation-free form: q = −(b + sign(b)·√D)/2, roots q/a and c/q.
+      // (−b ± √D)/2a lost the small root of x² − 10⁸x + 1 (7.45e-9 for 1e-8).
       final double dd = math.sqrt(d.toDouble());
-      final double da = twoA.toDouble();
-      final double x1 = (-b.toDouble() + dd) / da;
-      final double x2 = (-b.toDouble() - dd) / da;
+      final double bd = b.toDouble();
+      final double q = -(bd + (bd < 0 ? -dd : dd)) / 2;
+      final double x1;
+      final double x2;
+      if (q == 0) {
+        x1 = 0;
+        x2 = 0;
+      } else {
+        x1 = q / a.toDouble();
+        x2 = c.toDouble() / q;
+      }
       if (d.isZero) {
         realRoots.add(x1);
       } else {
@@ -378,17 +389,22 @@ class PolynomialService {
         .toList();
   }
 
+  /// Divisors from the factorization (Pollard-rho): the old trial division
+  /// up to √n on the UI thread took 66 s for x − 10^16. Coefficients beyond
+  /// 10^30, or with too many divisors, are refused rather than hanging.
+  static final BigInt _maxCoefficient = BigInt.from(10).pow(30);
+
   static Set<BigInt> _divisors(BigInt n) {
     n = n.abs();
-    final Set<BigInt> result = {};
-    if (n == BigInt.zero) return result;
-    for (BigInt i = BigInt.one; i * i <= n; i += BigInt.one) {
-      if (n % i == BigInt.zero) {
-        result.add(i);
-        result.add(n ~/ i);
-      }
+    if (n == BigInt.zero) return {};
+    if (n > _maxCoefficient) {
+      throw CalcException(CalcError.inputTooLarge, {'max': '10^30'});
     }
-    return result;
+    final List<BigInt>? all = divisorsOf(n, limit: 20000);
+    if (all == null) {
+      throw CalcException(CalcError.inputTooLarge, {'max': '10^30'});
+    }
+    return all.toSet();
   }
 
   static BigInt _gcd(BigInt a, BigInt b) {

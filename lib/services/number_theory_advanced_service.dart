@@ -265,21 +265,45 @@ class NumberTheoryAdvancedService {
     if (n > BigInt.from(100000000)) {
       throw CalcException(CalcError.inputTooLarge, {'max': '100000000'});
     }
-    BigInt a = _zero;
-    while (a * a <= n) {
-      BigInt b = a;
-      while (a * a + b * b <= n) {
-        final BigInt rem = n - a * a - b * b;
-        final two = sumOfTwoSquares(rem);
-        if (two != null) {
-          return (a: a, b: b, c: two.a, d: two.b);
-        }
-        b += _one;
+    // Search from the largest squares down, skipping dead ends by theory
+    // instead of by scanning: n − a² must avoid the form 4^k(8m+7) (Legendre:
+    // exactly those are not sums of three squares), and n − a² − b² is a sum
+    // of two squares iff every prime ≡ 3 (mod 4) has an even exponent. The
+    // old ascending scan paid an O(√n) two-square search per (a, b) and spent
+    // minutes on n = 99999999 (= 8m+7, so a = 0 never works).
+    for (BigInt a = _isqrt(n); a >= _zero; a -= _one) {
+      final BigInt rem = n - a * a;
+      if (_isFourPowTimes8kPlus7(rem)) continue;
+      for (BigInt b = _isqrt(rem); b >= _zero; b -= _one) {
+        final BigInt rem2 = rem - b * b;
+        if (!_isSumOfTwoSquares(rem2)) continue;
+        final two = sumOfTwoSquares(rem2)!;
+        final List<BigInt> parts = [a, b, two.a, two.b]..sort();
+        return (a: parts[0], b: parts[1], c: parts[2], d: parts[3]);
       }
-      a += _one;
     }
     // Unreachable by Lagrange's theorem.
     throw StateError(trLocale('No se encontró representación (no debería ocurrir)', 'No representation found (should not happen)', pt: 'Nenhuma representação encontrada (não deveria ocorrer)', fr: 'Aucune représentation trouvée (ne devrait pas arriver)', id: 'Representasi tidak ditemukan (seharusnya tidak terjadi)', vi: 'Không tìm được biểu diễn (lẽ ra không xảy ra)', ru: 'Представление не найдено (такого быть не должно)', it: 'Nessuna rappresentazione trovata (non dovrebbe accadere)'));
+  }
+
+  /// n = 4^k(8m+7): the numbers that are not a sum of three squares.
+  static bool _isFourPowTimes8kPlus7(BigInt n) {
+    if (n <= _zero) return false;
+    while (n % BigInt.from(4) == _zero) {
+      n ~/= BigInt.from(4);
+    }
+    return n % BigInt.from(8) == BigInt.from(7);
+  }
+
+  /// Sum of two squares iff each prime ≡ 3 (mod 4) has an even exponent.
+  static bool _isSumOfTwoSquares(BigInt n) {
+    if (n <= _one) return n >= _zero;
+    for (final e in factorize(n).entries) {
+      if (e.key % BigInt.from(4) == BigInt.from(3) && e.value.isOdd) {
+        return false;
+      }
+    }
+    return true;
   }
 
   // ── Frobenius number ─────────────────────────────────────────────────────
@@ -299,8 +323,20 @@ class NumberTheoryAdvancedService {
     }
     if (g != 1) return null;
 
+    // Two coprime values: Sylvester's formula ab − a − b, exact at any size
+    // (the residue table below needed an array of a entries: 6 s for
+    // a ≈ 10^6, and far longer for 10^9).
+    if (filtered.length == 2) {
+      final BigInt a = BigInt.from(filtered[0]);
+      final BigInt b = BigInt.from(filtered[1]);
+      return a * b - a - b;
+    }
+
     // "Round-Robin" / Dijkstra algorithm over residues mod a1.
     final int a1 = filtered.first;
+    if (a1 > 100000) {
+      throw CalcException(CalcError.inputTooLarge, {'max': '100000'});
+    }
     const int inf = -1;
     final List<int> dist = List.filled(a1, inf);
     dist[0] = 0;

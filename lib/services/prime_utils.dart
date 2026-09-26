@@ -13,17 +13,26 @@ void nextPrimeIsolate(Map<String, dynamic> message) {
   sendPort.send(candidate.toString());
 }
 
-/// The first 12 prime bases. With this set of witnesses, the Miller–Rabin
-/// test is DETERMINISTIC (no false positives) for every n less than
-/// 3.317 × 10^24. Above that bound it remains an extraordinarily reliable
-/// probabilistic test (error prob. < 4^-12 per composite).
+/// The first 13 prime bases. With them Miller–Rabin is DETERMINISTIC (no
+/// false positives) for every n < ψ₁₃ = 3317044064679887385961981
+/// (OEIS A014233). The first 12 only reach ψ₁₂ = 318665857834031151167461,
+/// which is itself composite (399165290221 × 798330580441) and was reported
+/// prime before base 41 was added.
 ///
-/// Note: the previous version used only {2,3,5,7}, with which 3215031751
+/// Note: an older version used only {2,3,5,7}, with which 3215031751
 /// (= 151·751·28351) —a strong pseudoprime to those four bases— was
 /// wrongly classified as prime.
-const List<int> _millerRabinBases = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37];
+const List<int> _millerRabinBases = [
+  2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41,
+];
 
-/// Miller–Rabin primality test.
+/// ψ₁₃: below it the bases above are a proof; at or above it
+/// [isProbablyPrime] adds a strong Lucas test (Baillie–PSW).
+final BigInt _deterministicBound = BigInt.parse('3317044064679887385961981');
+
+/// Primality test: Miller–Rabin with [_millerRabinBases] (a proof below
+/// ψ₁₃), plus a strong Lucas test above it — together the Baillie–PSW test,
+/// for which no composite that passes is known.
 ///
 /// [k] is kept for signature compatibility but no longer limits the number of
 /// witnesses: the bases from [_millerRabinBases] are always used.
@@ -61,7 +70,92 @@ bool isProbablyPrime(BigInt n, {int k = 10}) {
     if (!probablePrime) return false; // witness of compositeness
   }
 
-  return true;
+  if (n < _deterministicBound) return true;
+  return isStrongLucasProbablePrime(n);
+}
+
+/// Jacobi symbol (a/n) for odd n > 0.
+int _jacobi(BigInt a, BigInt n) {
+  a = a % n;
+  int result = 1;
+  final BigInt three = BigInt.from(3);
+  final BigInt four = BigInt.from(4);
+  final BigInt five = BigInt.from(5);
+  final BigInt eight = BigInt.from(8);
+  while (a != BigInt.zero) {
+    while (a.isEven) {
+      a = a >> 1;
+      final BigInt r = n % eight;
+      if (r == three || r == five) result = -result;
+    }
+    final BigInt t = a;
+    a = n;
+    n = t;
+    if (a % four == three && n % four == three) result = -result;
+    a = a % n;
+  }
+  return n == BigInt.one ? result : 0;
+}
+
+/// Strong Lucas probable-prime test with Selfridge's parameters (method A:
+/// the first D in 5, −7, 9, −11, … with Jacobi(D/n) = −1; P = 1,
+/// Q = (1 − D)/4). For odd n > 2 that is not a perfect square.
+bool isStrongLucasProbablePrime(BigInt n) {
+  if (n == BigInt.two) return true;
+  if (n < BigInt.two || n.isEven) return false;
+  // A square has no D with Jacobi −1, and the search below would not end.
+  final BigInt root = _iroot(n, 2);
+  if (root * root == n) return false;
+
+  int dAbs = 5;
+  int sign = 1;
+  BigInt d;
+  while (true) {
+    d = BigInt.from(dAbs * sign);
+    final int j = _jacobi(d, n);
+    if (j == -1) break;
+    if (j == 0 && BigInt.from(dAbs) != n) return false; // shares a factor
+    dAbs += 2;
+    sign = -sign;
+  }
+  final BigInt q = (BigInt.one - d) ~/ BigInt.from(4);
+
+  // n + 1 = dOdd · 2^s
+  BigInt dOdd = n + BigInt.one;
+  int s = 0;
+  while (dOdd.isEven) {
+    dOdd = dOdd >> 1;
+    s++;
+  }
+
+  BigInt half(BigInt x) {
+    x = x % n;
+    return (x.isOdd ? x + n : x) >> 1;
+  }
+
+  // U_1 = 1, V_1 = P = 1, Q^1; then binary ladder over the bits of dOdd.
+  BigInt u = BigInt.one;
+  BigInt v = BigInt.one;
+  BigInt qk = q % n;
+  for (int bit = dOdd.bitLength - 2; bit >= 0; bit--) {
+    u = (u * v) % n;
+    v = (v * v - BigInt.two * qk) % n;
+    qk = (qk * qk) % n;
+    if ((dOdd >> bit).isOdd) {
+      final BigInt nu = half(u + v); // (P·U + V)/2 with P = 1
+      final BigInt nv = half(d * u + v); // (D·U + P·V)/2
+      u = nu;
+      v = nv;
+      qk = (qk * q) % n;
+    }
+  }
+  if (u == BigInt.zero || v == BigInt.zero) return true;
+  for (int r = 1; r < s; r++) {
+    v = (v * v - BigInt.two * qk) % n;
+    qk = (qk * qk) % n;
+    if (v == BigInt.zero) return true;
+  }
+  return false;
 }
 
 /// Complete prime factorization of [n] as a `{prime: exponent}` map.
@@ -146,21 +240,47 @@ BigInt _iroot(BigInt n, int k) {
   }
 }
 
-/// Non-trivial divisor of an odd composite (Pollard-rho, Floyd cycle
-/// detection), retrying with a different constant when it degenerates.
+/// Non-trivial divisor of an odd composite: Pollard-rho with Brent's cycle
+/// detection and the gcd taken once per batch of [batch] products instead of
+/// once per step (Floyd with a gcd per step took 35 s on a 12×15-digit
+/// semiprime). Retries with a different constant when it degenerates.
 BigInt _pollardRho(BigInt n) {
+  const int batch = 128;
   BigInt c = BigInt.one;
   while (true) {
-    BigInt x = BigInt.two;
+    BigInt f(BigInt v) => (v * v + c) % n;
     BigInt y = BigInt.two;
-    BigInt d = BigInt.one;
-    while (d == BigInt.one) {
-      x = (x * x + c) % n;
-      y = (y * y + c) % n;
-      y = (y * y + c) % n;
-      d = _gcd((x - y).abs(), n);
+    BigInt x = y;
+    BigInt ys = y;
+    BigInt q = BigInt.one;
+    BigInt g = BigInt.one;
+    int r = 1;
+    do {
+      x = y;
+      for (int i = 0; i < r; i++) {
+        y = f(y);
+      }
+      int k = 0;
+      while (k < r && g == BigInt.one) {
+        ys = y;
+        final int steps = r - k < batch ? r - k : batch;
+        for (int i = 0; i < steps; i++) {
+          y = f(y);
+          q = (q * (x - y).abs()) % n;
+        }
+        g = _gcd(q, n);
+        k += batch;
+      }
+      r *= 2;
+    } while (g == BigInt.one);
+    if (g == n) {
+      // The batch overshot: replay it one step at a time.
+      do {
+        ys = f(ys);
+        g = _gcd((x - ys).abs(), n);
+      } while (g == BigInt.one);
     }
-    if (d != n) return d;
+    if (g != n) return g;
     c += BigInt.one;
   }
 }
