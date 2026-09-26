@@ -154,6 +154,10 @@ class ExpressionInput extends StatelessWidget {
                   _buildFunctionButton(context, calculator, 'ln(', l.exprLn),
                   _buildFunctionButton(context, calculator, 'π', l.exprPi),
                   _buildFunctionButton(context, calculator, 'e', l.exprEuler),
+                  // User-defined functions; the tooltip shows the definition
+                  for (final fn in calculator.customFunctions)
+                    _buildFunctionButton(
+                        context, calculator, '${fn.name}(', fn.definition),
                 ],
               ),
 

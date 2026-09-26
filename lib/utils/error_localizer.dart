@@ -25,6 +25,10 @@ String localizeError(BuildContext context, String key, [Map<String, String> args
     case 'errResultInvalid': return l.errResultInvalid;
     case 'errResultTooLarge': return l.errResultTooLarge;
 
+    // === Custom functions ===
+    case 'errCustomFnArgs': return l.errCustomFnArgs(n);
+    case 'errCustomFnRecursion': return l.errCustomFnRecursion;
+
     // === Analysis ===
     case 'errAnalysisInvalid': return l.errAnalysisInvalid;
     case 'errAnalysisFail': return l.errAnalysisFail;

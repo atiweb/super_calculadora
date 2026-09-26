@@ -105,6 +105,15 @@ class CalculatorDrawer extends StatelessWidget {
                 },
               ),
               ListTile(
+                leading: const Icon(Icons.edit_note),
+                title: Text(l.navFunctions),
+                subtitle: Text(l.navFunctionsSub),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.pushNamed(context, '/custom-functions');
+                },
+              ),
+              ListTile(
                 leading: const Icon(Icons.settings),
                 title: Text(l.navSettings),
                 subtitle: Text(l.navSettingsSub),

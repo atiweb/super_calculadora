@@ -4249,6 +4249,168 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Operación desconocida: {op}'**
   String errUnknownOp(String op);
+
+  /// Navigation drawer item for custom functions
+  ///
+  /// In es, this message translates to:
+  /// **'Mis funciones'**
+  String get navFunctions;
+
+  /// Subtitle for custom functions nav item
+  ///
+  /// In es, this message translates to:
+  /// **'Crea y edita funciones personalizadas'**
+  String get navFunctionsSub;
+
+  /// Custom functions screen title
+  ///
+  /// In es, this message translates to:
+  /// **'Funciones personalizadas'**
+  String get cfTitle;
+
+  /// Empty state title on custom functions screen
+  ///
+  /// In es, this message translates to:
+  /// **'Aún no has creado ninguna función'**
+  String get cfEmpty;
+
+  /// Empty state hint with an example definition
+  ///
+  /// In es, this message translates to:
+  /// **'Toca «Añadir función» y define la primera, por ejemplo: f(x) = x^2 + 1'**
+  String get cfEmptyHint;
+
+  /// Add-function button label
+  ///
+  /// In es, this message translates to:
+  /// **'Añadir función'**
+  String get cfAdd;
+
+  /// Editor dialog title when creating
+  ///
+  /// In es, this message translates to:
+  /// **'Nueva función'**
+  String get cfEditorTitleNew;
+
+  /// Editor dialog title when editing
+  ///
+  /// In es, this message translates to:
+  /// **'Editar función'**
+  String get cfEditorTitleEdit;
+
+  /// Editor text field hint (example definition)
+  ///
+  /// In es, this message translates to:
+  /// **'f(x) = x^2 + 1'**
+  String get cfEditorHint;
+
+  /// Help text below the editor field
+  ///
+  /// In es, this message translates to:
+  /// **'Escribe nombre(parámetros) = expresión. Puedes usar sin, cos, sqrt, ln… y también tus otras funciones.'**
+  String get cfEditorHelp;
+
+  /// Save button in the function editor
+  ///
+  /// In es, this message translates to:
+  /// **'Guardar'**
+  String get cfSave;
+
+  /// Cancel button in custom function dialogs
+  ///
+  /// In es, this message translates to:
+  /// **'Cancelar'**
+  String get cfCancel;
+
+  /// Delete button/tooltip for a custom function
+  ///
+  /// In es, this message translates to:
+  /// **'Eliminar'**
+  String get cfDelete;
+
+  /// Delete confirmation dialog title
+  ///
+  /// In es, this message translates to:
+  /// **'Eliminar función'**
+  String get cfDeleteTitle;
+
+  /// Delete confirmation dialog message
+  ///
+  /// In es, this message translates to:
+  /// **'¿Seguro que quieres eliminar {name}?'**
+  String cfDeleteMessage(String name);
+
+  /// Editor error: definition does not match name(params) = body
+  ///
+  /// In es, this message translates to:
+  /// **'Formato no válido. Usa: nombre(x) = expresión'**
+  String get cfErrBadSignature;
+
+  /// Editor error: function name shadows a builtin
+  ///
+  /// In es, this message translates to:
+  /// **'«{name}» es un nombre reservado de la calculadora'**
+  String cfErrReservedName(String name);
+
+  /// Editor error: invalid or shadowing parameter name
+  ///
+  /// In es, this message translates to:
+  /// **'Parámetro no válido: «{name}»'**
+  String cfErrBadParam(String name);
+
+  /// Editor error: duplicate parameter name
+  ///
+  /// In es, this message translates to:
+  /// **'Parámetro repetido: «{name}»'**
+  String cfErrDupParam(String name);
+
+  /// Editor error: another function already uses this name
+  ///
+  /// In es, this message translates to:
+  /// **'Ya existe una función llamada «{name}»'**
+  String cfErrNameTaken(String name);
+
+  /// Editor error: empty function body
+  ///
+  /// In es, this message translates to:
+  /// **'Falta la expresión después del signo ='**
+  String get cfErrEmptyBody;
+
+  /// Editor error: body does not parse
+  ///
+  /// In es, this message translates to:
+  /// **'La expresión de la función no es válida'**
+  String get cfErrBodyInvalid;
+
+  /// Editor error: body references an undefined name
+  ///
+  /// In es, this message translates to:
+  /// **'Nombre desconocido en la definición: «{name}»'**
+  String cfErrUnknownName(String name);
+
+  /// Evaluation error: custom function called with wrong arity
+  ///
+  /// In es, this message translates to:
+  /// **'Número de argumentos incorrecto para {n}'**
+  String errCustomFnArgs(String n);
+
+  /// Evaluation error: circular custom function definitions
+  ///
+  /// In es, this message translates to:
+  /// **'Las funciones personalizadas se llaman entre sí sin fin (definición circular)'**
+  String get errCustomFnRecursion;
+
+  /// Delete blocked: other functions reference this one
+  ///
+  /// In es, this message translates to:
+  /// **'No se puede eliminar: «{name}» se usa en {others}'**
+  String cfErrInUse(String name, String others);
+
+  /// Edit blocked: saved functions would stop working
+  ///
+  /// In es, this message translates to:
+  /// **'Este cambio rompería otras funciones: {others}'**
+  String cfErrBreaksOthers(String others);
 }
 
 class _AppLocalizationsDelegate

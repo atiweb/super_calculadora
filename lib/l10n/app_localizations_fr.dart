@@ -2303,4 +2303,109 @@ class AppLocalizationsFr extends AppLocalizations {
   String errUnknownOp(String op) {
     return 'Opération inconnue : $op';
   }
+
+  @override
+  String get navFunctions => 'Mes fonctions';
+
+  @override
+  String get navFunctionsSub =>
+      'Créer et modifier des fonctions personnalisées';
+
+  @override
+  String get cfTitle => 'Fonctions personnalisées';
+
+  @override
+  String get cfEmpty => 'Vous n\'avez encore créé aucune fonction';
+
+  @override
+  String get cfEmptyHint =>
+      'Touchez « Ajouter une fonction » et définissez la première, par exemple : f(x) = x^2 + 1';
+
+  @override
+  String get cfAdd => 'Ajouter une fonction';
+
+  @override
+  String get cfEditorTitleNew => 'Nouvelle fonction';
+
+  @override
+  String get cfEditorTitleEdit => 'Modifier la fonction';
+
+  @override
+  String get cfEditorHint => 'f(x) = x^2 + 1';
+
+  @override
+  String get cfEditorHelp =>
+      'Écrivez nom(paramètres) = expression. Vous pouvez utiliser sin, cos, sqrt, ln… ainsi que vos autres fonctions.';
+
+  @override
+  String get cfSave => 'Enregistrer';
+
+  @override
+  String get cfCancel => 'Annuler';
+
+  @override
+  String get cfDelete => 'Supprimer';
+
+  @override
+  String get cfDeleteTitle => 'Supprimer la fonction';
+
+  @override
+  String cfDeleteMessage(String name) {
+    return 'Voulez-vous vraiment supprimer $name ?';
+  }
+
+  @override
+  String get cfErrBadSignature =>
+      'Format non valide. Utilisez : nom(x) = expression';
+
+  @override
+  String cfErrReservedName(String name) {
+    return '« $name » est un nom réservé de la calculatrice';
+  }
+
+  @override
+  String cfErrBadParam(String name) {
+    return 'Paramètre non valide : « $name »';
+  }
+
+  @override
+  String cfErrDupParam(String name) {
+    return 'Paramètre répété : « $name »';
+  }
+
+  @override
+  String cfErrNameTaken(String name) {
+    return 'Une fonction nommée « $name » existe déjà';
+  }
+
+  @override
+  String get cfErrEmptyBody => 'Il manque l\'expression après le signe =';
+
+  @override
+  String get cfErrBodyInvalid =>
+      'L\'expression de la fonction n\'est pas valide';
+
+  @override
+  String cfErrUnknownName(String name) {
+    return 'Nom inconnu dans la définition : « $name »';
+  }
+
+  @override
+  String errCustomFnArgs(String n) {
+    return 'Nombre d\'arguments incorrect pour $n';
+  }
+
+  @override
+  String get errCustomFnRecursion =>
+      'Les fonctions personnalisées s\'appellent sans fin (définition circulaire)';
+
+  @override
+  String cfErrInUse(String name, String others) {
+    return 'Suppression impossible : « $name » est utilisée par $others';
+  }
+
+  @override
+  String cfErrBreaksOthers(String others) {
+    return 'Cette modification casserait d\'autres fonctions : $others';
+  }
 }
