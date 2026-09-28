@@ -22,7 +22,29 @@ import 'custom_function_service.dart';
 /// Main calculator service
 class CalculatorService extends ChangeNotifier {
   String _display = '0';
-  String _lastResult = '';
+  String _lastResultValue = '';
+
+  /// The display text at the moment a result was last shown, or null once
+  /// the user edits it. A digit typed over a shown result starts a new
+  /// number: "2 + 3 =" then 7 used to append and give 57.
+  String? _resultShown;
+
+  String get _lastResult => _lastResultValue;
+
+  /// Every one of the ~50 places that finishes an operation assigns the
+  /// display and then _lastResult, so recording the display here marks the
+  /// result as "on screen" without touching each of them.
+  set _lastResult(String value) {
+    _lastResultValue = value;
+    _resultShown = value.isEmpty ? null : _display;
+  }
+
+  /// Whether the display holds a finished result rather than typed input.
+  bool get _showingResult =>
+      _pending == null &&
+      _resultShown != null &&
+      _display == _resultShown &&
+      _isBareNumber(_display);
 
   /// The exact value behind a rounded result on the display: [shown] is the
   /// text displayed, [exact] a "(p/q)" the evaluator reads exactly. When the
@@ -288,6 +310,13 @@ class CalculatorService extends ChangeNotifier {
     // Anything typed fills the waiting parameter slot, including a literal 0.
     _paramSlotEmpty = false;
 
+    // Typing over a shown result starts a new number.
+    if (_showingResult) {
+      _display = '0';
+      _exactCarry = null;
+    }
+    _resultShown = null;
+
     // If the display is '0' and it's not a decimal point, replace it
     if (_display == '0' && digit != '.') {
       _display = digit;
@@ -322,6 +351,7 @@ class CalculatorService extends ChangeNotifier {
     // ' ÷ '), which produced "5  ÷  " and left a stray space behind after
     // backspace, so the next digit juxtaposed: "5 3" evaluated as 53.
     operator = operator.trim();
+    _resultShown = null; // an operator continues from the result
 
     // Empty display: only '-' can start one (negative number); ignore the rest.
     if (_display.isEmpty) {
@@ -734,6 +764,7 @@ class CalculatorService extends ChangeNotifier {
 
   /// Deletes the last character or element
   void backspace() {
+    _resultShown = null;
     if (_hasError) {
       clear();
       return;
@@ -796,6 +827,7 @@ class CalculatorService extends ChangeNotifier {
   /// Toggles the sign of the number
   void toggleSign() {
     if (_hasError) return;
+    _resultShown = null;
 
     // Negate the operand being entered, not the whole expression: "5 + 3" then
     // ± used to become "-5 + 3" (= −2) instead of "5 + -3" (= 2).
@@ -830,6 +862,7 @@ class CalculatorService extends ChangeNotifier {
 
   /// Adds an opening parenthesis
   void addOpenParenthesis() {
+    _resultShown = null;
     if (_hasError) {
       clear();
     }
@@ -850,6 +883,7 @@ class CalculatorService extends ChangeNotifier {
 
   /// Adds a closing parenthesis
   void addCloseParenthesis() {
+    _resultShown = null;
     if (_hasError) {
       clear();
     }
@@ -2057,12 +2091,28 @@ class CalculatorService extends ChangeNotifier {
   /// 15 decimals kept for 2.718281828459045) and 15 below 1, where float
   /// noise reaches the 16th digit (0.49999999999999994 must read 0.5). Fixed
   /// decimals flattened small values instead: 10^-16 became 0.
+  ///
+  /// From 1 up, noise can also reach the 16th digit (100 × sin 30° =
+  /// 49.99999999999999): when 15 digits snap the value to a visibly shorter
+  /// number (≤ 12 significant digits), that shorter number is the result.
   static double _roundSignificant(double x) {
     if (x == 0 || !x.isFinite) return x;
-    final int digits = x.abs() >= 1
-        ? NumericPrecision.decimals + 1
-        : NumericPrecision.decimals;
-    return double.parse(x.toStringAsPrecision(digits));
+    final String at15 = x.toStringAsPrecision(NumericPrecision.decimals);
+    if (x.abs() < 1 || _significantDigits(at15) <= 12) {
+      return double.parse(at15);
+    }
+    return double.parse(x.toStringAsPrecision(NumericPrecision.decimals + 1));
+  }
+
+  /// Significant digits in a toStringAsPrecision output ("5.00000000000000e+1"
+  /// has 1).
+  static int _significantDigits(String s) {
+    final String mantissa = s.split(RegExp('[eE]')).first;
+    final String digits = mantissa
+        .replaceAll(RegExp(r'[-.]'), '')
+        .replaceFirst(RegExp(r'^0+'), '')
+        .replaceFirst(RegExp(r'0+$'), '');
+    return digits.length;
   }
 
   /// Formats a number without using scientific notation
@@ -2126,7 +2176,9 @@ class CalculatorService extends ChangeNotifier {
     // PRECISION LOSS PREVENTION: For large numbers, NEVER convert to double
     // Numbers > 15 digits may lose precision in double conversions
   if (numberStr.length > NumericPrecision.decimals) {
-      return numberStr; // Return the original string for very large numbers
+      // Return the original digits for very large numbers; dropping zeros
+      // after the point loses nothing ("…640000.0" read as a decimal).
+      return _trimTrailingZeros(numberStr);
     }
     
     // Check whether scientific notation should be used
@@ -2486,9 +2538,15 @@ class CalculatorService extends ChangeNotifier {
         return 'err:errTanUndefined';
       }
 
-      // Format the result according to the settings
-      return _formatNumber(result.toString());
-      
+      // Round away float noise before formatting. _formatNumber only cleaned
+      // results below 10, so asin(0.5) showed 30.000000000000004, 100 ÷ 3
+      // 33.333333333333336 and 20! 2432902008176640000.0.
+      final double rounded = _roundSignificant(result);
+      if (!SettingsService.getUseScientificNotation()) {
+        return _formatWithoutScientificNotation(rounded);
+      }
+      return _formatNumber(rounded.toString());
+
     } catch (e) {
       throw Exception(trLocale('Error en evaluación: ${e.toString()}', 'Evaluation error: ${e.toString()}', pt: 'Erro na avaliação: ${e.toString()}', fr: "Erreur d'évaluation : ${e.toString()}", id: 'Kesalahan evaluasi: ${e.toString()}', vi: 'Lỗi khi tính giá trị: ${e.toString()}', ru: 'Ошибка вычисления: ${e.toString()}', it: 'Errore di valutazione: ${e.toString()}'));
     }

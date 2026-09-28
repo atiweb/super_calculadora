@@ -139,10 +139,19 @@ List<double> _realRootsApprox(Polynomial p) {
 /// Enumerates the lattice points of an integer-vertex polygon, so they can
 /// be drawn: (boundary, interior). If the sweep area is too large,
 /// it returns empty lists (the drawing omits the points).
-({List<Offset> boundary, List<Offset> interior}) _latticePoints(
+@visibleForTesting
+({List<Offset> boundary, List<Offset> interior}) latticePointsOf(
     List<Point> poly) {
   final xs = poly.map((p) => p.x.toDouble()).toList();
   final ys = poly.map((p) => p.y.toDouble()).toList();
+  // Size the sweep in doubles first. As int the product overflowed: for
+  // vertices at 4·10⁹ it wrapped negative, passed the 2500 cap and the
+  // sweep over ~10¹⁹ points froze the app on every rebuild.
+  final double spanX = xs.reduce(math.max) - xs.reduce(math.min) + 1;
+  final double spanY = ys.reduce(math.max) - ys.reduce(math.min) + 1;
+  if (!(spanX * spanY <= 2500)) {
+    return (boundary: const [], interior: const []);
+  }
   final int minX = xs.reduce(math.min).ceil();
   final int maxX = xs.reduce(math.max).floor();
   final int minY = ys.reduce(math.min).ceil();
@@ -597,7 +606,7 @@ class GeometryToolScreen extends StatelessWidget {
             final pts = _pointList(i[0]);
             if (pts.length < 3) return null;
             if (pts.any((p) => !p.x.isInteger || !p.y.isInteger)) return null;
-            final lattice = _latticePoints(pts);
+            final lattice = latticePointsOf(pts);
             final scheme = Theme.of(ctx).colorScheme;
             return CustomPaint(
               painter: PolygonPainter(

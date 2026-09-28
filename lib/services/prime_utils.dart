@@ -1,16 +1,12 @@
-import 'dart:isolate';
+import 'package:flutter/foundation.dart' show compute;
 
-/// Entry point for the isolate
-void nextPrimeIsolate(Map<String, dynamic> message) {
-  final SendPort sendPort = message['sendPort'];
-  final BigInt start = message['start'];
-
+/// Entry point for the isolate: the first prime after [start].
+String nextPrimeIsolate(BigInt start) {
   BigInt candidate = start + BigInt.one;
   while (!isProbablyPrime(candidate)) {
     candidate += BigInt.one;
   }
-
-  sendPort.send(candidate.toString());
+  return candidate.toString();
 }
 
 /// The first 13 prime bases. With them Miller–Rabin is DETERMINISTIC (no
@@ -326,16 +322,9 @@ List<BigInt>? divisorsOf(BigInt n, {int limit = 100000}) {
   return divisors;
 }
 
-/// Spawns the isolate and returns the next prime
-Future<String> findNextPrime(BigInt number) async {
-  final receivePort = ReceivePort();
-  await Isolate.spawn(
-    nextPrimeIsolate,
-    {
-      'sendPort': receivePort.sendPort,
-      'start': number,
-    },
-  );
-
-  return await receivePort.first;
-}
+/// The next prime, searched in an isolate. `compute` rather than
+/// `Isolate.spawn`: the web build has no isolates, so ReceivePort threw
+/// "Unsupported operation" and the analysis panel showed "calculation error"
+/// for the neighbouring primes of every number past 10 digits.
+Future<String> findNextPrime(BigInt number) =>
+    compute(nextPrimeIsolate, number);

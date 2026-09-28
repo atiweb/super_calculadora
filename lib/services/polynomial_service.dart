@@ -180,10 +180,21 @@ class PolynomialService {
 
     final List<BigInt> reduced = intCoeffs.sublist(lowZeros);
     if (reduced.length >= 2) {
-      final BigInt a0 = reduced.first.abs();
-      final BigInt an = reduced.last.abs();
-      for (final p0 in _divisors(a0)) {
-        for (final q0 in _divisors(an)) {
+      // Divide out the content first: 735134400x² − 735134400 paired the
+      // 1344 divisors of each end (1.8 M candidates, 7.5 s on every
+      // rebuild) when x² − 1 has four.
+      final BigInt content = reduced.fold(BigInt.zero, _gcd);
+      final BigInt a0 = (reduced.first ~/ content).abs();
+      final BigInt an = (reduced.last ~/ content).abs();
+      final Set<BigInt> ps = _divisors(a0);
+      final Set<BigInt> qs = _divisors(an);
+      if (ps.length * qs.length > _maxCandidatePairs) {
+        throw CalcException(CalcError.inputTooLarge, {'max': '10^30'});
+      }
+      for (final p0 in ps) {
+        for (final q0 in qs) {
+          // p/q in lowest terms only; the rest are duplicates.
+          if (_gcd(p0, q0) != BigInt.one) continue;
           candidates.add(Fraction(p0, q0));
           candidates.add(Fraction(-p0, q0));
         }
@@ -393,6 +404,10 @@ class PolynomialService {
   /// up to √n on the UI thread took 66 s for x − 10^16. Coefficients beyond
   /// 10^30, or with too many divisors, are refused rather than hanging.
   static final BigInt _maxCoefficient = BigInt.from(10).pow(30);
+
+  /// Divisor pairs p/q tried by the rational root theorem; each is a
+  /// candidate to evaluate, so past this the search blocks the UI.
+  static const int _maxCandidatePairs = 100000;
 
   static Set<BigInt> _divisors(BigInt n) {
     n = n.abs();

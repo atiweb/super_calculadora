@@ -636,14 +636,28 @@ class SpecialFunctionsService {
   static BigInt? findPrimitiveRoot(BigInt n) {
     if (n <= BigInt.one) return null;
     if (n == BigInt.two) return BigInt.one;
+    if (n == BigInt.from(4)) return BigInt.from(3);
 
-    for (BigInt g = BigInt.two; g < n; g += BigInt.one) {
+    // Rule out the moduli without primitive roots first, and factorize φ(n)
+    // once: the old loop tried up to 10000 values of g, each re-factorizing
+    // φ(n) through isPrimitiveRoot, and took 60 s to answer "none" for
+    // 105 · (10⁹ + 7) on the UI thread.
+    final Map<BigInt, int> f = factorize(n);
+    final List<BigInt> oddPrimes =
+        f.keys.where((p) => p != BigInt.two).toList();
+    if (oddPrimes.length != 1 || (f[BigInt.two] ?? 0) > 1) return null;
+    final BigInt p = oddPrimes.single;
+    // φ(pᵏ) = φ(2pᵏ)
+    final BigInt phi = (p - BigInt.one) * p.pow(f[p]! - 1);
+    final List<BigInt> phiPrimes = factorize(phi).keys.toList();
+
+    // Limit the search for very large numbers
+    final BigInt limit = BigInt.from(10000);
+    for (BigInt g = BigInt.two; g < n && g <= limit; g += BigInt.one) {
       if (gcd(g, n) != BigInt.one) continue;
-      if (isPrimitiveRoot(g, n)) {
+      if (phiPrimes.every((q) => modPow(g, phi ~/ q, n) != BigInt.one)) {
         return g;
       }
-      // Limit the search for very large numbers
-      if (g > BigInt.from(10000)) return null;
     }
 
     return null;
