@@ -322,6 +322,21 @@ List<BigInt>? divisorsOf(BigInt n, {int limit = 100000}) {
   return divisors;
 }
 
+/// Entry point for the isolate: the last prime before [start] (2 at least).
+String previousPrimeIsolate(BigInt start) {
+  BigInt candidate = start - BigInt.one;
+  if (candidate.isEven) candidate -= BigInt.one;
+  while (candidate > BigInt.two) {
+    if (isProbablyPrime(candidate)) return candidate.toString();
+    candidate -= BigInt.two;
+  }
+  return '2';
+}
+
+/// The previous prime, searched in an isolate (see [findNextPrime]).
+Future<String> findPreviousPrime(BigInt number) =>
+    compute(previousPrimeIsolate, number);
+
 /// The next prime, searched in an isolate. `compute` rather than
 /// `Isolate.spawn`: the web build has no isolates, so ReceivePort threw
 /// "Unsupported operation" and the analysis panel showed "calculation error"

@@ -1,10 +1,15 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:super_calculadora/models/calc_exception.dart';
 import 'package:super_calculadora/models/fraction.dart';
+import 'package:super_calculadora/models/operation_entry.dart';
 import 'package:super_calculadora/models/point.dart';
 import 'package:super_calculadora/screens/olympiad/olympiad_tool_screens.dart';
 import 'package:super_calculadora/services/calculator_service.dart';
+import 'package:super_calculadora/services/geometry_service.dart';
+import 'package:super_calculadora/services/number_analysis_service.dart';
 import 'package:super_calculadora/services/polynomial_service.dart';
+import 'package:super_calculadora/utils/app_locale.dart';
 import 'package:super_calculadora/services/prime_utils.dart';
 import 'package:super_calculadora/services/special_functions_service.dart';
 
@@ -136,6 +141,176 @@ void main() {
           PolynomialService.parse('4x^2-4'));
       // After dividing out 4: ±1.
       expect(c, [Fraction.fromInt(-1), Fraction.one]);
+    });
+  });
+
+  group('keypad (medium priority)', () {
+    test('5 + 4 √ acts on the 4 (was Error)', () async {
+      keys('5 + 4');
+      await calc.squareRoot();
+      expect(calc.display, '5 + 2');
+      calc.calculate();
+      expect(calc.display, '7');
+    });
+    test('x² and ∛ on the trailing operand', () async {
+      keys('1 + 3');
+      await calc.power('2');
+      expect(calc.display, '1 + 9');
+      calc.clear();
+      keys('2 × 27');
+      await calc.cubeRoot();
+      expect(calc.display, '2 × 3');
+    });
+    test('= over an error keeps the original message', () {
+      keys('5 ÷ 0 =');
+      final String first = calc.errorMessage;
+      calc.calculate();
+      expect(calc.errorMessage, first);
+      expect(first, isNot('errGeneric'));
+    });
+    test('17 mod, 2 + 4 = is 17 mod 6 (was 17 mod 4 = 1)', () {
+      keys('17');
+      calc.modFunction();
+      keys('2 + 4 =');
+      expect(calc.display, '5');
+    });
+    test('12 LCM 18 = = LCM is 36 (a phantom 0 made it 0)', () {
+      keys('12');
+      calc.lcmFunction();
+      keys('18 =');
+      calc.calculate();
+      calc.lcmFunction();
+      expect(calc.display, '36');
+    });
+    test('CE clears the last operand only', () {
+      keys('5 + 3');
+      calc.clearEntry();
+      expect(calc.display, '5 + ');
+      keys('4 =');
+      expect(calc.display, '9');
+    });
+    test('⌫ on a scientific-notation result clears it', () {
+      calc.setDisplay('9.999999999999998e-15');
+      // Mark it as a result, as calculate() would.
+      calc.loadResultFromHistory(OperationEntry(
+          expression: 'x', result: '9.999999999999998e-15'));
+      calc.backspace();
+      expect(calc.display, '0');
+    });
+    test('loading a history result clears a previous error', () {
+      keys('5 ÷ 0 =');
+      expect(calc.hasError, isTrue);
+      calc.loadResultFromHistory(OperationEntry(expression: '6×7', result: '42'));
+      expect(calc.hasError, isFalse);
+      keys('+ 1 =');
+      expect(calc.display, '43');
+    });
+  });
+
+  group('evaluator (medium priority)', () {
+    String ev(String e) => calc.evaluateCompleteExpression(e);
+    test('exp(x) works (was a FormatException)', () {
+      expect(ev('exp(0)'), '1');
+      expect(ev('2exp(0)'), '2');
+      expect(double.parse(ev('exp(1)')), closeTo(2.718281828459045, 1e-12));
+    });
+    test('implicit products allow a space', () {
+      expect(ev('3 sin(30)'), '1.5');
+      expect(ev('2 (3)'), '6');
+      expect(ev('(3) 2'), '6');
+      expect(double.parse(ev('2 π')), closeTo(6.283185307179586, 1e-12));
+      expect(ev('2floor(2.5)'), '4');
+    });
+    test('non-integer and negative factorials are refused (0.5! gave 1)', () {
+      expect(ev('0.5!'), 'err:errFactorialNonNeg');
+      expect(ev('2.5!'), 'err:errFactorialNonNeg');
+      expect(ev('(-3)!'), 'err:errFactorialNonNeg');
+      expect(ev('3!'), '6');
+      expect(ev('3.0!'), '6');
+    });
+    test('5/0! and 5/0^0 are 5, not a division by zero', () {
+      expect(ev('5/0!'), '5');
+      expect(ev('5/0^0'), '5');
+      expect(ev('5/0'), 'err:errExprDivZero');
+    });
+    test('ℯ from the keypad is Euler\'s number, next to scientific notation',
+        () {
+      expect(double.parse(ev('2ℯ-1')), closeTo(2 * 2.718281828459045 - 1, 1e-12));
+      expect(ev('2e-1'), '0.2');
+    });
+  });
+
+  group('olympiad tools (medium priority)', () {
+    test('fused numbers are refused: 2*3x was 23x, x^2*3 was x^23', () {
+      for (final s in ['2*3x', '2 3x', 'x^2*3']) {
+        expect(() => PolynomialService.parse(s),
+            throwsA(isA<CalcException>()
+                .having((e) => e.code, 'code', CalcError.invalidTerm)),
+            reason: s);
+      }
+      expect(PolynomialService.parse('3/2 x - 1').toString(),
+          PolynomialService.parse('3/2x-1').toString());
+      expect(PolynomialService.parse('2 * x').toString(),
+          PolynomialService.parse('2x').toString());
+    });
+    Point p(int x, int y) => Point.ints(x, y);
+    test('bow tie and flat polygons are refused (bow tie gave I = −3)', () {
+      Matcher notSimple = throwsA(isA<CalcException>()
+          .having((e) => e.code, 'code', CalcError.polygonNotSimple));
+      expect(() => GeometryService.pickAnalysis(
+          [p(0, 0), p(2, 0), p(0, 2), p(2, 2)]), notSimple);
+      expect(() => GeometryService.pickAnalysis(
+          [p(0, 0), p(1, 0), p(2, 0)]), notSimple);
+      expect(() => GeometryService.shoelaceArea(
+          [p(0, 0), p(2, 0), p(1, 0), p(1, 1)]), notSimple);
+    });
+    test('simple polygons still work, convex and concave', () {
+      expect(GeometryService.pickAnalysis([p(0, 0), p(4, 0), p(0, 6)]).interior,
+          BigInt.from(7));
+      // An L shape (concave), area 3.
+      expect(
+          GeometryService.shoelaceArea(
+              [p(0, 0), p(2, 0), p(2, 1), p(1, 1), p(1, 2), p(0, 2)]),
+          Fraction.fromInt(3));
+    });
+  });
+
+  group('platform and performance (medium priority)', () {
+    tearDown(() => appLanguage = 'en');
+    test('no localized "not prime" value for a composite, in any language',
+        () {
+      for (final lang in ['es', 'en', 'pt', 'fr', 'it', 'ru', 'vi', 'id']) {
+        appLanguage = lang;
+        final a = NumberAnalysisService.completeAnalysis(
+            BigInt.from(10).pow(16));
+        expect(a['nextPrime'], isNull, reason: lang);
+        expect(a['previousPrime'], isNull, reason: lang);
+      }
+    });
+    test('previous prime of a large number comes from the isolate', () async {
+      expect(await NumberAnalysisService.previousPrimeAsync(
+          BigInt.from(10000000000)), BigInt.from(9999999967));
+    });
+    test('F(n), Cat(n), D(n), n!! refuse n past their bound', () async {
+      Future<void> over(String n, Future<void> Function() op) async {
+        calc.clear();
+        keys(n);
+        await op();
+        expect(calc.errorMessage, 'errResultTooLarge', reason: n);
+      }
+      await over('100001', calc.fibonacciN);
+      await over('10001', calc.catalanNumber);
+      await over('10001', calc.derangementFunction);
+      await over('20001', calc.doubleFactorialFunction);
+      calc.clear();
+      keys('10');
+      await calc.fibonacciN();
+      expect(calc.display, '55');
+    });
+    test('Legendre symbol needs a prime (2/9 gave 0)', () {
+      expect(() => SpecialFunctionsService.legendreSymbol(BigInt.two, BigInt.from(9)),
+          throwsArgumentError);
+      expect(SpecialFunctionsService.legendreSymbol(BigInt.two, BigInt.from(7)), 1);
     });
   });
 

@@ -666,7 +666,9 @@ class SpecialFunctionsService {
   /// Legendre symbol (a/p) for odd prime p
   /// Returns 1 if a is a quadratic residue mod p, -1 if not, 0 if p|a
   static int legendreSymbol(BigInt a, BigInt p) {
-    if (p <= BigInt.two) {
+    // Checked for primality too: (2/9) and (4/15) returned 0, which claims
+    // p | a, and (3/4) returned −1. The Jacobi symbol covers composite n.
+    if (p <= BigInt.two || !isProbablyPrime(p)) {
       throw ArgumentError(trLocale('p debe ser un primo impar > 2', 'p must be an odd prime > 2', pt: 'p deve ser um primo ímpar > 2', fr: 'p doit être un nombre premier impair > 2', id: 'p harus bilangan prima ganjil > 2', vi: 'p phải là số nguyên tố lẻ > 2', ru: 'p должно быть нечётным простым > 2', it: 'p deve essere un primo dispari > 2'));
     }
 

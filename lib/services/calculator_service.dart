@@ -177,7 +177,15 @@ class CalculatorService extends ChangeNotifier {
 
   /// Clears only the display
   void clearEntry() {
-    _display = '0';
+    // CE clears the entry being typed, not the expression: "5 + 3 CE" wiped
+    // everything instead of leaving "5 + ".
+    if (!_hasError && !_isBareNumber(_display) && _endsWithNumber()) {
+      final String operand = _getCurrentNumber();
+      _display = _display.substring(0, _display.lastIndexOf(operand));
+    } else {
+      _display = '0';
+    }
+    _resultShown = null;
     _exactCarry = null;
     _hasError = false;
     _errorMessage = '';
@@ -417,6 +425,10 @@ class CalculatorService extends ChangeNotifier {
 
   /// Calculates the result of the expression
   void calculate() {
+    // '=' over an error re-evaluated the text "Error" and replaced the real
+    // message (division by zero…) with a raw parser exception.
+    if (_hasError) return;
+
     // If there is a pending operation, add the parameter and execute if complete
     if (_pending != null) {
       _addParamAndMaybeExecute();
@@ -487,6 +499,9 @@ class CalculatorService extends ChangeNotifier {
 
   /// Calculates power
   Future<void> power(String exponent) async {
+    if (_onExpressionOperand) {
+      return _applyToTrailingOperand(() => power(exponent));
+    }
     try {
       String originalValue = _display;
       BigDecimal base = BigDecimal.fromString(_display);
@@ -554,8 +569,30 @@ class CalculatorService extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Whether a one-operand key should act on the trailing operand of an
+  /// expression ("5 + 4") rather than on the whole display.
+  bool get _onExpressionOperand =>
+      !_hasError && !_isBareNumber(_display) && _endsWithNumber();
+
+  /// Runs [op] on the trailing operand only and splices its result back, as
+  /// % and 1/x already did: √, x², x³ and ∛ parsed the whole display, so
+  /// "5 + 4 √" showed Error instead of "5 + 2".
+  Future<void> _applyToTrailingOperand(Future<void> Function() op) async {
+    final String operand = _getCurrentNumber();
+    final String head =
+        _display.substring(0, _display.lastIndexOf(operand));
+    final int token = _operationToken;
+    _display = operand;
+    await op();
+    if (token != _operationToken || _hasError) return;
+    _display = head + _display;
+    _updateAnalysis();
+    notifyListeners();
+  }
+
   /// Calculates square root
   Future<void> squareRoot() async {
+    if (_onExpressionOperand) return _applyToTrailingOperand(squareRoot);
     try {
       String originalValue = _display;
       BigDecimal number = BigDecimal.fromString(_display);
@@ -632,6 +669,7 @@ class CalculatorService extends ChangeNotifier {
 
   /// Calculates cube root
   Future<void> cubeRoot() async {
+    if (_onExpressionOperand) return _applyToTrailingOperand(cubeRoot);
     try {
       String originalValue = _display;
       BigDecimal number = BigDecimal.fromString(_display);
@@ -764,9 +802,21 @@ class CalculatorService extends ChangeNotifier {
 
   /// Deletes the last character or element
   void backspace() {
-    _resultShown = null;
     if (_hasError) {
       clear();
+      return;
+    }
+    // A result in scientific notation is not text to edit digit by digit:
+    // ⌫ on 9.999999999999998e-15 left "…e-1", a jump of 10¹⁴, and a second
+    // ⌫ plus × produced "3.33…e × ". It clears the whole result instead.
+    final bool scientificResult =
+        _showingResult && _display.contains(RegExp('[eE]'));
+    _resultShown = null;
+    if (scientificResult) {
+      _display = '0';
+      _exactCarry = null;
+      _updateAnalysis();
+      notifyListeners();
       return;
     }
     
@@ -2415,12 +2465,20 @@ class CalculatorService extends ChangeNotifier {
         return 'err:errExprMalformed';
       }
 
+      // The parser truncates a non-integer factorial (0.5! gave 1, 2.5! gave
+      // 6) and throws a raw error on a negative one: (-3)!.
+      if (RegExp(r'(?<![\d.])\d*\.\d*[1-9]\d*\s*!').hasMatch(expression) ||
+          RegExp(r'\(\s*-\s*[\d.]+\s*\)\s*!').hasMatch(expression)) {
+        return 'err:errFactorialNonNeg';
+      }
+
       // Clean up the expression
       String cleanExpression = _prepareExpression(expression);
       
       // Check for division by a literal zero (only zeros with no further
       // digits or point after; "8/02" is 8÷2, not a division by zero)
-      if (RegExp(r'/\s*0+(?![\d.])').hasMatch(cleanExpression)) {
+      // A 0 followed by ! or ^ is not a zero divisor: 5/0! is 5.
+      if (RegExp(r'/\s*0+(?![\d.!^])').hasMatch(cleanExpression)) {
         return 'err:errExprDivZero';
       }
       
@@ -2624,6 +2682,8 @@ class CalculatorService extends ChangeNotifier {
     // With parens, the implicit-multiplication pass below resolves 2(π)
     // and (π)2 into products.
     prepared = prepared.replaceAll('π', '(${math.pi})');
+    // ℯ (the expression keypad's key) is always Euler's number.
+    prepared = prepared.replaceAll('ℯ', '(${math.e})');
     // Scientific notation is already expanded above, so an 'e' next to a
     // digit or parenthesis is Euler's number too: "2e" is 2·e (it used to
     // reach the parser bare, which read it as exp: 2e gave e²).
@@ -2631,7 +2691,11 @@ class CalculatorService extends ChangeNotifier {
       RegExp(r'(?<![A-Za-z])e(?![A-Za-z])'),
       (_) => '(${math.e})',
     );
-    
+    // exp(x) is a reserved name that custom functions may use, but the
+    // parser only knows it as e(x): "exp(2)" failed with a FormatException.
+    // After the constant pass, so this 'e' stays the function.
+    prepared = prepared.replaceAll(RegExp(r'(?<![A-Za-z])exp\('), 'e(');
+
     // Add implicit multiplication where needed
     prepared = _addImplicitMultiplication(prepared);
     
@@ -2643,27 +2707,32 @@ class CalculatorService extends ChangeNotifier {
     String result = expression;
 
     // A number glued to a function name is a product: 2sqrt(9) → 2*sqrt(9).
-    // Without this the parser rejected the whole expression.
+    // Without this the parser rejected the whole expression. A space is
+    // allowed in between ("3 sin(30)", and "2 π" once π became a
+    // parenthesis); e( is exp after preparation.
+    const String functions =
+        'arcsin|arccos|arctan|asin|acos|atan|sin|cos|tan|sqrt|log|ln|abs|'
+        'floor|ceil|sgn|e';
     result = result.replaceAllMapped(
-      RegExp(r'(\d)(arcsin|arccos|arctan|asin|acos|atan|sin|cos|tan|sqrt|log|ln|abs)\('),
+      RegExp('(\\d)\\s*($functions)\\('),
       (match) => '${match.group(1)}*${match.group(2)}(',
     );
 
     // Pattern for a number followed by a parenthesis: 2( → 2*(
     result = result.replaceAllMapped(
-      RegExp(r'(\d)\('),
+      RegExp(r'(\d)\s*\('),
       (match) => '${match.group(1)}*(',
     );
-    
+
     // Pattern for a parenthesis followed by a number: )2 → )*2
     result = result.replaceAllMapped(
-      RegExp(r'\)(\d)'),
+      RegExp(r'\)\s*(\d)'),
       (match) => ')*${match.group(1)}',
     );
-    
+
     // A closing parenthesis glued to a function: sqrt(16)sqrt(4).
     result = result.replaceAllMapped(
-      RegExp(r'\)\s*(arcsin|arccos|arctan|sin|cos|tan|sqrt|log|ln|abs)\('),
+      RegExp('\\)\\s*($functions)\\('),
       (match) => ')*${match.group(1)}(',
     );
 
@@ -2901,6 +2970,14 @@ class CalculatorService extends ChangeNotifier {
   
   /// Loads the result of an operation from the history
   void loadResultFromHistory(OperationEntry entry) {
+    // A reload after an error kept the error flag: the message stayed on
+    // screen and the next key cleared the loaded value.
+    _hasError = false;
+    _errorMessage = '';
+    _errorArgs = {};
+    _pending = null;
+    _paramSlotEmpty = false;
+    _exactCarry = null;
     _display = entry.result;
     _lastResult = entry.result;
     _updateAnalysis();
@@ -3575,7 +3652,9 @@ class CalculatorService extends ChangeNotifier {
       // phantom operand: lcm(12,18,0) = 0 instead of 36, gcd(12,18,10) = 2
       // instead of 6, and an odd operand count that broke CRT every time.
       if (!_paramSlotEmpty) {
-        _pending = _pending!.addParam(_getCurrentNumber());
+        final String? value = _slotValue();
+        if (value == null) return;
+        _pending = _pending!.addParam(value);
       }
       if (_pending!.canExecute) {
         _executeOperation(_pending!);
@@ -3605,12 +3684,35 @@ class CalculatorService extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// The value typed into a parameter slot. An expression is evaluated whole:
+  /// "17 mod" then "2 + 4 =" took only the 4 and gave 1 instead of 5. On an
+  /// evaluation error it shows the error, clears the pending operation and
+  /// returns null.
+  String? _slotValue() {
+    if (_isBareNumber(_display)) return _getCurrentNumber();
+    final String result = evaluateCompleteExpression(_display);
+    if (result.startsWith('err:')) {
+      _pending = null;
+      _paramSlotEmpty = false;
+      _setErrorFromEvaluation(result.substring(4));
+      _display = 'Error';
+      notifyListeners();
+      return null;
+    }
+    return result;
+  }
+
   /// Adds a parameter and executes if the operation is complete (fixed).
   /// For variable-param, = adds the param; pressing the function again executes.
   void _addParamAndMaybeExecute() {
     if (_pending == null) return;
 
-    String value = _getCurrentNumber();
+    // '=' on the untouched placeholder is not a parameter: "12 LCM 18 = ="
+    // added a phantom 0 and LCM came out 0.
+    if (_paramSlotEmpty) return;
+
+    final String? value = _slotValue();
+    if (value == null) return;
     _pending = _pending!.addParam(value);
 
     if (_pending!.isComplete) {
@@ -3645,6 +3747,7 @@ class CalculatorService extends ChangeNotifier {
           historyLabel = 'V${p[1]}(${p[0]})';
           break;
         case 'C':
+          if (_parseStringAsInt(p[0]) > _maxCombinationN) { _showError('errResultTooLarge'); return; }
           resultStr = _fmt(SpecialFunctionsService.combinations(_parseStringAsInt(p[0]), _parseStringAsInt(p[1])));
           historyLabel = 'C(${p[0]},${p[1]})';
           break;
@@ -3874,6 +3977,14 @@ class CalculatorService extends ChangeNotifier {
     notifyListeners();
   }
 
+  // Bounds for the big-integer keys, which run on the UI thread. Without
+  // them D(50000) took 3 s, Cat(10⁵) and C(2·10⁵, 10⁵) 7.5 s and F(10⁷)
+  // 26 s, growing quadratically. At these limits each takes ≤ ~150 ms, in
+  // line with n! (max 10000).
+  static const int _maxCombinationN = 20000; // C(n,k), n!!
+  static const int _maxCatalanN = 10000; // Cat(n), D(n)
+  static const int _maxFibonacciN = 100000;
+
   /// Double factorial n!!
   Future<void> doubleFactorialFunction() async {
     try {
@@ -3881,6 +3992,9 @@ class CalculatorService extends ChangeNotifier {
       int n = _getCurrentAsInt();
       if (n < 0) {
         _setError('errDoubleFactorialNeg');
+        _display = 'Error';
+      } else if (n > _maxCombinationN) {
+        _setError('errResultTooLarge');
         _display = 'Error';
       } else {
         BigInt result = SpecialFunctionsService.doubleFactorial(n);
@@ -3905,6 +4019,9 @@ class CalculatorService extends ChangeNotifier {
       if (n < 0) {
         _setError('errFibonacciNeg');
         _display = 'Error';
+      } else if (n > _maxFibonacciN) {
+        _setError('errResultTooLarge');
+        _display = 'Error';
       } else {
         BigInt result = SpecialFunctionsService.fibonacci(n);
         String resultStr = _formatNumber(result.toString());
@@ -3928,6 +4045,9 @@ class CalculatorService extends ChangeNotifier {
       if (n < 0) {
         _setError('errCatalanNeg');
         _display = 'Error';
+      } else if (n > _maxCatalanN) {
+        _setError('errResultTooLarge');
+        _display = 'Error';
       } else {
         BigInt result = SpecialFunctionsService.catalanNumber(n);
         String resultStr = _formatNumber(result.toString());
@@ -3950,6 +4070,9 @@ class CalculatorService extends ChangeNotifier {
       int n = _getCurrentAsInt();
       if (n < 0) {
         _setError('errDerangementNeg');
+        _display = 'Error';
+      } else if (n > _maxCatalanN) {
+        _setError('errResultTooLarge');
         _display = 'Error';
       } else {
         BigInt result = SpecialFunctionsService.derangement(n);

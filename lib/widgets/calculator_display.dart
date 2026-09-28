@@ -200,7 +200,12 @@ class _CalculatorDisplayState extends State<CalculatorDisplay> {
         ? localizeError(context, calculator.errorMessage, calculator.errorArgs)
         : _cleanDecimalDisplay(calculator.display);
 
-    if (useScientificNotation && !calculator.hasError) {
+    // Only a whole number can be rewritten in scientific notation. An
+    // expression came out as "1.23 + 456e+18" for 123+456+789+1, and "0."
+    // being typed as 0.000000e+0, hiding the point just pressed.
+    if (useScientificNotation &&
+        !calculator.hasError &&
+        RegExp(r'^-?\d+(\.\d+)?$').hasMatch(calculator.display)) {
       displayText = _formatScientificNotation(calculator.display);
     }
 

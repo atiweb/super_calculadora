@@ -42,6 +42,12 @@ class QuadraticSolution {
 class PolynomialService {
   /// Parses expressions like "x^2-5x+6", "2x^3 - x + 1", "3/2 x - 1".
   static Polynomial parse(String input) {
+    // Spaces and '*' are dropped below, so two numbers they separate would
+    // fuse: "2*3x" read as 23x and "x^2*3" as x^23, with no error.
+    final Match? fused = RegExp(r'[\d.][\s*]+[\d.]').firstMatch(input);
+    if (fused != null) {
+      throw CalcException(CalcError.invalidTerm, {'value': fused.group(0)!});
+    }
     String s = input.replaceAll(' ', '').replaceAll('*', '');
     if (s.isEmpty) throw CalcException(CalcError.emptyExpression);
 

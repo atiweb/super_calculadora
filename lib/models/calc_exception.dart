@@ -42,6 +42,7 @@ enum CalcError {
   inputTooLarge,
   integerCoordinatesRequired,
   collinearPoints,
+  polygonNotSimple,
   invalidSystem,
   primeRequired,
   moduliPositive,

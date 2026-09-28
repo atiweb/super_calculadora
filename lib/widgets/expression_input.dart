@@ -157,7 +157,9 @@ class ExpressionInput extends StatelessWidget {
                   _buildFunctionButton(context, calculator, 'log(', l.exprLog),
                   _buildFunctionButton(context, calculator, 'ln(', l.exprLn),
                   _buildFunctionButton(context, calculator, 'π', l.exprPi),
-                  _buildFunctionButton(context, calculator, 'e', l.exprEuler),
+                  // ℯ, not the letter: a typed "2e-1" is scientific
+                  // notation (0.2), so the key's 2·e − 1 read as 0.2 too.
+                  _buildFunctionButton(context, calculator, 'ℯ', l.exprEuler),
                   // User-defined functions; the tooltip shows the definition
                   for (final fn in calculator.customFunctions)
                     _buildFunctionButton(

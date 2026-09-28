@@ -201,6 +201,10 @@ class OlympiadStrings {
       case CalcError.collinearPoints:
         return pick('Los puntos son colineales: no forman un triángulo',
             'The points are collinear: they do not form a triangle', pt: 'Os pontos são colineares: não formam um triângulo', fr: 'Les points sont alignés : ils ne forment pas un triangle', id: 'Titik-titiknya segaris: tidak membentuk segitiga', vi: 'Các điểm thẳng hàng: không tạo thành tam giác', ru: 'Точки лежат на одной прямой: треугольника не получается', it: 'I punti sono allineati: non formano un triangolo');
+      case CalcError.polygonNotSimple:
+        return pick(
+            'El polígono no es simple: tiene área 0 o lados que se cruzan',
+            'The polygon is not simple: its area is 0 or its sides cross', pt: 'O polígono não é simples: tem área 0 ou lados que se cruzam', fr: "Le polygone n'est pas simple : son aire est nulle ou ses côtés se croisent", id: 'Poligonnya tidak sederhana: luasnya 0 atau sisi-sisinya berpotongan', vi: 'Đa giác không đơn: diện tích bằng 0 hoặc các cạnh cắt nhau', ru: 'Многоугольник не простой: его площадь равна 0 или стороны пересекаются', it: 'Il poligono non è semplice: ha area 0 o lati che si incrociano');
       case CalcError.invalidSystem:
         return pick(
             'Sistema inválido: 2 o 3 filas "a,b,…,k" separadas por ";"',

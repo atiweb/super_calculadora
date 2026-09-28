@@ -9,12 +9,6 @@ import '../utils/error_localizer.dart';
 class NumberAnalysisPanel extends StatelessWidget {
   const NumberAnalysisPanel({super.key});
 
-  /// The service marks "not applicable" with a localized text; compare against
-  /// both languages (comparing only the Spanish literal let 'Not prime'
-  /// through as if it were a value).
-  static bool _isNotPrimeMarker(dynamic value) =>
-      value == 'No es primo' || value == 'Not prime';
-
   @override
   Widget build(BuildContext context) {
     return Consumer<CalculatorService>(
@@ -322,11 +316,11 @@ class NumberAnalysisPanel extends StatelessWidget {
                     _buildInfoRow(l.analysisDigits, analysis['digitCount']?.toString() ?? 'N/A'),
 
                     // 4. Next prime
-                    if (analysis['nextPrime'] != null && !_isNotPrimeMarker(analysis['nextPrime']))
+                    if (analysis['nextPrime'] != null)
                       _buildInfoRow(l.analysisNextPrime, analysis['nextPrime']),
 
                     // 5. Previous prime
-                    if (analysis['previousPrime'] != null && !_isNotPrimeMarker(analysis['previousPrime']))
+                    if (analysis['previousPrime'] != null)
                       _buildInfoRow(l.analysisPrevPrime, analysis['previousPrime']),
 
                     // 6. Digit sum
@@ -374,12 +368,12 @@ class NumberAnalysisPanel extends StatelessWidget {
                     // Show prime-computation status or results
                     if (analysis.containsKey('calculatingPrimes') && analysis['calculatingPrimes'] == true)
                       _buildLoadingRow(l.analysisNextPrime, l.analysisCalculatingPrimes)
-                    else if (analysis['nextPrime'] != null && !_isNotPrimeMarker(analysis['nextPrime']))
+                    else if (analysis['nextPrime'] != null)
                       _buildInfoRow(l.analysisNextPrime, analysis['nextPrime']),
 
                     if (analysis.containsKey('calculatingPrimes') && analysis['calculatingPrimes'] == true)
                       _buildLoadingRow(l.analysisPrevPrime, l.analysisCalculatingPrimes)
-                    else if (analysis['previousPrime'] != null && !_isNotPrimeMarker(analysis['previousPrime']))
+                    else if (analysis['previousPrime'] != null)
                       _buildInfoRow(l.analysisPrevPrime, analysis['previousPrime']),
 
                     _buildInfoRow(l.analysisIsPerfect, _formatBooleanStatus(analysis['isPerfect'], l)),

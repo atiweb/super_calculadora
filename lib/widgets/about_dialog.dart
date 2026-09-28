@@ -16,7 +16,8 @@ class AppAboutDialog {
               color: Theme.of(context).colorScheme.primary,
             ),
             const SizedBox(width: 12),
-            Text(l.aboutTitle),
+            // Flexible: the title overflowed 9.6 px at 360 dp in es/pt.
+            Flexible(child: Text(l.aboutTitle)),
           ],
         ),
         content: SingleChildScrollView(

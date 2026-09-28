@@ -94,22 +94,11 @@ class NumberAnalysisService {
     BigInt integerPart = number.abs();
     if (integerPart <= BigInt.two) return BigInt.two;
     
-    // For large numbers, search more efficiently
+    // For large numbers, search in an isolate like nextPrimeAsync. This
+    // method had no await, so the whole search ran on the UI thread: 3.7 s
+    // frozen for a pasted 600-digit number.
     if (integerPart > BigInt.from(1000000)) {
-      BigInt candidate = integerPart - BigInt.one;
-      if (candidate % BigInt.two == BigInt.zero) {
-        candidate -= BigInt.one;
-      }
-      
-      // Search in larger steps for very large numbers
-      while (candidate > BigInt.two) {
-        if (isProbablyPrime(candidate)) {
-          return candidate;
-        }
-        candidate -= BigInt.two;
-      }
-      
-      return BigInt.two;
+      return BigInt.parse(await findPreviousPrime(integerPart));
     }
     
     // For small numbers, use the direct method
@@ -398,9 +387,9 @@ class NumberAnalysisService {
             analysis['previousPrime'] = previousPrime(number).toString();
             analysis['primeFactors'] = [number.toString()];
           } else {
-            analysis['nextPrime'] = trLocale('No es primo', 'Not prime', pt: 'Não é primo', fr: "N'est pas premier", id: 'Bukan bilangan prima', vi: 'Không phải số nguyên tố', ru: 'Не простое', it: 'Non è primo');
-            analysis['previousPrime'] = trLocale('No es primo', 'Not prime', pt: 'Não é primo', fr: "N'est pas premier", id: 'Bukan bilangan prima', vi: 'Không phải số nguyên tố', ru: 'Не простое', it: 'Non è primo');
-            
+            // No neighbouring primes here (the async search fills them in).
+            // This used to store a localized "Not prime" as the value, which
+            // the panel only recognised in Spanish and English.
             try {
               List<BigInt> factors = primeFactorization(number);
               if (factors.length <= 20) {
