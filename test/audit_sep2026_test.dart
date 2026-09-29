@@ -11,6 +11,8 @@ import 'package:super_calculadora/services/number_analysis_service.dart';
 import 'package:super_calculadora/services/polynomial_service.dart';
 import 'package:super_calculadora/utils/app_locale.dart';
 import 'package:super_calculadora/services/prime_utils.dart';
+import 'package:super_calculadora/services/sequence_service.dart';
+import 'package:super_calculadora/services/surd_service.dart';
 import 'package:super_calculadora/services/special_functions_service.dart';
 
 /// Regressions from the late-September 2026 audit: the six high-priority
@@ -311,6 +313,120 @@ void main() {
       expect(() => SpecialFunctionsService.legendreSymbol(BigInt.two, BigInt.from(9)),
           throwsArgumentError);
       expect(SpecialFunctionsService.legendreSymbol(BigInt.two, BigInt.from(7)), 1);
+    });
+  });
+
+  group('low priority', () {
+    tearDown(() => appLanguage = 'en');
+    String? norm(String s) => CalculatorService.normalizePastedNumber(s);
+    test('pasted numbers are normalized', () {
+      expect(norm(' 12 '), '12');
+      expect(norm('−3'), '-3');
+      expect(norm('1,5'), '1.5');
+      expect(norm('1.234,5'), '1234.5');
+      expect(norm('1,234.5'), '1234.5');
+      expect(norm('12,345,678'), '12345678');
+      expect(norm('1 234 567'), '1234567');
+      expect(norm('0b101'), '5');
+      expect(norm('1e5'), '1e5');
+      expect(norm('1e400'), isNull);
+      expect(norm('1e-400'), isNull);
+      expect(norm('12.34.56'), isNull);
+      expect(norm('abc'), isNull);
+      appLanguage = 'en';
+      expect(norm('1,234'), '1234');
+      appLanguage = 'es';
+      expect(norm('1,234'), '1.234');
+    });
+    test('paste goes where the next operand goes (was: replaced "5 + ")', () {
+      keys('5 +');
+      calc.pasteNumber('3');
+      expect(calc.display, '5 + 3');
+      calc.calculate();
+      expect(calc.display, '8');
+    });
+    test('± keeps the exact value: 1 ÷ 3 = ± × 3 = is −1', () {
+      keys('1 ÷ 3 = ± × 3 =');
+      expect(calc.display, '-1');
+    });
+    test('a point after ")" starts a new factor', () {
+      calc.addOpenParenthesis();
+      keys('2');
+      calc.addCloseParenthesis();
+      keys('.5 =');
+      expect(calc.display, '1');
+    });
+    test('2 × -3 keeps × and makes 3 negative (was 2 − 3)', () {
+      keys('2 × - 3 =');
+      expect(calc.display, '-6');
+      calc.clear();
+      keys('2 × - +'); // another operator replaces both
+      expect(calc.display, '2 + ');
+    });
+    String ev(String e) => calc.evaluateCompleteExpression(e);
+    test('evaluator error messages name the real problem', () {
+      expect(ev('0^-1'), 'err:errDivisionByZero');
+      expect(ev('log(1,5)'), 'err:errResultInvalid');
+      expect(ev('√-4'), 'err:errNegativeSqrt');
+      expect(ev('.5e3'), '500');
+      expect(ev('(10^400)/(10^399)'), '10');
+      expect(ev('1e-400'), isNot('0'));
+    });
+    test('surds: ³√0 is 0, and 1/(1 + √4) is the rational 1/3', () {
+      final r = SurdService.simplifyNthRoot(BigInt.zero, 3);
+      expect(r.coefficient, BigInt.zero);
+      expect(r.radicand, BigInt.one);
+      final b = SurdService.rationalizeOverBinomial(
+          Fraction.one, Fraction.one, BigInt.from(4));
+      expect(b.rational, Fraction(BigInt.one, BigInt.from(3)));
+      expect(b.surd.coefficient.isZero, isTrue);
+      expect(() => SurdService.rationalizeOverBinomial(
+              Fraction.one, Fraction.fromInt(-2), BigInt.from(4)),
+          throwsA(isA<CalcException>()));
+    });
+    test('linear recurrences are capped at 10000 terms', () {
+      expect(
+          () => SequenceService.linearRecurrenceInts([1, 1], [0, 1], 10001),
+          throwsA(isA<CalcException>()));
+      expect(SequenceService.linearRecurrenceInts([1, 1], [0, 1], 10).last,
+          Fraction.fromInt(34));
+    });
+    test('perfect powers use the smallest base: 64 = 2⁶, 2⁶⁰', () {
+      expect(NumberAnalysisService.isPerfectPower(BigInt.from(64))['expression'],
+          '2⁶');
+      final p = NumberAnalysisService.isPerfectPower(BigInt.two.pow(60));
+      expect(p['base'], BigInt.two);
+      expect(p['exponent'], 60);
+      expect(NumberAnalysisService.isPerfectPower(BigInt.from(36))['expression'],
+          '6²');
+    });
+    test('π(n): exact to 10⁷, no jump past 10⁶, R(x) beyond', () {
+      Object? pi(int n) =>
+          SpecialFunctionsService.primeCountingFunction(BigInt.from(n))['count'];
+      expect(pi(1000000), 78498);
+      expect(pi(1000001), 78498);
+      expect(pi(10000000), 664579);
+      final BigInt big = SpecialFunctionsService.primeCountingFunction(
+          BigInt.from(10).pow(12))['count'] as BigInt;
+      // π(10¹²) = 37607912018. R(10¹²) ≈ 37607910542, 1476 below it; the
+      // old formula was off by millions here.
+      expect((big - BigInt.from(37607912018)).abs() < BigInt.from(2000), isTrue,
+          reason: '$big');
+      final BigInt huge = SpecialFunctionsService.primeCountingFunction(
+          BigInt.from(10).pow(400))['count'] as BigInt;
+      expect(huge > BigInt.zero, isTrue);
+    });
+    test('p-adic valuation needs a prime p (V₄(32) gave 2)', () {
+      expect(() => SpecialFunctionsService.pAdicValuation(
+          BigInt.from(32), BigInt.from(4)), throwsArgumentError);
+      expect(SpecialFunctionsService.pAdicValuation(
+          BigInt.from(32), BigInt.two), 5);
+    });
+    test('no previous prime is shown for 2', () {
+      final a = NumberAnalysisService.completeAnalysis(BigInt.two);
+      expect(a['previousPrime'], isNull);
+      expect(NumberAnalysisService.completeAnalysis(BigInt.from(10))['previousPrime'],
+          '7');
     });
   });
 

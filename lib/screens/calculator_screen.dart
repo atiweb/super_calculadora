@@ -44,6 +44,14 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
     }
     final calculator = context.read<CalculatorService>();
     final key = event.logicalKey;
+    // While a long operation runs, typed keys went into the display and the
+    // result then overwrote them. Only Escape (cancel) gets through.
+    if (calculator.isCalculatingOperation) {
+      if (key == LogicalKeyboardKey.escape) {
+        calculator.cancelCurrentOperation();
+      }
+      return KeyEventResult.handled;
+    }
     final keyboard = HardwareKeyboard.instance;
     final ctrl = keyboard.isControlPressed || keyboard.isMetaPressed;
 

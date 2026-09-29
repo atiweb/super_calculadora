@@ -464,8 +464,10 @@ Future<void> pasteIntoCalculator(BuildContext context, CalculatorService calcula
     if (!context.mounted) return;
     if (data != null && data.text != null) {
       final clipboardText = data.text!.trim();
-      if (_isValidNumber(clipboardText)) {
-        calculator.setDisplay(clipboardText);
+      final String? number =
+          CalculatorService.normalizePastedNumber(clipboardText);
+      if (number != null) {
+        calculator.pasteNumber(number);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(l.displayPasted(clipboardText.length > 20 ? '${clipboardText.substring(0, 20)}...' : clipboardText)),
@@ -502,14 +504,4 @@ Future<void> pasteIntoCalculator(BuildContext context, CalculatorService calcula
       ),
     );
   }
-}
-
-bool _isValidNumber(String text) {
-  if (text.isEmpty) return false;
-  text = text.replaceAll(' ', '');
-  if (text.startsWith('0b')) {
-    final binaryPart = text.substring(2);
-    return RegExp(r'^[01]+$').hasMatch(binaryPart);
-  }
-  return RegExp(r'^-?(\d+\.?\d*|\.\d+)([eE][+-]?\d+)?$').hasMatch(text);
 }

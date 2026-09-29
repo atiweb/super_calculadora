@@ -47,7 +47,8 @@ class SurdService {
 
     final bool negative = n.isNegative;
     BigInt inside = n.abs();
-    if (inside == BigInt.zero) return (coefficient: BigInt.zero, radicand: BigInt.zero);
+    // 0 = 0·ᵏ√1; radicand 0 displayed as "0·³√0".
+    if (inside == BigInt.zero) return (coefficient: BigInt.zero, radicand: BigInt.one);
 
     // Each prime pᵉ contributes p^(e~/k) outside and p^(e%k) inside. Built
     // from the factorization instead of scanning dᵏ ≤ inside, which for k = 2
@@ -77,6 +78,17 @@ class SurdService {
     return Surd(a / Fraction.fromBigInt(b), b);
   }
 
+  /// ⌊√n⌋ for n ≥ 0, by Newton's method (no factorization needed).
+  static BigInt _isqrt(BigInt n) {
+    if (n < BigInt.two) return n;
+    BigInt x = BigInt.one << ((n.bitLength + 1) ~/ 2);
+    while (true) {
+      final BigInt y = (x + n ~/ x) >> 1;
+      if (y >= x) return x;
+      x = y;
+    }
+  }
+
   /// Rationalizes a/(c + √d) by multiplying by the conjugate (c − √d):
   ///   a(c − √d) / (c² − d)
   /// Returns the rational part and the radical part separately.
@@ -84,6 +96,15 @@ class SurdService {
       Fraction a, Fraction c, BigInt d) {
     if (d.isNegative) {
       throw CalcException(CalcError.negativeRadicand);
+    }
+    // √d rational (d a perfect square): the binomial is the rational c + √d
+    // and there is nothing to rationalize. The conjugate route left a split
+    // "−1/3 + 2/3" for 1/(1 + √4) instead of 1/3.
+    final BigInt s = _isqrt(d);
+    if (s * s == d) {
+      final Fraction sum = c + Fraction.fromBigInt(s);
+      if (sum.isZero) throw CalcException(CalcError.binomialVanishes);
+      return RationalizedBinomial(a / sum, Surd(Fraction.zero, BigInt.one));
     }
     final Fraction denom = c * c - Fraction.fromBigInt(d);
     if (denom.isZero) {

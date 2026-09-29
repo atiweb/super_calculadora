@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+import 'dart:typed_data';
 import '../utils/app_locale.dart';
 import 'package:super_calculadora/services/big_decimal.dart';
 import 'prime_utils.dart';
@@ -216,7 +217,9 @@ class SpecialFunctionsService {
     if (n == BigInt.zero) {
       throw ArgumentError(trLocale('La valuación p-ádica de 0 es infinita', 'The p-adic valuation of 0 is infinite', pt: 'A valuação p-ádica de 0 é infinita', fr: 'La valuation p-adique de 0 est infinie', id: 'Valuasi p-adik dari 0 adalah tak hingga', vi: 'Định giá p-adic của 0 là vô hạn', ru: 'p-адическое нормирование нуля бесконечно', it: 'La valutazione p-adica di 0 è infinita'));
     }
-    if (p <= BigInt.one) {
+    // Checked for primality: V₄(32) returned 2, a count of 4s rather than a
+    // p-adic valuation.
+    if (p <= BigInt.one || !isProbablyPrime(p)) {
       throw ArgumentError(trLocale('p debe ser un primo > 1', 'p must be a prime > 1', pt: 'p deve ser um primo > 1', fr: 'p doit être un nombre premier > 1', id: 'p harus bilangan prima > 1', vi: 'p phải là số nguyên tố > 1', ru: 'p должно быть простым > 1', it: 'p deve essere un primo > 1'));
     }
     
@@ -1128,34 +1131,84 @@ class SpecialFunctionsService {
       return {'count': 0, 'exact': true};
     }
 
-    // For small numbers, use a sieve
-    if (n <= BigInt.from(1000000)) {
-      int nInt = n.toInt();
-      List<bool> sieve = List.filled(nInt + 1, true);
-      sieve[0] = sieve[1] = false;
-      for (int i = 2; i * i <= nInt; i++) {
-        if (sieve[i]) {
-          for (int j = i * i; j <= nInt; j += i) {
-            sieve[j] = false;
-          }
+    // For small numbers, use a sieve (odd numbers only, one byte each).
+    if (n <= BigInt.from(_exactPrimeCountLimit)) {
+      final int nInt = n.toInt();
+      final Uint8List composite = Uint8List((nInt >> 1) + 1); // index i ↔ 2i+1
+      int count = 1; // the prime 2
+      for (int i = 1; 2 * i + 1 <= nInt; i++) {
+        if (composite[i] != 0) continue;
+        count++;
+        final int p = 2 * i + 1;
+        for (int j = p * p; j <= nInt; j += 2 * p) {
+          composite[j >> 1] = 1;
         }
       }
-      int count = sieve.where((x) => x).length;
       return {'count': count, 'exact': true};
     }
 
-    // For large numbers, approximation with Li(x).
+    // For large numbers, Riemann's R(x) = Σ μ(k)/k · li(x^(1/k)). The old
+    // formula, n/ln n·(1 + 1/ln n + 2/ln² n), jumped from the exact 78498 at
+    // 10⁶ down to 78380 just past it and was off by 890 at 10⁷, where R(x)
+    // is off by 88.
     //
     // ln(n) is derived from the digit count instead of double.parse(n), which
-    // overflows to Infinity beyond ~1.8e308 and made li.round() throw for any
-    // 309-digit input — precisely the sizes this app is built for.
+    // overflows to Infinity beyond ~1.8e308.
     final double lnX = _naturalLog(n);
-    final double liOverX = 1 / lnX * (1 + 1 / lnX + 2 / (lnX * lnX));
+    if (lnX < 700) {
+      double r = 0;
+      for (int k = 1; lnX / k > math.ln2; k++) {
+        final int mu = _mobiusSmall(k);
+        if (mu != 0) r += mu / k * _liFromLn(lnX / k);
+      }
+      return {'count': BigInt.from(r.round()), 'exact': false, 'approx': true};
+    }
 
-    // count ≈ n · liOverX, kept in BigInt so the magnitude never overflows.
-    final BigInt count = (BigInt.from((liOverX * 1e18).round()) * n) ~/
-        BigInt.from(10).pow(18);
+    // Beyond double range: li(x) ~ x/L · Σ k!/Lᵏ (the other R terms are
+    // √x-sized, far below the 16 digits a double carries), in BigInt so the
+    // magnitude never overflows.
+    double series = 0, term = 1;
+    for (int k = 0; k < 12; k++) {
+      series += term;
+      term *= (k + 1) / lnX;
+    }
+    final BigInt count =
+        (BigInt.from((series / lnX * 1e18).round()) * n) ~/
+            BigInt.from(10).pow(18);
     return {'count': count, 'exact': false, 'approx': true};
+  }
+
+  /// Exact π(n) by sieve up to here (~5 MB, well under a second).
+  static const int _exactPrimeCountLimit = 10000000;
+
+  /// li(eᴸ) by Ramanujan's series:
+  /// γ + ln L + e^(L/2) Σₙ (−1)ⁿ⁻¹ Lⁿ / (n! 2ⁿ⁻¹) Σ_{k ≤ (n−1)/2} 1/(2k+1).
+  /// Terms are built recursively so nothing overflows for L < 700.
+  static double _liFromLn(double lnX) {
+    const double eulerGamma = 0.5772156649015329;
+    double sum = 0, inner = 0;
+    double t = 2; // Lⁿ / (n! 2ⁿ⁻¹) at n = 0 is 2
+    for (int n = 1; n < 2000; n++) {
+      t *= lnX / 2 / n;
+      if (n.isOdd) inner += 1 / n;
+      final double term = (n.isOdd ? t : -t) * inner;
+      sum += term;
+      if (n > lnX && term.abs() < 1e-17 * sum.abs()) break;
+    }
+    return eulerGamma + math.log(lnX) + math.exp(lnX / 2) * sum;
+  }
+
+  /// μ(k) for the small k of the R(x) sum.
+  static int _mobiusSmall(int k) {
+    int result = 1;
+    for (int p = 2; p * p <= k; p++) {
+      if (k % p == 0) {
+        k ~/= p;
+        if (k % p == 0) return 0;
+        result = -result;
+      }
+    }
+    return k > 1 ? -result : result;
   }
 
   /// ln(n) for arbitrarily large [n], via its decimal digits:

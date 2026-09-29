@@ -325,6 +325,15 @@ class CalculatorService extends ChangeNotifier {
     }
     _resultShown = null;
 
+    // A point right after ")" starts a new factor: "(2)." failed to parse
+    // and surfaced a raw error.
+    if (digit == '.' && _display.trimRight().endsWith(')')) {
+      _display = '${_display.trimRight()} × 0.';
+      _updateAnalysis();
+      notifyListeners();
+      return;
+    }
+
     // If the display is '0' and it's not a decimal point, replace it
     if (_display == '0' && digit != '.') {
       _display = digit;
@@ -386,6 +395,20 @@ class CalculatorService extends ChangeNotifier {
         notifyListeners();
       }
       return;
+    }
+
+    // After × ÷ ^ mod a '-' is the sign of the next operand, not a new
+    // operator: typing 2*-3 replaced × with − and gave −1.
+    final String tail = _display.trimRight();
+    if (RegExp(r'(×|÷|\^|mod)$').hasMatch(tail)) {
+      if (operator == '-') {
+        _display = '$tail -';
+        notifyListeners();
+        return;
+      }
+    } else if (RegExp(r'(×|÷|\^|mod) -$').hasMatch(tail)) {
+      // Another operator after that sign replaces both.
+      _display = tail.substring(0, tail.length - 2);
     }
 
     // If it already ends with an operator, replace the last operator
@@ -900,11 +923,17 @@ class CalculatorService extends ChangeNotifier {
       return;
     }
 
+    final carry = _exactCarry?.shown == _display ? _exactCarry : null;
     if (_display.startsWith('-')) {
       _display = _display.substring(1);
     } else if (_display != '0') {
       _display = '-$_display';
     }
+    // Negate the exact value behind a rounded result too: "1 ÷ 3 = ± × 3 ="
+    // gave -0.999999999999999 instead of -1.
+    _exactCarry = carry == null
+        ? null
+        : (shown: _display, exact: '(-1*${carry.exact})');
 
     _updateAnalysis();
     notifyListeners();
@@ -1254,6 +1283,64 @@ class CalculatorService extends ChangeNotifier {
     _hasError = false;
     _errorMessage = '';
     _errorArgs = {};
+    _updateAnalysis();
+    notifyListeners();
+  }
+
+  /// Normalizes pasted text to a plain number the display can take, or null
+  /// if it isn't one. Accepts spaces and thousands separators, the Unicode
+  /// minus (−), a decimal comma (1,5) and 0b binary, which is converted to
+  /// decimal. The old check refused "1,5" and "−3", and took "0b101" and
+  /// "1e400" as they were, so the next "+ 1 =" failed or showed ∞.
+  static String? normalizePastedNumber(String text) {
+    String t = text
+        .trim()
+        .replaceAll(RegExp(r"[\s  _']"), '')
+        .replaceAll('−', '-');
+    if (t.isEmpty) return null;
+
+    final Match? bin = RegExp(r'^(-?)0b([01]+)$').firstMatch(t);
+    if (bin != null) {
+      final BigInt v = BigInt.parse(bin.group(2)!, radix: 2);
+      return '${bin.group(1)}$v';
+    }
+
+    final int comma = t.lastIndexOf(',');
+    final int point = t.lastIndexOf('.');
+    if (comma >= 0 && point >= 0) {
+      // Both: the last one is the decimal separator.
+      t = comma > point
+          ? t.replaceAll('.', '').replaceAll(',', '.')
+          : t.replaceAll(',', '');
+    } else if (comma >= 0) {
+      final bool groupsOfThree = RegExp(r'^-?\d{1,3}(,\d{3})+$').hasMatch(t);
+      // "1,234": thousands in English, 1.234 where the comma is decimal.
+      final bool commaIsDecimal = t.indexOf(',') == comma &&
+          (!groupsOfThree || appLanguage != 'en');
+      t = commaIsDecimal ? t.replaceAll(',', '.') : t.replaceAll(',', '');
+    }
+
+    if (!RegExp(r'^-?(\d+\.?\d*|\.\d+)([eE][+-]?\d+)?$').hasMatch(t)) {
+      return null;
+    }
+    // Past the double range the display showed ∞ (or 0) instead of the value.
+    final double? v = double.tryParse(t);
+    if (v == null ||
+        !v.isFinite ||
+        (v == 0 && RegExp(r'[1-9]').hasMatch(t.split(RegExp('[eE]')).first))) {
+      return null;
+    }
+    return t;
+  }
+
+  /// Puts a pasted number where the next operand goes, keeping the
+  /// expression before it: pasting 3 over "5 + " used to leave just "3".
+  void pasteNumber(String value) {
+    if (_hasError) clear();
+    _resultShown = null;
+    _exactCarry = null;
+    _paramSlotEmpty = false;
+    _insertOperand(_formatNumber(value));
     _updateAnalysis();
     notifyListeners();
   }
@@ -2543,8 +2630,17 @@ class CalculatorService extends ChangeNotifier {
 
   /// Whether a double-path result can't be trusted to the last digit
   /// (|x| ≥ 2^53, where doubles skip integers) or overflowed.
+  ///
+  /// Also an overflow in disguise: (10^400)/(10^399) is ∞/∞ = NaN in doubles
+  /// ("invalid result") and 1e-400 underflowed to 0; with no functions in
+  /// the expression, the exact evaluator gets both right.
   static bool _needsExactRetry(String result) {
-    if (result == 'err:errResultTooLarge') return true;
+    if (result == 'err:errResultTooLarge' ||
+        result == 'err:errResultInvalid' ||
+        result == 'err:errDivisionByZero' ||
+        result == '0') {
+      return true;
+    }
     final double? value = double.tryParse(result);
     return value != null && value.abs() >= 9007199254740992;
   }
@@ -2578,6 +2674,14 @@ class CalculatorService extends ChangeNotifier {
             result.isNegative) {
           return 'err:errLnDomain';
         }
+        // 0 to a negative power is 1/0, not an overflow.
+        if (RegExp(r'(?<![\d.])0+(\.0*)?\s*\^\s*\(?\s*-').hasMatch(original)) {
+          return 'err:errDivisionByZero';
+        }
+        // log(1, x) divides by ln 1 = 0: an undefined base, not a size issue.
+        if (RegExp(r'(?<![A-Za-z])log\(').hasMatch(original)) {
+          return 'err:errResultInvalid';
+        }
         // With no division anywhere the infinity is an overflow:
         // 10^200 × 10^200 used to say "division by zero".
         if (!original.contains('/')) {
@@ -2586,6 +2690,10 @@ class CalculatorService extends ChangeNotifier {
         return 'err:errDivisionByZero';
       }
       if (result.isNaN) {
+        // √-4 reached here as sqrt(-4).
+        if (RegExp(r'(?<![A-Za-z])sqrt\(\s*-').hasMatch(original)) {
+          return 'err:errNegativeSqrt';
+        }
         return 'err:errResultInvalid';
       }
       // tan at a pole: π/2 is not exact in floating point, so tan(90°) comes
@@ -2647,8 +2755,9 @@ class CalculatorService extends ChangeNotifier {
     prepared = prepared.replaceAll('×', '*');
     prepared = prepared.replaceAll('÷', '/');
     // √16 / √2.5 without parentheses: the parser saw the variable "sqrt16".
+    // A signed radicand too: "√-4" became "sqrt-4" and a raw RangeError.
     prepared = prepared.replaceAllMapped(
-        RegExp(r'√(\d+\.?\d*|\.\d+)'), (m) => 'sqrt(${m.group(1)})');
+        RegExp(r'√(-?(?:\d+\.?\d*|\.\d+))'), (m) => 'sqrt(${m.group(1)})');
     prepared = prepared.replaceAll('√', 'sqrt');
     // asin/acos/atan are the spellings people type; the parser only knows
     // the arc- ones and threw a FormatException.
@@ -2668,7 +2777,8 @@ class CalculatorService extends ChangeNotifier {
     // 'e' as Euler's number, so "1.0e+15 + 5" evaluated to 22.718 instead of
     // 1000000000000005 — silently, and the wrong value reached history.
     prepared = prepared.replaceAllMapped(
-      RegExp(r'(\d+\.?\d*)[eE]([+-]?)(\d+)'),
+      // ".5e3" too: without a leading digit it reached the parser as-is.
+      RegExp(r'(\d+\.?\d*|\.\d+)[eE]([+-]?)(\d+)'),
       (m) => m.group(2) == '-'
           ? '(${m.group(1)}/10^${m.group(3)})'
           : '(${m.group(1)}*10^${m.group(3)})',

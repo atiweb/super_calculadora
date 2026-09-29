@@ -13,6 +13,11 @@ class SequenceService {
       throw CalcException(CalcError.needKInitialTerms, {'k': '$k'});
     }
     if (count < 0) throw CalcException(CalcError.countNonNegative);
+    // The terms grow and so does each step: 100000 Fibonacci terms took
+    // 6.6 s on the UI thread; 10000 take tens of milliseconds.
+    if (count > 10000) {
+      throw CalcException(CalcError.inputTooLarge, {'max': '10000'});
+    }
 
     final List<Fraction> terms = List.of(initial);
     if (count <= k) return terms.sublist(0, count);

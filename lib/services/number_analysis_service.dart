@@ -152,11 +152,22 @@ class NumberAnalysisService {
     for (int exponent = 2; exponent <= number.bitLength; exponent++) {
       BigInt root = _nthRoot(number, exponent);
       if (root.pow(exponent) == number) {
+        // The smallest exponent may leave a base that is itself a power:
+        // 64 came out as 8², 2^60 as 1073741824². Fold it to the minimal
+        // base (2⁶, 2⁶⁰).
+        BigInt base = root;
+        int exp = exponent;
+        while (true) {
+          final Map<String, dynamic> inner = isPerfectPower(base);
+          if (inner['isPower'] != true) break;
+          base = inner['base'] as BigInt;
+          exp *= inner['exponent'] as int;
+        }
         return {
           'isPower': true,
-          'base': root,
-          'exponent': exponent,
-          'expression': '$root${_intToSuperscript(exponent)}'
+          'base': base,
+          'exponent': exp,
+          'expression': '$base${_intToSuperscript(exp)}'
         };
       }
     }
@@ -365,7 +376,11 @@ class NumberAnalysisService {
         if (digits <= 15) {
           // Complete analysis for small numbers
           analysis['nextPrime'] = nextPrime(number).toString();
-          analysis['previousPrime'] = previousPrime(number).toString();
+          // No prime lies below 2: the panel said "previous prime: 2" for
+          // 0, 1 and 2.
+          if (number.abs() > BigInt.two) {
+            analysis['previousPrime'] = previousPrime(number).toString();
+          }
           analysis['primeFactors'] = primeFactorization(number).map((f) => f.toString()).toList();
           // Bound the displayed list: a highly composite number can
           // have tens of thousands of divisors.
