@@ -1096,6 +1096,7 @@
   "errExprDivZero": "Error: Division by zero",
   "errResultInvalid": "Error: Invalid result",
   "errResultTooLarge": "The result is too large to compute exactly",
+  "errFactorizationTooHard": "The number has prime factors too large to factor in a reasonable time",
   "errAnalysisInvalid": "Error: Invalid number for analysis",
   "errAnalysisFail": "Cannot analyze the number",
   "errNoSolution": "No solution",

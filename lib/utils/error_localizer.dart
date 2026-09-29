@@ -24,6 +24,7 @@ String localizeError(BuildContext context, String key, [Map<String, String> args
     case 'errExprDivZero': return l.errExprDivZero;
     case 'errResultInvalid': return l.errResultInvalid;
     case 'errResultTooLarge': return l.errResultTooLarge;
+    case 'errFactorizationTooHard': return l.errFactorizationTooHard;
 
     // === Custom functions ===
     case 'errCustomFnArgs': return l.errCustomFnArgs(n);

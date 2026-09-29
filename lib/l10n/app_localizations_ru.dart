@@ -2271,6 +2271,10 @@ class AppLocalizationsRu extends AppLocalizations {
       'Результат слишком велик, чтобы вычислить его точно';
 
   @override
+  String get errFactorizationTooHard =>
+      'У числа слишком большие простые множители: разложить его за разумное время нельзя';
+
+  @override
   String get errAnalysisInvalid => 'Ошибка: недопустимое число для анализа';
 
   @override

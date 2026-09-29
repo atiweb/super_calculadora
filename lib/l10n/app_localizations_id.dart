@@ -2273,6 +2273,10 @@ class AppLocalizationsId extends AppLocalizations {
       'Hasilnya terlalu besar untuk dihitung secara eksak';
 
   @override
+  String get errFactorizationTooHard =>
+      'Bilangan ini memiliki faktor prima yang terlalu besar untuk difaktorkan dalam waktu wajar';
+
+  @override
   String get errAnalysisInvalid =>
       'Kesalahan: bilangan tidak sah untuk dianalisis';
 

@@ -2246,6 +2246,10 @@ class AppLocalizationsVi extends AppLocalizations {
   String get errResultTooLarge => 'Kết quả quá lớn để tính chính xác';
 
   @override
+  String get errFactorizationTooHard =>
+      'Số này có thừa số nguyên tố quá lớn, không thể phân tích trong thời gian hợp lý';
+
+  @override
   String get errAnalysisInvalid => 'Lỗi: số không hợp lệ để phân tích';
 
   @override

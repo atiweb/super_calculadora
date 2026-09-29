@@ -2254,6 +2254,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get errResultTooLarge => 'The result is too large to compute exactly';
 
   @override
+  String get errFactorizationTooHard =>
+      'The number has prime factors too large to factor in a reasonable time';
+
+  @override
   String get errAnalysisInvalid => 'Error: Invalid number for analysis';
 
   @override

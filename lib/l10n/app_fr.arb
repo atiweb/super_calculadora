@@ -684,6 +684,7 @@
   "errExprDivZero": "Erreur : division par zéro",
   "errResultInvalid": "Erreur : résultat invalide",
   "errResultTooLarge": "Le résultat est trop grand pour être calculé exactement",
+  "errFactorizationTooHard": "Le nombre a des facteurs premiers trop grands pour être factorisé en un temps raisonnable",
   "errAnalysisInvalid": "Erreur : nombre invalide pour l'analyse",
   "errAnalysisFail": "Impossible d'analyser le nombre",
   "errNoSolution": "Aucune solution",

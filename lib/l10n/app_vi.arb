@@ -1099,6 +1099,7 @@
   "errExprDivZero": "Lỗi: chia cho 0",
   "errResultInvalid": "Lỗi: kết quả không hợp lệ",
   "errResultTooLarge": "Kết quả quá lớn để tính chính xác",
+  "errFactorizationTooHard": "Số này có thừa số nguyên tố quá lớn, không thể phân tích trong thời gian hợp lý",
   "errAnalysisInvalid": "Lỗi: số không hợp lệ để phân tích",
   "errAnalysisFail": "Không thể phân tích số này",
   "errNoSolution": "Vô nghiệm",

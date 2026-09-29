@@ -4214,6 +4214,12 @@ abstract class AppLocalizations {
   /// **'El resultado es demasiado grande para calcularse exactamente'**
   String get errResultTooLarge;
 
+  /// Pollard-rho ran out of its step budget (two large prime factors)
+  ///
+  /// In es, this message translates to:
+  /// **'El número tiene factores primos demasiado grandes para factorizarlo en un tiempo razonable'**
+  String get errFactorizationTooHard;
+
   /// Error when number is invalid for analysis
   ///
   /// In es, this message translates to:

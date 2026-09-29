@@ -1099,6 +1099,7 @@
   "errExprDivZero": "Errore: divisione per zero",
   "errResultInvalid": "Errore: risultato non valido",
   "errResultTooLarge": "Il risultato è troppo grande per essere calcolato esattamente",
+  "errFactorizationTooHard": "Il numero ha fattori primi troppo grandi per essere fattorizzato in un tempo ragionevole",
   "errAnalysisInvalid": "Errore: numero non valido per l'analisi",
   "errAnalysisFail": "Non è possibile analizzare il numero",
   "errNoSolution": "Nessuna soluzione",

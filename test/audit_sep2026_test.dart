@@ -8,6 +8,7 @@ import 'package:super_calculadora/screens/olympiad/olympiad_tool_screens.dart';
 import 'package:super_calculadora/services/calculator_service.dart';
 import 'package:super_calculadora/services/geometry_service.dart';
 import 'package:super_calculadora/services/number_analysis_service.dart';
+import 'package:super_calculadora/services/number_theory_advanced_service.dart';
 import 'package:super_calculadora/services/polynomial_service.dart';
 import 'package:super_calculadora/utils/app_locale.dart';
 import 'package:super_calculadora/services/prime_utils.dart';
@@ -427,6 +428,76 @@ void main() {
       expect(a['previousPrime'], isNull);
       expect(NumberAnalysisService.completeAnalysis(BigInt.from(10))['previousPrime'],
           '7');
+    });
+  });
+
+  group('heavy work off the UI thread, with a budget', () {
+    final BigInt p = NumberAnalysisService.nextPrime(BigInt.from(10).pow(14));
+    final BigInt q =
+        NumberAnalysisService.nextPrime(BigInt.two * BigInt.from(10).pow(14));
+
+    test('the budget stops a hard factorization, and only a hard one', () {
+      expect(() => withFactorizationBudget(1 << 12, () => factorize(p * q)),
+          throwsA(isA<FactorizationTooHard>()));
+      // Easy numbers never touch Pollard's budget.
+      expect(withFactorizationBudget(1 << 12, () => factorize(BigInt.from(360))),
+          {BigInt.two: 3, BigInt.from(3): 2, BigInt.from(5): 1});
+      // Outside a budget nothing is limited.
+      final BigInt a = BigInt.from(1000003), b = BigInt.from(1000033);
+      expect(factorize(a * b), {a: 1, b: 1});
+    });
+
+    test('φ past 10¹² runs through the isolate executor', () async {
+      final BigInt a = BigInt.from(1000000007), b = BigInt.from(1000000009);
+      keys((a * b).toString());
+      await calc.eulerPhi();
+      expect(calc.hasError, isFalse);
+      expect(calc.display,
+          ((a - BigInt.one) * (b - BigInt.one)).toString());
+      expect(calc.isCalculatingOperation, isFalse);
+    });
+
+    test('a parameter operation out of budget says so (ord mod p·q)', () {
+      keys('2');
+      calc.multiplicativeOrder();
+      keys((p * q).toString());
+      calc.calculate();
+      expect(calc.errorMessage, 'errFactorizationTooHard');
+    }, timeout: const Timeout(Duration(seconds: 30)));
+
+    test('discrete log matches brute force, g invertible or not', () {
+      for (int n = 2; n <= 60; n++) {
+        for (int g = 0; g < n; g++) {
+          for (int h = 0; h < n; h++) {
+            int? expected;
+            int v = 1 % n;
+            for (int x = 0; x <= 2 * n; x++) {
+              if (v == h) {
+                expected = x;
+                break;
+              }
+              v = v * g % n;
+            }
+            final BigInt? got = NumberTheoryAdvancedService.discreteLog(
+                BigInt.from(g), BigInt.from(h), BigInt.from(n));
+            expect(got?.toInt(), expected, reason: '$g^x ≡ $h (mod $n)');
+          }
+        }
+      }
+    });
+
+    test('discrete log with g not invertible is fast (was linear, 2 s)', () {
+      final sw = Stopwatch()..start();
+      expect(
+          NumberTheoryAdvancedService.discreteLog(
+              BigInt.two, BigInt.from(3), BigInt.from(2 * 10000019)),
+          isNull);
+      final BigInt n = BigInt.from(2) * BigInt.from(100000000003);
+      final BigInt h = SpecialFunctionsService.modPow(BigInt.two, BigInt.from(123456), n);
+      final BigInt? x = NumberTheoryAdvancedService.discreteLog(BigInt.two, h, n);
+      expect(x, isNotNull);
+      expect(SpecialFunctionsService.modPow(BigInt.two, x!, n), h);
+      expect(sw.elapsedMilliseconds, lessThan(3000));
     });
   });
 

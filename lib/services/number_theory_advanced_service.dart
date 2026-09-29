@@ -405,48 +405,42 @@ class NumberTheoryAdvancedService {
       throw CalcException(CalcError.inputTooLarge, {'max': '10^12'});
     }
 
+    // g not invertible: divide out d = gcd(g, n) while it is > 1. Each round
+    // settles one small x directly and leaves k·g^(x−add) ≡ h' (mod n'),
+    // with g invertible mod n'. The old fallback walked the powers one by
+    // one until they repeated: linear in the period, 2 s for n ≈ 2·10⁷ and
+    // hours (and a set of 10¹¹ entries) near the 10¹² bound.
+    BigInt k = _one % n;
+    BigInt add = _zero;
+    while (true) {
+      final BigInt d = g.gcd(n);
+      if (d == _one) break;
+      if (h == k) return add;
+      if (h % d != _zero) return null;
+      h ~/= d;
+      n ~/= d;
+      add += _one;
+      k = (k * (g ~/ d)) % n;
+      g %= n;
+    }
+    if (n == _one) return add; // everything is ≡ 0 (mod 1)
+
+    // Baby-step giant-step for k·g^y ≡ h (mod n), y ≥ 0, x = y + add.
+    // Baby steps keep the LARGEST j for each value h·g^j, so the first
+    // giant step p that hits gives the smallest y = p·m − j.
     final BigInt m = _isqrt(n) + _one;
-
-    // Baby steps: g^j for j in [0, m).
-    final Map<BigInt, BigInt> table = {};
-    BigInt e = _one;
-    for (BigInt j = _zero; j < m; j += _one) {
-      table.putIfAbsent(e, () => j);
-      e = (e * g) % n;
+    final Map<BigInt, BigInt> baby = {};
+    BigInt cur = h % n;
+    for (BigInt j = _zero; j <= m; j += _one) {
+      baby[cur] = j;
+      cur = (cur * g) % n;
     }
-
-    // Check the table first: covers all solutions x < m even
-    // when g is not invertible mod n (e.g. 2^x ≡ 4 (mod 8), x = 2), a case
-    // where null used to be returned despite an existing solution.
-    final BigInt? direct = table[h];
-    if (direct != null) return direct;
-
-    // factor = g^(-m) mod n
-    final BigInt? gm = SpecialFunctionsService.modularInverse(
-        SpecialFunctionsService.modPow(g, m, n), n);
-    if (gm == null) {
-      // Giant steps need g to be invertible. When it is not, walk the powers
-      // directly: they are eventually periodic, so stop as soon as a value
-      // repeats — nothing new can appear afterwards. Giving up here missed
-      // real solutions beyond the table, e.g. 2^50 ≡ 100 (mod 202).
-      final Set<BigInt> seen = {};
-      BigInt value = _one;
-      for (BigInt x = _zero; x < n; x += _one) {
-        if (value == h) return x;
-        if (!seen.add(value)) return null;
-        value = (value * g) % n;
-      }
-      return null;
-    }
-
-    BigInt gamma = h;
-    for (BigInt i = _zero; i < m; i += _one) {
-      final BigInt? j = table[gamma];
-      if (j != null) {
-        final BigInt x = i * m + j;
-        return x;
-      }
-      gamma = (gamma * gm) % n;
+    final BigInt gm = SpecialFunctionsService.modPow(g, m, n);
+    cur = k;
+    for (BigInt p = _one; p <= m; p += _one) {
+      cur = (cur * gm) % n;
+      final BigInt? j = baby[cur];
+      if (j != null) return p * m - j + add;
     }
     return null;
   }

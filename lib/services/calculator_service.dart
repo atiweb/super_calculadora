@@ -10,6 +10,7 @@ import '../constants/numeric_precision.dart';
 import 'settings_service.dart';
 import 'history_service.dart';
 import 'precision_service.dart';
+import 'prime_utils.dart' show FactorizationTooHard, withFactorizationBudget;
 import 'special_functions_service.dart';
 import '../models/calculator_config.dart';
 import '../models/custom_function.dart';
@@ -1178,7 +1179,12 @@ class CalculatorService extends ChangeNotifier {
     appLanguage = args['lang'] as String;
     final BigInt number = args['number'] as BigInt;
     try {
-      return NumberAnalysisService.completeAnalysis(number);
+      // Bounded: the panel reanalyses on every keystroke, and a semiprime
+      // with two large factors kept an isolate (or, on the web, the page)
+      // busy for minutes. Out of budget, the factors read "too complex".
+      return withFactorizationBudget(
+          kIsWeb ? _analysisBudgetWeb : _analysisBudgetNative,
+          () => NumberAnalysisService.completeAnalysis(number));
     } catch (e) {
       return {
         'error': trLocale('Error en análisis: ${e.toString()}', 'Analysis error: ${e.toString()}', pt: 'Erro na análise: ${e.toString()}', fr: "Erreur d'analyse : ${e.toString()}", id: 'Kesalahan analisis: ${e.toString()}', vi: 'Lỗi khi phân tích: ${e.toString()}', ru: 'Ошибка анализа: ${e.toString()}', it: 'Errore di analisi: ${e.toString()}'),
@@ -3416,6 +3422,95 @@ class CalculatorService extends ChangeNotifier {
   // SPECIAL FUNCTIONS
   // =========================
 
+  // Pollard-rho step budgets (~3 µs a step; the smallest prime factor p
+  // needs ~√p steps). A key press gets ~50 s in an isolate, cancellable, so
+  // factors up to ~10¹⁴ are found; on the web `compute` runs on the page's
+  // own thread, so ~1.5 s (factors up to ~10¹¹). The analysis panel, which
+  // reruns on every keystroke, gets less.
+  static const int _factorBudgetNative = 1 << 24;
+  static const int _factorBudgetWeb = 1 << 19;
+  static const int _analysisBudgetNative = 1 << 21;
+  static const int _analysisBudgetWeb = 1 << 17;
+
+  /// The keys that factorize their argument, by name, so [_factorizing] can
+  /// run them in an isolate. Each returns its result as text ('' for "none").
+  static final Map<String, String Function(BigInt)> _factorizingOps = {
+    'phi': (n) => SpecialFunctionsService.eulerPhi(n).toString(),
+    'sigma0': (n) => SpecialFunctionsService.divisorCount(n).toString(),
+    'sigma': (n) => SpecialFunctionsService.divisorSum(1, n).toString(),
+    'mu': (n) => SpecialFunctionsService.moebiusMu(n).toString(),
+    'liouville': (n) => SpecialFunctionsService.liouvilleFunction(n).toString(),
+    'rad': (n) => SpecialFunctionsService.radical(n).toString(),
+    'omega': (n) => SpecialFunctionsService.smallOmega(n).toString(),
+    'bigOmega': (n) => SpecialFunctionsService.bigOmega(n).toString(),
+    'carmichael': (n) => SpecialFunctionsService.carmichaelLambda(n).toString(),
+    'sopfr': (n) => SpecialFunctionsService.sopfr(n).toString(),
+    'sopf': (n) => SpecialFunctionsService.sopf(n).toString(),
+    'primitiveRoot': (n) =>
+        SpecialFunctionsService.findPrimitiveRoot(n)?.toString() ?? '',
+  };
+
+  static Map<String, dynamic> _factorizingInIsolate(Map<String, dynamic> args) {
+    appLanguage = args['lang'] as String;
+    try {
+      return {
+        'result': withFactorizationBudget(
+            args['budget'] as int,
+            () => _factorizingOps[args['op']]!(
+                BigInt.parse(args['n'] as String))),
+      };
+    } on FactorizationTooHard {
+      return {'tooHard': true};
+    } catch (e) {
+      return {'error': e.toString()};
+    }
+  }
+
+  /// Runs the factorizing key [op] on [n]. Up to 10¹² trial division settles
+  /// it at once, inline; beyond, it runs through `compute` behind the
+  /// cancellable loading overlay, with a step budget. These keys used to run
+  /// on the UI thread with no bound: φ of a 27-digit semiprime froze the app
+  /// 16 s, and two 20-digit factors would have taken years.
+  ///
+  /// Returns the result text, or null when the operation was cancelled or ran
+  /// out of budget (the error is then already set). Any other failure is
+  /// rethrown for the caller's own error message.
+  Future<String?> _factorizing(String op, BigInt n) async {
+    final Map<String, dynamic> args = {
+      'op': op,
+      'n': n.toString(),
+      'lang': appLanguage,
+      'budget': kIsWeb ? _factorBudgetWeb : _factorBudgetNative,
+    };
+    Map<String, dynamic> res;
+    if (n.bitLength <= 40) {
+      res = _factorizingInIsolate(args);
+    } else {
+      _isCalculatingOperation = true;
+      _operationProgress = trLocale('Factorizando…', 'Factoring…', pt: 'Fatorando…', fr: 'Factorisation…', id: 'Memfaktorkan…', vi: 'Đang phân tích thừa số…', ru: 'Разложение на множители…', it: 'Scomposizione in fattori…');
+      _canCancelOperation = true;
+      notifyListeners();
+      final int token = _operationToken;
+      try {
+        res = await compute(_factorizingInIsolate, args);
+      } finally {
+        if (token == _operationToken) {
+          _isCalculatingOperation = false;
+          _operationProgress = '';
+          _canCancelOperation = false;
+        }
+      }
+      if (token != _operationToken) return null; // cancelled meanwhile
+    }
+    if (res['tooHard'] == true) {
+      _setError('errFactorizationTooHard');
+      _display = 'Error';
+      return null;
+    }
+    if (res.containsKey('error')) throw _OffThreadError(res['error'] as String);
+    return res['result'] as String;
+  }
+
   /// Euler's φ function
   Future<void> eulerPhi() async {
     try {
@@ -3425,7 +3520,12 @@ class CalculatorService extends ChangeNotifier {
         _setError('errPhiDomain');
         _display = 'Error';
       } else {
-        BigInt result = SpecialFunctionsService.eulerPhi(number);
+        final String? computed = await _factorizing('phi', number);
+        if (computed == null) {
+          notifyListeners();
+          return;
+        }
+        BigInt result = BigInt.parse(computed);
         String resultStr = _formatNumber(result.toString());
         _display = resultStr;
         _lastResult = resultStr;
@@ -3473,7 +3573,12 @@ class CalculatorService extends ChangeNotifier {
         _setError('errSigma0Domain');
         _display = 'Error';
       } else {
-        BigInt result = SpecialFunctionsService.divisorCount(number);
+        final String? computed = await _factorizing('sigma0', number);
+        if (computed == null) {
+          notifyListeners();
+          return;
+        }
+        BigInt result = BigInt.parse(computed);
         String resultStr = _formatNumber(result.toString());
         _display = resultStr;
         _lastResult = resultStr;
@@ -3499,7 +3604,12 @@ class CalculatorService extends ChangeNotifier {
         _setError('errSigmaDomain');
         _display = 'Error';
       } else {
-        BigDecimal result = SpecialFunctionsService.divisorSum(1, number);
+        final String? computed = await _factorizing('sigma', number);
+        if (computed == null) {
+          notifyListeners();
+          return;
+        }
+        BigDecimal result = BigDecimal.fromString(computed);
         String resultStr = _formatNumber(result.toString());
         _display = resultStr;
         _lastResult = resultStr;
@@ -3664,7 +3774,12 @@ class CalculatorService extends ChangeNotifier {
         _setError('errMobiusDomain');
         _display = 'Error';
       } else {
-        int result = SpecialFunctionsService.moebiusMu(number);
+        final String? computed = await _factorizing('mu', number);
+        if (computed == null) {
+          notifyListeners();
+          return;
+        }
+        int result = int.parse(computed);
         String resultStr = _formatNumber(result.toString());
         _display = resultStr;
         _lastResult = resultStr;
@@ -3837,7 +3952,12 @@ class CalculatorService extends ChangeNotifier {
   }
 
   /// Executes the operation with the collected parameters.
-  void _executeOperation(PendingOperation op) {
+  /// Parameter operations run inline on the UI thread, so the ones that
+  /// factorize (ord factors φ(n), CRT, …) get the short web budget.
+  void _executeOperation(PendingOperation op) => withFactorizationBudget(
+      _factorBudgetWeb, () => _executeOperationBounded(op));
+
+  void _executeOperationBounded(PendingOperation op) {
     List<String> p = op.params;
     _pending = null;
     _paramSlotEmpty = false;
@@ -3982,6 +4102,8 @@ class CalculatorService extends ChangeNotifier {
       _lastResult = resultStr;
       _updateAnalysis();
       _addDirectOperationToHistory(historyLabel, p.join(','), resultStr);
+    } on FactorizationTooHard {
+      _showError('errFactorizationTooHard');
     } catch (e) {
       _showError('errGeneric', {'error': e.toString()});
     }
@@ -4272,7 +4394,12 @@ class CalculatorService extends ChangeNotifier {
         _setError('errPrimitiveRootDomain');
         _display = 'Error';
       } else {
-        BigInt? result = SpecialFunctionsService.findPrimitiveRoot(number);
+        final String? computed = await _factorizing('primitiveRoot', number);
+        if (computed == null) {
+          notifyListeners();
+          return;
+        }
+        BigInt? result = computed.isEmpty ? null : BigInt.parse(computed);
         if (result == null) {
           _setError('errNoPrimitiveRoot', {'n': number.toString()});
           _display = 'Error';
@@ -4300,7 +4427,12 @@ class CalculatorService extends ChangeNotifier {
         _setError('errLiouvilleDomain');
         _display = 'Error';
       } else {
-        int result = SpecialFunctionsService.liouvilleFunction(number);
+        final String? computed = await _factorizing('liouville', number);
+        if (computed == null) {
+          notifyListeners();
+          return;
+        }
+        int result = int.parse(computed);
         String resultStr = _formatNumber(result.toString());
         _display = resultStr;
         _lastResult = resultStr;
@@ -4355,7 +4487,12 @@ class CalculatorService extends ChangeNotifier {
         _setError('errRadDomain');
         _display = 'Error';
       } else {
-        BigInt result = SpecialFunctionsService.radical(number);
+        final String? computed = await _factorizing('rad', number);
+        if (computed == null) {
+          notifyListeners();
+          return;
+        }
+        BigInt result = BigInt.parse(computed);
         String resultStr = _formatNumber(result.toString());
         _display = resultStr;
         _lastResult = resultStr;
@@ -4379,7 +4516,12 @@ class CalculatorService extends ChangeNotifier {
         _setError('errOmegaDomain');
         _display = 'Error';
       } else {
-        int result = SpecialFunctionsService.smallOmega(number);
+        final String? computed = await _factorizing('omega', number);
+        if (computed == null) {
+          notifyListeners();
+          return;
+        }
+        int result = int.parse(computed);
         String resultStr = _formatNumber(result.toString());
         _display = resultStr;
         _lastResult = resultStr;
@@ -4403,7 +4545,12 @@ class CalculatorService extends ChangeNotifier {
         _setError('errBigOmegaDomain');
         _display = 'Error';
       } else {
-        int result = SpecialFunctionsService.bigOmega(number);
+        final String? computed = await _factorizing('bigOmega', number);
+        if (computed == null) {
+          notifyListeners();
+          return;
+        }
+        int result = int.parse(computed);
         String resultStr = _formatNumber(result.toString());
         _display = resultStr;
         _lastResult = resultStr;
@@ -4427,7 +4574,12 @@ class CalculatorService extends ChangeNotifier {
         _setError('errCarmichaelDomain');
         _display = 'Error';
       } else {
-        BigInt result = SpecialFunctionsService.carmichaelLambda(number);
+        final String? computed = await _factorizing('carmichael', number);
+        if (computed == null) {
+          notifyListeners();
+          return;
+        }
+        BigInt result = BigInt.parse(computed);
         String resultStr = _formatNumber(result.toString());
         _display = resultStr;
         _lastResult = resultStr;
@@ -4451,7 +4603,12 @@ class CalculatorService extends ChangeNotifier {
         _setError('errSopfrDomain');
         _display = 'Error';
       } else {
-        BigInt result = SpecialFunctionsService.sopfr(number);
+        final String? computed = await _factorizing('sopfr', number);
+        if (computed == null) {
+          notifyListeners();
+          return;
+        }
+        BigInt result = BigInt.parse(computed);
         String resultStr = _formatNumber(result.toString());
         _display = resultStr;
         _lastResult = resultStr;
@@ -4475,7 +4632,12 @@ class CalculatorService extends ChangeNotifier {
         _setError('errSopfDomain');
         _display = 'Error';
       } else {
-        BigInt result = SpecialFunctionsService.sopf(number);
+        final String? computed = await _factorizing('sopf', number);
+        if (computed == null) {
+          notifyListeners();
+          return;
+        }
+        BigInt result = BigInt.parse(computed);
         String resultStr = _formatNumber(result.toString());
         _display = resultStr;
         _lastResult = resultStr;
@@ -4578,4 +4740,13 @@ class _NeedsDoubleFallback implements Exception {
 /// digits to compute; it translates to "errResultTooLarge".
 class _ResultTooLargeException implements Exception {
   const _ResultTooLargeException();
+}
+
+/// An error raised inside an isolate, carried back as its message so the
+/// caller shows it the same way as an inline failure.
+class _OffThreadError implements Exception {
+  final String message;
+  const _OffThreadError(this.message);
+  @override
+  String toString() => message;
 }

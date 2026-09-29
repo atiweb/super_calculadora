@@ -2276,6 +2276,10 @@ class AppLocalizationsIt extends AppLocalizations {
       'Il risultato è troppo grande per essere calcolato esattamente';
 
   @override
+  String get errFactorizationTooHard =>
+      'Il numero ha fattori primi troppo grandi per essere fattorizzato in un tempo ragionevole';
+
+  @override
   String get errAnalysisInvalid => 'Errore: numero non valido per l\'analisi';
 
   @override

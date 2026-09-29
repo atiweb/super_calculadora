@@ -236,6 +236,36 @@ BigInt _iroot(BigInt n, int k) {
   }
 }
 
+/// Thrown when a factorization runs out of the step budget set by
+/// [withFactorizationBudget]: the number has two large prime factors and
+/// Pollard-rho would need minutes, years, or longer.
+class FactorizationTooHard implements Exception {
+  const FactorizationTooHard();
+}
+
+/// Pollard-rho steps left for the current job; null means unbounded.
+int? _pollardStepsLeft;
+
+/// Runs [body] allowing at most [steps] Pollard-rho iterations across every
+/// factorization it performs, and throws [FactorizationTooHard] past them.
+/// Each step costs ~3 µs, and the smallest prime factor p needs ~√p steps.
+T withFactorizationBudget<T>(int steps, T Function() body) {
+  final int? outer = _pollardStepsLeft;
+  _pollardStepsLeft = steps;
+  try {
+    return body();
+  } finally {
+    _pollardStepsLeft = outer;
+  }
+}
+
+void _spendPollardSteps(int steps) {
+  final int? left = _pollardStepsLeft;
+  if (left == null) return;
+  if (left < steps) throw const FactorizationTooHard();
+  _pollardStepsLeft = left - steps;
+}
+
 /// Non-trivial divisor of an odd composite: Pollard-rho with Brent's cycle
 /// detection and the gcd taken once per batch of [batch] products instead of
 /// once per step (Floyd with a gcd per step took 35 s on a 12×15-digit
@@ -253,6 +283,7 @@ BigInt _pollardRho(BigInt n) {
     int r = 1;
     do {
       x = y;
+      _spendPollardSteps(r);
       for (int i = 0; i < r; i++) {
         y = f(y);
       }
@@ -260,6 +291,7 @@ BigInt _pollardRho(BigInt n) {
       while (k < r && g == BigInt.one) {
         ys = y;
         final int steps = r - k < batch ? r - k : batch;
+        _spendPollardSteps(steps);
         for (int i = 0; i < steps; i++) {
           y = f(y);
           q = (q * (x - y).abs()) % n;

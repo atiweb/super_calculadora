@@ -1099,6 +1099,7 @@
   "errExprDivZero": "Kesalahan: pembagian dengan nol",
   "errResultInvalid": "Kesalahan: hasil tidak sah",
   "errResultTooLarge": "Hasilnya terlalu besar untuk dihitung secara eksak",
+  "errFactorizationTooHard": "Bilangan ini memiliki faktor prima yang terlalu besar untuk difaktorkan dalam waktu wajar",
   "errAnalysisInvalid": "Kesalahan: bilangan tidak sah untuk dianalisis",
   "errAnalysisFail": "Bilangan tidak dapat dianalisis",
   "errNoSolution": "Tidak ada solusi",

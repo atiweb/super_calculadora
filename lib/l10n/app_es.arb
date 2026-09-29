@@ -2995,6 +2995,10 @@
   "@errExprDivZero": { "description": "Error division by zero in expression" },
   "errResultInvalid": "Error: Resultado no válido",
   "errResultTooLarge": "El resultado es demasiado grande para calcularse exactamente",
+  "errFactorizationTooHard": "El número tiene factores primos demasiado grandes para factorizarlo en un tiempo razonable",
+  "@errFactorizationTooHard": {
+    "description": "Pollard-rho ran out of its step budget (two large prime factors)"
+  },
   "@errResultTooLarge": {
     "description": "Power/operation result would have too many digits"
   },
