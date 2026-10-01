@@ -208,8 +208,15 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                   // a short screen the soft keyboard shrinks the body below
                   // what this block plus the tab row need, and with an error
                   // banner showing the column overflowed.
+                  //
+                  // Weighted 3 against the history's 2: at weight 1 against 3
+                  // it got a quarter of the height, so on a 1080×1920 phone
+                  // the field was cut and the function keys (sin, π, ℯ, the
+                  // user's functions) hid in a 250-px scroll box above an
+                  // empty history.
                   if (_currentPage == 2)
                     const Flexible(
+                      flex: 3,
                       child: SingleChildScrollView(child: ExpressionInput()),
                     ),
 
@@ -254,7 +261,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
 
                   // Page content
                   Expanded(
-                    flex: _currentPage == 2 ? 3 : 4,
+                    flex: _currentPage == 2 ? 2 : 4,
                     child: PageView(
                       controller: _pageController,
                       // Swipe disabled: when typing numbers quickly, the
