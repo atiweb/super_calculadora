@@ -168,12 +168,18 @@ class CalculatorKeyboard extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
           child: Container(
             alignment: Alignment.center,
-            child: Text(
-              text,
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: textColor,
+            padding: const EdgeInsets.symmetric(horizontal: 2),
+            // Scale down instead of spilling onto neighbours in a short window
+            // or with a large system font (the other keypads already do this).
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                text,
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: textColor,
+                ),
               ),
             ),
           ),

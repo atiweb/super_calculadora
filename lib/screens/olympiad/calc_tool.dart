@@ -126,6 +126,34 @@ class _CalcToolState extends State<CalcTool> {
     });
   }
 
+  /// The drawing for the last result, built once per inputs, colour scheme
+  /// and locale. It used to be rebuilt on every build — every scroll frame,
+  /// keystroke in another field or theme change — and some drawings compute
+  /// (rational roots, lattice points): 7.5 s per rebuild for one polynomial.
+  Widget? _visual;
+  (List<String>, ColorScheme, Locale)? _visualKey;
+
+  Widget? _visualFor(BuildContext context) {
+    final key = (
+      _lastSuccessfulInputs!,
+      Theme.of(context).colorScheme,
+      Localizations.localeOf(context),
+    );
+    final previous = _visualKey;
+    if (previous == null ||
+        !identical(previous.$1, key.$1) ||
+        previous.$2 != key.$2 ||
+        previous.$3 != key.$3) {
+      try {
+        _visual = widget.visualize!(context, key.$1);
+      } catch (_) {
+        _visual = null;
+      }
+      _visualKey = key;
+    }
+    return _visual;
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -216,12 +244,7 @@ class _CalcToolState extends State<CalcTool> {
                 _lastSuccessfulInputs != null) ...[
               const SizedBox(height: 12),
               Builder(builder: (context) {
-                Widget? visual;
-                try {
-                  visual = widget.visualize!(context, _lastSuccessfulInputs!);
-                } catch (_) {
-                  visual = null;
-                }
+                final Widget? visual = _visualFor(context);
                 if (visual == null) return const SizedBox.shrink();
                 return ClipRRect(
                   borderRadius: BorderRadius.circular(8),

@@ -3,6 +3,7 @@ import '../utils/app_locale.dart';
 import '../models/fraction.dart';
 import '../models/polynomial.dart';
 import '../models/step_result.dart';
+import 'prime_utils.dart';
 
 /// "Step-by-step" versions of classic algorithms, for teaching use.
 ///
@@ -69,14 +70,32 @@ class StepsService {
     BigInt remaining = n;
     final Map<BigInt, int> factors = {};
 
+    // Trial division is what the steps show, but only up to 10^6: past that
+    // it took 27 s for a 16-digit prime on the UI thread. Whatever is left
+    // is split by Pollard-rho and shown as the same kind of division steps.
+    final BigInt trialLimit = BigInt.from(1000000);
     BigInt d = BigInt.from(2);
-    while (d * d <= remaining) {
+    while (d * d <= remaining && d <= trialLimit) {
       while (remaining % d == _zero) {
         steps.add('$remaining ÷ $d = ${remaining ~/ d}');
         remaining ~/= d;
         factors[d] = (factors[d] ?? 0) + 1;
       }
       d += _one;
+    }
+    if (remaining > _one && d * d <= remaining) {
+      final List<MapEntry<BigInt, int>> rest = factorize(remaining)
+          .entries
+          .toList()
+        ..sort((x, y) => x.key.compareTo(y.key));
+      for (final e in rest) {
+        for (int i = 0; i < e.value; i++) {
+          if (remaining == e.key) break;
+          steps.add('$remaining ÷ ${e.key} = ${remaining ~/ e.key}');
+          remaining ~/= e.key;
+          factors[e.key] = (factors[e.key] ?? 0) + 1;
+        }
+      }
     }
     if (remaining > _one) {
       if (factors.isNotEmpty || remaining != n) {

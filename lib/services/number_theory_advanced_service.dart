@@ -127,6 +127,10 @@ class NumberTheoryAdvancedService {
   /// C(n, k) mod p for prime p, using Lucas' theorem.
   static BigInt lucasTheorem(BigInt n, BigInt k, BigInt p) {
     if (k.isNegative || k > n) return _zero;
+    // Each digit's binomial costs O(p): p ≈ 10^9 ran for minutes.
+    if (p > BigInt.from(1000000)) {
+      throw CalcException(CalcError.inputTooLarge, {'max': '1000000'});
+    }
     BigInt result = _one;
     while (n > _zero || k > _zero) {
       final BigInt ni = n % p;
@@ -265,21 +269,45 @@ class NumberTheoryAdvancedService {
     if (n > BigInt.from(100000000)) {
       throw CalcException(CalcError.inputTooLarge, {'max': '100000000'});
     }
-    BigInt a = _zero;
-    while (a * a <= n) {
-      BigInt b = a;
-      while (a * a + b * b <= n) {
-        final BigInt rem = n - a * a - b * b;
-        final two = sumOfTwoSquares(rem);
-        if (two != null) {
-          return (a: a, b: b, c: two.a, d: two.b);
-        }
-        b += _one;
+    // Search from the largest squares down, skipping dead ends by theory
+    // instead of by scanning: n − a² must avoid the form 4^k(8m+7) (Legendre:
+    // exactly those are not sums of three squares), and n − a² − b² is a sum
+    // of two squares iff every prime ≡ 3 (mod 4) has an even exponent. The
+    // old ascending scan paid an O(√n) two-square search per (a, b) and spent
+    // minutes on n = 99999999 (= 8m+7, so a = 0 never works).
+    for (BigInt a = _isqrt(n); a >= _zero; a -= _one) {
+      final BigInt rem = n - a * a;
+      if (_isFourPowTimes8kPlus7(rem)) continue;
+      for (BigInt b = _isqrt(rem); b >= _zero; b -= _one) {
+        final BigInt rem2 = rem - b * b;
+        if (!_isSumOfTwoSquares(rem2)) continue;
+        final two = sumOfTwoSquares(rem2)!;
+        final List<BigInt> parts = [a, b, two.a, two.b]..sort();
+        return (a: parts[0], b: parts[1], c: parts[2], d: parts[3]);
       }
-      a += _one;
     }
     // Unreachable by Lagrange's theorem.
     throw StateError(trLocale('No se encontró representación (no debería ocurrir)', 'No representation found (should not happen)', pt: 'Nenhuma representação encontrada (não deveria ocorrer)', fr: 'Aucune représentation trouvée (ne devrait pas arriver)', id: 'Representasi tidak ditemukan (seharusnya tidak terjadi)', vi: 'Không tìm được biểu diễn (lẽ ra không xảy ra)', ru: 'Представление не найдено (такого быть не должно)', it: 'Nessuna rappresentazione trovata (non dovrebbe accadere)'));
+  }
+
+  /// n = 4^k(8m+7): the numbers that are not a sum of three squares.
+  static bool _isFourPowTimes8kPlus7(BigInt n) {
+    if (n <= _zero) return false;
+    while (n % BigInt.from(4) == _zero) {
+      n ~/= BigInt.from(4);
+    }
+    return n % BigInt.from(8) == BigInt.from(7);
+  }
+
+  /// Sum of two squares iff each prime ≡ 3 (mod 4) has an even exponent.
+  static bool _isSumOfTwoSquares(BigInt n) {
+    if (n <= _one) return n >= _zero;
+    for (final e in factorize(n).entries) {
+      if (e.key % BigInt.from(4) == BigInt.from(3) && e.value.isOdd) {
+        return false;
+      }
+    }
+    return true;
   }
 
   // ── Frobenius number ─────────────────────────────────────────────────────
@@ -299,8 +327,20 @@ class NumberTheoryAdvancedService {
     }
     if (g != 1) return null;
 
+    // Two coprime values: Sylvester's formula ab − a − b, exact at any size
+    // (the residue table below needed an array of a entries: 6 s for
+    // a ≈ 10^6, and far longer for 10^9).
+    if (filtered.length == 2) {
+      final BigInt a = BigInt.from(filtered[0]);
+      final BigInt b = BigInt.from(filtered[1]);
+      return a * b - a - b;
+    }
+
     // "Round-Robin" / Dijkstra algorithm over residues mod a1.
     final int a1 = filtered.first;
+    if (a1 > 100000) {
+      throw CalcException(CalcError.inputTooLarge, {'max': '100000'});
+    }
     const int inf = -1;
     final List<int> dist = List.filled(a1, inf);
     dist[0] = 0;
@@ -335,13 +375,19 @@ class NumberTheoryAdvancedService {
     if (n < 0) throw CalcException(CalcError.nNonNegative);
     if (n == 0) return _two;
     if (n == 1) return _one;
-    BigInt prev = _two, cur = _one;
-    for (int i = 2; i <= n; i++) {
-      final BigInt next = prev + cur;
-      prev = cur;
-      cur = next;
-    }
-    return cur;
+    // L(n) = F(n−1) + F(n+1) with fast-doubling Fibonacci: O(log n) steps
+    // (the linear loop took over 15 s for n = 10^6).
+    final (fn, fn1) = _fibPair(n); // F(n), F(n+1)
+    return _two * fn1 - fn;
+  }
+
+  /// (F(n), F(n+1)) by fast doubling.
+  static (BigInt, BigInt) _fibPair(int n) {
+    if (n == 0) return (_zero, _one);
+    final (a, b) = _fibPair(n >> 1); // F(k), F(k+1), k = n ~/ 2
+    final BigInt c = a * (_two * b - a); // F(2k)
+    final BigInt d = a * a + b * b; // F(2k+1)
+    return n.isEven ? (c, d) : (d, c + d);
   }
 
   // ── Discrete logarithm ───────────────────────────────────────────────────
@@ -353,49 +399,48 @@ class NumberTheoryAdvancedService {
     if (g.isNegative) g += n;
     h = h % n;
     if (h.isNegative) h += n;
+    // The baby-step table has √n entries (and the non-invertible walk can
+    // reach n): beyond 10^12 that is minutes and gigabytes.
+    if (n > BigInt.from(10).pow(12)) {
+      throw CalcException(CalcError.inputTooLarge, {'max': '10^12'});
+    }
 
+    // g not invertible: divide out d = gcd(g, n) while it is > 1. Each round
+    // settles one small x directly and leaves k·g^(x−add) ≡ h' (mod n'),
+    // with g invertible mod n'. The old fallback walked the powers one by
+    // one until they repeated: linear in the period, 2 s for n ≈ 2·10⁷ and
+    // hours (and a set of 10¹¹ entries) near the 10¹² bound.
+    BigInt k = _one % n;
+    BigInt add = _zero;
+    while (true) {
+      final BigInt d = g.gcd(n);
+      if (d == _one) break;
+      if (h == k) return add;
+      if (h % d != _zero) return null;
+      h ~/= d;
+      n ~/= d;
+      add += _one;
+      k = (k * (g ~/ d)) % n;
+      g %= n;
+    }
+    if (n == _one) return add; // everything is ≡ 0 (mod 1)
+
+    // Baby-step giant-step for k·g^y ≡ h (mod n), y ≥ 0, x = y + add.
+    // Baby steps keep the LARGEST j for each value h·g^j, so the first
+    // giant step p that hits gives the smallest y = p·m − j.
     final BigInt m = _isqrt(n) + _one;
-
-    // Baby steps: g^j for j in [0, m).
-    final Map<BigInt, BigInt> table = {};
-    BigInt e = _one;
-    for (BigInt j = _zero; j < m; j += _one) {
-      table.putIfAbsent(e, () => j);
-      e = (e * g) % n;
+    final Map<BigInt, BigInt> baby = {};
+    BigInt cur = h % n;
+    for (BigInt j = _zero; j <= m; j += _one) {
+      baby[cur] = j;
+      cur = (cur * g) % n;
     }
-
-    // Check the table first: covers all solutions x < m even
-    // when g is not invertible mod n (e.g. 2^x ≡ 4 (mod 8), x = 2), a case
-    // where null used to be returned despite an existing solution.
-    final BigInt? direct = table[h];
-    if (direct != null) return direct;
-
-    // factor = g^(-m) mod n
-    final BigInt? gm = SpecialFunctionsService.modularInverse(
-        SpecialFunctionsService.modPow(g, m, n), n);
-    if (gm == null) {
-      // Giant steps need g to be invertible. When it is not, walk the powers
-      // directly: they are eventually periodic, so stop as soon as a value
-      // repeats — nothing new can appear afterwards. Giving up here missed
-      // real solutions beyond the table, e.g. 2^50 ≡ 100 (mod 202).
-      final Set<BigInt> seen = {};
-      BigInt value = _one;
-      for (BigInt x = _zero; x < n; x += _one) {
-        if (value == h) return x;
-        if (!seen.add(value)) return null;
-        value = (value * g) % n;
-      }
-      return null;
-    }
-
-    BigInt gamma = h;
-    for (BigInt i = _zero; i < m; i += _one) {
-      final BigInt? j = table[gamma];
-      if (j != null) {
-        final BigInt x = i * m + j;
-        return x;
-      }
-      gamma = (gamma * gm) % n;
+    final BigInt gm = SpecialFunctionsService.modPow(g, m, n);
+    cur = k;
+    for (BigInt p = _one; p <= m; p += _one) {
+      cur = (cur * gm) % n;
+      final BigInt? j = baby[cur];
+      if (j != null) return p * m - j + add;
     }
     return null;
   }

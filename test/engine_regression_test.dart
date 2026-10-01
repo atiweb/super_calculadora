@@ -132,11 +132,9 @@ void main() {
   group('Scientific-notation displays are read as whole numbers', () {
     test('percentage acts on the value, not on the exponent', () {
       final c = CalculatorService();
-      // 1 ÷ 3000000 = 3.3333...e-7
-      type(c, '1');
-      c.addOperator('÷');
-      type(c, '3000000');
-      c.calculate();
+      // 1 ÷ 3000000 used to display 3.3333333333333334e-7 even with
+      // scientific notation off; it now expands, so set that display directly.
+      c.setDisplay('3.3333333333333334e-7');
       expect(c.display.contains('e'), isTrue,
           reason: 'precondition: result shown in scientific notation');
 

@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'calc_exception.dart';
 
 /// Exact rational number p/q using arbitrary-precision arithmetic.
@@ -196,7 +197,14 @@ class Fraction implements Comparable<Fraction> {
 
   // ── Conversion / formatting ──────────────────────────────────────────────
 
-  double toDouble() => numerator / denominator;
+  /// Scales both terms down first when they exceed double range: (10^400+1)
+  /// / 10^400 gave Infinity/Infinity = NaN instead of 1.0.
+  double toDouble() {
+    final int shift =
+        math.max(numerator.abs().bitLength, denominator.bitLength) - 1000;
+    if (shift <= 0) return numerator / denominator;
+    return (numerator >> shift) / (denominator >> shift);
+  }
 
   /// "7/3", or "5" if it is an integer.
   @override

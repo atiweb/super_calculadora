@@ -1,6 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:math_expressions/math_expressions.dart';
+// math_expressions also exports a (deprecated) class named CustomFunction;
+// ours is the one from models/custom_function.dart.
+import 'package:math_expressions/math_expressions.dart' hide CustomFunction;
 import 'dart:math' as math;
 import 'big_decimal.dart';
 import 'number_analysis_service.dart';
@@ -8,20 +10,54 @@ import '../constants/numeric_precision.dart';
 import 'settings_service.dart';
 import 'history_service.dart';
 import 'precision_service.dart';
+import 'prime_utils.dart' show FactorizationTooHard, withFactorizationBudget;
 import 'special_functions_service.dart';
 import '../models/calculator_config.dart';
+import '../models/custom_function.dart';
+import '../models/fraction.dart';
 import '../models/operation_entry.dart';
 import '../models/pending_operation.dart';
 import '../utils/app_locale.dart';
+import 'custom_function_service.dart';
 
 /// Main calculator service
 class CalculatorService extends ChangeNotifier {
   String _display = '0';
-  String _lastResult = '';
+  String _lastResultValue = '';
+
+  /// The display text at the moment a result was last shown, or null once
+  /// the user edits it. A digit typed over a shown result starts a new
+  /// number: "2 + 3 =" then 7 used to append and give 57.
+  String? _resultShown;
+
+  String get _lastResult => _lastResultValue;
+
+  /// Every one of the ~50 places that finishes an operation assigns the
+  /// display and then _lastResult, so recording the display here marks the
+  /// result as "on screen" without touching each of them.
+  set _lastResult(String value) {
+    _lastResultValue = value;
+    _resultShown = value.isEmpty ? null : _display;
+  }
+
+  /// Whether the display holds a finished result rather than typed input.
+  bool get _showingResult =>
+      _pending == null &&
+      _resultShown != null &&
+      _display == _resultShown &&
+      _isBareNumber(_display);
+
+  /// The exact value behind a rounded result on the display: [shown] is the
+  /// text displayed, [exact] a "(p/q)" the evaluator reads exactly. When the
+  /// next calculation starts from that result, the exact value is used, so
+  /// 1 ÷ 3 = × 3 = gives 1, not 0.999999999999999 (the display text alone
+  /// is all the old flow carried forward).
+  ({String shown, String exact})? _exactCarry;
   Map<String, dynamic> _currentAnalysis = {};
   bool _hasError = false;
   String _errorMessage = '';
   Map<String, String> _errorArgs = {};
+  List<CustomFunction> _customFunctions = const [];
   bool _isCalculatingPrimes = false;
   // Analysis generation token: isolate analyses can finish
   // out of order and overwrite the current number's analysis with a stale one.
@@ -90,14 +126,20 @@ class CalculatorService extends ChangeNotifier {
   
   /// Gets the last operation performed
   OperationEntry? get lastOperation => _history.isNotEmpty ? _history.first : null;
+
+  /// User-defined functions, usable inside full expressions
+  List<CustomFunction> get customFunctions => _customFunctions;
   
   // Constructor
   CalculatorService() {
+    // The keypad and DEG/RAD the user left the app with.
+    _calculatorType = CalculatorConfig.getCalculatorType();
+    _isRadianMode = SettingsService.getRadianMode();
     _loadHistory();
-    // The UI (expression tab buttons) derives its enabled state
-    // from the controller's text; when typing directly into the TextField nobody
-    // notified and the buttons were left with stale state.
-    _expressionController.addListener(notifyListeners);
+    _loadCustomFunctions();
+    // The expression tab's buttons follow the controller's text through
+    // their own ValueListenableBuilder (expression_input.dart); notifying
+    // every listener here rebuilt the whole screen on each keystroke.
   }
 
   /// Changes the calculator type
@@ -110,6 +152,7 @@ class CalculatorService extends ChangeNotifier {
   /// Toggles between degrees and radians
   void toggleAngleMode() {
     _isRadianMode = !_isRadianMode;
+    SettingsService.setRadianMode(_isRadianMode);
     notifyListeners();
   }
 
@@ -117,6 +160,7 @@ class CalculatorService extends ChangeNotifier {
   void clear() {
     _display = '0';
     _lastResult = '';
+    _exactCarry = null;
     _analysisToken++; // discard in-flight analysis
     _currentAnalysis = {};
     _hasError = false;
@@ -134,7 +178,16 @@ class CalculatorService extends ChangeNotifier {
 
   /// Clears only the display
   void clearEntry() {
-    _display = '0';
+    // CE clears the entry being typed, not the expression: "5 + 3 CE" wiped
+    // everything instead of leaving "5 + ".
+    if (!_hasError && !_isBareNumber(_display) && _endsWithNumber()) {
+      final String operand = _getCurrentNumber();
+      _display = _display.substring(0, _display.lastIndexOf(operand));
+    } else {
+      _display = '0';
+    }
+    _resultShown = null;
+    _exactCarry = null;
     _hasError = false;
     _errorMessage = '';
     _errorArgs = {};
@@ -218,6 +271,24 @@ class CalculatorService extends ChangeNotifier {
     return i >= 0 ? _display.substring(0, i) + result : result;
   }
 
+  /// Puts a whole value (π, e, MR) where the next operand goes: after an
+  /// operator it is appended; over a number being typed it replaces that
+  /// number only ("2 + 3 π" → "2 + 3.14…", not "3.14…"); after ")" it is a
+  /// product.
+  void _insertOperand(String value) {
+    if (_display == '0' || _display.isEmpty || _isBareNumber(_display)) {
+      _display = value;
+    } else if (_endsWithOperator()) {
+      _display += value;
+    } else if (_endsWithNumber()) {
+      _display = _spliceResult(value, _getCurrentNumber());
+    } else if (_display.trimRight().endsWith(')')) {
+      _display += ' × $value';
+    } else {
+      _display = value;
+    }
+  }
+
   /// Whether [s] is a single literal number rather than an expression.
   bool _isBareNumber(String s) =>
       RegExp(r'^-?\d*\.?\d+([eE][+-]?\d+)?$').hasMatch(s.trim());
@@ -247,6 +318,22 @@ class CalculatorService extends ChangeNotifier {
 
     // Anything typed fills the waiting parameter slot, including a literal 0.
     _paramSlotEmpty = false;
+
+    // Typing over a shown result starts a new number.
+    if (_showingResult) {
+      _display = '0';
+      _exactCarry = null;
+    }
+    _resultShown = null;
+
+    // A point right after ")" starts a new factor: "(2)." failed to parse
+    // and surfaced a raw error.
+    if (digit == '.' && _display.trimRight().endsWith(')')) {
+      _display = '${_display.trimRight()} × 0.';
+      _updateAnalysis();
+      notifyListeners();
+      return;
+    }
 
     // If the display is '0' and it's not a decimal point, replace it
     if (_display == '0' && digit != '.') {
@@ -282,6 +369,7 @@ class CalculatorService extends ChangeNotifier {
     // ' ÷ '), which produced "5  ÷  " and left a stray space behind after
     // backspace, so the next digit juxtaposed: "5 3" evaluated as 53.
     operator = operator.trim();
+    _resultShown = null; // an operator continues from the result
 
     // Empty display: only '-' can start one (negative number); ignore the rest.
     if (_display.isEmpty) {
@@ -308,6 +396,20 @@ class CalculatorService extends ChangeNotifier {
         notifyListeners();
       }
       return;
+    }
+
+    // After × ÷ ^ mod a '-' is the sign of the next operand, not a new
+    // operator: typing 2*-3 replaced × with − and gave −1.
+    final String tail = _display.trimRight();
+    if (RegExp(r'(×|÷|\^|mod)$').hasMatch(tail)) {
+      if (operator == '-') {
+        _display = '$tail -';
+        notifyListeners();
+        return;
+      }
+    } else if (RegExp(r'(×|÷|\^|mod) -$').hasMatch(tail)) {
+      // Another operator after that sign replaces both.
+      _display = tail.substring(0, tail.length - 2);
     }
 
     // If it already ends with an operator, replace the last operator
@@ -347,6 +449,10 @@ class CalculatorService extends ChangeNotifier {
 
   /// Calculates the result of the expression
   void calculate() {
+    // '=' over an error re-evaluated the text "Error" and replaced the real
+    // message (division by zero…) with a raw parser exception.
+    if (_hasError) return;
+
     // If there is a pending operation, add the parameter and execute if complete
     if (_pending != null) {
       _addParamAndMaybeExecute();
@@ -370,17 +476,15 @@ class CalculatorService extends ChangeNotifier {
     }
 
     try {
+      // Continue from the exact value of the previous result when the
+      // expression starts with it.
+      final String toEvaluate = _applyExactCarry(_display);
       // Use the new method that correctly handles parentheses and functions
-      String result = evaluateCompleteExpression(_display);
+      String result = evaluateCompleteExpression(toEvaluate);
       
       // Check whether the result contains an error
       if (result.startsWith('err:')) {
-        String errPart = result.substring(4); // remove 'err:'
-        if (errPart.startsWith('errGeneric:')) {
-          _setError('errGeneric', {'error': errPart.substring(11)});
-        } else {
-          _setError(errPart);
-        }
+        _setErrorFromEvaluation(result.substring(4)); // remove 'err:'
         _display = 'Error';
       } else {
         // Add to history
@@ -400,6 +504,7 @@ class CalculatorService extends ChangeNotifier {
         // Show the result
         _display = _formatNumber(result);
         _lastResult = result;
+        _rememberExact(_display, _exactValueOf(toEvaluate));
         _hasError = false;
         _errorMessage = '';
         _errorArgs = {};
@@ -418,6 +523,9 @@ class CalculatorService extends ChangeNotifier {
 
   /// Calculates power
   Future<void> power(String exponent) async {
+    if (_onExpressionOperand) {
+      return _applyToTrailingOperand(() => power(exponent));
+    }
     try {
       String originalValue = _display;
       BigDecimal base = BigDecimal.fromString(_display);
@@ -485,8 +593,30 @@ class CalculatorService extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Whether a one-operand key should act on the trailing operand of an
+  /// expression ("5 + 4") rather than on the whole display.
+  bool get _onExpressionOperand =>
+      !_hasError && !_isBareNumber(_display) && _endsWithNumber();
+
+  /// Runs [op] on the trailing operand only and splices its result back, as
+  /// % and 1/x already did: √, x², x³ and ∛ parsed the whole display, so
+  /// "5 + 4 √" showed Error instead of "5 + 2".
+  Future<void> _applyToTrailingOperand(Future<void> Function() op) async {
+    final String operand = _getCurrentNumber();
+    final String head =
+        _display.substring(0, _display.lastIndexOf(operand));
+    final int token = _operationToken;
+    _display = operand;
+    await op();
+    if (token != _operationToken || _hasError) return;
+    _display = head + _display;
+    _updateAnalysis();
+    notifyListeners();
+  }
+
   /// Calculates square root
   Future<void> squareRoot() async {
+    if (_onExpressionOperand) return _applyToTrailingOperand(squareRoot);
     try {
       String originalValue = _display;
       BigDecimal number = BigDecimal.fromString(_display);
@@ -563,6 +693,7 @@ class CalculatorService extends ChangeNotifier {
 
   /// Calculates cube root
   Future<void> cubeRoot() async {
+    if (_onExpressionOperand) return _applyToTrailingOperand(cubeRoot);
     try {
       String originalValue = _display;
       BigDecimal number = BigDecimal.fromString(_display);
@@ -699,11 +830,36 @@ class CalculatorService extends ChangeNotifier {
       clear();
       return;
     }
+    // A result in scientific notation is not text to edit digit by digit:
+    // ⌫ on 9.999999999999998e-15 left "…e-1", a jump of 10¹⁴, and a second
+    // ⌫ plus × produced "3.33…e × ". It clears the whole result instead.
+    final bool scientificResult =
+        _showingResult && _display.contains(RegExp('[eE]'));
+    _resultShown = null;
+    if (scientificResult) {
+      _display = '0';
+      _exactCarry = null;
+      _updateAnalysis();
+      notifyListeners();
+      return;
+    }
     
     if (_display.isEmpty || _display == '0') {
       return;
     }
     
+    // "mod" is a word operator: remove it whole. The symbol scan below
+    // doesn't know it, so "5 mod ⌫" left "5 mod" (then "5 mod3" failed) and
+    // "5 × 3 mod ⌫" deleted back to "5".
+    final String trimmedEnd = _display.trimRight();
+    if (trimmedEnd.endsWith('mod')) {
+      _display = trimmedEnd.substring(0, trimmedEnd.length - 3).trimRight();
+      if (_display.isEmpty) _display = '0';
+      _updateAnalysis();
+      notifyListeners();
+      return;
+    }
+
     // If the display has more than one character
     if (_display.length > 1) {
       // If it ends with a space, remove the whole operator (e.g. " + ")
@@ -745,12 +901,15 @@ class CalculatorService extends ChangeNotifier {
   /// Toggles the sign of the number
   void toggleSign() {
     if (_hasError) return;
+    _resultShown = null;
 
     // Negate the operand being entered, not the whole expression: "5 + 3" then
     // ± used to become "-5 + 3" (= −2) instead of "5 + -3" (= 2).
     final String currentNumber = _getCurrentNumber();
-    if (!_isBareNumber(_display) && currentNumber != '0') {
-      final int i = _display.lastIndexOf(currentNumber);
+    if (!_isBareNumber(_display)) {
+      final int i = currentNumber == '0' || !_endsWithNumber()
+          ? -1
+          : _display.lastIndexOf(currentNumber);
       if (i > 0) {
         final String head = _display.substring(0, i);
         final String negated = currentNumber.startsWith('-')
@@ -759,15 +918,23 @@ class CalculatorService extends ChangeNotifier {
         _display = head + negated;
         _updateAnalysis();
         notifyListeners();
-        return;
       }
+      // No trailing operand ("5 + ", "2 + (3)") or it is 0: nothing to
+      // negate. Falling through negated the FIRST operand: "5 + ±" → "-5 + ".
+      return;
     }
 
+    final carry = _exactCarry?.shown == _display ? _exactCarry : null;
     if (_display.startsWith('-')) {
       _display = _display.substring(1);
     } else if (_display != '0') {
       _display = '-$_display';
     }
+    // Negate the exact value behind a rounded result too: "1 ÷ 3 = ± × 3 ="
+    // gave -0.999999999999999 instead of -1.
+    _exactCarry = carry == null
+        ? null
+        : (shown: _display, exact: '(-1*${carry.exact})');
 
     _updateAnalysis();
     notifyListeners();
@@ -775,6 +942,7 @@ class CalculatorService extends ChangeNotifier {
 
   /// Adds an opening parenthesis
   void addOpenParenthesis() {
+    _resultShown = null;
     if (_hasError) {
       clear();
     }
@@ -795,6 +963,7 @@ class CalculatorService extends ChangeNotifier {
 
   /// Adds a closing parenthesis
   void addCloseParenthesis() {
+    _resultShown = null;
     if (_hasError) {
       clear();
     }
@@ -1010,7 +1179,12 @@ class CalculatorService extends ChangeNotifier {
     appLanguage = args['lang'] as String;
     final BigInt number = args['number'] as BigInt;
     try {
-      return NumberAnalysisService.completeAnalysis(number);
+      // Bounded: the panel reanalyses on every keystroke, and a semiprime
+      // with two large factors kept an isolate (or, on the web, the page)
+      // busy for minutes. Out of budget, the factors read "too complex".
+      return withFactorizationBudget(
+          kIsWeb ? _analysisBudgetWeb : _analysisBudgetNative,
+          () => NumberAnalysisService.completeAnalysis(number));
     } catch (e) {
       return {
         'error': trLocale('Error en análisis: ${e.toString()}', 'Analysis error: ${e.toString()}', pt: 'Erro na análise: ${e.toString()}', fr: "Erreur d'analyse : ${e.toString()}", id: 'Kesalahan analisis: ${e.toString()}', vi: 'Lỗi khi phân tích: ${e.toString()}', ru: 'Ошибка анализа: ${e.toString()}', it: 'Errore di analisi: ${e.toString()}'),
@@ -1119,9 +1293,68 @@ class CalculatorService extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Normalizes pasted text to a plain number the display can take, or null
+  /// if it isn't one. Accepts spaces and thousands separators, the Unicode
+  /// minus (−), a decimal comma (1,5) and 0b binary, which is converted to
+  /// decimal. The old check refused "1,5" and "−3", and took "0b101" and
+  /// "1e400" as they were, so the next "+ 1 =" failed or showed ∞.
+  static String? normalizePastedNumber(String text) {
+    String t = text
+        .trim()
+        .replaceAll(RegExp(r"[\s  _']"), '')
+        .replaceAll('−', '-');
+    if (t.isEmpty) return null;
+
+    final Match? bin = RegExp(r'^(-?)0b([01]+)$').firstMatch(t);
+    if (bin != null) {
+      final BigInt v = BigInt.parse(bin.group(2)!, radix: 2);
+      return '${bin.group(1)}$v';
+    }
+
+    final int comma = t.lastIndexOf(',');
+    final int point = t.lastIndexOf('.');
+    if (comma >= 0 && point >= 0) {
+      // Both: the last one is the decimal separator.
+      t = comma > point
+          ? t.replaceAll('.', '').replaceAll(',', '.')
+          : t.replaceAll(',', '');
+    } else if (comma >= 0) {
+      final bool groupsOfThree = RegExp(r'^-?\d{1,3}(,\d{3})+$').hasMatch(t);
+      // "1,234": thousands in English, 1.234 where the comma is decimal.
+      final bool commaIsDecimal = t.indexOf(',') == comma &&
+          (!groupsOfThree || appLanguage != 'en');
+      t = commaIsDecimal ? t.replaceAll(',', '.') : t.replaceAll(',', '');
+    }
+
+    if (!RegExp(r'^-?(\d+\.?\d*|\.\d+)([eE][+-]?\d+)?$').hasMatch(t)) {
+      return null;
+    }
+    // Past the double range the display showed ∞ (or 0) instead of the value.
+    final double? v = double.tryParse(t);
+    if (v == null ||
+        !v.isFinite ||
+        (v == 0 && RegExp(r'[1-9]').hasMatch(t.split(RegExp('[eE]')).first))) {
+      return null;
+    }
+    return t;
+  }
+
+  /// Puts a pasted number where the next operand goes, keeping the
+  /// expression before it: pasting 3 over "5 + " used to leave just "3".
+  void pasteNumber(String value) {
+    if (_hasError) clear();
+    _resultShown = null;
+    _exactCarry = null;
+    _paramSlotEmpty = false;
+    _insertOperand(_formatNumber(value));
+    _updateAnalysis();
+    notifyListeners();
+  }
+
   /// Sets the display directly (for tests)
   void setDisplay(String value) {
     _display = _formatNumber(value);
+    _exactCarry = null;
     _hasError = false;
     _errorMessage = '';
     _errorArgs = {};
@@ -1192,12 +1425,10 @@ class CalculatorService extends ChangeNotifier {
       clear();
     }
     
-    if (_hasMemoryValue) {
-      _display = _formatNumber(_memoryValue.toString());
-      _updateAnalysis();
-    } else {
-      _display = '0';
-    }
+    // Empty memory recalls nothing (it used to wipe "2 + " to 0).
+    if (!_hasMemoryValue) return;
+    _insertOperand(_formatNumber(_memoryValue.toString()));
+    _updateAnalysis();
     notifyListeners();
   }
 
@@ -1317,7 +1548,7 @@ class CalculatorService extends ChangeNotifier {
       double angleInRadians = _convertAngle(value);
       double result = math.sin(angleInRadians);
 
-      String resultStr = _formatScientificResult(result);
+      String resultStr = _formatScientificResult(result, snapTinyToZero: true);
       _display = _spliceResult(resultStr, currentNumber);
       _lastResult = resultStr;
       _updateAnalysis();
@@ -1359,7 +1590,7 @@ class CalculatorService extends ChangeNotifier {
       double angleInRadians = _convertAngle(value);
       double result = math.cos(angleInRadians);
 
-      String resultStr = _formatScientificResult(result);
+      String resultStr = _formatScientificResult(result, snapTinyToZero: true);
       _display = _spliceResult(resultStr, currentNumber);
       _lastResult = resultStr;
       _updateAnalysis();
@@ -1422,7 +1653,7 @@ class CalculatorService extends ChangeNotifier {
         _setError('errTanUndefined');
         _display = 'Error';
       } else {
-        String resultStr = _formatScientificResult(result);
+        String resultStr = _formatScientificResult(result, snapTinyToZero: true);
         _display = _spliceResult(resultStr, currentNumber);
         _lastResult = resultStr;
         _updateAnalysis();
@@ -1851,11 +2082,7 @@ class CalculatorService extends ChangeNotifier {
 
     // In the middle of an expression ("2×"), π is the next operand; previously
     // the whole display was replaced and the "2×" was silently lost.
-    if (_endsWithOperator()) {
-      _display += piValue;
-    } else {
-      _display = piValue;
-    }
+    _insertOperand(piValue);
 
     _updateAnalysis();
     notifyListeners();
@@ -1875,11 +2102,7 @@ class CalculatorService extends ChangeNotifier {
     }
 
     // In the middle of an expression ("2×"), e is the next operand (see addPi)
-    if (_endsWithOperator()) {
-      _display += eValue;
-    } else {
-      _display = eValue;
-    }
+    _insertOperand(eValue);
 
     _updateAnalysis();
     notifyListeners();
@@ -1906,28 +2129,6 @@ class CalculatorService extends ChangeNotifier {
     int digits = baseStr.replaceAll('.', '').replaceAll('-', '').length;
 
     return digits > 100 || exponent > 100 || (digits > 10 && exponent > 10);
-  }
-
-  /// Estimates whether base^exp would produce an EXACT result with too many
-  /// digits to compute (e.g. a non-integer base with a huge exponent explodes
-  /// into billions of decimals). Avoids freezing the UI by rejecting the
-  /// operation instantly, like calculators do with "overflow".
-  bool _powerExceedsDigitLimit(BigDecimal base, int exponent,
-      {int maxDigits = 100000}) {
-    if (exponent <= 1) return false;
-    final d = base.toDouble();
-    if (d == 0 || d == 1 || d == -1) return false; // trivial cases
-    // Significant digits of the base (integer part without leading zeros + decimals).
-    final body = base.toString().replaceAll('-', '');
-    final dot = body.indexOf('.');
-    final intPart = (dot < 0 ? body : body.substring(0, dot))
-        .replaceAll(RegExp(r'^0+'), '');
-    final fracPlaces = dot < 0 ? 0 : body.length - dot - 1;
-    final sigDigits = intPart.length + fracPlaces;
-    // The exact result's digit count grows ~ exp × sigDigits.
-    // We use BigInt to avoid overflows with huge exponents.
-    return BigInt.from(exponent) * BigInt.from(sigDigits) >
-        BigInt.from(maxDigits);
   }
 
   /// Detects power operations that may produce large numbers
@@ -1983,7 +2184,11 @@ class CalculatorService extends ChangeNotifier {
   }
 
   /// Formats the result of scientific functions
-  String _formatScientificResult(double result) {
+  ///
+  /// [snapTinyToZero] is for sin/cos/tan only: there a result below 1e-15 is
+  /// the residue of the rounded π (sin 180° = 1.2e-16), not a real value. For
+  /// e^x or 10^x a tiny result is genuine (10^-20 used to display 0).
+  String _formatScientificResult(double result, {bool snapTinyToZero = false}) {
     // Handle special cases
     if (result.isNaN) {
       return 'NaN';
@@ -1991,15 +2196,14 @@ class CalculatorService extends ChangeNotifier {
     if (result.isInfinite) {
       return result.isNegative ? '-∞' : '∞';
     }
-    
-    // Normalize very small floating-point errors
-    // E.g.: sin(30°) -> 0.49999999999999994 should be 0.5
-    if (result.abs() < 1e-15) {
+
+    if (snapTinyToZero && result.abs() < 1e-15) {
       result = 0.0;
     }
-  // Soft rounding to N decimals to stabilize scientific function results
-  // This fixes artifacts like 0.4999999999999999 -> 0.5 and keeps the expected precision (e.g., e^2)
-  result = double.parse(result.toStringAsFixed(NumericPrecision.decimals));
+    // Round to N significant digits: fixes artifacts like
+    // 0.49999999999999994 -> 0.5 without flattening small values the way
+    // fixed decimals did (e^-30 kept 2 digits, 10^-16 became 0).
+    result = _roundSignificant(result);
     
     // Check whether scientific notation should be used
     bool useScientificNotation = SettingsService.getUseScientificNotation();
@@ -2026,6 +2230,34 @@ class CalculatorService extends ChangeNotifier {
     }
   }
   
+  /// [x] rounded to significant digits: 16 from 1 up (what the old fixed
+  /// 15 decimals kept for 2.718281828459045) and 15 below 1, where float
+  /// noise reaches the 16th digit (0.49999999999999994 must read 0.5). Fixed
+  /// decimals flattened small values instead: 10^-16 became 0.
+  ///
+  /// From 1 up, noise can also reach the 16th digit (100 × sin 30° =
+  /// 49.99999999999999): when 15 digits snap the value to a visibly shorter
+  /// number (≤ 12 significant digits), that shorter number is the result.
+  static double _roundSignificant(double x) {
+    if (x == 0 || !x.isFinite) return x;
+    final String at15 = x.toStringAsPrecision(NumericPrecision.decimals);
+    if (x.abs() < 1 || _significantDigits(at15) <= 12) {
+      return double.parse(at15);
+    }
+    return double.parse(x.toStringAsPrecision(NumericPrecision.decimals + 1));
+  }
+
+  /// Significant digits in a toStringAsPrecision output ("5.00000000000000e+1"
+  /// has 1).
+  static int _significantDigits(String s) {
+    final String mantissa = s.split(RegExp('[eE]')).first;
+    final String digits = mantissa
+        .replaceAll(RegExp(r'[-.]'), '')
+        .replaceFirst(RegExp(r'^0+'), '')
+        .replaceFirst(RegExp(r'0+$'), '');
+    return digits.length;
+  }
+
   /// Formats a number without using scientific notation
   String _formatWithoutScientificNotation(double result) {
     // Handle special cases
@@ -2036,8 +2268,8 @@ class CalculatorService extends ChangeNotifier {
       return result.isNegative ? '-∞' : '∞';
     }
     
-  // Round to N decimals to clean floating-point noise while preserving precision
-  result = double.parse(result.toStringAsFixed(NumericPrecision.decimals));
+    // Round to N significant digits to clean floating-point noise
+    result = _roundSignificant(result);
     
     // Convert to BigDecimal to keep precision
     BigDecimal bigResult = BigDecimal.fromDouble(result);
@@ -2087,7 +2319,9 @@ class CalculatorService extends ChangeNotifier {
     // PRECISION LOSS PREVENTION: For large numbers, NEVER convert to double
     // Numbers > 15 digits may lose precision in double conversions
   if (numberStr.length > NumericPrecision.decimals) {
-      return numberStr; // Return the original string for very large numbers
+      // Return the original digits for very large numbers; dropping zeros
+      // after the point loses nothing ("…640000.0" read as a decimal).
+      return _trimTrailingZeros(numberStr);
     }
     
     // Check whether scientific notation should be used
@@ -2160,7 +2394,138 @@ class CalculatorService extends ChangeNotifier {
   /// (e.g. HistoryScreen) mutates HistoryService directly: this service's
   /// in-memory copy stayed stale until restart.
   Future<void> reloadHistory() => _loadHistory();
-  
+
+  /// Loads the user-defined functions from local storage
+  Future<void> _loadCustomFunctions() async {
+    try {
+      _customFunctions = await CustomFunctionService.getAll();
+      notifyListeners();
+    } catch (e) {
+      debugPrint('Error cargando funciones personalizadas: $e');
+    }
+  }
+
+  /// Reloads the custom functions from storage. Needed when the management
+  /// screen mutates CustomFunctionService directly (same reason as
+  /// [reloadHistory]).
+  Future<void> reloadCustomFunctions() => _loadCustomFunctions();
+
+  /// Injects functions synchronously; tests cannot await the async load.
+  @visibleForTesting
+  void debugSetCustomFunctions(List<CustomFunction> fns) {
+    _customFunctions = fns;
+  }
+
+  /// Validates a candidate definition against the current function set
+  /// without saving it. Returns null when valid, otherwise an editor error
+  /// code, optionally suffixed with ':argument'.
+  ///
+  /// [replacesName] is the function being edited, excluded from the set so
+  /// renaming works and the old definition can't satisfy references.
+  String? validateCustomFunction(CustomFunction candidate,
+      {String? replacesName}) {
+    final Map<String, CustomFunction> fns = {
+      for (final f in _customFunctions)
+        if (f.name != replacesName) f.name: f,
+    };
+    // A parameter that shadows another saved function would silently change
+    // that function's meaning inside this body.
+    for (final p in candidate.params) {
+      if (fns.containsKey(p)) return 'cfErrBadParam:$p';
+    }
+    fns[candidate.name] = candidate;
+    return _probeFunction(candidate, fns);
+  }
+
+  /// Saved functions that would stop working if [candidate] replaced the
+  /// function named [replacesName]: they reference a name that disappears,
+  /// or call it with an arity the new definition no longer accepts.
+  List<String> customFunctionsBrokenBy(CustomFunction candidate,
+      {String? replacesName}) {
+    final Map<String, CustomFunction> fns = {
+      for (final f in _customFunctions)
+        if (f.name != replacesName) f.name: f,
+    };
+    fns[candidate.name] = candidate;
+    return [
+      for (final f in fns.values)
+        if (f.name != candidate.name && _probeFunction(f, fns) != null) f.name,
+    ];
+  }
+
+  /// Saved functions that would stop working if the one named [name] were
+  /// deleted (probed, so calls like 2g(x) count and a parameter named g
+  /// doesn't).
+  List<String> customFunctionsBrokenByRemoval(String name) {
+    final Map<String, CustomFunction> fns = {
+      for (final f in _customFunctions)
+        if (f.name != name) f.name: f,
+    };
+    return [
+      for (final f in fns.values)
+        if (_probeFunction(f, fns) != null) f.name,
+    ];
+  }
+
+  /// Expands a probe call of [fn] with dummy arguments against [fns] and
+  /// checks the result parses; catches arity mistakes in nested calls,
+  /// circular definitions, unknown names and bodies that don't parse.
+  /// Returns null when the function is sound, else an error code.
+  String? _probeFunction(CustomFunction fn, Map<String, CustomFunction> fns) {
+    final String probe =
+        '${fn.name}(${List.filled(fn.params.length, '1').join(',')})';
+    String expanded;
+    try {
+      expanded = CustomFunctionService.expandCalls(probe, fns);
+    } on CustomFunctionException catch (e) {
+      return e.arg.isEmpty ? e.code : '${e.code}:${e.arg}';
+    }
+    String prepared;
+    try {
+      prepared = _prepareExpression(expanded);
+    } catch (_) {
+      return 'cfErrBodyInvalid';
+    }
+    final String? unknown = _findUnknownIdentifier(prepared);
+    if (unknown != null) return 'cfErrUnknownName:$unknown';
+    // Same gate evaluation applies: "sin (x)" parsed here but every call
+    // then failed as malformed.
+    if (_hasInvalidPatterns(expanded)) return 'cfErrBodyInvalid';
+    try {
+      ShuntingYardParser().parse(prepared);
+    } catch (_) {
+      return 'cfErrBodyInvalid';
+    }
+    return null;
+  }
+
+  /// After expansion and preparation every remaining identifier must be an
+  /// engine builtin; anything else is a typo or an undefined variable.
+  static String? _findUnknownIdentifier(String prepared) {
+    const Set<String> known = {
+      'sin', 'cos', 'tan', 'asin', 'acos', 'atan',
+      'arcsin', 'arccos', 'arctan',
+      'log', 'ln', 'sqrt', 'abs', 'ceil', 'floor', 'exp', 'sgn', 'e',
+    };
+    for (final m in RegExp(r'[A-Za-z][A-Za-z0-9_]*').allMatches(prepared)) {
+      if (!known.contains(m.group(0)!)) return m.group(0)!;
+    }
+    return null;
+  }
+
+  /// Maps an evaluation error code (already stripped of 'err:') to
+  /// [_setError], splitting off the argument for the codes that carry one.
+  void _setErrorFromEvaluation(String errPart) {
+    if (errPart.startsWith('errGeneric:')) {
+      _setError('errGeneric', {'error': errPart.substring(11)});
+    } else if (errPart.startsWith('errCustomFnArgs:')) {
+      _setError('errCustomFnArgs',
+          {'n': errPart.substring('errCustomFnArgs:'.length)});
+    } else {
+      _setError(errPart);
+    }
+  }
+
   /// Evaluates a full mathematical expression using math_expressions
   String evaluateCompleteExpression(String expression) {
     try {
@@ -2168,18 +2533,45 @@ class CalculatorService extends ChangeNotifier {
       if (expression.trim().isEmpty) {
         return 'err:errExprEmpty';
       }
-      
+
+      // Expand user-defined functions first, so their bodies go through the
+      // exact same validation and preparation as hand-typed input. Doing it
+      // before _hasInvalidPatterns also keeps a name like 'sinc' from
+      // tripping the "sin without parenthesis" pattern below.
+      if (_customFunctions.isNotEmpty) {
+        try {
+          expression = CustomFunctionService.expandCalls(
+              expression, {for (final f in _customFunctions) f.name: f});
+        } on CustomFunctionException catch (e) {
+          return e.arg.isEmpty ? 'err:${e.code}' : 'err:${e.code}:${e.arg}';
+        }
+      }
+
       // Validate problematic patterns
       if (_hasInvalidPatterns(expression)) {
         return 'err:errExprMalformed';
       }
-      
+      // A dangling operator ("2+") or empty parentheses ("()") reached the
+      // parser and came back as a raw RangeError / "Bad state: No element".
+      if (RegExp(r'([+\-*/×÷^%]|\bmod)\s*$').hasMatch(expression) ||
+          RegExp(r'\(\s*\)').hasMatch(expression)) {
+        return 'err:errExprMalformed';
+      }
+
+      // The parser truncates a non-integer factorial (0.5! gave 1, 2.5! gave
+      // 6) and throws a raw error on a negative one: (-3)!.
+      if (RegExp(r'(?<![\d.])\d*\.\d*[1-9]\d*\s*!').hasMatch(expression) ||
+          RegExp(r'\(\s*-\s*[\d.]+\s*\)\s*!').hasMatch(expression)) {
+        return 'err:errFactorialNonNeg';
+      }
+
       // Clean up the expression
       String cleanExpression = _prepareExpression(expression);
       
       // Check for division by a literal zero (only zeros with no further
       // digits or point after; "8/02" is 8÷2, not a division by zero)
-      if (RegExp(r'/\s*0+(?![\d.])').hasMatch(cleanExpression)) {
+      // A 0 followed by ! or ^ is not a zero divisor: 5/0! is 5.
+      if (RegExp(r'/\s*0+(?![\d.!^])').hasMatch(cleanExpression)) {
         return 'err:errExprDivZero';
       }
       
@@ -2196,29 +2588,73 @@ class CalculatorService extends ChangeNotifier {
       
       // If it has a complex structure, math_expressions is mandatory
       if (hasComplexStructure) {
-        return _evaluateWithMathExpressions(cleanExpression);
+        final String result = _evaluateWithMathExpressions(cleanExpression);
+        // Only parentheses (no functions): past 2^53, or on overflow, redo
+        // it exactly. (10^200)×(10^200) said "division by zero", and a
+        // custom function (whose call always adds parentheses) lost the
+        // last digits of f(12345678901234567890).
+        if (!RegExp(r'[A-Za-z]').hasMatch(cleanExpression) &&
+            _needsExactRetry(result)) {
+          try {
+            return _evaluateBigDecimalExpression(cleanExpression);
+          } catch (_) {
+            // Keep the double result.
+          }
+        }
+        return result;
       }
       
-      // For simple expressions, check whether there are large numbers
-      if (_containsLargeNumbers(cleanExpression)) {
-        return _evaluateBigDecimalExpression(cleanExpression);
+      // For simple expressions, large operands or powers go to the exact
+      // evaluator; a term it can't keep exact (2^0.5) falls back to doubles.
+      if (_containsLargeNumbers(cleanExpression) ||
+          _hasPotentiallyLargePowerOperation(cleanExpression)) {
+        try {
+          return _evaluateBigDecimalExpression(cleanExpression);
+        } on _NeedsDoubleFallback {
+          return _evaluateWithMathExpressions(cleanExpression);
+        }
       }
-      
-      // FIX: Check for power operations that may produce large numbers
-      if (_hasPotentiallyLargePowerOperation(cleanExpression)) {
-        return _evaluateBigDecimalExpression(cleanExpression);
-      }
-      
+
       // For simple expressions with normal numbers, use math_expressions
-      return _evaluateWithMathExpressions(cleanExpression);
-      
+      final String result = _evaluateWithMathExpressions(cleanExpression);
+      // Past 2^53 a double no longer holds every integer: 123456789 ×
+      // 987654321 showed 121932631112635260.0 instead of …269. The operands
+      // were small, so nothing above sent it to the exact evaluator.
+      if (_needsExactRetry(result)) {
+        try {
+          return _evaluateBigDecimalExpression(cleanExpression);
+        } catch (_) {
+          // Keep the double result.
+        }
+      }
+      return result;
+
     } catch (e) {
       return 'err:errGeneric:${e.toString()}';
     }
   }
 
+  /// Whether a double-path result can't be trusted to the last digit
+  /// (|x| ≥ 2^53, where doubles skip integers) or overflowed.
+  ///
+  /// Also an overflow in disguise: (10^400)/(10^399) is ∞/∞ = NaN in doubles
+  /// ("invalid result") and 1e-400 underflowed to 0; with no functions in
+  /// the expression, the exact evaluator gets both right.
+  static bool _needsExactRetry(String result) {
+    if (result == 'err:errResultTooLarge' ||
+        result == 'err:errResultInvalid' ||
+        result == 'err:errDivisionByZero' ||
+        result == '0') {
+      return true;
+    }
+    final double? value = double.tryParse(result);
+    return value != null && value.abs() >= 9007199254740992;
+  }
+
   /// Evaluates exclusively using math_expressions
   String _evaluateWithMathExpressions(String cleanExpression) {
+    // Before the degree conversion adds its own '/180'.
+    final String original = cleanExpression;
     try {
       // Use math_expressions for standard expressions
   ShuntingYardParser parser = ShuntingYardParser();
@@ -2239,15 +2675,50 @@ class CalculatorService extends ChangeNotifier {
       // gave two different messages for the same mistake, since only a
       // literal-zero divisor was matched earlier.
       if (result.isInfinite) {
+        // ln/log of 0 is a domain error, not a division.
+        if (RegExp(r'\b(ln|log)\(').hasMatch(original) &&
+            result.isNegative) {
+          return 'err:errLnDomain';
+        }
+        // 0 to a negative power is 1/0, not an overflow.
+        if (RegExp(r'(?<![\d.])0+(\.0*)?\s*\^\s*\(?\s*-').hasMatch(original)) {
+          return 'err:errDivisionByZero';
+        }
+        // log(1, x) divides by ln 1 = 0: an undefined base, not a size issue.
+        if (RegExp(r'(?<![A-Za-z])log\(').hasMatch(original)) {
+          return 'err:errResultInvalid';
+        }
+        // With no division anywhere the infinity is an overflow:
+        // 10^200 × 10^200 used to say "division by zero".
+        if (!original.contains('/')) {
+          return 'err:errResultTooLarge';
+        }
         return 'err:errDivisionByZero';
       }
       if (result.isNaN) {
+        // √-4 reached here as sqrt(-4).
+        if (RegExp(r'(?<![A-Za-z])sqrt\(\s*-').hasMatch(original)) {
+          return 'err:errNegativeSqrt';
+        }
         return 'err:errResultInvalid';
       }
-      
-      // Format the result according to the settings
-      return _formatNumber(result.toString());
-      
+      // tan at a pole: π/2 is not exact in floating point, so tan(90°) comes
+      // out as 1.6e16 instead of infinity (the tan key already rejects it).
+      if (result.abs() > 1e15 &&
+          RegExp(r'(?<![A-Za-z])tan\(').hasMatch(original) &&
+          !_containsLargeNumbers(original)) {
+        return 'err:errTanUndefined';
+      }
+
+      // Round away float noise before formatting. _formatNumber only cleaned
+      // results below 10, so asin(0.5) showed 30.000000000000004, 100 ÷ 3
+      // 33.333333333333336 and 20! 2432902008176640000.0.
+      final double rounded = _roundSignificant(result);
+      if (!SettingsService.getUseScientificNotation()) {
+        return _formatWithoutScientificNotation(rounded);
+      }
+      return _formatNumber(rounded.toString());
+
     } catch (e) {
       throw Exception(trLocale('Error en evaluación: ${e.toString()}', 'Evaluation error: ${e.toString()}', pt: 'Erro na avaliação: ${e.toString()}', fr: "Erreur d'évaluation : ${e.toString()}", id: 'Kesalahan evaluasi: ${e.toString()}', vi: 'Lỗi khi tính giá trị: ${e.toString()}', ru: 'Ошибка вычисления: ${e.toString()}', it: 'Errore di valutazione: ${e.toString()}'));
     }
@@ -2255,12 +2726,14 @@ class CalculatorService extends ChangeNotifier {
   
   /// Checks whether the expression has invalid patterns
   bool _hasInvalidPatterns(String expression) {
-    // Problematic consecutive operators
-    if (RegExp(r'[\+\-\*\/\^]{2,}').hasMatch(expression)) {
-      // Allow some valid cases like --x or ++x
-      if (!RegExp(r'^[\+\-]*\d').hasMatch(expression.trim())) {
-        return true;
-      }
+    // Consecutive operators: ×, ÷, ^ right after another operator (or at
+    // the start) is malformed; a sign there is unary ("2*-3", "x^-1"), but
+    // not three in a row. The old rule waived everything when the
+    // expression started with a digit and rejected "(x)*-1" when it didn't.
+    final String compact = expression.replaceAll(' ', '');
+    if (RegExp(r'(^|[+\-*/^×÷(])[*/^×÷]').hasMatch(compact) ||
+        RegExp(r'[+\-*/^×÷][+\-][+\-]').hasMatch(compact)) {
+      return true;
     }
     
     // Unbalanced parentheses
@@ -2287,7 +2760,19 @@ class CalculatorService extends ChangeNotifier {
     // Replace visual operators
     prepared = prepared.replaceAll('×', '*');
     prepared = prepared.replaceAll('÷', '/');
+    // √16 / √2.5 without parentheses: the parser saw the variable "sqrt16".
+    // A signed radicand too: "√-4" became "sqrt-4" and a raw RangeError.
+    prepared = prepared.replaceAllMapped(
+        RegExp(r'√(-?(?:\d+\.?\d*|\.\d+))'), (m) => 'sqrt(${m.group(1)})');
     prepared = prepared.replaceAll('√', 'sqrt');
+    // asin/acos/atan are the spellings people type; the parser only knows
+    // the arc- ones and threw a FormatException.
+    prepared = prepared.replaceAllMapped(
+        RegExp(r'(?<![A-Za-z])a(sin|cos|tan)\('), (m) => 'arc${m.group(1)}(');
+    // The log( button inserts a one-argument log, but the parser's log is
+    // log(base, x): "log(100)" failed with a RangeError. One argument means
+    // base 10.
+    prepared = _baseTenLogCalls(prepared);
 
     // The scientific keyboard's `mod` key writes the literal word, which the
     // parser rejects — every "a mod b =" ended in a FormatException. Map it to
@@ -2298,7 +2783,8 @@ class CalculatorService extends ChangeNotifier {
     // 'e' as Euler's number, so "1.0e+15 + 5" evaluated to 22.718 instead of
     // 1000000000000005 — silently, and the wrong value reached history.
     prepared = prepared.replaceAllMapped(
-      RegExp(r'(\d+\.?\d*)[eE]([+-]?)(\d+)'),
+      // ".5e3" too: without a leading digit it reached the parser as-is.
+      RegExp(r'(\d+\.?\d*|\.\d+)[eE]([+-]?)(\d+)'),
       (m) => m.group(2) == '-'
           ? '(${m.group(1)}/10^${m.group(3)})'
           : '(${m.group(1)}*10^${m.group(3)})',
@@ -2307,12 +2793,25 @@ class CalculatorService extends ChangeNotifier {
     // Replace constants. Only a standalone 'e' is Euler's constant:
     // replacing every 'e' corrupted scientific notation ("2e3" turned
     // into "2·2.718…·3" with no visible error).
-    prepared = prepared.replaceAll('π', math.pi.toString());
+    // The value goes in parentheses: bare digits glued to a neighbor —
+    // "2π" → "23.14…", "π2" → "3.14…2" — computed a silently wrong result.
+    // With parens, the implicit-multiplication pass below resolves 2(π)
+    // and (π)2 into products.
+    prepared = prepared.replaceAll('π', '(${math.pi})');
+    // ℯ (the expression keypad's key) is always Euler's number.
+    prepared = prepared.replaceAll('ℯ', '(${math.e})');
+    // Scientific notation is already expanded above, so an 'e' next to a
+    // digit or parenthesis is Euler's number too: "2e" is 2·e (it used to
+    // reach the parser bare, which read it as exp: 2e gave e²).
     prepared = prepared.replaceAllMapped(
-      RegExp(r'(?<![0-9A-Za-z.])e(?![0-9A-Za-z(])'),
-      (_) => math.e.toString(),
+      RegExp(r'(?<![A-Za-z])e(?![A-Za-z])'),
+      (_) => '(${math.e})',
     );
-    
+    // exp(x) is a reserved name that custom functions may use, but the
+    // parser only knows it as e(x): "exp(2)" failed with a FormatException.
+    // After the constant pass, so this 'e' stays the function.
+    prepared = prepared.replaceAll(RegExp(r'(?<![A-Za-z])exp\('), 'e(');
+
     // Add implicit multiplication where needed
     prepared = _addImplicitMultiplication(prepared);
     
@@ -2322,25 +2821,76 @@ class CalculatorService extends ChangeNotifier {
   /// Adds implicit multiplication (e.g.: 2(3+4) → 2*(3+4))
   String _addImplicitMultiplication(String expression) {
     String result = expression;
-    
+
+    // A number glued to a function name is a product: 2sqrt(9) → 2*sqrt(9).
+    // Without this the parser rejected the whole expression. A space is
+    // allowed in between ("3 sin(30)", and "2 π" once π became a
+    // parenthesis); e( is exp after preparation.
+    const String functions =
+        'arcsin|arccos|arctan|asin|acos|atan|sin|cos|tan|sqrt|log|ln|abs|'
+        'floor|ceil|sgn|e';
+    result = result.replaceAllMapped(
+      RegExp('(\\d)\\s*($functions)\\('),
+      (match) => '${match.group(1)}*${match.group(2)}(',
+    );
+
     // Pattern for a number followed by a parenthesis: 2( → 2*(
     result = result.replaceAllMapped(
-      RegExp(r'(\d)\('),
+      RegExp(r'(\d)\s*\('),
       (match) => '${match.group(1)}*(',
     );
-    
+
     // Pattern for a parenthesis followed by a number: )2 → )*2
     result = result.replaceAllMapped(
-      RegExp(r'\)(\d)'),
+      RegExp(r'\)\s*(\d)'),
       (match) => ')*${match.group(1)}',
     );
-    
-    // Pattern for consecutive parentheses: )( → )*(
-    result = result.replaceAll(')(', ')*(');
-    
+
+    // A closing parenthesis glued to a function: sqrt(16)sqrt(4).
+    result = result.replaceAllMapped(
+      RegExp('\\)\\s*($functions)\\('),
+      (match) => ')*${match.group(1)}(',
+    );
+
+    // Consecutive parentheses, with or without a space: )( → )*(
+    result = result.replaceAll(RegExp(r'\)\s*\('), ')*(');
+
     return result;
   }
   
+  /// Rewrites every one-argument `log(x)` as `log(10,x)`; two-argument calls
+  /// (a comma at the call's top level) are left alone.
+  static String _baseTenLogCalls(String s) {
+    final StringBuffer out = StringBuffer();
+    final RegExp letter = RegExp(r'[A-Za-z]');
+    int i = 0;
+    while (i < s.length) {
+      if (s.startsWith('log(', i) && (i == 0 || !letter.hasMatch(s[i - 1]))) {
+        final int open = i + 3;
+        int depth = 1;
+        int j = open + 1;
+        bool topLevelComma = false;
+        while (j < s.length && depth > 0) {
+          if (s[j] == '(') depth++;
+          if (s[j] == ')') depth--;
+          if (s[j] == ',' && depth == 1) topLevelComma = true;
+          j++;
+        }
+        if (depth != 0) {
+          out.write(s.substring(i));
+          break;
+        }
+        final String arg = _baseTenLogCalls(s.substring(open + 1, j - 1));
+        out.write(topLevelComma ? 'log($arg)' : 'log(10,$arg)');
+        i = j;
+      } else {
+        out.write(s[i]);
+        i++;
+      }
+    }
+    return out.toString();
+  }
+
   /// Converts trigonometric functions from degrees to radians.
   /// Walks the expression respecting nested parentheses: the previous regex
   /// (`sin\(([^)]+)\)`) cut the argument at the first ')', converting
@@ -2356,6 +2906,28 @@ class CalculatorService extends ChangeNotifier {
     int i = 0;
     while (i < s.length) {
       bool converted = false;
+      // Inverse functions return an angle: in degree mode convert the
+      // result (arcsin(0.5) gave 0.5236 rad instead of 30°).
+      for (final String name in const ['arcsin', 'arccos', 'arctan']) {
+        if (s.startsWith('$name(', i) &&
+            (i == 0 || !letter.hasMatch(s[i - 1]))) {
+          final int open = i + name.length;
+          int depth = 1;
+          int j = open + 1;
+          while (j < s.length && depth > 0) {
+            if (s[j] == '(') depth++;
+            if (s[j] == ')') depth--;
+            j++;
+          }
+          if (depth != 0) break;
+          final String arg = _degreesToRadiansCalls(s.substring(open + 1, j - 1));
+          out.write('($name($arg)*180/${math.pi})');
+          i = j;
+          converted = true;
+          break;
+        }
+      }
+      if (converted) continue;
       for (final String name in const ['sin', 'cos', 'tan']) {
         // The preceding-letter guard avoids converting the 'sin(' in 'arcsin('.
         if (s.startsWith('$name(', i) &&
@@ -2397,6 +2969,7 @@ class CalculatorService extends ChangeNotifier {
         // Update display
         _display = result;
         _lastResult = result;
+        _exactCarry = null;
         _hasError = false;
         _errorMessage = '';
         _errorArgs = {};
@@ -2405,6 +2978,7 @@ class CalculatorService extends ChangeNotifier {
         OperationEntry entry = OperationEntry(
           expression: expression,
           result: result,
+          expanded: _expandForHistory(expression),
         );
         
         // Add to the local history
@@ -2422,12 +2996,7 @@ class CalculatorService extends ChangeNotifier {
         _updateAnalysis();
         
       } else {
-        String errPart = result.substring(4); // remove 'err:'
-        if (errPart.startsWith('errGeneric:')) {
-          _setError('errGeneric', {'error': errPart.substring(11)});
-        } else {
-          _setError(errPart);
-        }
+        _setErrorFromEvaluation(result.substring(4)); // remove 'err:'
         _display = 'Error';
       }
 
@@ -2492,12 +3061,39 @@ class CalculatorService extends ChangeNotifier {
   
   /// Loads an expression from the history
   void loadFromHistory(OperationEntry entry) {
-    _expressionController.text = entry.expression;
+    // If the functions it used were edited or deleted since, reload what was
+    // actually computed rather than a call that now means something else
+    // (or fails).
+    final String? expanded = entry.expanded;
+    final bool stale =
+        expanded != null && _expandForHistory(entry.expression) != expanded;
+    _expressionController.text = stale ? expanded : entry.expression;
     notifyListeners();
+  }
+
+  /// [expression] with its custom-function calls expanded; null when it
+  /// calls none (or no longer expands).
+  String? _expandForHistory(String expression) {
+    if (_customFunctions.isEmpty) return null;
+    try {
+      final String out = CustomFunctionService.expandCalls(
+          expression, {for (final f in _customFunctions) f.name: f});
+      return out == expression ? null : out;
+    } on CustomFunctionException {
+      return null;
+    }
   }
   
   /// Loads the result of an operation from the history
   void loadResultFromHistory(OperationEntry entry) {
+    // A reload after an error kept the error flag: the message stayed on
+    // screen and the next key cleared the loaded value.
+    _hasError = false;
+    _errorMessage = '';
+    _errorArgs = {};
+    _pending = null;
+    _paramSlotEmpty = false;
+    _exactCarry = null;
     _display = entry.result;
     _lastResult = entry.result;
     _updateAnalysis();
@@ -2562,68 +3158,203 @@ class CalculatorService extends ChangeNotifier {
     return false;
   }
 
-  /// Evaluates expressions with BigDecimal for very large numbers.
+  /// Evaluates a flat expression (no parentheses or functions) exactly.
   ///
-  /// Recursive descent by precedence (+,− < ×,÷ < ^) over a flat expression
-  /// (those with parentheses go through math_expressions). The previous
-  /// version split at the FIRST operator found and only supported one
-  /// operation: "2^68+1" returned 1.
+  /// Recursive descent by precedence (+,− < ×,÷,mod < ^) over exact rationals
+  /// (BigInt/BigInt), rounded only once, when displayed. The BigDecimal
+  /// version cut every quotient to 20 fixed decimals: 1 ÷ 10^25 gave 0 and
+  /// 10^20 ÷ 7 × 7 gave 99999999999999999999.99999999999999999996.
   String _evaluateBigDecimalExpression(String expression) {
     try {
       expression = expression.replaceAll(' ', '');
       if (expression.isEmpty) {
         throw ArgumentError(trLocale('Expresión inválida: operandos vacíos', 'Invalid expression: empty operands', pt: 'Expressão inválida: operandos vazios', fr: 'Expression invalide : opérandes vides', id: 'Ekspresi tidak sah: operan kosong', vi: 'Biểu thức không hợp lệ: thiếu toán hạng', ru: 'Неверное выражение: пустые операнды', it: 'Espressione non valida: operandi vuoti'));
       }
-      return _evalBigAdditive(expression).toString();
+      return _formatExactRational(_evalBigAdditive(expression));
     } on _ResultTooLargeException {
       return 'err:errResultTooLarge';
+    } on _NeedsDoubleFallback {
+      rethrow;
     } catch (e) {
       throw ArgumentError(trLocale('Error evaluando expresión: $e', 'Error evaluating expression: $e', pt: 'Erro ao avaliar a expressão: $e', fr: "Erreur lors de l'évaluation de l'expression : $e", id: 'Kesalahan saat menghitung ekspresi: $e', vi: 'Lỗi khi tính biểu thức: $e', ru: 'Ошибка при вычислении выражения: $e', it: "Errore nella valutazione dell'espressione: $e"));
     }
   }
 
+  /// [expression] with a leading copy of the carried result replaced by its
+  /// exact value; unchanged when it doesn't start with it.
+  String _applyExactCarry(String expression) {
+    final carry = _exactCarry;
+    if (carry == null) return expression;
+    if (expression == carry.shown) return carry.exact;
+    if (expression.startsWith('${carry.shown} ')) {
+      return carry.exact + expression.substring(carry.shown.length);
+    }
+    return expression;
+  }
+
+  /// Stores (or clears) the exact value behind [shown]. Only worth keeping
+  /// when the display rounded it.
+  void _rememberExact(String shown, Fraction? exact) {
+    if (exact == null || exact.denominator == BigInt.one ||
+        _formatExactRational(exact) == shown) {
+      _exactCarry = null;
+      return;
+    }
+    _exactCarry = (
+      shown: shown,
+      exact: '(${exact.numerator}/${exact.denominator})',
+    );
+  }
+
+  /// Exact rational value of a keypad expression made only of numbers,
+  /// + − × ÷ ^ (integer exponents) and parentheses; null otherwise.
+  Fraction? _exactValueOf(String expression) {
+    try {
+      final String prepared =
+          _prepareExpression(expression).replaceAll(' ', '');
+      if (RegExp(r'[A-Za-z%]').hasMatch(prepared)) return null;
+      return _evalBigAdditive(prepared);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  /// Significant digits shown for a non-integer exact result.
+  static const int _exactSignificantDigits = 20;
+
+  /// Decimal text for an exact rational: integers in full; otherwise rounded
+  /// to [_exactSignificantDigits] significant digits (at least 10 decimals
+  /// when the integer part is long), trailing zeros trimmed.
+  static String _formatExactRational(Fraction f) {
+    if (f.denominator == BigInt.one) return f.numerator.toString();
+    final bool negative = f.isNegative;
+    final BigInt num = f.numerator.abs();
+    final BigInt den = f.denominator;
+    final BigInt intPart = num ~/ den;
+    int decimals;
+    if (intPart > BigInt.zero) {
+      decimals =
+          math.max(_exactSignificantDigits - intPart.toString().length, 10);
+    } else {
+      // Leading zeros after the point: estimate by length, then correct.
+      int zeros = den.toString().length - num.toString().length - 1;
+      if (zeros < 0) zeros = 0;
+      while (num * BigInt.from(10).pow(zeros + 1) < den) {
+        zeros++;
+      }
+      while (zeros > 0 && num * BigInt.from(10).pow(zeros) >= den) {
+        zeros--;
+      }
+      decimals = zeros + _exactSignificantDigits;
+    }
+    final BigInt scale = BigInt.from(10).pow(decimals);
+    // Round half up.
+    final BigInt scaled =
+        (num * scale * BigInt.two + den) ~/ (den * BigInt.two);
+    final String digits = scaled.toString().padLeft(decimals + 1, '0');
+    final int point = digits.length - decimals;
+    String text = '${digits.substring(0, point)}.${digits.substring(point)}';
+    text = text.replaceAll(RegExp(r'0+$'), '');
+    if (text.endsWith('.')) text = text.substring(0, text.length - 1);
+    return negative && text != '0' ? '-$text' : text;
+  }
+
   /// Is the character at [i] a binary operator? (If preceded by another
   /// operator or at the start, it is a unary sign of the right operand.)
   static bool _isBinaryOperatorAt(String s, int i) {
-    return i > 0 && RegExp(r'[0-9.]').hasMatch(s[i - 1]);
+    return i > 0 && RegExp(r'[0-9.)]').hasMatch(s[i - 1]);
   }
 
   /// +/− level. Split at the RIGHTMOST operator to respect left
   /// associativity (1-2-3 = (1-2)-3).
-  BigDecimal _evalBigAdditive(String s) {
+  Fraction _evalBigAdditive(String s) {
+    int depth = 0;
     for (int i = s.length - 1; i > 0; i--) {
       final String c = s[i];
-      if ((c == '+' || c == '-') && _isBinaryOperatorAt(s, i)) {
-        final BigDecimal left = _evalBigAdditive(s.substring(0, i));
-        final BigDecimal right = _evalBigMultiplicative(s.substring(i + 1));
+      if (c == ')') depth++;
+      if (c == '(') depth--;
+      if (depth == 0 && (c == '+' || c == '-') && _isBinaryOperatorAt(s, i)) {
+        final Fraction left = _evalBigAdditive(s.substring(0, i));
+        final Fraction right = _evalBigMultiplicative(s.substring(i + 1));
         return c == '+' ? left + right : left - right;
       }
     }
     return _evalBigMultiplicative(s);
   }
 
-  /// ×/÷ level (left associativity).
-  BigDecimal _evalBigMultiplicative(String s) {
+  /// ×/÷/mod level (left associativity). `mod` arrives here as '%', which
+  /// this evaluator used to reject: "12345678901 mod 7" failed.
+  Fraction _evalBigMultiplicative(String s) {
+    int depth = 0;
     for (int i = s.length - 1; i > 0; i--) {
       final String c = s[i];
-      if ((c == '*' || c == '/') && _isBinaryOperatorAt(s, i)) {
-        final BigDecimal left = _evalBigMultiplicative(s.substring(0, i));
-        final BigDecimal right = _evalBigPower(s.substring(i + 1));
+      if (c == ')') depth++;
+      if (c == '(') depth--;
+      if (depth == 0 &&
+          (c == '*' || c == '/' || c == '%') &&
+          _isBinaryOperatorAt(s, i)) {
+        final Fraction left = _evalBigMultiplicative(s.substring(0, i));
+        final Fraction right = _evalBigPower(s.substring(i + 1));
         if (c == '*') return left * right;
-        if (right == BigDecimal.zero) {
+        if (right.isZero) {
           throw ArgumentError(trLocale('División por cero', 'Division by zero', pt: 'Divisão por zero', fr: 'Division par zéro', id: 'Pembagian dengan nol', vi: 'Chia cho 0', ru: 'Деление на ноль', it: 'Divisione per zero'));
         }
-        return left / right;
+        if (c == '/') return left / right;
+        // Same convention as the double path (Dart's %: result >= 0).
+        if (left.denominator != BigInt.one ||
+            right.denominator != BigInt.one) {
+          throw const _NeedsDoubleFallback();
+        }
+        return Fraction.fromBigInt(left.numerator % right.numerator);
       }
     }
     return _evalBigPower(s);
   }
 
+  /// An operand ("-12.5", ".5", "7", "-(2+3)") as an exact rational.
+  Fraction _parseExactOperand(String s) {
+    final bool negative = s.startsWith('-');
+    final String body =
+        negative || s.startsWith('+') ? s.substring(1) : s;
+    if (body.startsWith('(') && body.endsWith(')') &&
+        _closingParen(body, 0) == body.length - 1) {
+      final Fraction inner = _evalBigAdditive(body.substring(1, body.length - 1));
+      return negative ? -inner : inner;
+    }
+    if (!RegExp(r'^(\d+\.?\d*|\.\d+)$').hasMatch(body)) {
+      throw FormatException(trLocale('Número inválido: $s', 'Invalid number: $s', pt: 'Número inválido: $s', fr: 'Nombre invalide : $s', id: 'Angka tidak sah: $s', vi: 'Số không hợp lệ: $s', ru: 'Неверное число: $s', it: 'Numero non valido: $s'));
+    }
+    final Fraction value = Fraction.fromDecimalString(body);
+    return negative ? -value : value;
+  }
+
+  /// Index of the ')' matching the '(' at [open], or -1.
+  static int _closingParen(String s, int open) {
+    int depth = 0;
+    for (int j = open; j < s.length; j++) {
+      if (s[j] == '(') depth++;
+      if (s[j] == ')') {
+        depth--;
+        if (depth == 0) return j;
+      }
+    }
+    return -1;
+  }
+
   /// ^ level (right associativity: 2^3^2 = 2^(3^2)).
-  BigDecimal _evalBigPower(String s) {
-    final int i = s.indexOf('^');
+  Fraction _evalBigPower(String s) {
+    int i = -1;
+    int depth = 0;
+    for (int j = 0; j < s.length; j++) {
+      if (s[j] == '(') depth++;
+      if (s[j] == ')') depth--;
+      if (depth == 0 && s[j] == '^') {
+        i = j;
+        break;
+      }
+    }
     if (i <= 0) {
-      return BigDecimal.fromString(s);
+      return _parseExactOperand(s);
     }
     // Unary minus binds looser than '^': −2² is −4. Folding the sign into the
     // base made identical keystrokes yield +4 once the operand grew large
@@ -2632,27 +3363,34 @@ class CalculatorService extends ChangeNotifier {
     final bool negated = baseStr.startsWith('-');
     if (negated) baseStr = baseStr.substring(1);
 
-    final BigDecimal base = BigDecimal.fromString(baseStr);
-    final BigDecimal exp = _evalBigPower(s.substring(i + 1));
+    final Fraction base = _parseExactOperand(baseStr);
+    final Fraction exp = _evalBigPower(s.substring(i + 1));
 
-    if (exp.fractionalPart != BigInt.zero) {
-      // Previously it was silently truncated (x^2.5 computed x^2).
-      throw ArgumentError(trLocale('Exponente no entero no soportado en modo de números grandes',
-          'Non-integer exponent not supported in big-number mode', pt: 'Expoente não inteiro não suportado no modo de números grandes', fr: 'Exposant non entier non pris en charge en mode grands nombres', id: 'Eksponen bukan bilangan bulat tidak didukung pada mode bilangan besar', vi: 'Không hỗ trợ số mũ không nguyên ở chế độ số lớn', ru: 'Нецелый показатель не поддерживается в режиме больших чисел', it: 'Esponente non intero non supportato in modalità numeri grandi'));
+    if (exp.denominator != BigInt.one) {
+      // A fractional exponent has no exact rational result; the double
+      // evaluator handles it (this used to be an error, while 2^0.5 alone
+      // worked because it never came here).
+      throw const _NeedsDoubleFallback();
     }
-    if (exp.isNegative) {
-      throw ArgumentError(trLocale('Exponente negativo no soportado', 'Negative exponent not supported', pt: 'Expoente negativo não suportado', fr: 'Exposant négatif non pris en charge', id: 'Eksponen negatif tidak didukung', vi: 'Không hỗ trợ số mũ âm', ru: 'Отрицательный показатель не поддерживается', it: 'Esponente negativo non supportato'));
-    }
-    final BigInt expInt = exp.integerPart;
-    if (!expInt.isValidInt) {
+    final BigInt expInt = exp.numerator;
+    if (!expInt.abs().isValidInt) {
       throw const _ResultTooLargeException();
     }
     final int exponent = expInt.toInt();
-    if (_powerExceedsDigitLimit(base, exponent)) {
+    if (base.isZero && exponent < 0) {
+      throw ArgumentError(trLocale('División por cero', 'Division by zero', pt: 'Divisão por zero', fr: 'Division par zéro', id: 'Pembagian dengan nol', vi: 'Chia cho 0', ru: 'Деление на ноль', it: 'Divisione per zero'));
+    }
+    // The result has about |exponent| × (digits of the base) digits.
+    if (exponent.abs() > 1 && base.denominator + base.numerator.abs() > BigInt.two &&
+        BigInt.from(exponent.abs()) *
+                BigInt.from(base.numerator.abs().toString().length +
+                    base.denominator.toString().length - 1) >
+            BigInt.from(100000)) {
       throw const _ResultTooLargeException();
     }
-    final BigDecimal result = base.pow(exponent);
-    return negated ? BigDecimal.zero - result : result;
+    // Fraction.pow takes negative exponents: 2^-1 = 1/2 (was an error here).
+    final Fraction result = base.pow(exponent);
+    return negated ? -result : result;
   }
 
   /// Helper method to add direct operations to the history
@@ -2684,6 +3422,95 @@ class CalculatorService extends ChangeNotifier {
   // SPECIAL FUNCTIONS
   // =========================
 
+  // Pollard-rho step budgets (~3 µs a step; the smallest prime factor p
+  // needs ~√p steps). A key press gets ~50 s in an isolate, cancellable, so
+  // factors up to ~10¹⁴ are found; on the web `compute` runs on the page's
+  // own thread, so ~1.5 s (factors up to ~10¹¹). The analysis panel, which
+  // reruns on every keystroke, gets less.
+  static const int _factorBudgetNative = 1 << 24;
+  static const int _factorBudgetWeb = 1 << 19;
+  static const int _analysisBudgetNative = 1 << 21;
+  static const int _analysisBudgetWeb = 1 << 17;
+
+  /// The keys that factorize their argument, by name, so [_factorizing] can
+  /// run them in an isolate. Each returns its result as text ('' for "none").
+  static final Map<String, String Function(BigInt)> _factorizingOps = {
+    'phi': (n) => SpecialFunctionsService.eulerPhi(n).toString(),
+    'sigma0': (n) => SpecialFunctionsService.divisorCount(n).toString(),
+    'sigma': (n) => SpecialFunctionsService.divisorSum(1, n).toString(),
+    'mu': (n) => SpecialFunctionsService.moebiusMu(n).toString(),
+    'liouville': (n) => SpecialFunctionsService.liouvilleFunction(n).toString(),
+    'rad': (n) => SpecialFunctionsService.radical(n).toString(),
+    'omega': (n) => SpecialFunctionsService.smallOmega(n).toString(),
+    'bigOmega': (n) => SpecialFunctionsService.bigOmega(n).toString(),
+    'carmichael': (n) => SpecialFunctionsService.carmichaelLambda(n).toString(),
+    'sopfr': (n) => SpecialFunctionsService.sopfr(n).toString(),
+    'sopf': (n) => SpecialFunctionsService.sopf(n).toString(),
+    'primitiveRoot': (n) =>
+        SpecialFunctionsService.findPrimitiveRoot(n)?.toString() ?? '',
+  };
+
+  static Map<String, dynamic> _factorizingInIsolate(Map<String, dynamic> args) {
+    appLanguage = args['lang'] as String;
+    try {
+      return {
+        'result': withFactorizationBudget(
+            args['budget'] as int,
+            () => _factorizingOps[args['op']]!(
+                BigInt.parse(args['n'] as String))),
+      };
+    } on FactorizationTooHard {
+      return {'tooHard': true};
+    } catch (e) {
+      return {'error': e.toString()};
+    }
+  }
+
+  /// Runs the factorizing key [op] on [n]. Up to 10¹² trial division settles
+  /// it at once, inline; beyond, it runs through `compute` behind the
+  /// cancellable loading overlay, with a step budget. These keys used to run
+  /// on the UI thread with no bound: φ of a 27-digit semiprime froze the app
+  /// 16 s, and two 20-digit factors would have taken years.
+  ///
+  /// Returns the result text, or null when the operation was cancelled or ran
+  /// out of budget (the error is then already set). Any other failure is
+  /// rethrown for the caller's own error message.
+  Future<String?> _factorizing(String op, BigInt n) async {
+    final Map<String, dynamic> args = {
+      'op': op,
+      'n': n.toString(),
+      'lang': appLanguage,
+      'budget': kIsWeb ? _factorBudgetWeb : _factorBudgetNative,
+    };
+    Map<String, dynamic> res;
+    if (n.bitLength <= 40) {
+      res = _factorizingInIsolate(args);
+    } else {
+      _isCalculatingOperation = true;
+      _operationProgress = trLocale('Factorizando…', 'Factoring…', pt: 'Fatorando…', fr: 'Factorisation…', id: 'Memfaktorkan…', vi: 'Đang phân tích thừa số…', ru: 'Разложение на множители…', it: 'Scomposizione in fattori…');
+      _canCancelOperation = true;
+      notifyListeners();
+      final int token = _operationToken;
+      try {
+        res = await compute(_factorizingInIsolate, args);
+      } finally {
+        if (token == _operationToken) {
+          _isCalculatingOperation = false;
+          _operationProgress = '';
+          _canCancelOperation = false;
+        }
+      }
+      if (token != _operationToken) return null; // cancelled meanwhile
+    }
+    if (res['tooHard'] == true) {
+      _setError('errFactorizationTooHard');
+      _display = 'Error';
+      return null;
+    }
+    if (res.containsKey('error')) throw _OffThreadError(res['error'] as String);
+    return res['result'] as String;
+  }
+
   /// Euler's φ function
   Future<void> eulerPhi() async {
     try {
@@ -2693,7 +3520,12 @@ class CalculatorService extends ChangeNotifier {
         _setError('errPhiDomain');
         _display = 'Error';
       } else {
-        BigInt result = SpecialFunctionsService.eulerPhi(number);
+        final String? computed = await _factorizing('phi', number);
+        if (computed == null) {
+          notifyListeners();
+          return;
+        }
+        BigInt result = BigInt.parse(computed);
         String resultStr = _formatNumber(result.toString());
         _display = resultStr;
         _lastResult = resultStr;
@@ -2741,7 +3573,12 @@ class CalculatorService extends ChangeNotifier {
         _setError('errSigma0Domain');
         _display = 'Error';
       } else {
-        BigInt result = SpecialFunctionsService.divisorCount(number);
+        final String? computed = await _factorizing('sigma0', number);
+        if (computed == null) {
+          notifyListeners();
+          return;
+        }
+        BigInt result = BigInt.parse(computed);
         String resultStr = _formatNumber(result.toString());
         _display = resultStr;
         _lastResult = resultStr;
@@ -2767,7 +3604,12 @@ class CalculatorService extends ChangeNotifier {
         _setError('errSigmaDomain');
         _display = 'Error';
       } else {
-        BigDecimal result = SpecialFunctionsService.divisorSum(1, number);
+        final String? computed = await _factorizing('sigma', number);
+        if (computed == null) {
+          notifyListeners();
+          return;
+        }
+        BigDecimal result = BigDecimal.fromString(computed);
         String resultStr = _formatNumber(result.toString());
         _display = resultStr;
         _lastResult = resultStr;
@@ -2932,7 +3774,12 @@ class CalculatorService extends ChangeNotifier {
         _setError('errMobiusDomain');
         _display = 'Error';
       } else {
-        int result = SpecialFunctionsService.moebiusMu(number);
+        final String? computed = await _factorizing('mu', number);
+        if (computed == null) {
+          notifyListeners();
+          return;
+        }
+        int result = int.parse(computed);
         String resultStr = _formatNumber(result.toString());
         _display = resultStr;
         _lastResult = resultStr;
@@ -3030,7 +3877,9 @@ class CalculatorService extends ChangeNotifier {
       // phantom operand: lcm(12,18,0) = 0 instead of 36, gcd(12,18,10) = 2
       // instead of 6, and an odd operand count that broke CRT every time.
       if (!_paramSlotEmpty) {
-        _pending = _pending!.addParam(_getCurrentNumber());
+        final String? value = _slotValue();
+        if (value == null) return;
+        _pending = _pending!.addParam(value);
       }
       if (_pending!.canExecute) {
         _executeOperation(_pending!);
@@ -3044,7 +3893,10 @@ class CalculatorService extends ChangeNotifier {
     }
 
     String currentNumber = _getCurrentNumber();
-    if (currentNumber == '0' && _lastResult.isNotEmpty) {
+    // Only an untouched placeholder stands for the previous result. A 0 the
+    // user sees (typed, or left by CE/⌫) is the operand: "5+5= CE 0 mod 3"
+    // computed 10 mod 3 = 1 instead of 0.
+    if (currentNumber == '0' && _paramSlotEmpty && _lastResult.isNotEmpty) {
       currentNumber = _lastResult;
     }
 
@@ -3057,12 +3909,35 @@ class CalculatorService extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// The value typed into a parameter slot. An expression is evaluated whole:
+  /// "17 mod" then "2 + 4 =" took only the 4 and gave 1 instead of 5. On an
+  /// evaluation error it shows the error, clears the pending operation and
+  /// returns null.
+  String? _slotValue() {
+    if (_isBareNumber(_display)) return _getCurrentNumber();
+    final String result = evaluateCompleteExpression(_display);
+    if (result.startsWith('err:')) {
+      _pending = null;
+      _paramSlotEmpty = false;
+      _setErrorFromEvaluation(result.substring(4));
+      _display = 'Error';
+      notifyListeners();
+      return null;
+    }
+    return result;
+  }
+
   /// Adds a parameter and executes if the operation is complete (fixed).
   /// For variable-param, = adds the param; pressing the function again executes.
   void _addParamAndMaybeExecute() {
     if (_pending == null) return;
 
-    String value = _getCurrentNumber();
+    // '=' on the untouched placeholder is not a parameter: "12 LCM 18 = ="
+    // added a phantom 0 and LCM came out 0.
+    if (_paramSlotEmpty) return;
+
+    final String? value = _slotValue();
+    if (value == null) return;
     _pending = _pending!.addParam(value);
 
     if (_pending!.isComplete) {
@@ -3077,7 +3952,12 @@ class CalculatorService extends ChangeNotifier {
   }
 
   /// Executes the operation with the collected parameters.
-  void _executeOperation(PendingOperation op) {
+  /// Parameter operations run inline on the UI thread, so the ones that
+  /// factorize (ord factors φ(n), CRT, …) get the short web budget.
+  void _executeOperation(PendingOperation op) => withFactorizationBudget(
+      _factorBudgetWeb, () => _executeOperationBounded(op));
+
+  void _executeOperationBounded(PendingOperation op) {
     List<String> p = op.params;
     _pending = null;
     _paramSlotEmpty = false;
@@ -3097,6 +3977,7 @@ class CalculatorService extends ChangeNotifier {
           historyLabel = 'V${p[1]}(${p[0]})';
           break;
         case 'C':
+          if (_parseStringAsInt(p[0]) > _maxCombinationN) { _showError('errResultTooLarge'); return; }
           resultStr = _fmt(SpecialFunctionsService.combinations(_parseStringAsInt(p[0]), _parseStringAsInt(p[1])));
           historyLabel = 'C(${p[0]},${p[1]})';
           break;
@@ -3221,6 +4102,8 @@ class CalculatorService extends ChangeNotifier {
       _lastResult = resultStr;
       _updateAnalysis();
       _addDirectOperationToHistory(historyLabel, p.join(','), resultStr);
+    } on FactorizationTooHard {
+      _showError('errFactorizationTooHard');
     } catch (e) {
       _showError('errGeneric', {'error': e.toString()});
     }
@@ -3326,6 +4209,14 @@ class CalculatorService extends ChangeNotifier {
     notifyListeners();
   }
 
+  // Bounds for the big-integer keys, which run on the UI thread. Without
+  // them D(50000) took 3 s, Cat(10⁵) and C(2·10⁵, 10⁵) 7.5 s and F(10⁷)
+  // 26 s, growing quadratically. At these limits each takes ≤ ~150 ms, in
+  // line with n! (max 10000).
+  static const int _maxCombinationN = 20000; // C(n,k), n!!
+  static const int _maxCatalanN = 10000; // Cat(n), D(n)
+  static const int _maxFibonacciN = 100000;
+
   /// Double factorial n!!
   Future<void> doubleFactorialFunction() async {
     try {
@@ -3333,6 +4224,9 @@ class CalculatorService extends ChangeNotifier {
       int n = _getCurrentAsInt();
       if (n < 0) {
         _setError('errDoubleFactorialNeg');
+        _display = 'Error';
+      } else if (n > _maxCombinationN) {
+        _setError('errResultTooLarge');
         _display = 'Error';
       } else {
         BigInt result = SpecialFunctionsService.doubleFactorial(n);
@@ -3357,6 +4251,9 @@ class CalculatorService extends ChangeNotifier {
       if (n < 0) {
         _setError('errFibonacciNeg');
         _display = 'Error';
+      } else if (n > _maxFibonacciN) {
+        _setError('errResultTooLarge');
+        _display = 'Error';
       } else {
         BigInt result = SpecialFunctionsService.fibonacci(n);
         String resultStr = _formatNumber(result.toString());
@@ -3380,6 +4277,9 @@ class CalculatorService extends ChangeNotifier {
       if (n < 0) {
         _setError('errCatalanNeg');
         _display = 'Error';
+      } else if (n > _maxCatalanN) {
+        _setError('errResultTooLarge');
+        _display = 'Error';
       } else {
         BigInt result = SpecialFunctionsService.catalanNumber(n);
         String resultStr = _formatNumber(result.toString());
@@ -3402,6 +4302,9 @@ class CalculatorService extends ChangeNotifier {
       int n = _getCurrentAsInt();
       if (n < 0) {
         _setError('errDerangementNeg');
+        _display = 'Error';
+      } else if (n > _maxCatalanN) {
+        _setError('errResultTooLarge');
         _display = 'Error';
       } else {
         BigInt result = SpecialFunctionsService.derangement(n);
@@ -3491,7 +4394,12 @@ class CalculatorService extends ChangeNotifier {
         _setError('errPrimitiveRootDomain');
         _display = 'Error';
       } else {
-        BigInt? result = SpecialFunctionsService.findPrimitiveRoot(number);
+        final String? computed = await _factorizing('primitiveRoot', number);
+        if (computed == null) {
+          notifyListeners();
+          return;
+        }
+        BigInt? result = computed.isEmpty ? null : BigInt.parse(computed);
         if (result == null) {
           _setError('errNoPrimitiveRoot', {'n': number.toString()});
           _display = 'Error';
@@ -3519,7 +4427,12 @@ class CalculatorService extends ChangeNotifier {
         _setError('errLiouvilleDomain');
         _display = 'Error';
       } else {
-        int result = SpecialFunctionsService.liouvilleFunction(number);
+        final String? computed = await _factorizing('liouville', number);
+        if (computed == null) {
+          notifyListeners();
+          return;
+        }
+        int result = int.parse(computed);
         String resultStr = _formatNumber(result.toString());
         _display = resultStr;
         _lastResult = resultStr;
@@ -3574,7 +4487,12 @@ class CalculatorService extends ChangeNotifier {
         _setError('errRadDomain');
         _display = 'Error';
       } else {
-        BigInt result = SpecialFunctionsService.radical(number);
+        final String? computed = await _factorizing('rad', number);
+        if (computed == null) {
+          notifyListeners();
+          return;
+        }
+        BigInt result = BigInt.parse(computed);
         String resultStr = _formatNumber(result.toString());
         _display = resultStr;
         _lastResult = resultStr;
@@ -3598,7 +4516,12 @@ class CalculatorService extends ChangeNotifier {
         _setError('errOmegaDomain');
         _display = 'Error';
       } else {
-        int result = SpecialFunctionsService.smallOmega(number);
+        final String? computed = await _factorizing('omega', number);
+        if (computed == null) {
+          notifyListeners();
+          return;
+        }
+        int result = int.parse(computed);
         String resultStr = _formatNumber(result.toString());
         _display = resultStr;
         _lastResult = resultStr;
@@ -3622,7 +4545,12 @@ class CalculatorService extends ChangeNotifier {
         _setError('errBigOmegaDomain');
         _display = 'Error';
       } else {
-        int result = SpecialFunctionsService.bigOmega(number);
+        final String? computed = await _factorizing('bigOmega', number);
+        if (computed == null) {
+          notifyListeners();
+          return;
+        }
+        int result = int.parse(computed);
         String resultStr = _formatNumber(result.toString());
         _display = resultStr;
         _lastResult = resultStr;
@@ -3646,7 +4574,12 @@ class CalculatorService extends ChangeNotifier {
         _setError('errCarmichaelDomain');
         _display = 'Error';
       } else {
-        BigInt result = SpecialFunctionsService.carmichaelLambda(number);
+        final String? computed = await _factorizing('carmichael', number);
+        if (computed == null) {
+          notifyListeners();
+          return;
+        }
+        BigInt result = BigInt.parse(computed);
         String resultStr = _formatNumber(result.toString());
         _display = resultStr;
         _lastResult = resultStr;
@@ -3670,7 +4603,12 @@ class CalculatorService extends ChangeNotifier {
         _setError('errSopfrDomain');
         _display = 'Error';
       } else {
-        BigInt result = SpecialFunctionsService.sopfr(number);
+        final String? computed = await _factorizing('sopfr', number);
+        if (computed == null) {
+          notifyListeners();
+          return;
+        }
+        BigInt result = BigInt.parse(computed);
         String resultStr = _formatNumber(result.toString());
         _display = resultStr;
         _lastResult = resultStr;
@@ -3694,7 +4632,12 @@ class CalculatorService extends ChangeNotifier {
         _setError('errSopfDomain');
         _display = 'Error';
       } else {
-        BigInt result = SpecialFunctionsService.sopf(number);
+        final String? computed = await _factorizing('sopf', number);
+        if (computed == null) {
+          notifyListeners();
+          return;
+        }
+        BigInt result = BigInt.parse(computed);
         String resultStr = _formatNumber(result.toString());
         _display = resultStr;
         _lastResult = resultStr;
@@ -3766,9 +4709,16 @@ class CalculatorService extends ChangeNotifier {
       
       BigDecimal result = BigDecimal.one / value;
       String resultStr = _formatNumber(result.toString());
-      
+
       _display = _spliceResult(resultStr, currentNumber);
       _lastResult = resultStr;
+      if (_display == resultStr) {
+        Fraction? exact;
+        try {
+          exact = Fraction.one / Fraction.fromDecimalString(currentNumber);
+        } catch (_) {}
+        _rememberExact(resultStr, exact);
+      }
       _updateAnalysis();
       
       await _addDirectOperationToHistory('1/$currentNumber', originalValue, resultStr);
@@ -3780,8 +4730,23 @@ class CalculatorService extends ChangeNotifier {
   }
 }
 
+/// Thrown by the exact evaluator for a term it can't keep exact (fractional
+/// exponent, non-integer mod); the caller re-evaluates with doubles.
+class _NeedsDoubleFallback implements Exception {
+  const _NeedsDoubleFallback();
+}
+
 /// Signals that an exact result (e.g. a power) would have too many
 /// digits to compute; it translates to "errResultTooLarge".
 class _ResultTooLargeException implements Exception {
   const _ResultTooLargeException();
+}
+
+/// An error raised inside an isolate, carried back as its message so the
+/// caller shows it the same way as an inline failure.
+class _OffThreadError implements Exception {
+  final String message;
+  const _OffThreadError(this.message);
+  @override
+  String toString() => message;
 }

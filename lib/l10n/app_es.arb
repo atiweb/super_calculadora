@@ -2995,6 +2995,10 @@
   "@errExprDivZero": { "description": "Error division by zero in expression" },
   "errResultInvalid": "Error: Resultado no válido",
   "errResultTooLarge": "El resultado es demasiado grande para calcularse exactamente",
+  "errFactorizationTooHard": "El número tiene factores primos demasiado grandes para factorizarlo en un tiempo razonable",
+  "@errFactorizationTooHard": {
+    "description": "Pollard-rho ran out of its step budget (two large prime factors)"
+  },
   "@errResultTooLarge": {
     "description": "Power/operation result would have too many digits"
   },
@@ -3013,5 +3017,86 @@
   "@errUnknownOp": {
     "description": "Unknown operation error",
     "placeholders": { "op": { "type": "String" } }
+  },
+  "navFunctions": "Mis funciones",
+  "@navFunctions": { "description": "Navigation drawer item for custom functions" },
+  "navFunctionsSub": "Crea y edita funciones personalizadas",
+  "@navFunctionsSub": { "description": "Subtitle for custom functions nav item" },
+  "cfTitle": "Funciones personalizadas",
+  "@cfTitle": { "description": "Custom functions screen title" },
+  "cfEmpty": "Aún no has creado ninguna función",
+  "@cfEmpty": { "description": "Empty state title on custom functions screen" },
+  "cfEmptyHint": "Toca «Añadir función» y define la primera, por ejemplo: f(x) = x^2 + 1",
+  "@cfEmptyHint": { "description": "Empty state hint with an example definition" },
+  "cfAdd": "Añadir función",
+  "@cfAdd": { "description": "Add-function button label" },
+  "cfEditorTitleNew": "Nueva función",
+  "@cfEditorTitleNew": { "description": "Editor dialog title when creating" },
+  "cfEditorTitleEdit": "Editar función",
+  "@cfEditorTitleEdit": { "description": "Editor dialog title when editing" },
+  "cfEditorHint": "f(x) = x^2 + 1",
+  "@cfEditorHint": { "description": "Editor text field hint (example definition)" },
+  "cfEditorHelp": "Escribe nombre(parámetros) = expresión. Puedes usar sin, cos, sqrt, ln… y también tus otras funciones.",
+  "@cfEditorHelp": { "description": "Help text below the editor field" },
+  "cfSave": "Guardar",
+  "@cfSave": { "description": "Save button in the function editor" },
+  "cfCancel": "Cancelar",
+  "@cfCancel": { "description": "Cancel button in custom function dialogs" },
+  "cfDelete": "Eliminar",
+  "@cfDelete": { "description": "Delete button/tooltip for a custom function" },
+  "cfDeleteTitle": "Eliminar función",
+  "@cfDeleteTitle": { "description": "Delete confirmation dialog title" },
+  "cfDeleteMessage": "¿Seguro que quieres eliminar {name}?",
+  "@cfDeleteMessage": {
+    "description": "Delete confirmation dialog message",
+    "placeholders": { "name": { "type": "String" } }
+  },
+  "cfErrBadSignature": "Formato no válido. Usa: nombre(x) = expresión",
+  "@cfErrBadSignature": { "description": "Editor error: definition does not match name(params) = body" },
+  "cfErrReservedName": "«{name}» es un nombre reservado de la calculadora",
+  "@cfErrReservedName": {
+    "description": "Editor error: function name shadows a builtin",
+    "placeholders": { "name": { "type": "String" } }
+  },
+  "cfErrBadParam": "Parámetro no válido: «{name}»",
+  "@cfErrBadParam": {
+    "description": "Editor error: invalid or shadowing parameter name",
+    "placeholders": { "name": { "type": "String" } }
+  },
+  "cfErrDupParam": "Parámetro repetido: «{name}»",
+  "@cfErrDupParam": {
+    "description": "Editor error: duplicate parameter name",
+    "placeholders": { "name": { "type": "String" } }
+  },
+  "cfErrNameTaken": "Ya existe una función llamada «{name}»",
+  "@cfErrNameTaken": {
+    "description": "Editor error: another function already uses this name",
+    "placeholders": { "name": { "type": "String" } }
+  },
+  "cfErrEmptyBody": "Falta la expresión después del signo =",
+  "@cfErrEmptyBody": { "description": "Editor error: empty function body" },
+  "cfErrBodyInvalid": "La expresión de la función no es válida",
+  "@cfErrBodyInvalid": { "description": "Editor error: body does not parse" },
+  "cfErrUnknownName": "Nombre desconocido en la definición: «{name}»",
+  "@cfErrUnknownName": {
+    "description": "Editor error: body references an undefined name",
+    "placeholders": { "name": { "type": "String" } }
+  },
+  "errCustomFnArgs": "Número de argumentos incorrecto para {n}",
+  "@errCustomFnArgs": {
+    "description": "Evaluation error: custom function called with wrong arity",
+    "placeholders": { "n": { "type": "String" } }
+  },
+  "errCustomFnRecursion": "Las funciones personalizadas se llaman entre sí sin fin (definición circular)",
+  "@errCustomFnRecursion": { "description": "Evaluation error: circular custom function definitions" },
+  "cfErrInUse": "No se puede eliminar: «{name}» se usa en {others}",
+  "@cfErrInUse": {
+    "description": "Delete blocked: other functions reference this one",
+    "placeholders": { "name": { "type": "String" }, "others": { "type": "String" } }
+  },
+  "cfErrBreaksOthers": "Este cambio rompería otras funciones: {others}",
+  "@cfErrBreaksOthers": {
+    "description": "Edit blocked: saved functions would stop working",
+    "placeholders": { "others": { "type": "String" } }
   }
 }

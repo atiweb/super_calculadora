@@ -96,6 +96,8 @@ class TrianglePainter extends CustomPainter {
   }
 
   String _fmt(double v) {
+    // truncate() saturates: a side of 10^30 was labelled 9223372036854775807.
+    if (v.abs() >= 1e15) return v.toStringAsExponential(3);
     if (v == v.truncateToDouble()) return v.truncate().toString();
     return v.toStringAsFixed(2);
   }
@@ -259,6 +261,8 @@ class PolygonPainter extends CustomPainter {
   }
 
   String _fmt(double v) {
+    // truncate() saturates: a side of 10^30 was labelled 9223372036854775807.
+    if (v.abs() >= 1e15) return v.toStringAsExponential(3);
     if (v == v.truncateToDouble()) return v.truncate().toString();
     return v.toStringAsFixed(2);
   }
@@ -634,6 +638,8 @@ class PolynomialPlotPainter extends CustomPainter {
   }
 
   String _fmt(double v) {
+    // truncate() saturates: a side of 10^30 was labelled 9223372036854775807.
+    if (v.abs() >= 1e15) return v.toStringAsExponential(3);
     if (v == v.truncateToDouble()) return v.truncate().toString();
     return v.toStringAsFixed(2);
   }

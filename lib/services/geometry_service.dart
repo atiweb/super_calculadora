@@ -212,7 +212,51 @@ class GeometryService {
       final Point q = vertices[(i + 1) % vertices.length];
       sum = sum + (p.x * q.y - q.x * p.y);
     }
-    return (sum * Fraction(BigInt.one, BigInt.two)).abs();
+    final Fraction area = (sum * Fraction(BigInt.one, BigInt.two)).abs();
+    // The formula means nothing for a crossed or flat polygon: the bow tie
+    // 0,0;2,0;0,2;2,2 gave A = 0 and, through Pick, I = −3.
+    if (area.isZero || _hasCrossingSides(vertices)) {
+      throw CalcException(CalcError.polygonNotSimple);
+    }
+    return area;
+  }
+
+  /// Orientation of c relative to the line a→b: sign of the cross product.
+  static int _orient(Point a, Point b, Point c) =>
+      ((b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x)).compareTo(Fraction.zero);
+
+  /// Whether c, known collinear with a–b, lies within that segment.
+  static bool _within(Point a, Point b, Point c) =>
+      (c.x.compareTo(a.x) * c.x.compareTo(b.x)) <= 0 &&
+      (c.y.compareTo(a.y) * c.y.compareTo(b.y)) <= 0;
+
+  static bool _segmentsTouch(Point a, Point b, Point c, Point d) {
+    final int o1 = _orient(a, b, c), o2 = _orient(a, b, d);
+    final int o3 = _orient(c, d, a), o4 = _orient(c, d, b);
+    if (o1 * o2 < 0 && o3 * o4 < 0) return true;
+    return (o1 == 0 && _within(a, b, c)) ||
+        (o2 == 0 && _within(a, b, d)) ||
+        (o3 == 0 && _within(c, d, a)) ||
+        (o4 == 0 && _within(c, d, b));
+  }
+
+  /// Whether two sides of the polygon cross or overlap. Adjacent sides share
+  /// a vertex, so for them only doubling back along the same line counts.
+  static bool _hasCrossingSides(List<Point> v) {
+    final int n = v.length;
+    for (int i = 0; i < n; i++) {
+      final Point a = v[i], b = v[(i + 1) % n], c = v[(i + 2) % n];
+      if (a == b) return true; // repeated vertex
+      if (_orient(a, b, c) == 0 && !_within(a, c, b)) {
+        // b is collinear but not between a and c: the path turns back.
+        return true;
+      }
+      for (int j = i + 2; j < n; j++) {
+        if (i == 0 && j == n - 1) continue; // adjacent through the wrap
+        if (_segmentsTouch(a, b, v[j], v[(j + 1) % n])) return true;
+      }
+    }
+    return false;
   }
 
   /// Pick's theorem for a simple polygon with integer vertices:
@@ -321,6 +365,11 @@ class GeometryService {
   /// Uses Euclid's formula: a=m²−n², b=2mn, c=m²+n²
   /// with m>n>0, gcd(m,n)=1 and m,n of opposite parity.
   static List<List<BigInt>> primitivePythagoreanTriples(int maxHypotenuse) {
+    // Bounded like allPythagoreanTriples: synchronous on the UI thread, and
+    // 10^8 ran for minutes.
+    if (maxHypotenuse > 100000) {
+      throw CalcException(CalcError.inputTooLarge, {'max': '100000'});
+    }
     final List<List<BigInt>> triples = [];
     for (int m = 2; m * m <= maxHypotenuse; m++) {
       for (int n = 1; n < m; n++) {

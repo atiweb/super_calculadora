@@ -2273,6 +2273,10 @@ class AppLocalizationsId extends AppLocalizations {
       'Hasilnya terlalu besar untuk dihitung secara eksak';
 
   @override
+  String get errFactorizationTooHard =>
+      'Bilangan ini memiliki faktor prima yang terlalu besar untuk difaktorkan dalam waktu wajar';
+
+  @override
   String get errAnalysisInvalid =>
       'Kesalahan: bilangan tidak sah untuk dianalisis';
 
@@ -2291,5 +2295,108 @@ class AppLocalizationsId extends AppLocalizations {
   @override
   String errUnknownOp(String op) {
     return 'Operasi tidak dikenal: $op';
+  }
+
+  @override
+  String get navFunctions => 'Fungsi saya';
+
+  @override
+  String get navFunctionsSub => 'Buat dan ubah fungsi kustom';
+
+  @override
+  String get cfTitle => 'Fungsi kustom';
+
+  @override
+  String get cfEmpty => 'Anda belum membuat fungsi apa pun';
+
+  @override
+  String get cfEmptyHint =>
+      'Ketuk \"Tambah fungsi\" dan definisikan yang pertama, misalnya: f(x) = x^2 + 1';
+
+  @override
+  String get cfAdd => 'Tambah fungsi';
+
+  @override
+  String get cfEditorTitleNew => 'Fungsi baru';
+
+  @override
+  String get cfEditorTitleEdit => 'Ubah fungsi';
+
+  @override
+  String get cfEditorHint => 'f(x) = x^2 + 1';
+
+  @override
+  String get cfEditorHelp =>
+      'Tulis nama(parameter) = ekspresi. Anda dapat menggunakan sin, cos, sqrt, ln… serta fungsi Anda yang lain.';
+
+  @override
+  String get cfSave => 'Simpan';
+
+  @override
+  String get cfCancel => 'Batal';
+
+  @override
+  String get cfDelete => 'Hapus';
+
+  @override
+  String get cfDeleteTitle => 'Hapus fungsi';
+
+  @override
+  String cfDeleteMessage(String name) {
+    return 'Yakin ingin menghapus $name?';
+  }
+
+  @override
+  String get cfErrBadSignature =>
+      'Format tidak sah. Gunakan: nama(x) = ekspresi';
+
+  @override
+  String cfErrReservedName(String name) {
+    return '\'$name\' adalah nama khusus kalkulator';
+  }
+
+  @override
+  String cfErrBadParam(String name) {
+    return 'Parameter tidak sah: \'$name\'';
+  }
+
+  @override
+  String cfErrDupParam(String name) {
+    return 'Parameter duplikat: \'$name\'';
+  }
+
+  @override
+  String cfErrNameTaken(String name) {
+    return 'Fungsi bernama \'$name\' sudah ada';
+  }
+
+  @override
+  String get cfErrEmptyBody => 'Ekspresi setelah tanda = belum diisi';
+
+  @override
+  String get cfErrBodyInvalid => 'Ekspresi fungsi tidak sah';
+
+  @override
+  String cfErrUnknownName(String name) {
+    return 'Nama tidak dikenal dalam definisi: \'$name\'';
+  }
+
+  @override
+  String errCustomFnArgs(String n) {
+    return 'Jumlah argumen salah untuk $n';
+  }
+
+  @override
+  String get errCustomFnRecursion =>
+      'Fungsi kustom saling memanggil tanpa akhir (definisi melingkar)';
+
+  @override
+  String cfErrInUse(String name, String others) {
+    return 'Tidak dapat menghapus: \'$name\' digunakan oleh $others';
+  }
+
+  @override
+  String cfErrBreaksOthers(String others) {
+    return 'Perubahan ini akan merusak fungsi lain: $others';
   }
 }

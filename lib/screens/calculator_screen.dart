@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../l10n/app_localizations.dart';
 import '../widgets/calculator_display.dart';
@@ -24,11 +25,110 @@ class CalculatorScreen extends StatefulWidget {
 class _CalculatorScreenState extends State<CalculatorScreen> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
+  final FocusNode _keyFocus = FocusNode(debugLabel: 'calculatorKeys');
 
   @override
   void dispose() {
+    _keyFocus.dispose();
     _pageController.dispose();
     super.dispose();
+  }
+
+  /// Physical keyboard (Windows/web, or a hardware keyboard on Android) on the
+  /// keypad and analysis tabs. The expressions tab has its own TextField, so
+  /// keys are left alone there.
+  KeyEventResult _handleKey(FocusNode node, KeyEvent event) {
+    if (_currentPage == 2) return KeyEventResult.ignored;
+    if (event is! KeyDownEvent && event is! KeyRepeatEvent) {
+      return KeyEventResult.ignored;
+    }
+    final calculator = context.read<CalculatorService>();
+    final key = event.logicalKey;
+    // While a long operation runs, typed keys went into the display and the
+    // result then overwrote them. Only Escape (cancel) gets through.
+    if (calculator.isCalculatingOperation) {
+      if (key == LogicalKeyboardKey.escape) {
+        calculator.cancelCurrentOperation();
+      }
+      return KeyEventResult.handled;
+    }
+    final keyboard = HardwareKeyboard.instance;
+    final ctrl = keyboard.isControlPressed || keyboard.isMetaPressed;
+
+    if (ctrl) {
+      if (key == LogicalKeyboardKey.keyC) {
+        copyDisplayToClipboard(context, calculator.display);
+        return KeyEventResult.handled;
+      }
+      if (key == LogicalKeyboardKey.keyV) {
+        pasteIntoCalculator(context, calculator);
+        return KeyEventResult.handled;
+      }
+      return KeyEventResult.ignored;
+    }
+    if (keyboard.isAltPressed) return KeyEventResult.ignored;
+
+    if (key == LogicalKeyboardKey.enter ||
+        key == LogicalKeyboardKey.numpadEnter ||
+        key == LogicalKeyboardKey.numpadEqual) {
+      calculator.calculate();
+      return KeyEventResult.handled;
+    }
+    if (key == LogicalKeyboardKey.backspace) {
+      calculator.backspace();
+      return KeyEventResult.handled;
+    }
+    if (key == LogicalKeyboardKey.escape) {
+      calculator.clear();
+      return KeyEventResult.handled;
+    }
+    if (key == LogicalKeyboardKey.delete) {
+      calculator.clearEntry();
+      return KeyEventResult.handled;
+    }
+
+    // Numpad keys by identity: their character isn't reliable across
+    // platforms and keyboard layouts.
+    final String? numpadChar = {
+      LogicalKeyboardKey.numpad0: '0', LogicalKeyboardKey.numpad1: '1',
+      LogicalKeyboardKey.numpad2: '2', LogicalKeyboardKey.numpad3: '3',
+      LogicalKeyboardKey.numpad4: '4', LogicalKeyboardKey.numpad5: '5',
+      LogicalKeyboardKey.numpad6: '6', LogicalKeyboardKey.numpad7: '7',
+      LogicalKeyboardKey.numpad8: '8', LogicalKeyboardKey.numpad9: '9',
+      LogicalKeyboardKey.numpadDecimal: '.',
+      LogicalKeyboardKey.numpadAdd: '+',
+      LogicalKeyboardKey.numpadSubtract: '-',
+      LogicalKeyboardKey.numpadMultiply: '*',
+      LogicalKeyboardKey.numpadDivide: '/',
+    }[key];
+
+    // Everything else by the character it types, which already follows the
+    // keyboard layout (Shift+7 is '/' on a Spanish keyboard, not '&').
+    final ch = numpadChar ?? event.character;
+    if (ch == null || ch.length != 1) return KeyEventResult.ignored;
+    if ('0123456789'.contains(ch)) {
+      calculator.addDigit(ch);
+    } else if (ch == '.' || ch == ',') {
+      // Numpad decimal types ',' on pt-BR/es keyboards.
+      calculator.addDigit('.');
+    } else if (ch == '+' || ch == '-' || ch == '^') {
+      calculator.addOperator(ch);
+    } else if (ch == '*' || ch == 'x' || ch == 'X' || ch == '×') {
+      calculator.addOperator('×');
+    } else if (ch == '/' || ch == '÷') {
+      calculator.addOperator('÷');
+    } else if (ch == '(') {
+      calculator.addOpenParenthesis();
+    } else if (ch == ')') {
+      calculator.addCloseParenthesis();
+    } else if (ch == '=') {
+      calculator.calculate();
+    } else if (ch == '%') {
+      calculator.percentage();
+    } else {
+      return KeyEventResult.ignored;
+    }
+    return KeyEventResult.handled;
   }
 
   @override
@@ -40,7 +140,18 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
     appLanguage = Localizations.localeOf(context).languageCode;
     return Consumer<CalculatorService>(
       builder: (context, calculator, child) {
-        return Scaffold(
+        // System back on the Analysis/Expressions tab returns to the keypad
+        // instead of closing the app.
+        return PopScope(
+          canPop: _currentPage == 0,
+          onPopInvokedWithResult: (didPop, _) {
+            if (!didPop) _pageController.jumpToPage(0);
+          },
+          child: Focus(
+          focusNode: _keyFocus,
+          autofocus: true,
+          onKeyEvent: _handleKey,
+          child: Scaffold(
           backgroundColor: Theme.of(context).colorScheme.surface,
           drawer: const CalculatorDrawer(),
           appBar: AppBar(
@@ -85,6 +196,11 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
               // Android 15's edge-to-edge view.
               SafeArea(
                 top: false,
+                // On a wide desktop window the keypad would stretch into
+                // 300-px-wide, 35-px-tall buttons; keep a phone-like column.
+                child: Center(
+                child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 560),
                 child: Column(
                   children: [
                   // Show ExpressionInput only on the expressions tab.
@@ -92,8 +208,15 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                   // a short screen the soft keyboard shrinks the body below
                   // what this block plus the tab row need, and with an error
                   // banner showing the column overflowed.
+                  //
+                  // Weighted 3 against the history's 2: at weight 1 against 3
+                  // it got a quarter of the height, so on a 1080×1920 phone
+                  // the field was cut and the function keys (sin, π, ℯ, the
+                  // user's functions) hid in a 250-px scroll box above an
+                  // empty history.
                   if (_currentPage == 2)
                     const Flexible(
+                      flex: 3,
                       child: SingleChildScrollView(child: ExpressionInput()),
                     ),
 
@@ -138,7 +261,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
 
                   // Page content
                   Expanded(
-                    flex: _currentPage == 2 ? 3 : 4,
+                    flex: _currentPage == 2 ? 2 : 4,
                     child: PageView(
                       controller: _pageController,
                       // Swipe disabled: when typing numbers quickly, the
@@ -150,6 +273,9 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                         setState(() {
                           _currentPage = index;
                         });
+                        // Leaving the expressions tab disposes its TextField;
+                        // take focus back so the physical keyboard keeps working.
+                        if (index != 2) _keyFocus.requestFocus();
                       },
                       children: [
                         // Calculator page
@@ -210,12 +336,16 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                   ),
                   ],
                 ),
+                ),
+                ),
               ),
 
               // Overlay for heavy operations
               if (calculator.isCalculatingOperation)
                 _buildOperationLoadingOverlay(context, calculator, l),
             ],
+          ),
+        ),
           ),
         );
       },
@@ -286,6 +416,8 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
               const SizedBox(height: 4),
               Text(
                 label,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                   fontSize: 12,
                   fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,

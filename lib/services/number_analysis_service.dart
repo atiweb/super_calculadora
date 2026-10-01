@@ -94,22 +94,11 @@ class NumberAnalysisService {
     BigInt integerPart = number.abs();
     if (integerPart <= BigInt.two) return BigInt.two;
     
-    // For large numbers, search more efficiently
+    // For large numbers, search in an isolate like nextPrimeAsync. This
+    // method had no await, so the whole search ran on the UI thread: 3.7 s
+    // frozen for a pasted 600-digit number.
     if (integerPart > BigInt.from(1000000)) {
-      BigInt candidate = integerPart - BigInt.one;
-      if (candidate % BigInt.two == BigInt.zero) {
-        candidate -= BigInt.one;
-      }
-      
-      // Search in larger steps for very large numbers
-      while (candidate > BigInt.two) {
-        if (isProbablyPrime(candidate)) {
-          return candidate;
-        }
-        candidate -= BigInt.two;
-      }
-      
-      return BigInt.two;
+      return BigInt.parse(await findPreviousPrime(integerPart));
     }
     
     // For small numbers, use the direct method
@@ -144,65 +133,14 @@ class NumberAnalysisService {
   /// own "prime factor" while isPrime said it was composite.
   static List<BigInt> primeFactorization(BigInt number) {
     if (number < BigInt.two) return [];
-
-    List<BigInt> factors = [];
-    BigInt n = number;
-
-    // Divide by 2
-    while (n % BigInt.two == BigInt.zero) {
-      factors.add(BigInt.two);
-      n ~/= BigInt.two;
-    }
-
-    // Trial division by small odd numbers (cheap and removes most factors)
-    BigInt divisor = BigInt.from(3);
-    final BigInt trialLimit = BigInt.from(100000);
-    while (divisor <= trialLimit && divisor * divisor <= n) {
-      while (n % divisor == BigInt.zero) {
-        factors.add(divisor);
-        n ~/= divisor;
-      }
-      divisor += BigInt.two;
-    }
-
-    // Remainder: prime → add; composite → factor with Pollard-rho
-    if (n > BigInt.one) {
-      _factorCompletely(n, factors);
-    }
-
-    factors.sort((a, b) => a.compareTo(b));
+    // One factorizer for the whole app (prime_utils): this copy lacked its
+    // perfect-power shortcut and Brent's batched gcd, so the square of a
+    // 16-digit prime took over 15 s here and milliseconds there.
+    final List<BigInt> factors = [
+      for (final e in factorize(number).entries)
+        for (int i = 0; i < e.value; i++) e.key,
+    ]..sort();
     return factors;
-  }
-
-  /// Factors [n] (odd, with no factors ≤ 10⁵) recursively into [factors].
-  static void _factorCompletely(BigInt n, List<BigInt> factors) {
-    if (n == BigInt.one) return;
-    if (isPrime(n)) {
-      factors.add(n);
-      return;
-    }
-    final BigInt d = _pollardRho(n);
-    _factorCompletely(d, factors);
-    _factorCompletely(n ~/ d, factors);
-  }
-
-  /// Finds a non-trivial divisor of an odd composite via
-  /// Pollard-rho (Floyd), retrying with another constant if it degenerates.
-  static BigInt _pollardRho(BigInt n) {
-    BigInt c = BigInt.one;
-    while (true) {
-      BigInt x = BigInt.two;
-      BigInt y = BigInt.two;
-      BigInt d = BigInt.one;
-      while (d == BigInt.one) {
-        x = (x * x + c) % n;
-        y = (y * y + c) % n;
-        y = (y * y + c) % n;
-        d = gcd((x - y).abs(), n);
-      }
-      if (d != n) return d;
-      c += BigInt.one;
-    }
   }
 
   /// Checks whether it is a perfect power
@@ -214,11 +152,22 @@ class NumberAnalysisService {
     for (int exponent = 2; exponent <= number.bitLength; exponent++) {
       BigInt root = _nthRoot(number, exponent);
       if (root.pow(exponent) == number) {
+        // The smallest exponent may leave a base that is itself a power:
+        // 64 came out as 8², 2^60 as 1073741824². Fold it to the minimal
+        // base (2⁶, 2⁶⁰).
+        BigInt base = root;
+        int exp = exponent;
+        while (true) {
+          final Map<String, dynamic> inner = isPerfectPower(base);
+          if (inner['isPower'] != true) break;
+          base = inner['base'] as BigInt;
+          exp *= inner['exponent'] as int;
+        }
         return {
           'isPower': true,
-          'base': root,
-          'exponent': exponent,
-          'expression': '$root${_intToSuperscript(exponent)}'
+          'base': base,
+          'exponent': exp,
+          'expression': '$base${_intToSuperscript(exp)}'
         };
       }
     }
@@ -427,7 +376,11 @@ class NumberAnalysisService {
         if (digits <= 15) {
           // Complete analysis for small numbers
           analysis['nextPrime'] = nextPrime(number).toString();
-          analysis['previousPrime'] = previousPrime(number).toString();
+          // No prime lies below 2: the panel said "previous prime: 2" for
+          // 0, 1 and 2.
+          if (number.abs() > BigInt.two) {
+            analysis['previousPrime'] = previousPrime(number).toString();
+          }
           analysis['primeFactors'] = primeFactorization(number).map((f) => f.toString()).toList();
           // Bound the displayed list: a highly composite number can
           // have tens of thousands of divisors.
@@ -449,9 +402,9 @@ class NumberAnalysisService {
             analysis['previousPrime'] = previousPrime(number).toString();
             analysis['primeFactors'] = [number.toString()];
           } else {
-            analysis['nextPrime'] = trLocale('No es primo', 'Not prime', pt: 'Não é primo', fr: "N'est pas premier", id: 'Bukan bilangan prima', vi: 'Không phải số nguyên tố', ru: 'Не простое', it: 'Non è primo');
-            analysis['previousPrime'] = trLocale('No es primo', 'Not prime', pt: 'Não é primo', fr: "N'est pas premier", id: 'Bukan bilangan prima', vi: 'Không phải số nguyên tố', ru: 'Не простое', it: 'Non è primo');
-            
+            // No neighbouring primes here (the async search fills them in).
+            // This used to store a localized "Not prime" as the value, which
+            // the panel only recognised in Spanish and English.
             try {
               List<BigInt> factors = primeFactorization(number);
               if (factors.length <= 20) {

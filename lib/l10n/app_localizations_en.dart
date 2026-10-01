@@ -2254,6 +2254,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get errResultTooLarge => 'The result is too large to compute exactly';
 
   @override
+  String get errFactorizationTooHard =>
+      'The number has prime factors too large to factor in a reasonable time';
+
+  @override
   String get errAnalysisInvalid => 'Error: Invalid number for analysis';
 
   @override
@@ -2271,5 +2275,107 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String errUnknownOp(String op) {
     return 'Unknown operation: $op';
+  }
+
+  @override
+  String get navFunctions => 'My functions';
+
+  @override
+  String get navFunctionsSub => 'Create and edit custom functions';
+
+  @override
+  String get cfTitle => 'Custom functions';
+
+  @override
+  String get cfEmpty => 'You haven\'t created any functions yet';
+
+  @override
+  String get cfEmptyHint =>
+      'Tap \"Add function\" and define your first one, for example: f(x) = x^2 + 1';
+
+  @override
+  String get cfAdd => 'Add function';
+
+  @override
+  String get cfEditorTitleNew => 'New function';
+
+  @override
+  String get cfEditorTitleEdit => 'Edit function';
+
+  @override
+  String get cfEditorHint => 'f(x) = x^2 + 1';
+
+  @override
+  String get cfEditorHelp =>
+      'Write name(parameters) = expression. You can use sin, cos, sqrt, ln… and your other functions too.';
+
+  @override
+  String get cfSave => 'Save';
+
+  @override
+  String get cfCancel => 'Cancel';
+
+  @override
+  String get cfDelete => 'Delete';
+
+  @override
+  String get cfDeleteTitle => 'Delete function';
+
+  @override
+  String cfDeleteMessage(String name) {
+    return 'Are you sure you want to delete $name?';
+  }
+
+  @override
+  String get cfErrBadSignature => 'Invalid format. Use: name(x) = expression';
+
+  @override
+  String cfErrReservedName(String name) {
+    return '\'$name\' is a reserved calculator name';
+  }
+
+  @override
+  String cfErrBadParam(String name) {
+    return 'Invalid parameter: \'$name\'';
+  }
+
+  @override
+  String cfErrDupParam(String name) {
+    return 'Duplicate parameter: \'$name\'';
+  }
+
+  @override
+  String cfErrNameTaken(String name) {
+    return 'A function named \'$name\' already exists';
+  }
+
+  @override
+  String get cfErrEmptyBody => 'The expression after = is missing';
+
+  @override
+  String get cfErrBodyInvalid => 'The function\'s expression is not valid';
+
+  @override
+  String cfErrUnknownName(String name) {
+    return 'Unknown name in the definition: \'$name\'';
+  }
+
+  @override
+  String errCustomFnArgs(String n) {
+    return 'Wrong number of arguments for $n';
+  }
+
+  @override
+  String get errCustomFnRecursion =>
+      'Custom functions call each other without end (circular definition)';
+
+  @override
+  String cfErrInUse(String name, String others) {
+    return 'Cannot delete: \'$name\' is used by $others';
+  }
+
+  @override
+  String cfErrBreaksOthers(String others) {
+    return 'This change would break other functions: $others';
   }
 }

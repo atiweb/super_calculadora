@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'l10n/app_localizations.dart';
 import 'screens/calculator_screen.dart';
+import 'screens/custom_functions_screen.dart';
 import 'screens/settings_screen.dart';
 import 'screens/history_screen.dart';
 import 'screens/special_functions_help_screen.dart';
@@ -119,6 +120,7 @@ class SuperCalculadoraApp extends StatelessWidget {
             routes: {
               '/settings': (context) => const SettingsScreen(),
               '/history': (context) => const HistoryScreen(),
+              '/custom-functions': (context) => const CustomFunctionsScreen(),
               '/special-help': (context) => const SpecialFunctionsHelpScreen(),
               '/olympiad': (context) => const OlympiadToolsScreen(),
             },

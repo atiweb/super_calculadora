@@ -2271,6 +2271,10 @@ class AppLocalizationsRu extends AppLocalizations {
       'Результат слишком велик, чтобы вычислить его точно';
 
   @override
+  String get errFactorizationTooHard =>
+      'У числа слишком большие простые множители: разложить его за разумное время нельзя';
+
+  @override
   String get errAnalysisInvalid => 'Ошибка: недопустимое число для анализа';
 
   @override
@@ -2288,5 +2292,108 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String errUnknownOp(String op) {
     return 'Неизвестная операция: $op';
+  }
+
+  @override
+  String get navFunctions => 'Мои функции';
+
+  @override
+  String get navFunctionsSub => 'Создание и изменение своих функций';
+
+  @override
+  String get cfTitle => 'Пользовательские функции';
+
+  @override
+  String get cfEmpty => 'Вы ещё не создали ни одной функции';
+
+  @override
+  String get cfEmptyHint =>
+      'Нажмите «Добавить функцию» и задайте первую, например: f(x) = x^2 + 1';
+
+  @override
+  String get cfAdd => 'Добавить функцию';
+
+  @override
+  String get cfEditorTitleNew => 'Новая функция';
+
+  @override
+  String get cfEditorTitleEdit => 'Изменить функцию';
+
+  @override
+  String get cfEditorHint => 'f(x) = x^2 + 1';
+
+  @override
+  String get cfEditorHelp =>
+      'Запишите имя(параметры) = выражение. Можно использовать sin, cos, sqrt, ln… а также другие ваши функции.';
+
+  @override
+  String get cfSave => 'Сохранить';
+
+  @override
+  String get cfCancel => 'Отмена';
+
+  @override
+  String get cfDelete => 'Удалить';
+
+  @override
+  String get cfDeleteTitle => 'Удалить функцию';
+
+  @override
+  String cfDeleteMessage(String name) {
+    return 'Точно удалить $name?';
+  }
+
+  @override
+  String get cfErrBadSignature =>
+      'Неверный формат. Используйте: имя(x) = выражение';
+
+  @override
+  String cfErrReservedName(String name) {
+    return '«$name» — зарезервированное имя калькулятора';
+  }
+
+  @override
+  String cfErrBadParam(String name) {
+    return 'Недопустимый параметр: «$name»';
+  }
+
+  @override
+  String cfErrDupParam(String name) {
+    return 'Повторяющийся параметр: «$name»';
+  }
+
+  @override
+  String cfErrNameTaken(String name) {
+    return 'Функция с именем «$name» уже существует';
+  }
+
+  @override
+  String get cfErrEmptyBody => 'Не хватает выражения после знака =';
+
+  @override
+  String get cfErrBodyInvalid => 'Выражение функции некорректно';
+
+  @override
+  String cfErrUnknownName(String name) {
+    return 'Неизвестное имя в определении: «$name»';
+  }
+
+  @override
+  String errCustomFnArgs(String n) {
+    return 'Неверное число аргументов для $n';
+  }
+
+  @override
+  String get errCustomFnRecursion =>
+      'Пользовательские функции бесконечно вызывают друг друга (циклическое определение)';
+
+  @override
+  String cfErrInUse(String name, String others) {
+    return 'Нельзя удалить: «$name» используется в $others';
+  }
+
+  @override
+  String cfErrBreaksOthers(String others) {
+    return 'Это изменение сломает другие функции: $others';
   }
 }

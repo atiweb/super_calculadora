@@ -2246,6 +2246,10 @@ class AppLocalizationsVi extends AppLocalizations {
   String get errResultTooLarge => 'Kết quả quá lớn để tính chính xác';
 
   @override
+  String get errFactorizationTooHard =>
+      'Số này có thừa số nguyên tố quá lớn, không thể phân tích trong thời gian hợp lý';
+
+  @override
   String get errAnalysisInvalid => 'Lỗi: số không hợp lệ để phân tích';
 
   @override
@@ -2263,5 +2267,108 @@ class AppLocalizationsVi extends AppLocalizations {
   @override
   String errUnknownOp(String op) {
     return 'Phép tính không xác định: $op';
+  }
+
+  @override
+  String get navFunctions => 'Hàm của tôi';
+
+  @override
+  String get navFunctionsSub => 'Tạo và chỉnh sửa hàm tùy chỉnh';
+
+  @override
+  String get cfTitle => 'Hàm tùy chỉnh';
+
+  @override
+  String get cfEmpty => 'Bạn chưa tạo hàm nào';
+
+  @override
+  String get cfEmptyHint =>
+      'Nhấn \"Thêm hàm\" và định nghĩa hàm đầu tiên, ví dụ: f(x) = x^2 + 1';
+
+  @override
+  String get cfAdd => 'Thêm hàm';
+
+  @override
+  String get cfEditorTitleNew => 'Hàm mới';
+
+  @override
+  String get cfEditorTitleEdit => 'Sửa hàm';
+
+  @override
+  String get cfEditorHint => 'f(x) = x^2 + 1';
+
+  @override
+  String get cfEditorHelp =>
+      'Viết tên(tham số) = biểu thức. Bạn có thể dùng sin, cos, sqrt, ln… và cả các hàm khác của bạn.';
+
+  @override
+  String get cfSave => 'Lưu';
+
+  @override
+  String get cfCancel => 'Hủy';
+
+  @override
+  String get cfDelete => 'Xóa';
+
+  @override
+  String get cfDeleteTitle => 'Xóa hàm';
+
+  @override
+  String cfDeleteMessage(String name) {
+    return 'Bạn có chắc muốn xóa $name?';
+  }
+
+  @override
+  String get cfErrBadSignature =>
+      'Định dạng không hợp lệ. Hãy dùng: tên(x) = biểu thức';
+
+  @override
+  String cfErrReservedName(String name) {
+    return '\'$name\' là tên dành riêng của máy tính';
+  }
+
+  @override
+  String cfErrBadParam(String name) {
+    return 'Tham số không hợp lệ: \'$name\'';
+  }
+
+  @override
+  String cfErrDupParam(String name) {
+    return 'Tham số bị lặp: \'$name\'';
+  }
+
+  @override
+  String cfErrNameTaken(String name) {
+    return 'Đã có hàm tên \'$name\'';
+  }
+
+  @override
+  String get cfErrEmptyBody => 'Thiếu biểu thức sau dấu =';
+
+  @override
+  String get cfErrBodyInvalid => 'Biểu thức của hàm không hợp lệ';
+
+  @override
+  String cfErrUnknownName(String name) {
+    return 'Tên không xác định trong định nghĩa: \'$name\'';
+  }
+
+  @override
+  String errCustomFnArgs(String n) {
+    return 'Số đối số không đúng cho $n';
+  }
+
+  @override
+  String get errCustomFnRecursion =>
+      'Các hàm tùy chỉnh gọi nhau vô hạn (định nghĩa vòng)';
+
+  @override
+  String cfErrInUse(String name, String others) {
+    return 'Không thể xóa: \'$name\' đang được dùng bởi $others';
+  }
+
+  @override
+  String cfErrBreaksOthers(String others) {
+    return 'Thay đổi này sẽ làm hỏng các hàm khác: $others';
   }
 }

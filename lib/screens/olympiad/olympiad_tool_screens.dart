@@ -43,8 +43,26 @@ int _int(String s) {
   return v;
 }
 
+/// A real number field: a decimal, a fraction "p/q", or a multiple of π
+/// ("pi", "-pi/2", "2π"). Several tools used double.parse directly, so "1/2"
+/// or "pi" showed "Invalid double" in English, and "NaN" was accepted.
 double _dbl(String s) {
-  final v = double.tryParse(s.trim());
+  final String t = s.trim().replaceAll(' ', '');
+  double? v = double.tryParse(t);
+  if (v == null) {
+    final Match? m =
+        RegExp(r'^([+-]?)(\d*\.?\d*)(pi|π)?(?:/(\d+\.?\d*))?$').firstMatch(t);
+    if (m != null && (m.group(2)!.isNotEmpty || m.group(3) != null)) {
+      final double coeff =
+          m.group(2)!.isEmpty ? 1 : (double.tryParse(m.group(2)!) ?? double.nan);
+      final double divisor =
+          m.group(4) == null ? 1 : double.parse(m.group(4)!);
+      v = (m.group(1) == '-' ? -1 : 1) *
+          coeff *
+          (m.group(3) != null ? math.pi : 1) /
+          divisor;
+    }
+  }
   if (v == null || !v.isFinite) {
     throw CalcException(CalcError.invalidNumber, {'value': s});
   }
@@ -139,10 +157,19 @@ List<double> _realRootsApprox(Polynomial p) {
 /// Enumerates the lattice points of an integer-vertex polygon, so they can
 /// be drawn: (boundary, interior). If the sweep area is too large,
 /// it returns empty lists (the drawing omits the points).
-({List<Offset> boundary, List<Offset> interior}) _latticePoints(
+@visibleForTesting
+({List<Offset> boundary, List<Offset> interior}) latticePointsOf(
     List<Point> poly) {
   final xs = poly.map((p) => p.x.toDouble()).toList();
   final ys = poly.map((p) => p.y.toDouble()).toList();
+  // Size the sweep in doubles first. As int the product overflowed: for
+  // vertices at 4·10⁹ it wrapped negative, passed the 2500 cap and the
+  // sweep over ~10¹⁹ points froze the app on every rebuild.
+  final double spanX = xs.reduce(math.max) - xs.reduce(math.min) + 1;
+  final double spanY = ys.reduce(math.max) - ys.reduce(math.min) + 1;
+  if (!(spanX * spanY <= 2500)) {
+    return (boundary: const [], interior: const []);
+  }
   final int minX = xs.reduce(math.min).ceil();
   final int maxX = xs.reduce(math.max).floor();
   final int minY = ys.reduce(math.min).ceil();
@@ -597,7 +624,7 @@ class GeometryToolScreen extends StatelessWidget {
             final pts = _pointList(i[0]);
             if (pts.length < 3) return null;
             if (pts.any((p) => !p.x.isInteger || !p.y.isInteger)) return null;
-            final lattice = _latticePoints(pts);
+            final lattice = latticePointsOf(pts);
             final scheme = Theme.of(ctx).colorScheme;
             return CustomPaint(
               painter: PolygonPainter(
@@ -827,8 +854,8 @@ class PolynomialsToolScreen extends StatelessWidget {
           ],
           compute: (i) {
             final roots = PolynomialService.solveCubicReal(
-                double.parse(i[0]), double.parse(i[1]),
-                double.parse(i[2]), double.parse(i[3]));
+                _dbl(i[0]), _dbl(i[1]),
+                _dbl(i[2]), _dbl(i[3]));
             return '${s.pick('Raíces reales', 'Real roots', pt: 'Raízes reais', fr: 'Racines réelles', id: 'Akar real', vi: 'Nghiệm thực', ru: 'Вещественные корни', it: 'Radici reali')} ≈\n'
                 '${roots.map((r) => r.toStringAsFixed(6)).join('\n')}';
           },
@@ -1362,7 +1389,7 @@ class ComplexSequencesToolScreen extends StatelessWidget {
           visualize: (ctx, i) {
             final n = _int(i[2]);
             if (n < 1 || n > 60) return null;
-            final z = Complex(double.parse(i[0]), double.parse(i[1]));
+            final z = Complex(_dbl(i[0]), _dbl(i[1]));
             if (z.modulus == 0) return null;
             final scheme = Theme.of(ctx).colorScheme;
             return CustomPaint(
@@ -1678,7 +1705,7 @@ class CalculusToolScreen extends StatelessWidget {
             ToolField('x₀', initial: '1'),
           ],
           compute: (i) {
-            final d = CalculusService.derivative(i[0], double.parse(i[1]));
+            final d = CalculusService.derivative(i[0], _dbl(i[1]));
             if (!CalculusService.isUsable(d)) {
               throw CalcException(CalcError.invalidOperation);
             }
@@ -1695,7 +1722,7 @@ class CalculusToolScreen extends StatelessWidget {
           ],
           compute: (i) {
             final v = CalculusService.integral(
-                i[0], double.parse(i[1]), double.parse(i[2]));
+                i[0], _dbl(i[1]), _dbl(i[2]));
             if (!CalculusService.isUsable(v)) {
               throw CalcException(CalcError.invalidOperation);
             }
@@ -1711,7 +1738,7 @@ class CalculusToolScreen extends StatelessWidget {
             ToolField('x₀', initial: '0'),
           ],
           compute: (i) {
-            final l = CalculusService.limit(i[0], double.parse(i[1]));
+            final l = CalculusService.limit(i[0], _dbl(i[1]));
             if (l == null) {
               return s.pick(
                   'No existe (límites laterales distintos o no finitos)',

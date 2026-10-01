@@ -104,8 +104,10 @@ class _CalculatorDisplayState extends State<CalculatorDisplay> {
               // Main display (small fixed height to avoid overflows in tests)
               const SizedBox(height: 4),
               GestureDetector(
-                onTap: () => _copyToClipboard(context, calculator.display),
+                onTap: () => copyDisplayToClipboard(context, calculator.display),
                 onLongPress: () => _showContextMenu(context, calculator),
+                // Mouse users (Windows/web) get the same menu on right-click.
+                onSecondaryTap: () => _showContextMenu(context, calculator),
                 child: _buildDisplayContent(context, calculator),
               ),
             ],
@@ -162,7 +164,7 @@ class _CalculatorDisplayState extends State<CalculatorDisplay> {
             mainAxisSize: MainAxisSize.min,
             children: [
               IconButton(
-                onPressed: () => _pasteFromClipboard(context, calculator),
+                onPressed: () => pasteIntoCalculator(context, calculator),
                 icon: Icon(
                   Icons.paste,
                   size: 14,
@@ -173,7 +175,7 @@ class _CalculatorDisplayState extends State<CalculatorDisplay> {
                 constraints: const BoxConstraints.tightFor(width: 28, height: 24),
               ),
               IconButton(
-                onPressed: () => _copyToClipboard(context, calculator.display),
+                onPressed: () => copyDisplayToClipboard(context, calculator.display),
                 icon: Icon(
                   Icons.copy,
                   size: 14,
@@ -198,7 +200,12 @@ class _CalculatorDisplayState extends State<CalculatorDisplay> {
         ? localizeError(context, calculator.errorMessage, calculator.errorArgs)
         : _cleanDecimalDisplay(calculator.display);
 
-    if (useScientificNotation && !calculator.hasError) {
+    // Only a whole number can be rewritten in scientific notation. An
+    // expression came out as "1.23 + 456e+18" for 123+456+789+1, and "0."
+    // being typed as 0.000000e+0, hiding the point just pressed.
+    if (useScientificNotation &&
+        !calculator.hasError &&
+        RegExp(r'^-?\d+(\.\d+)?$').hasMatch(calculator.display)) {
       displayText = _formatScientificNotation(calculator.display);
     }
 
@@ -388,18 +395,6 @@ class _CalculatorDisplayState extends State<CalculatorDisplay> {
     }
   }
 
-  void _copyToClipboard(BuildContext context, String text) {
-    final l = AppLocalizations.of(context)!;
-    Clipboard.setData(ClipboardData(text: text));
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(l.displayCopied(text.length > 20 ? '${text.substring(0, 20)}...' : text)),
-        duration: const Duration(seconds: 2),
-        behavior: SnackBarBehavior.floating,
-      ),
-    );
-  }
-
   void _showContextMenu(BuildContext context, CalculatorService calculator) {
     final l = AppLocalizations.of(context)!;
     showModalBottomSheet(
@@ -419,7 +414,7 @@ class _CalculatorDisplayState extends State<CalculatorDisplay> {
                 title: Text(l.displayCopyResult),
                 onTap: () {
                   Navigator.pop(sheetContext);
-                  _copyToClipboard(context, calculator.display);
+                  copyDisplayToClipboard(context, calculator.display);
                 },
               ),
               ListTile(
@@ -427,7 +422,7 @@ class _CalculatorDisplayState extends State<CalculatorDisplay> {
                 title: Text(l.displayPasteNumber),
                 onTap: () {
                   Navigator.pop(sheetContext);
-                  _pasteFromClipboard(context, calculator);
+                  pasteIntoCalculator(context, calculator);
                 },
               ),
               ListTile(
@@ -444,61 +439,69 @@ class _CalculatorDisplayState extends State<CalculatorDisplay> {
       },
     );
   }
+}
 
-  void _pasteFromClipboard(BuildContext context, CalculatorService calculator) async {
-    final l = AppLocalizations.of(context)!;
-    try {
-      final data = await Clipboard.getData('text/plain');
-  if (!context.mounted) return;
-      if (data != null && data.text != null) {
-        final clipboardText = data.text!.trim();
-        if (_isValidNumber(clipboardText)) {
-          calculator.setDisplay(clipboardText);
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(l.displayPasted(clipboardText.length > 20 ? '${clipboardText.substring(0, 20)}...' : clipboardText)),
-              duration: const Duration(seconds: 2),
-              behavior: SnackBarBehavior.floating,
-            ),
-          );
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(l.displayInvalidNumber),
-              duration: const Duration(seconds: 3),
-              behavior: SnackBarBehavior.floating,
-            ),
-          );
-        }
-      } else {
+/// Copies [text] to the clipboard and confirms with a snackbar. Top-level so
+/// the screen's Ctrl+C shortcut shares it with the display's tap and menu.
+void copyDisplayToClipboard(BuildContext context, String text) {
+  final l = AppLocalizations.of(context)!;
+  Clipboard.setData(ClipboardData(text: text));
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text(l.displayCopied(text.length > 20 ? '${text.substring(0, 20)}...' : text)),
+      duration: const Duration(seconds: 2),
+      behavior: SnackBarBehavior.floating,
+    ),
+  );
+}
+
+/// Pastes a number from the clipboard into the calculator (display menu and
+/// the Ctrl+V shortcut).
+Future<void> pasteIntoCalculator(BuildContext context, CalculatorService calculator) async {
+  final l = AppLocalizations.of(context)!;
+  try {
+    final data = await Clipboard.getData('text/plain');
+    if (!context.mounted) return;
+    if (data != null && data.text != null) {
+      final clipboardText = data.text!.trim();
+      final String? number =
+          CalculatorService.normalizePastedNumber(clipboardText);
+      if (number != null) {
+        calculator.pasteNumber(number);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(l.displayNothingToPaste),
+            content: Text(l.displayPasted(clipboardText.length > 20 ? '${clipboardText.substring(0, 20)}...' : clipboardText)),
             duration: const Duration(seconds: 2),
             behavior: SnackBarBehavior.floating,
           ),
         );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(l.displayInvalidNumber),
+            duration: const Duration(seconds: 3),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
       }
-    } catch (e) {
-  if (!context.mounted) return;
-      final l2 = AppLocalizations.of(context)!;
+    } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(l2.displayPasteError(e.toString())),
-          duration: const Duration(seconds: 3),
+          content: Text(l.displayNothingToPaste),
+          duration: const Duration(seconds: 2),
           behavior: SnackBarBehavior.floating,
         ),
       );
     }
-  }
-
-  bool _isValidNumber(String text) {
-    if (text.isEmpty) return false;
-    text = text.replaceAll(' ', '');
-    if (text.startsWith('0b')) {
-      final binaryPart = text.substring(2);
-      return RegExp(r'^[01]+$').hasMatch(binaryPart);
-    }
-    return RegExp(r'^-?(\d+\.?\d*|\.\d+)([eE][+-]?\d+)?$').hasMatch(text);
+  } catch (e) {
+    if (!context.mounted) return;
+    final l2 = AppLocalizations.of(context)!;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(l2.displayPasteError(e.toString())),
+        duration: const Duration(seconds: 3),
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
   }
 }

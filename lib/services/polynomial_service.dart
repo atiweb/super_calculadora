@@ -2,6 +2,7 @@ import 'dart:math' as math;
 import '../models/calc_exception.dart';
 import '../models/fraction.dart';
 import '../models/polynomial.dart';
+import 'prime_utils.dart';
 
 /// Vieta's relations for a polynomial.
 class VietaRelations {
@@ -41,6 +42,12 @@ class QuadraticSolution {
 class PolynomialService {
   /// Parses expressions like "x^2-5x+6", "2x^3 - x + 1", "3/2 x - 1".
   static Polynomial parse(String input) {
+    // Spaces and '*' are dropped below, so two numbers they separate would
+    // fuse: "2*3x" read as 23x and "x^2*3" as x^23, with no error.
+    final Match? fused = RegExp(r'[\d.][\s*]+[\d.]').firstMatch(input);
+    if (fused != null) {
+      throw CalcException(CalcError.invalidTerm, {'value': fused.group(0)!});
+    }
     String s = input.replaceAll(' ', '').replaceAll('*', '');
     if (s.isEmpty) throw CalcException(CalcError.emptyExpression);
 
@@ -179,10 +186,21 @@ class PolynomialService {
 
     final List<BigInt> reduced = intCoeffs.sublist(lowZeros);
     if (reduced.length >= 2) {
-      final BigInt a0 = reduced.first.abs();
-      final BigInt an = reduced.last.abs();
-      for (final p0 in _divisors(a0)) {
-        for (final q0 in _divisors(an)) {
+      // Divide out the content first: 735134400x² − 735134400 paired the
+      // 1344 divisors of each end (1.8 M candidates, 7.5 s on every
+      // rebuild) when x² − 1 has four.
+      final BigInt content = reduced.fold(BigInt.zero, _gcd);
+      final BigInt a0 = (reduced.first ~/ content).abs();
+      final BigInt an = (reduced.last ~/ content).abs();
+      final Set<BigInt> ps = _divisors(a0);
+      final Set<BigInt> qs = _divisors(an);
+      if (ps.length * qs.length > _maxCandidatePairs) {
+        throw CalcException(CalcError.inputTooLarge, {'max': '10^30'});
+      }
+      for (final p0 in ps) {
+        for (final q0 in qs) {
+          // p/q in lowest terms only; the rest are duplicates.
+          if (_gcd(p0, q0) != BigInt.one) continue;
           candidates.add(Fraction(p0, q0));
           candidates.add(Fraction(-p0, q0));
         }
@@ -239,10 +257,20 @@ class PolynomialService {
     }
 
     if (!d.isNegative) {
+      // Cancellation-free form: q = −(b + sign(b)·√D)/2, roots q/a and c/q.
+      // (−b ± √D)/2a lost the small root of x² − 10⁸x + 1 (7.45e-9 for 1e-8).
       final double dd = math.sqrt(d.toDouble());
-      final double da = twoA.toDouble();
-      final double x1 = (-b.toDouble() + dd) / da;
-      final double x2 = (-b.toDouble() - dd) / da;
+      final double bd = b.toDouble();
+      final double q = -(bd + (bd < 0 ? -dd : dd)) / 2;
+      final double x1;
+      final double x2;
+      if (q == 0) {
+        x1 = 0;
+        x2 = 0;
+      } else {
+        x1 = q / a.toDouble();
+        x2 = c.toDouble() / q;
+      }
       if (d.isZero) {
         realRoots.add(x1);
       } else {
@@ -378,17 +406,26 @@ class PolynomialService {
         .toList();
   }
 
+  /// Divisors from the factorization (Pollard-rho): the old trial division
+  /// up to √n on the UI thread took 66 s for x − 10^16. Coefficients beyond
+  /// 10^30, or with too many divisors, are refused rather than hanging.
+  static final BigInt _maxCoefficient = BigInt.from(10).pow(30);
+
+  /// Divisor pairs p/q tried by the rational root theorem; each is a
+  /// candidate to evaluate, so past this the search blocks the UI.
+  static const int _maxCandidatePairs = 100000;
+
   static Set<BigInt> _divisors(BigInt n) {
     n = n.abs();
-    final Set<BigInt> result = {};
-    if (n == BigInt.zero) return result;
-    for (BigInt i = BigInt.one; i * i <= n; i += BigInt.one) {
-      if (n % i == BigInt.zero) {
-        result.add(i);
-        result.add(n ~/ i);
-      }
+    if (n == BigInt.zero) return {};
+    if (n > _maxCoefficient) {
+      throw CalcException(CalcError.inputTooLarge, {'max': '10^30'});
     }
-    return result;
+    final List<BigInt>? all = divisorsOf(n, limit: 20000);
+    if (all == null) {
+      throw CalcException(CalcError.inputTooLarge, {'max': '10^30'});
+    }
+    return all.toSet();
   }
 
   static BigInt _gcd(BigInt a, BigInt b) {

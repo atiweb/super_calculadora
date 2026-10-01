@@ -51,6 +51,12 @@ android {
         }
     }
 
+    if (!hasReleaseKeystore) {
+        // A "release" signed with the debug key can't be uploaded to Play and
+        // can't be updated in place by a properly signed build later.
+        logger.warn("WARNING: android/key.properties not found - the release build is signed with the DEBUG key.")
+    }
+
     buildTypes {
         release {
             signingConfig = if (hasReleaseKeystore) signingConfigs.getByName("release") else signingConfigs.getByName("debug")
