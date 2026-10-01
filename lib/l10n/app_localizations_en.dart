@@ -12,7 +12,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get appTitle => 'Super Calculator';
 
   @override
-  String get appVersion => 'Version 1.3.0';
+  String get appVersion => 'Version 1.4.0';
 
   @override
   String get appDeveloped => 'Developed in Flutter';
@@ -60,7 +60,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get navAbout => 'About';
 
   @override
-  String get navAboutSub => 'Super Calculator v1.3.0';
+  String get navAboutSub => 'Super Calculator v1.4.0';
 
   @override
   String get navCalculator => 'Calculator';
@@ -1445,7 +1445,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get hlpPrimeCountDesc =>
-      'Counts primes ≤ n. Exact for n ≤ 1,000,000; Li(x) approximation for larger.';
+      'Counts primes ≤ n. Exact up to n = 10,000,000 (sieve); beyond that, Riemann\'s R(x) approximation, marked \"(approx)\".';
 
   @override
   String get hlpPrimeCountFormula => 'π(n) ~ n/ln(n) (Prime Number Theorem)';
@@ -1817,7 +1817,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get hlpFactorialParams => '1 param';
 
   @override
-  String get hlpFactorialDesc => 'Product from 1 to n. Arbitrary precision.';
+  String get hlpFactorialDesc =>
+      'Product from 1 to n. Arbitrary precision. Up to n = 10,000.';
 
   @override
   String get hlpFactorialFormula => 'n! = 1 × 2 × ... × n,  0! = 1';
@@ -1838,7 +1839,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get hlpDblFactorialParams => '1 param';
 
   @override
-  String get hlpDblFactorialDesc => 'Product of integers with same parity.';
+  String get hlpDblFactorialDesc =>
+      'Product of integers with same parity. Up to n = 20,000.';
 
   @override
   String get hlpDblFactorialFormula => 'n!! = n × (n−2) × (n−4) × ...';
@@ -1859,7 +1861,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get hlpCombParams => '2 params: n → C(n,k) → k → =';
 
   @override
-  String get hlpCombDesc => 'Ways to choose k from n regardless of order.';
+  String get hlpCombDesc =>
+      'Ways to choose k from n regardless of order. Up to n = 20,000.';
 
   @override
   String get hlpCombFormula => 'C(n,k) = n! / (k!(n−k)!)';
@@ -1906,7 +1909,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get hlpCatalanDesc =>
-      'Counts binary trees, triangulations, Dyck paths, balanced parentheses.';
+      'Counts binary trees, triangulations, Dyck paths, balanced parentheses. Up to n = 10,000.';
 
   @override
   String get hlpCatalanFormula => 'Cₙ = C(2n,n)/(n+1)';
@@ -1925,7 +1928,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get hlpDerangementDesc =>
-      'Permutations where no element remains in its original position.';
+      'Permutations where no element remains in its original position. Up to n = 10,000.';
 
   @override
   String get hlpDerangementFormula =>
@@ -2035,7 +2038,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get hlpFibDesc =>
-      'Computes F(n) with fast doubling O(log n). Supports very large n.';
+      'Computes F(n) exactly by fast doubling, in O(log n) steps. Up to n = 100,000.';
 
   @override
   String get hlpFibFormula => 'F(0)=0, F(1)=1, F(n)=F(n−1)+F(n−2)';
@@ -2196,7 +2199,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get hlpAutoAnalysisContent =>
-      'When any number is entered, the right panel (tablet) or bottom panel (mobile) automatically shows:\n\n• Properties: digits, parity, sign\n• Representations: binary, octal, hexadecimal\n• Primality: Miller-Rabin test, full factorization\n• Neighboring primes: previous and next\n• Divisors: complete list, sum, count\n• Classifications: perfect square/cube, perfect power, Fibonacci, triangular, palindrome\n\nFor numbers ≤ 15 digits, it also shows:\n\n• Arithmetic functions: φ, λ, μ, ω, Ω, sopfr, sopf, rad, dr\n• Classifications: square-free, powerful, Harshad, semiprime, abundant/deficient/perfect';
+      'When any number is entered, the right panel (tablet) or bottom panel (mobile) automatically shows:\n\n• Properties: digits, parity, sign\n• Representations: binary, octal, hexadecimal\n• Primality: Baillie–PSW test, full factorization\n• Neighboring primes: previous and next\n• Divisors: complete list, sum, count\n• Classifications: perfect square/cube, perfect power, Fibonacci, triangular, palindrome\n\nFor numbers ≤ 15 digits, it also shows:\n\n• Arithmetic functions: φ, λ, μ, ω, Ω, sopfr, sopf, rad, dr\n• Classifications: square-free, powerful, Harshad, semiprime, abundant/deficient/perfect';
 
   @override
   String get hlpHighPrecHeader => 'High Precision & Tools';
@@ -2214,6 +2217,37 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get hlpNewToolsContent =>
       'From the side menu → Olympiad Tools: Fractions, Radicals, Geometry (with diagrams: triangle, Pick, centers and the Euler line), Polynomials (plot, Ruffini, n×n systems), Algebra (expansion and identities in several variables), Number Theory (sieve, modular clock, residues), Step-by-step procedures, Complex (unit circle, Sierpiński — in high precision), Statistics, Matrices (exact), Calculus (derivative/integral/limit) and a self-checking Practice quiz.';
+
+  @override
+  String get hlpUsageHeader => 'Keypad, expressions and your own functions';
+
+  @override
+  String get hlpWhatsNewTitle => 'What\'s new in version 1.4';
+
+  @override
+  String get hlpWhatsNewContent =>
+      '• Your own functions: menu → My functions, usable in the Expressions tab.\n• Keypad: a digit after = starts a new number, √ x² ∛ act on the last number, CE clears only that number, and results no longer show rounding noise (asin(0.5) = 30 in degrees).\n• Exact arithmetic beyond 16 digits, and a result used in the next calculation keeps its exact value: 1 ÷ 3 = × 3 = gives 1.\n• Number theory: Baillie–PSW primality test, long factorizations in the background with Cancel, and π(n) exact up to 10 million.\n• Physical keyboard, and paste that understands decimal commas and thousands separators.\n• Fixes across the Olympiad tools: polynomials, polygons (Pick, shoelace), radicals, discrete logarithm, and fractions or π in number fields.';
+
+  @override
+  String get hlpKeypadTitle => 'On the keypad';
+
+  @override
+  String get hlpKeypadContent =>
+      '• A digit typed after = starts a new number; an operator continues from the result.\n• √, x², x³ and ∛ act on the last number of an expression: 5 + 4 then √ gives 5 + 2.\n• CE clears only the number being typed; C clears everything.\n• A minus right after ×, ÷, ^ or mod is the sign of the next number: 2 × − 3 = −6.\n• Pasted numbers may use a decimal comma (1,5), thousands separators (1 234 567, 12,345.6), the minus sign (−3) or binary (0b101).\n\nPhysical keyboard: on a computer, or a tablet with a keyboard: digits, + − * / ^ ( ) . % and = type as on the keypad; Enter calculates, Backspace deletes, Delete is CE, Esc is C (or cancels a long calculation), and Ctrl+C / Ctrl+V copy and paste.';
+
+  @override
+  String get hlpExpressionsTitle => 'Expressions tab · Your own functions';
+
+  @override
+  String get hlpExpressionsContent =>
+      'Type a whole expression and press ▶ or Enter. Available: + − * / ^ ! mod, parentheses, sqrt, sin cos tan, asin acos atan, log (base 10, or log(b, x)), ln, exp, abs, floor, ceil, π and ℯ. Angles follow the DEG/RAD setting.\n\nMultiplication may be implicit, with or without a space: 2π, 3 sin(30), 2(3+4). The ℯ key inserts Euler\'s number; a typed 2e-1 is scientific notation (0.2).\n\nYour own functions: menu → My functions: define, for example, f(x) = x^2 + 1 or h(a, b) = sqrt(a^2 + b^2), then use them in the Expressions tab: f(3) + h(3, 4) = 15. A function may use others you defined; the number-theory keys (φ, GCD…) are not available inside them.';
+
+  @override
+  String get hlpLongOpsTitle => 'Long calculations';
+
+  @override
+  String get hlpLongOpsContent =>
+      'The keys that factor n (φ, λ, μ, λL, ω, Ω, σ₀, σ, sopfr, sopf, rad and the primitive root) run in the background when n is above 10¹², with a Cancel button. If n has two very large prime factors, the app gives up after a while and says so instead of freezing.\n\nLimits that keep the app responsive: n! up to n = 10,000; n!! and C(n,k) up to n = 20,000; Catalan numbers and derangements up to n = 10,000; F(n) up to n = 100,000; linear recurrences up to 10,000 terms.';
 
   @override
   String get hlpOlympiadHeader => 'Key Olympiad Formulas';

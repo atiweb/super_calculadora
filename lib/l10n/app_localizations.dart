@@ -119,7 +119,7 @@ abstract class AppLocalizations {
   /// App version string
   ///
   /// In es, this message translates to:
-  /// **'Versión 1.3.0'**
+  /// **'Versión 1.4.0'**
   String get appVersion;
 
   /// Framework credit shown in about section
@@ -215,7 +215,7 @@ abstract class AppLocalizations {
   /// Subtitle for about nav item
   ///
   /// In es, this message translates to:
-  /// **'Super Calculadora v1.3.0'**
+  /// **'Super Calculadora v1.4.0'**
   String get navAboutSub;
 
   /// Calculator label in navigation
@@ -2669,7 +2669,7 @@ abstract class AppLocalizations {
   /// Prime counting description
   ///
   /// In es, this message translates to:
-  /// **'Cuenta primos ≤ n. Exacto para n ≤ 1,000,000; aproximación Li(x) para mayores.'**
+  /// **'Cuenta los primos ≤ n. Exacto hasta n = 10,000,000 (criba); por encima, aproximación R(x) de Riemann, marcada «(aprox)».'**
   String get hlpPrimeCountDesc;
 
   /// Prime counting formula
@@ -3383,7 +3383,7 @@ abstract class AppLocalizations {
   /// Factorial description
   ///
   /// In es, this message translates to:
-  /// **'Producto de 1 a n. Precisión arbitraria.'**
+  /// **'Producto de 1 a n. Precisión arbitraria. Hasta n = 10,000.'**
   String get hlpFactorialDesc;
 
   /// Factorial formula
@@ -3425,7 +3425,7 @@ abstract class AppLocalizations {
   /// Double factorial description
   ///
   /// In es, this message translates to:
-  /// **'Producto de enteros de misma paridad.'**
+  /// **'Producto de enteros de misma paridad. Hasta n = 20,000.'**
   String get hlpDblFactorialDesc;
 
   /// Double factorial formula
@@ -3467,7 +3467,7 @@ abstract class AppLocalizations {
   /// Combinations description
   ///
   /// In es, this message translates to:
-  /// **'Formas de elegir k de n sin importar orden.'**
+  /// **'Formas de elegir k de n sin importar orden. Hasta n = 20,000.'**
   String get hlpCombDesc;
 
   /// Combinations formula
@@ -3557,7 +3557,7 @@ abstract class AppLocalizations {
   /// Catalan description
   ///
   /// In es, this message translates to:
-  /// **'Cuenta árboles binarios, triangulaciones, caminos de Dyck, paréntesis balanceados.'**
+  /// **'Cuenta árboles binarios, triangulaciones, caminos de Dyck, paréntesis balanceados. Hasta n = 10,000.'**
   String get hlpCatalanDesc;
 
   /// Catalan formula
@@ -3593,7 +3593,7 @@ abstract class AppLocalizations {
   /// Derangements description
   ///
   /// In es, this message translates to:
-  /// **'Permutaciones donde ningún elemento queda en su posición original.'**
+  /// **'Permutaciones donde ningún elemento queda en su posición original. Hasta n = 10,000.'**
   String get hlpDerangementDesc;
 
   /// Derangements formula
@@ -3797,7 +3797,7 @@ abstract class AppLocalizations {
   /// Fibonacci description
   ///
   /// In es, this message translates to:
-  /// **'Calcula F(n) con duplicación rápida O(log n). Soporta n muy grandes.'**
+  /// **'Calcula F(n) exacto por duplicación rápida, en O(log n) pasos. Hasta n = 100,000.'**
   String get hlpFibDesc;
 
   /// Fibonacci formula
@@ -4109,7 +4109,7 @@ abstract class AppLocalizations {
   /// Auto analysis info card content
   ///
   /// In es, this message translates to:
-  /// **'Al ingresar cualquier número, el panel derecho (tablet) o inferior (móvil) muestra automáticamente:\n\n• Propiedades: dígitos, paridad, signo\n• Representaciones: binario, octal, hexadecimal\n• Primalidad: test Miller-Rabin, factorización completa\n• Primos vecinos: anterior y siguiente\n• Divisores: lista completa, suma, cantidad\n• Clasificaciones: cuadrado/cubo perfecto, potencia perfecta, Fibonacci, triangular, palíndromo\n\nPara números ≤ 15 dígitos, también muestra:\n\n• Funciones aritméticas: φ, λ, μ, ω, Ω, sopfr, sopf, rad, dr\n• Clasificaciones: libre de cuadrados, poderoso, Harshad, semiprimo, abundante/deficiente/perfecto'**
+  /// **'Al ingresar cualquier número, el panel derecho (tablet) o inferior (móvil) muestra automáticamente:\n\n• Propiedades: dígitos, paridad, signo\n• Representaciones: binario, octal, hexadecimal\n• Primalidad: test Baillie–PSW, factorización completa\n• Primos vecinos: anterior y siguiente\n• Divisores: lista completa, suma, cantidad\n• Clasificaciones: cuadrado/cubo perfecto, potencia perfecta, Fibonacci, triangular, palíndromo\n\nPara números ≤ 15 dígitos, también muestra:\n\n• Funciones aritméticas: φ, λ, μ, ω, Ω, sopfr, sopf, rad, dr\n• Clasificaciones: libre de cuadrados, poderoso, Harshad, semiprimo, abundante/deficiente/perfecto'**
   String get hlpAutoAnalysisContent;
 
   /// Help section header for high precision and new tools
@@ -4141,6 +4141,60 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Desde el menú lateral → Herramientas de Olimpiada: Fracciones, Radicales, Geometría (con dibujos: triángulo, Pick, centros y recta de Euler), Polinomios (gráfica, Ruffini, sistemas n×n), Álgebra (desarrollo e identidades con varias variables), Teoría de Números (criba, reloj modular, residuos), Procedimientos paso a paso, Complejos (círculo unitario, Sierpiński — en alta precisión), Estadística, Matrices (exactas), Cálculo (derivada/integral/límite) y Práctica con verificación.'**
   String get hlpNewToolsContent;
+
+  /// No description provided for @hlpUsageHeader.
+  ///
+  /// In es, this message translates to:
+  /// **'Teclado, expresiones y funciones propias'**
+  String get hlpUsageHeader;
+
+  /// No description provided for @hlpWhatsNewTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Novedades de la versión 1.4'**
+  String get hlpWhatsNewTitle;
+
+  /// No description provided for @hlpWhatsNewContent.
+  ///
+  /// In es, this message translates to:
+  /// **'• Funciones propias: menú → Mis funciones, para usarlas en la pestaña Expresiones.\n• Teclado: un dígito tras = empieza un número nuevo, √ x² ∛ actúan sobre el último número, CE borra solo ese número y los resultados ya no muestran ruido de redondeo (asin(0.5) = 30 en grados).\n• Aritmética exacta más allá de 16 cifras, y un resultado usado en el siguiente cálculo conserva su valor exacto: 1 ÷ 3 = × 3 = da 1.\n• Teoría de números: test de primalidad Baillie–PSW, factorizaciones largas en segundo plano con botón Cancelar, y π(n) exacto hasta 10 millones.\n• Teclado físico, y pegar números con coma decimal y separadores de miles.\n• Correcciones en las herramientas de olimpiada: polinomios, polígonos (Pick, fórmula del zapatero), radicales, logaritmo discreto, y fracciones o π en los campos numéricos.'**
+  String get hlpWhatsNewContent;
+
+  /// No description provided for @hlpKeypadTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'En el teclado'**
+  String get hlpKeypadTitle;
+
+  /// No description provided for @hlpKeypadContent.
+  ///
+  /// In es, this message translates to:
+  /// **'• Un dígito tecleado tras = empieza un número nuevo; un operador continúa a partir del resultado.\n• √, x², x³ y ∛ actúan sobre el último número de la expresión: 5 + 4 y luego √ da 5 + 2.\n• CE borra solo el número que se está escribiendo; C lo borra todo.\n• Un menos justo después de ×, ÷, ^ o mod es el signo del número siguiente: 2 × − 3 = −6.\n• Al pegar, el número puede llevar coma decimal (1,5), separadores de miles (1 234 567, 12,345.6), el signo menos (−3) o estar en binario (0b101).\n\nTeclado físico: en un ordenador, o en una tablet con teclado: los dígitos, + − * / ^ ( ) . % y = funcionan como en el teclado de la app; Enter calcula, Retroceso borra, Supr es CE, Esc es C (o cancela un cálculo largo), y Ctrl+C / Ctrl+V copian y pegan.'**
+  String get hlpKeypadContent;
+
+  /// No description provided for @hlpExpressionsTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Pestaña Expresiones · Funciones propias'**
+  String get hlpExpressionsTitle;
+
+  /// No description provided for @hlpExpressionsContent.
+  ///
+  /// In es, this message translates to:
+  /// **'Escribe una expresión completa y pulsa ▶ o Enter. Disponibles: + − * / ^ ! mod, paréntesis, sqrt, sin cos tan, asin acos atan, log (base 10, o log(b, x)), ln, exp, abs, floor, ceil, π y ℯ. Los ángulos siguen el ajuste DEG/RAD.\n\nLa multiplicación puede ser implícita, con o sin espacio: 2π, 3 sin(30), 2(3+4). La tecla ℯ inserta el número de Euler; 2e-1 escrito a mano es notación científica (0.2).\n\nFunciones propias: menú → Mis funciones: define, por ejemplo, f(x) = x^2 + 1 o h(a, b) = sqrt(a^2 + b^2) y úsalas en la pestaña Expresiones: f(3) + h(3, 4) = 15. Una función puede usar otras que hayas definido; las teclas de teoría de números (φ, MCD…) no están disponibles dentro de ellas.'**
+  String get hlpExpressionsContent;
+
+  /// No description provided for @hlpLongOpsTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Cálculos largos'**
+  String get hlpLongOpsTitle;
+
+  /// No description provided for @hlpLongOpsContent.
+  ///
+  /// In es, this message translates to:
+  /// **'Las teclas que factorizan n (φ, λ, μ, λL, ω, Ω, σ₀, σ, sopfr, sopf, rad y la raíz primitiva) calculan en segundo plano cuando n supera 10¹², con un botón Cancelar. Si n tiene dos factores primos muy grandes, la app desiste al cabo de un rato y lo indica, en lugar de bloquearse.\n\nLímites que mantienen la app ágil: n! hasta n = 10,000; n!! y C(n,k) hasta n = 20,000; números de Catalan y desarreglos hasta n = 10,000; F(n) hasta n = 100,000; recurrencias lineales hasta 10,000 términos.'**
+  String get hlpLongOpsContent;
 
   /// Olympiad formulas section header
   ///

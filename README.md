@@ -35,6 +35,7 @@
 | **Standard** | Basic arithmetic with arbitrary-precision BigDecimal engine |
 | **Scientific** | Trigonometric, logarithmic, exponential functions; degree/radian toggle |
 | **Special Functions** | 100+ advanced mathematical functions (see below) |
+| **Expressions** | Whole expressions (`3 sin(30) + 2π`, `log(2, 1024)`, `5!`) and **your own functions** (`f(x) = x^2 + 1`, defined in *My functions*) |
 
 ### High-Precision Mode *(optional toggle in Settings)*
 An optional engine backed by **constructive (computable) real numbers** that
@@ -58,7 +59,7 @@ rounds only when displaying — to a configurable number of digits (5–100).
 - **sopf(n) / sopfr(n)** — sum of prime factors (distinct / with repetition)
 - **Radical rad(n)** — product of distinct prime factors
 - **Divisor functions σ₀(n), σ(m,n)**
-- **Prime-counting π(n)** — exact for n ≤ 10⁶, approximated for larger
+- **Prime-counting π(n)** — exact for n ≤ 10⁷ (sieve), Riemann's R(x) approximation beyond
 - **Primorial n#**, **p-adic valuation Vₚ(n)**
 
 ### Modular Arithmetic
@@ -79,7 +80,7 @@ rounds only when displaying — to a configurable number of digits (5–100).
 
 ### Real-Time Number Analysis Panel
 Every number you enter is automatically analyzed:
-- Primality test (Miller-Rabin)
+- Primality test (Baillie–PSW)
 - Prime factorization with exponents (e.g. **2³ × 3 × 5²**)
 - Perfect power detection (e.g. 8 = 2³)
 - Binary / Octal / Hexadecimal representations
@@ -109,7 +110,9 @@ A dedicated section (from the navigation drawer) with **exact** tools, many with
 - **Persistent history** — last 100 operations saved on device
 - **Eight languages** — English, Spanish, Portuguese, French, Italian, Russian, Vietnamese and Indonesian (auto-detected from the device locale, or chosen in Settings)
 - **Light / Dark / System** theme
-- **Copy & Paste** support for large numbers
+- **Copy & Paste** support for large numbers (decimal comma, thousands separators, `−3`, `0b101`)
+- **Physical keyboard** — digits and operators, Enter, Backspace, Delete (CE), Esc (C or cancel), Ctrl+C / Ctrl+V
+- **Long calculations stay cancellable** — factorizations past 10¹² run in the background with a Cancel button and give up with a clear message on numbers with two huge prime factors
 - Fully **offline** — no internet required, no data collected
 
 ---
@@ -208,7 +211,7 @@ lib/
 - **Constructive reals (optional)** — vendored `computable_reals` gives exact, lazily-evaluated transcendental functions to any precision
 - **Exact rational layer** — `Fraction`-based matrices and polynomials (Gaussian elimination, no rounding)
 - **Isolate-based computation** — heavy and high-precision operations run off the UI thread with a loader; an overflow guard rejects infeasible exact powers instantly
-- **Miller-Rabin primality** — deterministic for n < 3.3×10²⁴ using the first 12 prime bases (no false positives in that range)
+- **Baillie–PSW primality** — Miller–Rabin on the first 13 prime bases (a proof below 3.3×10²⁴) plus a strong Lucas test above it; factorization by Pollard–Brent with a step budget
 - **Fast Fibonacci** — O(log n) doubling algorithm
 - **Android 15 ready** — edge-to-edge layout, portrait-locked
 

@@ -12,7 +12,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get appTitle => 'Super Calculadora';
 
   @override
-  String get appVersion => 'Versão 1.3.0';
+  String get appVersion => 'Versão 1.4.0';
 
   @override
   String get appDeveloped => 'Desenvolvido em Flutter';
@@ -60,7 +60,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get navAbout => 'Sobre';
 
   @override
-  String get navAboutSub => 'Super Calculadora v1.3.0';
+  String get navAboutSub => 'Super Calculadora v1.4.0';
 
   @override
   String get navCalculator => 'Calculadora';
@@ -1456,7 +1456,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get hlpPrimeCountDesc =>
-      'Conta os primos ≤ n. Exato para n ≤ 1 000 000; aproximação Li(x) para maiores.';
+      'Conta os primos ≤ n. Exato até n = 10 000 000 (crivo); acima disso, aproximação R(x) de Riemann, marcada «(aprox.)».';
 
   @override
   String get hlpPrimeCountFormula =>
@@ -1836,7 +1836,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get hlpFactorialParams => '1 param';
 
   @override
-  String get hlpFactorialDesc => 'Produto de 1 até n. Precisão arbitrária.';
+  String get hlpFactorialDesc =>
+      'Produto de 1 até n. Precisão arbitrária. Até n = 10 000.';
 
   @override
   String get hlpFactorialFormula => 'n! = 1 × 2 × ... × n,  0! = 1';
@@ -1857,7 +1858,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get hlpDblFactorialParams => '1 param';
 
   @override
-  String get hlpDblFactorialDesc => 'Produto dos inteiros de mesma paridade.';
+  String get hlpDblFactorialDesc =>
+      'Produto dos inteiros de mesma paridade. Até n = 20 000.';
 
   @override
   String get hlpDblFactorialFormula => 'n!! = n × (n−2) × (n−4) × ...';
@@ -1879,7 +1881,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get hlpCombDesc =>
-      'Maneiras de escolher k entre n, sem importar a ordem.';
+      'Maneiras de escolher k entre n, sem importar a ordem. Até n = 20 000.';
 
   @override
   String get hlpCombFormula => 'C(n,k) = n! / (k!(n−k)!)';
@@ -1926,7 +1928,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get hlpCatalanDesc =>
-      'Conta árvores binárias, triangulações, caminhos de Dyck e parênteses balanceados.';
+      'Conta árvores binárias, triangulações, caminhos de Dyck e parênteses balanceados. Até n = 10 000.';
 
   @override
   String get hlpCatalanFormula => 'Cₙ = C(2n,n)/(n+1)';
@@ -1945,7 +1947,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get hlpDerangementDesc =>
-      'Permutações em que nenhum elemento fica na sua posição original.';
+      'Permutações em que nenhum elemento fica na sua posição original. Até n = 10 000.';
 
   @override
   String get hlpDerangementFormula =>
@@ -2055,7 +2057,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get hlpFibDesc =>
-      'Calcula F(n) com duplicação rápida O(log n). Suporta n muito grandes.';
+      'Calcula F(n) exato por duplicação rápida, em O(log n) passos. Até n = 100 000.';
 
   @override
   String get hlpFibFormula => 'F(0)=0, F(1)=1, F(n)=F(n−1)+F(n−2)';
@@ -2218,7 +2220,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get hlpAutoAnalysisContent =>
-      'Ao digitar qualquer número, o painel da direita (tablet) ou de baixo (celular) mostra automaticamente:\n\n• Propriedades: dígitos, paridade, sinal\n• Representações: binário, octal, hexadecimal\n• Primalidade: teste de Miller-Rabin, fatoração completa\n• Primos vizinhos: anterior e seguinte\n• Divisores: lista completa, soma, quantidade\n• Classificações: quadrado/cubo perfeito, potência perfeita, Fibonacci, triangular, palíndromo\n\nPara números com até 15 dígitos, também mostra:\n\n• Funções aritméticas: φ, λ, μ, ω, Ω, sopfr, sopf, rad, dr\n• Classificações: livre de quadrados, poderoso, Harshad, semiprimo, abundante/deficiente/perfeito';
+      'Ao digitar qualquer número, o painel da direita (tablet) ou de baixo (celular) mostra automaticamente:\n\n• Propriedades: dígitos, paridade, sinal\n• Representações: binário, octal, hexadecimal\n• Primalidade: teste de Baillie–PSW, fatoração completa\n• Primos vizinhos: anterior e seguinte\n• Divisores: lista completa, soma, quantidade\n• Classificações: quadrado/cubo perfeito, potência perfeita, Fibonacci, triangular, palíndromo\n\nPara números com até 15 dígitos, também mostra:\n\n• Funções aritméticas: φ, λ, μ, ω, Ω, sopfr, sopf, rad, dr\n• Classificações: livre de quadrados, poderoso, Harshad, semiprimo, abundante/deficiente/perfeito';
 
   @override
   String get hlpHighPrecHeader => 'Alta Precisão e Ferramentas';
@@ -2236,6 +2238,37 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get hlpNewToolsContent =>
       'No menu lateral → Ferramentas de Olimpíada: Frações, Radicais, Geometria (com desenhos: triângulo, Pick, centros e reta de Euler), Polinômios (gráfico, Ruffini, sistemas n×n), Álgebra (desenvolvimento e identidades com várias variáveis), Teoria dos Números (crivo, relógio modular, resíduos), Procedimentos passo a passo, Complexos (círculo unitário, Sierpiński — em alta precisão), Estatística, Matrizes (exatas), Cálculo (derivada/integral/limite) e Prática com verificação.';
+
+  @override
+  String get hlpUsageHeader => 'Teclado, expressões e funções próprias';
+
+  @override
+  String get hlpWhatsNewTitle => 'Novidades da versão 1.4';
+
+  @override
+  String get hlpWhatsNewContent =>
+      '• Funções próprias: menu → Minhas funções, para usar na aba Expressões.\n• Teclado: um dígito depois de = começa um número novo, √ x² ∛ agem sobre o último número, CE apaga só esse número e os resultados não mostram mais ruído de arredondamento (asin(0.5) = 30 em graus).\n• Aritmética exata além de 16 dígitos, e um resultado usado no cálculo seguinte mantém o valor exato: 1 ÷ 3 = × 3 = dá 1.\n• Teoria dos números: teste de primalidade Baillie–PSW, fatorações longas em segundo plano com botão Cancelar, e π(n) exato até 10 milhões.\n• Teclado físico, e colar números com vírgula decimal e separadores de milhar.\n• Correções nas ferramentas de olimpíada: polinômios, polígonos (Pick, fórmula do cadarço), radicais, logaritmo discreto, e frações ou π nos campos numéricos.';
+
+  @override
+  String get hlpKeypadTitle => 'No teclado';
+
+  @override
+  String get hlpKeypadContent =>
+      '• Um dígito digitado depois de = começa um número novo; um operador continua a partir do resultado.\n• √, x², x³ e ∛ agem sobre o último número da expressão: 5 + 4 e depois √ dá 5 + 2.\n• CE apaga só o número que está sendo digitado; C apaga tudo.\n• Um menos logo depois de ×, ÷, ^ ou mod é o sinal do número seguinte: 2 × − 3 = −6.\n• Ao colar, o número pode ter vírgula decimal (1,5), separadores de milhar (1 234 567, 12,345.6), o sinal de menos (−3) ou estar em binário (0b101).\n\nTeclado físico: em um computador, ou num tablet com teclado: os dígitos, + − * / ^ ( ) . % e = funcionam como no teclado do app; Enter calcula, Backspace apaga, Delete é CE, Esc é C (ou cancela um cálculo longo), e Ctrl+C / Ctrl+V copiam e colam.';
+
+  @override
+  String get hlpExpressionsTitle => 'Aba Expressões · Funções próprias';
+
+  @override
+  String get hlpExpressionsContent =>
+      'Digite uma expressão inteira e toque em ▶ ou Enter. Disponíveis: + − * / ^ ! mod, parênteses, sqrt, sin cos tan, asin acos atan, log (base 10, ou log(b, x)), ln, exp, abs, floor, ceil, π e ℯ. Os ângulos seguem a configuração DEG/RAD.\n\nA multiplicação pode ser implícita, com ou sem espaço: 2π, 3 sin(30), 2(3+4). A tecla ℯ insere o número de Euler; 2e-1 digitado é notação científica (0.2).\n\nFunções próprias: menu → Minhas funções: defina, por exemplo, f(x) = x^2 + 1 ou h(a, b) = sqrt(a^2 + b^2) e use-as na aba Expressões: f(3) + h(3, 4) = 15. Uma função pode usar outras que você definiu; as teclas de teoria dos números (φ, MDC…) não ficam disponíveis dentro delas.';
+
+  @override
+  String get hlpLongOpsTitle => 'Cálculos longos';
+
+  @override
+  String get hlpLongOpsContent =>
+      'As teclas que fatoram n (φ, λ, μ, λL, ω, Ω, σ₀, σ, sopfr, sopf, rad e a raiz primitiva) calculam em segundo plano quando n passa de 10¹², com um botão Cancelar. Se n tiver dois fatores primos muito grandes, o app desiste depois de um tempo e avisa, em vez de travar.\n\nLimites que mantêm o app ágil: n! até n = 10 000; n!! e C(n,k) até n = 20 000; números de Catalan e desarranjos até n = 10 000; F(n) até n = 100 000; recorrências lineares até 10 000 termos.';
 
   @override
   String get hlpOlympiadHeader => 'Fórmulas Essenciais para Olimpíadas';
