@@ -38,6 +38,32 @@ class SpecialFunctionsHelpScreen extends StatelessWidget {
           const SizedBox(height: 16),
 
           // ============================================================
+          // KEYPAD, EXPRESSIONS AND YOUR OWN FUNCTIONS
+          // ============================================================
+          _SectionHeader(title: l.hlpUsageHeader, icon: Icons.keyboard),
+          _InfoCard(
+            title: l.hlpWhatsNewTitle,
+            icon: Icons.new_releases,
+            content: l.hlpWhatsNewContent,
+          ),
+          _InfoCard(
+            title: l.hlpKeypadTitle,
+            icon: Icons.dialpad,
+            content: l.hlpKeypadContent,
+          ),
+          _InfoCard(
+            title: l.hlpExpressionsTitle,
+            icon: Icons.functions,
+            content: l.hlpExpressionsContent,
+          ),
+          _InfoCard(
+            title: l.hlpLongOpsTitle,
+            icon: Icons.hourglass_bottom,
+            content: l.hlpLongOpsContent,
+          ),
+          const SizedBox(height: 16),
+
+          // ============================================================
           // NUMBER THEORY
           // ============================================================
           _SectionHeader(title: l.hlpNumberTheoryHeader, icon: Icons.calculate),
@@ -590,12 +616,16 @@ class _SectionHeader extends StatelessWidget {
         children: [
           Icon(icon, color: Theme.of(context).colorScheme.primary, size: 24),
           const SizedBox(width: 8),
-          Text(
-            title,
-            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
+          // Expanded: a long title ("Keypad, expressions and your own
+          // functions") overflowed the row by 132 px instead of wrapping.
+          Expanded(
+            child: Text(
+              title,
+              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+            ),
           ),
         ],
       ),
@@ -826,11 +856,13 @@ class _ParameterSystemCard extends StatelessWidget {
                           size: 18,
                           color: theme.colorScheme.onTertiaryContainer),
                       const SizedBox(width: 6),
-                      Text(
-                        l.hlpPendingOpTitle,
-                        style: theme.textTheme.titleSmall?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: theme.colorScheme.onTertiaryContainer,
+                      Expanded(
+                        child: Text(
+                          l.hlpPendingOpTitle,
+                          style: theme.textTheme.titleSmall?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: theme.colorScheme.onTertiaryContainer,
+                          ),
                         ),
                       ),
                     ],

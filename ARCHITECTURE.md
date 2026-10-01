@@ -44,7 +44,7 @@ lib/
 │   ├── big_decimal.dart             # Custom arbitrary-precision type
 │   ├── number_analysis_service.dart # Real-time number analysis
 │   ├── special_functions_service.dart # Number theory functions
-│   ├── prime_utils.dart             # Miller-Rabin + isolate-based prime search
+│   ├── prime_utils.dart             # Baillie–PSW, Pollard–Brent factorization, prime search
 │   ├── history_service.dart         # SharedPreferences persistence for history
 │   ├── settings_service.dart        # SharedPreferences persistence for settings
 │   ├── surd_service.dart            # Radical simplification / rationalization
@@ -118,7 +118,7 @@ Static methods for the 100+ functions accessible from the Special tab: all numbe
 
 ### `prime_utils.dart`
 
-Miller-Rabin primality test using deterministic bases `[2, 3, 5, 7]`, which gives a correct result for all n < 3.2 × 10¹⁸. For searching next/previous primes on numbers with more than 15 digits, the search loop runs in a Dart `Isolate` to avoid blocking the UI thread.
+Baillie–PSW primality: Miller–Rabin on the first 13 prime bases, which is a proof for every n < ψ₁₃ ≈ 3.3 × 10²⁴ (OEIS A014233), plus a strong Lucas test above it. `factorize` does trial division to 10⁵, detects perfect powers, then splits the rest with Pollard–Rho (Brent's cycle detection, batched gcd). `withFactorizationBudget` caps the Pollard steps of a whole job and throws `FactorizationTooHard` past them, so a number with two huge prime factors ends in a message instead of an endless loop. Next/previous prime searches run through `compute`.
 
 ---
 
@@ -187,9 +187,14 @@ Adding a language is therefore: a new `lib/l10n/app_xx.arb` (the `.arb` layer, ~
 
 Dart is single-threaded by default. Heavy operations that could block the UI run in a separate `Isolate`:
 
-- **Next/previous prime search** for numbers larger than 10¹⁵ (`prime_utils.dart`)
+- **Next/previous prime search** for numbers larger than 10⁶ (`findNextPrime` / `findPreviousPrime`)
+- **The analysis panel** for numbers of more than 10 digits
+- **Factorizing keys** (φ, λ, μ, ω, Ω, σ, σ₀, rad, sopf, sopfr, λL, primitive root) for n > 10¹²: `CalculatorService._factorizing` runs them behind the cancellable overlay
+- **Heavy powers and roots**, and everything in high-precision mode
 
-Shorter operations (factorization, divisor lists, analysis panel updates) run on the main isolate because they are fast enough not to cause jank for the number ranges the app targets.
+All of it goes through `compute`, never `Isolate.spawn`: the web has no isolates, and there `compute` runs on the page's own thread. So every unbounded search also carries a budget sized for the web (Pollard steps, combinatorics bounds), and the page cannot freeze for long either. Results that arrive after the user has moved on are dropped by comparing a token captured before the `await` (`_operationToken`, `_analysisToken`).
+
+Shorter operations (small factorizations, divisor lists, parameter operations such as ord or CRT) run on the main isolate, under the web-sized factorization budget.
 
 ---
 
@@ -198,7 +203,7 @@ Shorter operations (factorization, divisor lists, analysis panel updates) run on
 1. Implement the logic as a static method in `SpecialFunctionsService`.
 2. Add the button to `SpecialCalculatorKeyboard` and wire it to `CalculatorService`.
 3. Add localized strings for the button label and any error messages to both `app_localizations_en.dart` and `app_localizations_es.dart`.
-4. If the function is slow for large inputs, move the computation to an `Isolate` following the pattern in `prime_utils.dart`.
+4. If the function is slow for large inputs, bound it and run it through `compute` (for a function of one factorized argument, add it to `_factorizingOps` in `CalculatorService`).
 
 ## Adding a New Olympiad Tool
 

@@ -12,7 +12,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get appTitle => 'Kalkulator Super';
 
   @override
-  String get appVersion => 'Versi 1.3.0';
+  String get appVersion => 'Versi 1.4.0';
 
   @override
   String get appDeveloped => 'Dikembangkan dengan Flutter';
@@ -60,7 +60,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get navAbout => 'Tentang';
 
   @override
-  String get navAboutSub => 'Kalkulator Super v1.3.0';
+  String get navAboutSub => 'Kalkulator Super v1.4.0';
 
   @override
   String get navCalculator => 'Kalkulator';
@@ -1454,7 +1454,7 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get hlpPrimeCountDesc =>
-      'Menghitung prima ≤ n. Eksak untuk n ≤ 1 000 000; di atas itu memakai hampiran Li(x).';
+      'Menghitung bilangan prima ≤ n. Eksak hingga n = 10 000 000 (saringan); di atas itu memakai aproksimasi R(x) Riemann, ditandai «(hampiran)».';
 
   @override
   String get hlpPrimeCountFormula => 'π(n) ~ n/ln(n) (teorema bilangan prima)';
@@ -1831,7 +1831,7 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get hlpFactorialDesc =>
-      'Hasil kali dari 1 sampai n. Presisi sembarang.';
+      'Hasil kali dari 1 sampai n. Presisi sembarang. Hingga n = 10 000.';
 
   @override
   String get hlpFactorialFormula => 'n! = 1 × 2 × ... × n,  0! = 1';
@@ -1853,7 +1853,7 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get hlpDblFactorialDesc =>
-      'Hasil kali bilangan bulat dengan paritas yang sama.';
+      'Hasil kali bilangan bulat dengan paritas yang sama. Hingga n = 20 000.';
 
   @override
   String get hlpDblFactorialFormula => 'n!! = n × (n−2) × (n−4) × ...';
@@ -1875,7 +1875,7 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get hlpCombDesc =>
-      'Banyak cara memilih k dari n tanpa memperhatikan urutan.';
+      'Banyak cara memilih k dari n tanpa memperhatikan urutan. Hingga n = 20 000.';
 
   @override
   String get hlpCombFormula => 'C(n,k) = n! / (k!(n−k)!)';
@@ -1922,7 +1922,7 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get hlpCatalanDesc =>
-      'Menghitung pohon biner, triangulasi, lintasan Dyck, pasangan kurung yang seimbang.';
+      'Menghitung pohon biner, triangulasi, lintasan Dyck, pasangan kurung yang seimbang. Hingga n = 10 000.';
 
   @override
   String get hlpCatalanFormula => 'Cₙ = C(2n,n)/(n+1)';
@@ -1941,7 +1941,7 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get hlpDerangementDesc =>
-      'Permutasi yang tidak menyisakan satu pun unsur di posisi semula.';
+      'Permutasi yang tidak menyisakan satu pun unsur di posisi semula. Hingga n = 10 000.';
 
   @override
   String get hlpDerangementFormula =>
@@ -2050,7 +2050,7 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get hlpFibDesc =>
-      'Menghitung F(n) dengan penggandaan cepat O(log n). Menerima n yang sangat besar.';
+      'Menghitung F(n) secara eksak dengan penggandaan cepat, O(log n) langkah. Hingga n = 100 000.';
 
   @override
   String get hlpFibFormula => 'F(0)=0, F(1)=1, F(n)=F(n−1)+F(n−2)';
@@ -2214,7 +2214,7 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get hlpAutoAnalysisContent =>
-      'Begitu sebuah bilangan dimasukkan, panel kanan (tablet) atau panel bawah (ponsel) otomatis menampilkan:\n\n• Sifat: banyak digit, paritas, tanda\n• Representasi: biner, oktal, heksadesimal\n• Keprimaan: uji Miller-Rabin, faktorisasi lengkap\n• Prima tetangga: sebelum dan sesudah\n• Pembagi: daftar lengkap, jumlah, banyaknya\n• Klasifikasi: kuadrat/kubik sempurna, pangkat sempurna, Fibonacci, segitiga, palindrom\n\nUntuk bilangan sampai 15 digit, juga ditampilkan:\n\n• Fungsi aritmetika: φ, λ, μ, ω, Ω, sopfr, sopf, rad, dr\n• Klasifikasi: bebas kuadrat, bilangan kuat, Harshad, semiprima, berlebih/kurang/sempurna';
+      'Begitu sebuah bilangan dimasukkan, panel kanan (tablet) atau panel bawah (ponsel) otomatis menampilkan:\n\n• Sifat: banyak digit, paritas, tanda\n• Representasi: biner, oktal, heksadesimal\n• Keprimaan: uji Baillie–PSW, faktorisasi lengkap\n• Prima tetangga: sebelum dan sesudah\n• Pembagi: daftar lengkap, jumlah, banyaknya\n• Klasifikasi: kuadrat/kubik sempurna, pangkat sempurna, Fibonacci, segitiga, palindrom\n\nUntuk bilangan sampai 15 digit, juga ditampilkan:\n\n• Fungsi aritmetika: φ, λ, μ, ω, Ω, sopfr, sopf, rad, dr\n• Klasifikasi: bebas kuadrat, bilangan kuat, Harshad, semiprima, berlebih/kurang/sempurna';
 
   @override
   String get hlpHighPrecHeader => 'Presisi tinggi dan alat';
@@ -2232,6 +2232,37 @@ class AppLocalizationsId extends AppLocalizations {
   @override
   String get hlpNewToolsContent =>
       'Dari menu samping → Alat Olimpiade: Pecahan, Bentuk akar, Geometri (dengan gambar: segitiga, Pick, titik-titik istimewa dan garis Euler), Polinomial (grafik, skema Horner, sistem n×n), Aljabar (penjabaran dan identitas beberapa variabel), Teori bilangan (saringan, jam modular, residu), Prosedur langkah demi langkah, Bilangan kompleks (lingkaran satuan, Sierpiński — pada presisi tinggi), Statistika, Matriks (eksak), Kalkulus (turunan/integral/limit) dan Latihan dengan pemeriksaan jawaban.';
+
+  @override
+  String get hlpUsageHeader => 'Tombol, ekspresi, dan fungsi buatan sendiri';
+
+  @override
+  String get hlpWhatsNewTitle => 'Yang baru di versi 1.4';
+
+  @override
+  String get hlpWhatsNewContent =>
+      '• Fungsi buatan sendiri: menu → Fungsi saya, bisa dipakai di tab Ekspresi.\n• Tombol: angka setelah = memulai bilangan baru, √ x² ∛ bekerja pada bilangan terakhir, CE hanya menghapus bilangan itu, dan hasil tidak lagi menampilkan galat pembulatan (asin(0.5) = 30 dalam derajat).\n• Aritmetika eksak di atas 16 digit, dan hasil yang dipakai di perhitungan berikutnya mempertahankan nilai eksaknya: 1 ÷ 3 = × 3 = menghasilkan 1.\n• Teori bilangan: uji keprimaan Baillie–PSW, faktorisasi panjang di latar belakang dengan tombol Batal, dan π(n) eksak hingga 10 juta.\n• Keyboard fisik, serta menempel bilangan dengan koma desimal dan pemisah ribuan.\n• Perbaikan pada alat olimpiade: polinomial, poligon (Pick, rumus tali sepatu), bentuk akar, logaritma diskret, serta pecahan atau π di kolom angka.';
+
+  @override
+  String get hlpKeypadTitle => 'Pada tombol kalkulator';
+
+  @override
+  String get hlpKeypadContent =>
+      '• Angka yang diketik setelah = memulai bilangan baru; operator melanjutkan dari hasilnya.\n• √, x², x³, dan ∛ bekerja pada bilangan terakhir ekspresi: 5 + 4 lalu √ menghasilkan 5 + 2.\n• CE hanya menghapus bilangan yang sedang diketik; C menghapus semuanya.\n• Tanda minus tepat setelah ×, ÷, ^, atau mod adalah tanda bilangan berikutnya: 2 × − 3 = −6.\n• Bilangan yang ditempel boleh memakai koma desimal (1,5), pemisah ribuan (1 234 567, 12,345.6), tanda minus (−3), atau biner (0b101).\n\nKeyboard fisik: di komputer, atau tablet dengan keyboard: angka, + − * / ^ ( ) . %, dan = berfungsi seperti tombol aplikasi; Enter menghitung, Backspace menghapus, Delete adalah CE, Esc adalah C (atau membatalkan perhitungan panjang), dan Ctrl+C / Ctrl+V menyalin dan menempel.';
+
+  @override
+  String get hlpExpressionsTitle => 'Tab Ekspresi · Fungsi buatan sendiri';
+
+  @override
+  String get hlpExpressionsContent =>
+      'Ketik seluruh ekspresi lalu tekan ▶ atau Enter. Tersedia: + − * / ^ ! mod, tanda kurung, sqrt, sin cos tan, asin acos atan, log (basis 10, atau log(b, x)), ln, exp, abs, floor, ceil, π dan ℯ. Sudut mengikuti pengaturan DEG/RAD.\n\nPerkalian boleh tersirat, dengan atau tanpa spasi: 2π, 3 sin(30), 2(3+4). Tombol ℯ menyisipkan bilangan Euler; 2e-1 yang diketik adalah notasi ilmiah (0.2).\n\nFungsi buatan sendiri: menu → Fungsi saya: definisikan, misalnya, f(x) = x^2 + 1 atau h(a, b) = sqrt(a^2 + b^2) lalu pakai di tab Ekspresi: f(3) + h(3, 4) = 15. Sebuah fungsi boleh memakai fungsi lain yang sudah Anda buat; tombol teori bilangan (φ, FPB…) tidak tersedia di dalamnya.';
+
+  @override
+  String get hlpLongOpsTitle => 'Perhitungan panjang';
+
+  @override
+  String get hlpLongOpsContent =>
+      'Tombol yang memfaktorkan n (φ, λ, μ, λL, ω, Ω, σ₀, σ, sopfr, sopf, rad dan akar primitif) berjalan di latar belakang jika n di atas 10¹², dengan tombol Batal. Jika n punya dua faktor prima yang sangat besar, aplikasi berhenti setelah beberapa saat dan memberi tahu, alih-alih macet.\n\nBatas agar aplikasi tetap responsif: n! hingga n = 10 000; n!! dan C(n,k) hingga n = 20 000; bilangan Catalan dan derangement hingga n = 10 000; F(n) hingga n = 100 000; rekurensi linear hingga 10 000 suku.';
 
   @override
   String get hlpOlympiadHeader => 'Rumus olimpiade penting';

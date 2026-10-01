@@ -12,7 +12,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get appTitle => 'Máy tính Siêu việt';
 
   @override
-  String get appVersion => 'Phiên bản 1.3.0';
+  String get appVersion => 'Phiên bản 1.4.0';
 
   @override
   String get appDeveloped => 'Được phát triển bằng Flutter';
@@ -60,7 +60,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get navAbout => 'Giới thiệu';
 
   @override
-  String get navAboutSub => 'Máy tính Siêu việt v1.3.0';
+  String get navAboutSub => 'Máy tính Siêu việt v1.4.0';
 
   @override
   String get navCalculator => 'Máy tính';
@@ -1437,7 +1437,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get hlpPrimeCountDesc =>
-      'Đếm số nguyên tố ≤ n. Chính xác khi n ≤ 1 000 000; lớn hơn thì xấp xỉ bằng Li(x).';
+      'Đếm số nguyên tố ≤ n. Chính xác đến n = 10 000 000 (sàng); lớn hơn thì dùng xấp xỉ R(x) của Riemann, ghi «(xấp xỉ)».';
 
   @override
   String get hlpPrimeCountFormula => 'π(n) ~ n/ln(n) (định lý số nguyên tố)';
@@ -1811,7 +1811,8 @@ class AppLocalizationsVi extends AppLocalizations {
   String get hlpFactorialParams => '1 tham số';
 
   @override
-  String get hlpFactorialDesc => 'Tích từ 1 đến n. Độ chính xác tuỳ ý.';
+  String get hlpFactorialDesc =>
+      'Tích từ 1 đến n. Độ chính xác tuỳ ý. Tối đa n = 10 000.';
 
   @override
   String get hlpFactorialFormula => 'n! = 1 × 2 × ... × n,  0! = 1';
@@ -1832,7 +1833,8 @@ class AppLocalizationsVi extends AppLocalizations {
   String get hlpDblFactorialParams => '1 tham số';
 
   @override
-  String get hlpDblFactorialDesc => 'Tích các số nguyên cùng tính chẵn lẻ.';
+  String get hlpDblFactorialDesc =>
+      'Tích các số nguyên cùng tính chẵn lẻ. Tối đa n = 20 000.';
 
   @override
   String get hlpDblFactorialFormula => 'n!! = n × (n−2) × (n−4) × ...';
@@ -1853,7 +1855,8 @@ class AppLocalizationsVi extends AppLocalizations {
   String get hlpCombParams => '2 tham số: n → C(n,k) → k → =';
 
   @override
-  String get hlpCombDesc => 'Số cách chọn k phần tử từ n, không kể thứ tự.';
+  String get hlpCombDesc =>
+      'Số cách chọn k phần tử từ n, không kể thứ tự. Tối đa n = 20 000.';
 
   @override
   String get hlpCombFormula => 'C(n,k) = n! / (k!(n−k)!)';
@@ -1900,7 +1903,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get hlpCatalanDesc =>
-      'Đếm cây nhị phân, phép tam giác phân, đường đi Dyck, cách đặt ngoặc hợp lệ.';
+      'Đếm cây nhị phân, phép tam giác phân, đường đi Dyck, cách đặt ngoặc hợp lệ. Tối đa n = 10 000.';
 
   @override
   String get hlpCatalanFormula => 'Cₙ = C(2n,n)/(n+1)';
@@ -1919,7 +1922,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get hlpDerangementDesc =>
-      'Hoán vị mà không phần tử nào còn ở vị trí ban đầu.';
+      'Hoán vị mà không phần tử nào còn ở vị trí ban đầu. Tối đa n = 10 000.';
 
   @override
   String get hlpDerangementFormula =>
@@ -2027,7 +2030,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get hlpFibDesc =>
-      'Tính F(n) bằng nhân đôi nhanh O(log n). Nhận n rất lớn.';
+      'Tính F(n) chính xác bằng nhân đôi nhanh, O(log n) bước. Tối đa n = 100 000.';
 
   @override
   String get hlpFibFormula => 'F(0)=0, F(1)=1, F(n)=F(n−1)+F(n−2)';
@@ -2188,7 +2191,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get hlpAutoAnalysisContent =>
-      'Khi nhập bất kỳ số nào, bảng bên phải (máy tính bảng) hoặc bảng phía dưới (điện thoại) tự động hiển thị:\n\n• Tính chất: số chữ số, tính chẵn lẻ, dấu\n• Biểu diễn: nhị phân, bát phân, thập lục phân\n• Tính nguyên tố: kiểm tra Miller-Rabin, phân tích đầy đủ\n• Số nguyên tố lân cận: liền trước và liền sau\n• Ước số: danh sách đầy đủ, tổng, số lượng\n• Phân loại: số chính phương/lập phương đúng, luỹ thừa đúng, Fibonacci, tam giác, đối xứng\n\nVới số không quá 15 chữ số, còn hiển thị thêm:\n\n• Hàm số học: φ, λ, μ, ω, Ω, sopfr, sopf, rad, dr\n• Phân loại: không có ước chính phương, số mạnh, Harshad, nửa nguyên tố, dư thừa/thiếu hụt/hoàn hảo';
+      'Khi nhập bất kỳ số nào, bảng bên phải (máy tính bảng) hoặc bảng phía dưới (điện thoại) tự động hiển thị:\n\n• Tính chất: số chữ số, tính chẵn lẻ, dấu\n• Biểu diễn: nhị phân, bát phân, thập lục phân\n• Tính nguyên tố: kiểm tra Baillie–PSW, phân tích đầy đủ\n• Số nguyên tố lân cận: liền trước và liền sau\n• Ước số: danh sách đầy đủ, tổng, số lượng\n• Phân loại: số chính phương/lập phương đúng, luỹ thừa đúng, Fibonacci, tam giác, đối xứng\n\nVới số không quá 15 chữ số, còn hiển thị thêm:\n\n• Hàm số học: φ, λ, μ, ω, Ω, sopfr, sopf, rad, dr\n• Phân loại: không có ước chính phương, số mạnh, Harshad, nửa nguyên tố, dư thừa/thiếu hụt/hoàn hảo';
 
   @override
   String get hlpHighPrecHeader => 'Độ chính xác cao và công cụ';
@@ -2206,6 +2209,37 @@ class AppLocalizationsVi extends AppLocalizations {
   @override
   String get hlpNewToolsContent =>
       'Từ menu bên → Công cụ Olympic: Phân số, Căn thức, Hình học (có hình vẽ: tam giác, Pick, các điểm đặc biệt và đường thẳng Euler), Đa thức (đồ thị, sơ đồ Horner, hệ n×n), Đại số (khai triển và hằng đẳng thức nhiều biến), Số học (sàng, đồng hồ modulo, thặng dư), Lời giải từng bước, Số phức (đường tròn đơn vị, Sierpiński — ở độ chính xác cao), Thống kê, Ma trận (chính xác), Giải tích (đạo hàm/tích phân/giới hạn) và phần Luyện tập có chấm điểm.';
+
+  @override
+  String get hlpUsageHeader => 'Bàn phím, biểu thức và hàm của bạn';
+
+  @override
+  String get hlpWhatsNewTitle => 'Có gì mới trong phiên bản 1.4';
+
+  @override
+  String get hlpWhatsNewContent =>
+      '• Hàm tự định nghĩa: menu → Hàm của tôi, dùng được trong thẻ Biểu thức.\n• Bàn phím: chữ số sau = bắt đầu số mới, √ x² ∛ tác dụng lên số cuối, CE chỉ xoá số đó, và kết quả không còn sai số làm tròn (asin(0.5) = 30 theo độ).\n• Số học chính xác vượt quá 16 chữ số, và kết quả dùng cho phép tính tiếp theo giữ giá trị chính xác: 1 ÷ 3 = × 3 = cho 1.\n• Lý thuyết số: kiểm tra nguyên tố Baillie–PSW, phân tích thừa số lâu chạy nền với nút Huỷ, π(n) chính xác đến 10 triệu.\n• Bàn phím vật lý, và dán số có dấu phẩy thập phân và dấu phân cách hàng nghìn.\n• Sửa lỗi trong các công cụ olympic: đa thức, đa giác (Pick, công thức dây giày), căn thức, logarit rời rạc, và phân số hoặc π trong ô nhập số.';
+
+  @override
+  String get hlpKeypadTitle => 'Trên bàn phím';
+
+  @override
+  String get hlpKeypadContent =>
+      '• Một chữ số gõ sau = bắt đầu số mới; một phép toán thì tiếp tục từ kết quả.\n• √, x², x³ và ∛ tác dụng lên số cuối của biểu thức: 5 + 4 rồi √ cho 5 + 2.\n• CE chỉ xoá số đang gõ; C xoá tất cả.\n• Dấu trừ ngay sau ×, ÷, ^ hoặc mod là dấu của số tiếp theo: 2 × − 3 = −6.\n• Số được dán có thể dùng dấu phẩy thập phân (1,5), dấu phân cách hàng nghìn (1 234 567, 12,345.6), dấu trừ (−3) hoặc dạng nhị phân (0b101).\n\nBàn phím vật lý: trên máy tính, hoặc máy tính bảng có bàn phím: các chữ số, + − * / ^ ( ) . % và = gõ như trên bàn phím của ứng dụng; Enter để tính, Backspace để xoá, Delete là CE, Esc là C (hoặc huỷ một phép tính lâu), còn Ctrl+C / Ctrl+V để sao chép và dán.';
+
+  @override
+  String get hlpExpressionsTitle => 'Thẻ Biểu thức · Hàm tự định nghĩa';
+
+  @override
+  String get hlpExpressionsContent =>
+      'Gõ cả biểu thức rồi nhấn ▶ hoặc Enter. Có sẵn: + − * / ^ ! mod, dấu ngoặc, sqrt, sin cos tan, asin acos atan, log (cơ số 10, hoặc log(b, x)), ln, exp, abs, floor, ceil, π và ℯ. Góc theo chế độ DEG/RAD.\n\nCó thể bỏ dấu nhân, có hoặc không có dấu cách: 2π, 3 sin(30), 2(3+4). Phím ℯ chèn số Euler; còn 2e-1 gõ tay là ký hiệu khoa học (0.2).\n\nHàm tự định nghĩa: menu → Hàm của tôi: định nghĩa, ví dụ, f(x) = x^2 + 1 hoặc h(a, b) = sqrt(a^2 + b^2) rồi dùng trong thẻ Biểu thức: f(3) + h(3, 4) = 15. Một hàm có thể dùng các hàm khác bạn đã định nghĩa; các phím lý thuyết số (φ, ƯCLN…) không dùng được bên trong.';
+
+  @override
+  String get hlpLongOpsTitle => 'Phép tính lâu';
+
+  @override
+  String get hlpLongOpsContent =>
+      'Các phím phân tích n ra thừa số (φ, λ, μ, λL, ω, Ω, σ₀, σ, sopfr, sopf, rad và căn nguyên thủy) chạy nền khi n lớn hơn 10¹², kèm nút Huỷ. Nếu n có hai thừa số nguyên tố rất lớn, ứng dụng sẽ dừng sau một lúc và báo lại thay vì bị treo.\n\nGiới hạn giúp ứng dụng luôn mượt: n! đến n = 10 000; n!! và C(n,k) đến n = 20 000; số Catalan và hoán vị không điểm cố định đến n = 10 000; F(n) đến n = 100 000; hệ thức truy hồi tuyến tính đến 10 000 số hạng.';
 
   @override
   String get hlpOlympiadHeader => 'Các công thức olympic quan trọng';
